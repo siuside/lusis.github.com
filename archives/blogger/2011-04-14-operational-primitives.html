@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Operational Primitives - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="&#8220;Infrastructure as code&#8221;. I love the phrase. Where devops is a word that is sadly open to so much (mis)interpretation, &#8220;Infrastru...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lusis.org/archives/blogger/2011-04-14-operational-primitives.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lusis.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Operational Primitives</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">&#8220;Infrastructure as code&#8221;. I love the phrase. Where devops is a word that is sadly open to so much (mis)interpretation, &#8220;Infrastructure as code&#8221; is pretty clear. Treat your infrastructure as code. Programmable. Testable. Deployable.<br /><br />But when you start to really think about that concept, there&#8217;s a deep dive you can take, navigating various programming and computer science constructs and applying those to your infrastructure.<br /><br />I&#8217;ve been working pretty heavily on getting the first API stable release of <a href="http://goo.gl/BQCvs">Noah</a> out the door. It&#8217;s been a challenge with the schedule I have to work on it - which is essentially &#8220;when everyone else in the house is asleep and I&#8217;m awake&#8217;. Last night, I came to a fork in the road where I needed to make a decision. This decision would lock me into an API path that I was unwilling to change for a while. Nobody wants to use a service or tool with a constantly changing API. I needed to shit or get off the pot, to use a creative euphemism. With the announcements of both <a href="https://github.com/bmizerany/doozer">Doozer</a> and <a href="https://github.com/jtuple/riak_zab">riak_zab</a>, it was clear that I wasn&#8217;t the only person attempting to tackle the ZooKeeper space.<br /><br />Since Github lacks any facility for soliciting project feedback (hint hint, @github), I decided to create a &nbsp;Wufoo form and tweet it out. I don&#8217;t have a very big audience but I was hoping it would at least get to the people who were likely to use Noah. The form was fairly simple with one question on something that I had pretty summarily dismissed early on - <b>HATEOAS</b> (<i>hypermedia as the engine of application state</i>).<br /><br /><span class="Apple-style-span" style="font-size: large;">A small HATEOAS diversion</span><br /><span class="Apple-style-span" style="font-size: large;"><br /></span><br />The HATEOAS debate is a lot like Linux vs. GNU/Linux. It&#8217;s fairly esoteric but there&#8217;s some meat to the matter. My problem with it was simply that, despite what Roy Fielding and others intended, REST had taken on a new definition and it wasn&#8217;t the strict HATEOAS one. Additionally, I found it VERY difficult to map HATEOAS concepts to JSON. JSON is a great format but a rich document structure is not (rightly so) part of the format. It&#8217;s intended to be simple, easily read and cleanly mapped to machine readable format. It also felt like extra work on the part of the API consumer. The concepts that we use when reading a website (click this link, read this list, click this link) are simple not&nbsp;necessary&nbsp;when you have a contextually relevant (or descriptive) URL scheme. True, as a human I don&#8217;t make changes in the URL bar to navigate a site (I use the links provided by the site) but when it comes to dealing with an API, I don&#8217;t exhibit the same usage patterns as a web browser. I&#8217;m making distinct atomic transactions (DELETE this resource, PUT this resource) at a given endpoint. These simply aren&#8217;t the same as filling out forms and are only&nbsp;tangentially&nbsp;related. I&#8217;m simply not willing to force someone to parse a JSON object to tell them how to create a new object in the system. The API for Noah is fairly simple as it is. Objects in the system have only two or three required attributes for a given operation and normally one of those attributes is directly inferable from the URL.<br /><br />But based on the poll results thus far, I wanted to give the idea fair consideration which led me to think about what types of objects Noah had in its system.<br /><br /><span class="Apple-style-span" style="font-size: large;">Primitives</span><br /><span class="Apple-style-span" style="font-size: large;"><br /></span><br />For those who aren&#8217;t familiar or simple don&#8217;t know, there&#8217;s a term in computer science and programming called &#8220;Primitive&#8221;. It essentially means a basic data type in a language from which other complex data types are created. A building block if you will. Some easily grokable examples of primitives are Characters and Integers. Some languages actually have ONE primitive like Object and everything is built on top of that. You could get into a semantic argument about a lot of this so I&#8217;m going to leave it at that.<br /><br />But back to the phrase &#8220;Infrastucture as code&#8221;. If we start looking at how we &#8220;program&#8221; our infrastructure, what are the &#8220;primitives&#8221; that our language supports. I inadvertently created some of these in Noah. I&#8217;ve been calling them the &#8220;opinionated models&#8221; but really in the infrastructure programming language of Noah, they&#8217;re primitives.<br /><br />When this hit me last night, I immediately pulled out the tablet and went to work on a mind map. I laid out what I had already implemented as primitives in Noah:<br /><br /><br /><ul><li>Host</li><li>Service</li><li>Application</li><li>Configuration</li></ul><br /><br />I then started to think about other concepts in Noah. Were <i>Ephmerals</i> really a primitive. Not really. If anything Ephemerals are more similar to ruby&#8217;s <i>BasicObject</i>. The only real attribute <i>Ephemerals</i> have are a path (similar to the <i>object_id</i>).<br /><br />So what else would be our modern operational primitives? Remember that we&#8217;re talking about building blocks here. I don&#8217;t want to abstract out too much. For instance you could simply say that a &#8220;Resource&#8221; is the only real operational primitive and that everything else is built on top of that. &nbsp;Also consider that languages such as Python have some richer primitives built-in like tuples.<br /><br />One interesting thought I had was the idea that &#8221;<i>State</i>&#8221; was a primitive. Again, in the world of operations and infrastructure, one of your basic building blocks is if something is available or not - up or down. At first glance it would appear that this maps pretty cleanly to a <i>Boolean</i> (which is a primitive in most languages) however I think it&#8217;s a richer primitive than that.<br /><br />In the world of operations, State is actually quaternary (if that&#8217;s the right word) rather than binary. There are two distinct areas between up and down that have dramatically different implications on how you interact with it:<br /><br /><br /><ul><li>Up</li><li>Down</li><li>Pending Up</li><li>Pending Down</li></ul><br /><br />Currently in Noah, we simple have Up, Down and Pending but something that is in the State of shutting down is grossly different than something in the state of Starting up. Look at a database that is queiscing connections. It&#8217;s in a state of &#8220;Pending Down&#8221;. It&#8217;s still servicing existing requests. However a database in the state of &#8220;Pending Up&#8221; is NOT servicing any requests.<br /><br />So I&#8217;m curious what other thoughts people have. What else are the basic building blocks of modern operations when viewed through the lens of &#8220;infrastructure as code&#8221;?<br /><br /><i>For the record, I&#8217;m still pretty confident that Noah still has a place in the Doozer, riak_zab, ZooKeeper world. All three of those still rely on the persistent connection for signaling and broadcast whereas Noah is fundamentally about the disconnected and asynchronous world.</i><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-8420097466413685534?l=lusislog.blogspot.com' alt='' /></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+
+
+
+      
+
+<span class="categories">
+  
+    Liquid error: undefined method `sort!' for nil:NilClass
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.lusis.org/archives/blogger/2011-04-14-operational-primitives.html" data-via="lusis" data-counturl="http://blog.lusis.org/archives/blogger/2011-04-14-operational-primitives.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/22/scale10x-recap/">Scale10x Recap</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/02/2011-in-review/">2011-in-review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/22/github-trolling-for-fun-and-profit/">Github Trolling for Fun and Profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/deploy-all-the-things/">Deploy ALL the Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/rollbacks-and-other-deployment-myths/">Rollbacks and other deployment myths</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

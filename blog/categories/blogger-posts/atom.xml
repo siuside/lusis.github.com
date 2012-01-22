@@ -1,0 +1,913 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: blogger posts | blog dot lusis]]></title>
+  <link href="http://blog.lusis.org/blog/categories/blogger-posts/atom.xml" rel="self"/>
+  <link href="http://blog.lusis.org/"/>
+  <updated>2012-01-22T11:25:44-08:00</updated>
+  <id>http://blog.lusis.org/</id>
+  <author>
+    <name><![CDATA[John E. Vincent]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[On Noah - Part 4]]></title>
+    <link href="http://blog.lusis.org/blog/2011/05/19/on-noah-part-4/"/>
+    <updated>2011-05-19T19:01:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/05/19/on-noah-part-4</id>
+    <content type="html"><![CDATA[<p><em>This is the fourth part in a series on Noah. <a href="http://goo.gl/l3Mgt">Part 1</a>, <a href="http://goo.gl/Nj2TN">Part 2</a> and <a href="http://goo.gl/RsZtZ">Part 3</a> are available as well</em></p>
+
+<p>In Part 1 and 2 of this series I covered background on Zookeeper and
+discussed the similarities and differences between it and Noah. Part 3
+was about the components underneath Noah that make it tick.</p>
+
+<p>This post is about the "future" of Noah. Since I'm a fan of Fourcast
+podcast, I thought it would be nice to do an immediate, medium and long
+term set of goals.</p>
+
+<!--more-->
+
+
+<h1>Immediate Future - the road to 1.0</h1>
+
+<p>In the most immediate future there are a few things that need to happen.
+These are in no specific order.</p>
+
+<ul>
+<li><p>General</p>
+
+<ul>
+<li>Better test coverage ESPECIALLY around the watch subsystem</li>
+<li>Full code comment coverage</li>
+<li>Chef cookbooks/Puppet manifests for doing a full install</li>
+<li>"fatty" installers for a standalone server</li>
+<li>Documentation around operational best practices</li>
+<li>Documentation around clustering, redundancy and hadr</li>
+<li>Documentation around integration best practices</li>
+<li>Performance testing</li>
+</ul>
+</li>
+<li><p>Noah Server</p>
+
+<ul>
+<li>Expiry flags and reaping for Ephemerals</li>
+<li>Convert mime-type in Configurations to make sense</li>
+<li>Untag and Unlink support</li>
+<li>Refactor how you specify Redis connection information</li>
+<li>Integrated metrics for monitoring (failed callbacks, expired
+ephemeral count, that kind of stuff)</li>
+</ul>
+</li>
+<li><p>Watcher callback daemon</p>
+
+<ul>
+<li>Make the HTTP callback plugin more flexible</li>
+<li>Finish binscript for the watcher daemon</li>
+</ul>
+</li>
+<li><p>Other</p>
+
+<ul>
+<li>Finish <a href="http://goo.gl/B65aL">Boat</a></li>
+<li>Finish NoahLite LWRP for Chef (using Boat)</li>
+<li>A few more HTTP-based callback plugins (Rundeck, Jenkins)</li>
+</ul>
+</li>
+</ul>
+
+
+<p>Now that doesn't look like a very cool list but it's a lot of work for
+one person. I don't blame anyone for not getting excited about it. The
+goal now is to get a functional and stable application out the door that
+people can start using. Mind you I think it's usable now (and I'm
+already using it in "production").</p>
+
+<p>Obviously if anyone has something else they'd like to see on the list,
+let me know.</p>
+
+<h1>Medium Rare</h1>
+
+<p>So beyond that 1.0 release, what's on tap? Most of the work will
+probably occur around the watcher subsystem and the callback daemon.
+However there are a few key server changes I need to implement.</p>
+
+<ul>
+<li><p>Server</p>
+
+<ul>
+<li>Full ACL support on every object at every level</li>
+<li>Token-based and SSH key based credentialing</li>
+<li>Optional versioning on every object at every level</li>
+<li>Accountability/Audit trail</li>
+<li>Implement a long-polling interface for inband watchers</li>
+</ul>
+</li>
+<li><p>Watcher callback daemon</p>
+
+<ul>
+<li>Decouple the callback daemon from the Ruby API of the server.
+Instead the daemon itself needs to be a full REST client of the
+Noah server</li>
+<li>Break out the "official" callback daemon into a distinct package</li>
+</ul>
+</li>
+<li><p>Clients</p>
+
+<ul>
+<li>Sinatra Helper</li>
+</ul>
+</li>
+</ul>
+
+
+<p>Also during this period, I want to spend time building up the ecosystem
+as a whole. You can see a general mindmap of that
+<a href="https://github.com/lusis/Noah/wiki/Ecosystem">here</a>.</p>
+
+<p>Going into a bit more detail...</p>
+
+<h2>Tokens and keys</h2>
+
+<p>It's plainly clear that something which has the ability to make runtime
+environment changes needs to be secure. The first thing to roll off the
+line post-1.0 will be that functionality. Full ACL support for all
+entries will be enabled and in can be set at any level in the namespace
+just the same as Watches.</p>
+
+<h2>Versioning and Auditing</h2>
+
+<p>Again for all entires and levels in the namespace, versioning and
+auditing will be allowed. The intention is that the number of revisions
+and audit entries are configurable as well - not just an enable/disable
+bit.</p>
+
+<h2>In-band watches</h2>
+
+<p>While I've lamented the fact that watches were in-band only in
+Zookeeper, there's a real world need for that model. The idea of
+long-polling functionality is something I'd actually like to have by 1.0
+but likely won't happen. The intent is simply that when you call say
+<code>/some/path/watch</code>, you can pass an optional flag in the message stating
+that you want to watch that endpoint for a fixed amount of time for any
+changes. Optionally a way to subscribe to all changes over long-polling
+for a fixed amount of time is cool too.</p>
+
+<h2>Agent changes</h2>
+
+<p>These two are pretty high on my list. As I said, there's a workable
+solution with minimal tech debt going into the 1.0 release but long
+term, this needs to be a distinct package. A few other ideas I'm kicking
+around are allowing configurable filtering on WHICH callback types an
+agent will handle. The idea is that you can specify that this invocation
+only handle http callbacks while this other one handles AMQP.</p>
+
+<h2>Sinatra Helper</h2>
+
+<p>One idea I'd REALLY like to come to fruition is the Sinatra Helper. I
+envision it working something like this:</p>
+
+<p>``` ruby</p>
+
+<pre><code>require 'sinatra/base'
+
+class MyApp &lt; Sinatra::Base
+  register Noah::Sinatra
+
+  noah_server "http://localhost:5678"
+  noah_node_name "myself"
+  noah_app_name "MyApp"
+  noah_token "somerandomlongstring"
+  dynamic_get :database_server
+  dynamic_set :some_other_variable, "foobar"
+  watch :this_other_node
+end
+</code></pre>
+
+<p>```</p>
+
+<p>The idea is that the helper allows you to register your application very
+easily with Noah for other components in your environment to be know. As
+a byproduct, you get the ability to get/set certain configuration
+parameters entirely in Noah. The watch setting is kind of cool as well.
+What will happen is if you decide to <code>watch</code> something this way, the
+helper will create a random (and yes, secure) route in your application
+that watch events can notify. In this way, your Sinatra application can
+be notified of any changes and will automatically "reconfigure" itself.</p>
+
+<p>Obviously I'd love to see other implementations of this idea for other
+languages and frameworks.</p>
+
+<h1>Long term changes</h1>
+
+<p>There aren't so much specific list items here as general themes and
+ideas. While I list these as long term, I've already gotten an offer to
+help with some of them so they might actually get out sooner.</p>
+
+<h2>Making Noah itself distributed</h2>
+
+<p>This is something I'm VERY keen on getting accomplished and would really
+consider it the fruition of what Noah itself does. The idea is simply
+that multiple Noah servers themselves are clients of other Noah servers.
+I've got several ideas about how to accomplish this but I got an
+interesting follow up from someone on Github the other day. He asked
+what my plans were in this area and we had several lengthy emails back
+and forth including an offer to work on this particular issue.</p>
+
+<p>Obviously there are a whole host of issues to consider. Race conditions
+in ordered delivery of Watch callbacks (getting a status "down" after a
+status "up" when it's supposed to be the other way around..) and
+eventual consistency spring to mind first.</p>
+
+<p>The general architecture idea that was offered up is to use
+<a href="https://github.com/derekcollison/nats">NATS</a> as the mechanism for
+accomplishing this. In the same way that there would be AMQP callback
+support, there would be NATS support. Additional Noah servers would only
+need to know one other member to bootstrap and everything else happens
+using the natural flows within Noah.</p>
+
+<p>The other part of that is how to handle the Redis part. The natural
+inclination is to use the upcoming Redis clustering but that's not
+something I want to do. I want each Noah server to actually include its
+OWN Redis instance "embedded" and not need to rely on any external
+mechanism for replication of the data. Again, the biggest validation of
+what Noah is designed to do is using only Noah itself to do it.</p>
+
+<h2>Move off Redis/Swappable persistence</h2>
+
+<p>If NATS says anything to me, it says "Why do you even need Redis?". If
+you recall, I went with Redis because it solved multiple problems. If I
+can find a persistence mechanism that I can use without any external
+service running, I'd love to use it.</p>
+
+<h2>ZeroMQ</h2>
+
+<p>If I were to end up moving off Redis, I'd need a cross platform and
+cross language way to handle the pubsub component. NATS would be the
+first idea but NATS is Ruby only (unless I've missed something). ZeroMQ
+appears to have broad language and platform support so writing custom
+agents in the same vein as the Redis PUBSUB method should be feasible.</p>
+
+<h2>Nanite-style agents</h2>
+
+<p>This is more of a command-and-control topic but a set of
+high-performance specialized agents on systems that can watch the PUBSUB
+backend or listen for callbacks would be awesome. This would allow you
+really integrate Noah into your infrastructure beyond the application
+level. Use it to trigger a puppet or chef run, reboot instances or do
+whatever. This is really about bringing what I wanted to accomplish with
+Vogeler into Noah.</p>
+
+<h2>The PAXOS question</h2>
+
+<p>A lot of people have asked me about this. I'll state right now that I
+can only make it through about 20-30% of any reading about Paxos before
+my brain starts to melt. However in the interest of proving myself the
+fool, I think it would be possible to implement some Paxos like
+functionality on top of Noah. Remember that Noah is fundamentally about
+fully disconnected nodes. What better example of a network of unreliable
+processors than ones that never actually talk to each other. The problem
+is that the use case for doing it in Noah is fairly limited so as not to
+be worth it.</p>
+
+<p>The grand scheme is that Noah helps enable the construction of systems
+where you can say "This component is free to go off and operate in this
+way secure in the knowledge that if something it needs to know changes,
+someone will tell it". I did say "grand" didn't I? At some point, I may
+hit the limit of what I can do using only Ruby. Who knows.</p>
+
+<h1>Wrap up - Part 4</h1>
+
+<p>Again with the recap</p>
+
+<ul>
+<li>Get to 1.0 with a stable and fixed set of functionality</li>
+<li>Nurture the Noah ecosystem</li>
+<li>Make it easy for people to integrate Noah into thier applications</li>
+<li>Get all meta and make Noah itself distributed using Noah</li>
+<li>Minimize the dependencies even more</li>
+<li>Build skynet</li>
+</ul>
+
+
+<p><em>I'm not kidding on that last one. Ask me about Parrot AR drones and
+Noah sometime</em></p>
+
+<p>If you made it this far, I want to say thank you to anyone who read any
+or all of the parts. Please don't hesitate to contact me with any
+questions about the project.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[On Noah - Part 3]]></title>
+    <link href="http://blog.lusis.org/blog/2011/05/18/on-noah-part-3/"/>
+    <updated>2011-05-18T15:14:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/05/18/on-noah-part-3</id>
+    <content type="html"><![CDATA[<p><em>This is the third part in a series on Noah. <a href="http://goo.gl/l3Mgt">Part 1</a> and <a href="http://goo.gl/Nj2TN">Part 2</a> are available as well</em></p>
+
+<p>In Part 1 and 2 of this series I covered background on Zookeeper and
+discussed the similarities and differences between it and Noah. This
+post is discussing the technology stack under Noah and the reasoning for
+it.</p>
+
+<h1>A little back story</h1>
+
+<p>I've told a few people this but my original intention was to use Noah as
+a way to learn Erlang. However this did not work out. I needed to get a
+proof of concept out much quicker than the ramp up time it would take to
+<a href="http://learnyousomeerlang.com/">learn me some Erlang</a>. I had this
+grandiose idea to slap mnesia, riak_core and webmachine into a tasty
+ball of Zookeeper clonage.</p>
+
+<!--more-->
+
+
+<p>I am not a developer by trade. I don't have any formal education in
+computer science (or anything for that matter). The reason I mention
+this is to say that programming is hard work for me. This has two side
+effects:</p>
+
+<ul>
+<li>It takes me considerably longer than a working developer to code
+what's in my head</li>
+<li>I can only really learn a new language when I have an itch to
+scratch. A real world problem to model.</li>
+</ul>
+
+
+<p>So in the interest of time, I fell back to a language I'm most
+comfortable with right now, Ruby.</p>
+
+<h1>Sinatra and Ruby</h1>
+
+<p>Noah isn't so much a web application as it is this 'api thing'. There's
+no proper front end and honestly, you guys don't want to see what my
+design deficient mind would create. I like to joke that in the world of
+MVC, I stick to the M and C. Sure, APIs have views but not in the "click
+the pretty button sense".</p>
+
+<p>I had been doing quite a bit of glue code at the office using
+<a href="http://www.sinatrarb.com">Sinatra</a> (and EventMachine) so I went with
+that. Sinatra is, if you use sheer number of clones in other languages
+as an example, a success for writing API-only applications. I also
+figured that if I wanted to slap something proper on the front, I could
+easily integrate it with <a href="http://www.padrinorb.com">Padrino</a>.</p>
+
+<p>But now I had to address the data storage issue.</p>
+
+<h1>Redis</h1>
+
+<p>Previously, as a way to learn Python at another company, I wrote an
+application called <a href="https://github.com/lusis/vogeler">Vogeler</a>. That
+application had a lot of moving parts - CouchDB for storage and RabbitMQ
+for messaging.</p>
+
+<p>I knew from dealing with CouchDB on CentOS5 that I wasn't going to use
+THAT again. Much of it would have been overkill for Noah anyway. I
+realized I really needed nothing more than a key/value store. That
+really left me with either Riak or Redis. I love Riak but it wasn't the
+right fit in this case. I needed something with a smaller dependency
+footprint. Mind you Riak is VERY easy to install but managing Erlang
+applications is still a bit edgy for some folks. I needed something
+simpler.</p>
+
+<p>I also realized early on that I needed some sort of basic queuing
+functionality. That really sealed Redis for me. Not only did it have
+zero external dependencies, but it also met the needs for queuing. I
+could use <code>lists</code> as dedicated direct queues and I could use the
+built-in <code>pubsub</code> as a broadcast mechanism. Redis also has a fast atomic
+counter that could be used to approximate the ZK sequence primitive
+should I want to do that.</p>
+
+<p>Additionally, Redis has master/slave (not my first choice) support for
+limited scaling as well as redundancy. One of my original design goals
+was that Noah behave like a traditional web application. This is a model
+ops folks understand very well at this point.</p>
+
+<h1>EventMachine</h1>
+
+<p>When you think asynchronous in the Ruby world, there's really only one
+tool that comes to mind, EventMachine. Noah is designed for asynchronous
+networks and is itself asynchronous in its design. The callback agent
+itself uses EventMachine to process watches. As I said previously, this
+is simply using an EM friendly Redis driver that can do <code>PSUBSCRIBE</code>
+(using em-hiredis) and send watch messages (using em-http-request since
+we only support HTTP by default).</p>
+
+<h1>Ohm</h1>
+
+<p>Finally I slapped <a href="http://ohm.keyvalue.org">Ohm</a> on top as the
+abstraction layer for Redis access. Ohm, if you haven't used it, is
+simply one of if not the best Ruby library for working with Redis. It's
+easily extensible, very transparent and frankly, it just gets the hell
+out of your way. A good example of this is converting some result to a
+hash. By default, Ohm only returns the id of the record. Nothing more.
+It also makes it VERY easy to drop past the abstraction and operate on
+Redis directly. It even provides helpers to get the keys it uses to
+query Redis. A good example of this is in the Linking and Tagging code.
+The following is a method in the Tag model:</p>
+
+<p>``` ruby</p>
+
+<pre><code>def members=(member)
+  self.key[:members].sadd(member.key)
+  member.tag! self.name unless member.tags.member?(self)
+end
+</code></pre>
+
+<p>```</p>
+
+<p>Because Links and Tags are a one-to-many across multiple models, I drop
+down to Redis and use <code>sadd</code> to add the object to a Redis set of objects
+sharing the same tag.</p>
+
+<p>It also has a very handy feature which is how the core of Watches are
+done. You can define hooks at any phase of Redis interaction - before
+and after saves, creates, updates and deletes. the entire Watch system
+is nothing more than calling these post hooks to format the state of the
+object as JSON, add metadata and send the message using <code>PUBLISH</code>
+messages to Redis with the Noah namespace as the channel.</p>
+
+<h1>Distribution vectors</h1>
+
+<p>I've used this phrase with a few people. Essentially, I want as many
+people as possible to be able to use the Noah server component. I've
+kept the Ruby dependencies to a minimum and I've made sure that every
+single one works on MRI 1.8.7 up to 1.9.2 as well as JRuby. I already
+distribute the most current release as a war that can be deployed to a
+container or run standalone. I want the lowest barrier to entry to get
+the broadest install base possible. When a new PaaS offering comes out,
+I pester the hell out of anyone I can find associated with it so I can
+get deploy instructions written for Noah. So far you can run it on
+Heroku (using the various hosted Redis providers), CloudFoundry and
+dotcloud.</p>
+
+<p>I'm a bit more lax on the callback daemon. Because it can be written in
+any language that can talk to the Redis pubsub system and because it has
+"stricter" performance needs, I'm willing to make the requirements for
+the "official" daemon more stringent. It currently ONLY works on MRI
+(mainly due to the em-hiredis requirement).</p>
+
+<h2>Doing things differently</h2>
+
+<p>Some people have asked me why I didn't use technology A or technology B.
+I think I addressed that mostly above but I'll tackle a couple of key
+ones.</p>
+
+<p>ZeroMQ</p>
+
+<p>The main reason for not using 0mq was that I wasn't really aware of it.
+Were I to start over and still be using Ruby, I'd probably give it a
+good strong look. The would still be the question of the storage
+component though. There's still a possible place for it that I'll
+address in part four.</p>
+
+<p>NATS</p>
+
+<p>This was something I simply had no idea about until I started poking
+around the CloudFoundry code base. I can almost guarantee that NATS will
+be a part of Noah in the future. Expect much more information about that
+in part four.</p>
+
+<p>MongoDB</p>
+
+<p>You have got to be kidding me, right? I don't trust my data (or anyone
+else's for that matter) to a product that doesn't understand what
+durability means when we're talking about databases.</p>
+
+<p>Insert favorite data store here</p>
+
+<p>As I said, Redis was the best way to get multiple required functionality
+into a single product. Why does a data storage engine have a pubsub
+messaging subsystem built in? I don't know off the top of my head but
+I'll take it.</p>
+
+<h2>Wrap up - Part 3</h2>
+
+<p>So again, because I evidently like recaps, here's the take away:</p>
+
+<ul>
+<li>The key components in Noah are Redis and Sinatra</li>
+<li>Noah is written in Ruby because of time constraints in learning a
+new language</li>
+<li>Noah strives for the server component to have the broadest set of
+distribution vectors as possible</li>
+<li>Ruby dependencies are kept to a minimum to ensure the previous point</li>
+<li>The lightest possible abstractions (Ohm) are used.</li>
+<li>Stricter requirements exist for non-server components because of
+flexibility in alternates</li>
+<li>I really should learn me some erlang</li>
+<li>I'm not a fan of MongoDB</li>
+</ul>
+
+
+<p>If you haven't guessed, I'm doing one part a night in this series.
+Tomorrow is part four which will cover the future plans for Noah. I'm
+also planning on a bonus part five to cover things that didn't really
+fit into the first four.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[On Noah - Part 2]]></title>
+    <link href="http://blog.lusis.org/blog/2011/05/17/on-noah-part-2/"/>
+    <updated>2011-05-17T15:38:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/05/17/on-noah-part-2</id>
+    <content type="html"><![CDATA[<p><em>This is the second part in a series on Noah. Part 1 is available</em> <a href="http://goo.gl/l3Mgt">here</a></p>
+
+<p>In part one of this series, I went over a little background about
+ZooKeeper and how the basic Zookeeper concepts are implemented in Noah.
+In this post, I want to go over a little bit about a few things that
+Noah does differently.</p>
+
+<!--more-->
+
+
+<h2>Noah Primitives</h2>
+
+<p>As mentioned in the previous post, Noah has 5 essential data types, four
+of which are what I've interchangeably refered to as either Primitives
+and Opinionated models. The four primitives are Host, Service,
+Application and Configuration. The idea was to map some common use cases
+for Zookeeper and Noah onto a set of objects that users would find
+familiar.</p>
+
+<p>You might detect a bit of Nagios inspiration in the first two.</p>
+
+<ul>
+<li><strong>Host:</strong>
+  Analogous to a traditional host or server. The machine or instance running the operating system. Unique by name.</li>
+<li><strong>Service:</strong>
+  Typically mapped to something like HTTP or HTTPS. Think of this as the listening port on a Host. Services must be bound to Hosts. Unique by service name and host name.</li>
+<li><strong>Application:</strong>
+  Apache, your application (rails, php, java, whatever). There's a subtle difference here from Service. Unique by name.</li>
+<li><strong>Configuration:</strong>
+  A distinct configuration element. Has a one-to-many relationship with Applications. Supports limited mime typing.</li>
+</ul>
+
+
+<p>Hosts and Services have a unique attribute known as <code>status</code>. This is a
+required attribute and is one of <code>up</code>,<code>down</code> or <code>pending</code>. These
+primitives would work very well integrated into the OS init process.
+Since Noah is curl-friendly, you could add something globally to init
+scripts that updated Noah when your host is starting up or when some
+critical init script starts. If you were to imagine Noah primitives as
+part of the OSI model, these are analagous to Layers 2 and 3.</p>
+
+<p>Applications and Configurations are intended to feel more like Layer 7
+(again, using our OSI model analogy). The differentiation is that your
+application might be a Sinatra or Java application that has a set of
+Configurations associated with it. Interestingly enough, you might
+choose to have something like Tomcat act as both a Service AND an
+Application. The aspect of Tomcat as a Service is different than the
+Java applications running in the container or even Tomcat's own
+configurations (such as logging).</p>
+
+<p>One thing I'm trying to pull off with Configurations is limited
+mime-type support. When creating a Configuration in Noah, you can assign
+a <code>format</code> attribute. Currently 3 formats or types are understood:</p>
+
+<ul>
+<li>string</li>
+<li>json</li>
+<li>yaml</li>
+</ul>
+
+
+<p>The idea is that, if you provide a type, we will serve that content back
+to you in that format when you request it (assuming you request it that
+way via HTTP headers). This should allow you to skip parsing the JSON
+representation of the whole object and instead use it directly. Right
+now this list is hardcoded. I have a task to convert this.</p>
+
+<p>Hosts and Services make a great "canned" structure for building a
+monitoring system on top of Noah. Applications and Configurations are a
+lightweight configuration management system. Obviously there are more
+uses than that but it's a good way to look at it.</p>
+
+<h2>Ephemerals</h2>
+
+<p>Ephemerals, as mentioned previously, are closer to what Zookeeper
+provides. The way I like to describe Ephemerals to people is a '512 byte
+key/value store with triggers' (via Watch callbacks). If none of the
+Primitives fit your use case, the Ephemerals make a good place to start.
+Simply send some data in the body of your post to the url and the data
+is stored there. No attempt is made to understand or interpret the data.
+The hierarchy of objects in the Ephemeral namespace is completely
+arbitrary. Data living at <code>/ephemerals/foo</code> has no relationship with
+data living at <code>/ephemerals/foo/bar</code>.</p>
+
+<p>Ephemerals are also not browseable except via a Linking and Tagging.</p>
+
+<h2>Links and Tags</h2>
+
+<p>Links and Tags are, as far as I can tell, unique to Noah compared to
+Zookeeper. Because we namespace against Primitives and Ephemerals, there
+existed the need to visualize objects under a custom hierarchy.
+Currently Links and Tags are the only way to visualize Ephemerals in a
+JSON format.</p>
+
+<p>Tags are pretty standard across the internet by now. You might choose to
+tag a bunch of items as <code>production</code> or perhaps group a set of Hosts and
+Services as <code>out-of-service</code>. Tagging an item is a simple process in the
+API. Simply <code>PUT</code> the name of the tag(s) to the url of a distinct named
+item appended by <code>tag</code>. For instance, the following JSON posted to
+<code>/applications/my_kick_ass_app/tag</code> with tag the Application
+<code>my_kick_ass_app</code> with the tags <code>sinatra</code>, <code>production</code> and <code>foobar</code>:</p>
+
+<p>```javascript</p>
+
+<pre><code>{"tags":["sinatra", "production", "foobar"]}
+</code></pre>
+
+<p>```</p>
+
+<p>Links work similar to Tags (including the act of linking) except that
+the top level namespace is now replaced with the name of the Link. The
+top level namespace in Noah for the purposes of Watches is <code>//noah</code>. By
+linking a group of objects together, you will be able to (not yet
+implemented), perform operations such as Watches in bulk. For instance,
+if you wanted to be informed of all changes to your objects in Noah, you
+would create a Watch against <code>//noah/*</code>. This works fine for most people
+but imagine you wanted a more multi-tenant friendly system. By using
+links, you can group ONLY the objects you care about and create the
+watch against that link. So <code>//noah/*</code> becomes <code>//my_organization/*</code> and
+only those changes to items in that namespace will fire for that Watch.</p>
+
+<p>The idea is also that other operations outside of setting Watches can be
+applied to the underlying object in the link as well. The name Link was
+inspired by the idea of symlinking.</p>
+
+<h2>Watches and Callbacks</h2>
+
+<p>In the first post, I mentioned that by nature of Noah being
+"disconnected", Watches were persistent as opposed to one-shot.
+Additionally, because of the pluggable nature of Noah Watches and
+because Noah has no opinion regarding the destination of a fired Watch,
+it becomes very easy to use Noah as a broadcast mechanism. You don't
+need to have watches for each interested party. Instead, you can create
+a callback plugin that could dump the messages on an ActiveMQ Fanout
+queue or AMQP broadcast exchange. You could even use multicast to notify
+multiple interested parties at once.</p>
+
+<p>Again, the act of creating a watch and the destination for notifications
+is entirely disconnected from the final client that might use the
+information in that watch event.</p>
+
+<p>Additionally, because of how changes are broadcast internally to Noah,
+you don't even have to use the "official" Watch method. All actions in
+Noah are published post-commit to a pubsub queue in Redis. Any language
+that supports Redis pubsub can attach directly to the queue and
+PSUBSCRIBE to the entire namespace or a subset. You can write your own
+engine for listening, filtering and notifying clients.</p>
+
+<p>This is exactly how the Watcher daemon works. It attaches to the Redis
+pubsub queue, makes a few API calls for the current registered set of
+watches and then uses the watches to filter messages. When a new watch
+is created, that message is like any other change in Noah. The watcher
+daemon sees that and immediately adds it to its internal filter. This
+means that you can create a new watch, immediately change the watched
+object and the callback will be made.</p>
+
+<h2>Wrap up - Part Two</h2>
+
+<p>So to wrap up:</p>
+
+<ul>
+<li>Noah has 5 basic "objects" in the system. Four of those are
+opinionated and come with specific contracts. The other is a "dumb"
+key/value store of sorts.</li>
+<li>Noah provides Links and Tags as a way to perform logical grouping of
+these objects. Links replace the top-level hierarchy.</li>
+<li>Watches are persistent. The act of creating a watch and notifying on
+watched objects is disconnected from the final recipient of the
+message. System A can register a watch on behalf of System B.</li>
+<li>Watches are nothing more than a set of filters applied to a Redis
+pubsub queue listener. Any language that supports Redis and its
+pubsub queue can be a processor for watches.</li>
+<li>You don't even have to register any Watches in Noah if you choose to
+attach and filter yourself.</li>
+</ul>
+
+
+<p>Part three in this series will discuss the technology stack under Noah
+and the reasoning behind it. A bit of that was touched on in this post.
+Part four is the discussion about long-term goals and roadmaps.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[On Noah - Part 1]]></title>
+    <link href="http://blog.lusis.org/blog/2011/05/16/on-noah-part-1/"/>
+    <updated>2011-05-16T23:16:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/05/16/on-noah-part-1</id>
+    <content type="html"><![CDATA[<p><em>This is the first part in a series of posts going over Noah</em></p>
+
+<p>As you may have heard (from my own mouth no less), I've got a smallish
+side project I've been working on called
+<a href="https://github.com/lusis/Noah">Noah</a>.</p>
+
+<!--more-->
+
+
+<p>It's a project I've been wanting to work on for a long time now and
+earlier this year I got off my ass and started hacking. The response has
+been nothing short of overwhelming. I've heard from so many people how
+they're excited for it and nothing could drive me harder to work on it
+than that feedback. To everyone who doesn't run away when I talk your
+ear off about it, thank you so much.</p>
+
+<p>Since I never really wrote an "official" post about it, I thought this
+would be a good opportunity to talk about what it is, what my ideas are
+and where I'd like to see it go in the future.</p>
+
+<h1>So why Noah?</h1>
+
+<p><em>fair warning. much of the following may be duplicates of information in
+the Noah wiki</em></p>
+
+<p>The inspiration for Noah came from a few places but the biggest
+inspiration is <a href="http://goo.gl/WGCxY">Apache Zookeeper</a>. Zookeeper is one
+of those things that by virtue of its design is a BUNCH of different
+things. It's all about perspective. I'm going to (yet again) paste the
+description of Zookeeper straight from the project site:</p>
+
+<pre><code>ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.
+</code></pre>
+
+<p>Now that might be a bit confusing at first. Which is it? Is it a
+configuration management system? A naming system? It's all of them and,
+again, it's all about perspective.</p>
+
+<p>Zookeeper, however, has a few problems for my standard use case.</p>
+
+<ul>
+<li>Limited client library support</li>
+<li>Requires persistent connections to the server for full benefit</li>
+</ul>
+
+
+<p>By the first, I mean that the only official language bindings are C and
+Java. There's contributed Python support and Twitter maintains a Ruby
+library. However all of these bindings are "native" and must be
+compiled. There is also a command-line client that you can use for
+interacting as well - one in Java and two C flavors.</p>
+
+<p>The second is more of a showstopper. Zookeeper uses the client
+connection to the server as in-band signaling. This is how watches
+(discussed in a moment) are communicated to clients. Persistent
+connections are simply not always an option. I can't deploy something to
+Heroku or AppEngine that requires that persistent connection. Even if I
+could, it would be cost-prohibitive and honestly wouldn't make sense.</p>
+
+<p>Looking at the list of features I loved about ZK, I thought "How would I
+make that work in the disconnected world?". By that I mean what would it
+take to implement any or all of the Zookeeper functionality as a service
+that other applications could use?</p>
+
+<p>From that thought process, I came up with Noah. The name is only a play
+on the concept of a zookeeper and holds no other real significance other
+than irritation at least two people named Noah when I talk about the
+project.</p>
+
+<p>So working through the feature list, I came up with a few things I
+<strong>REALLY</strong> wanted. I wanted Znodes, Watches and I wanted to do it all
+over HTTP so that I could have the broadest set of client support. JSON
+is really the defacto standard for web "messaging" at this point so
+that's what I went with. Basically the goal was "If your language can
+make HTTP requests and parse JSON, you can write a Noah client"</p>
+
+<h1>Znodes and Noah primitives</h1>
+
+<p>Zookeeper has a shared hierarchical namespace similar to a UNIX
+filesystem. Points in the hierarchy are called <code>znodes</code>. Essentially
+these are arbitrary paths where you can store bits of data - up to 1MB
+in size. These znodes are unique absolute paths. For instance:</p>
+
+<pre><code>//systems/foo/bar/networks/kansas/router-1/router-2
+</code></pre>
+
+<p>Each fully qualified path is a unique znode. Znodes can be ephemeral or
+persistent. Zookeeper also has some primitives that can be applied to
+znodes such as 'sequence`.</p>
+
+<p>When I originally started working on Noah, so that I could work with a
+model, I created some base primitives that would help me demonstrate an
+example of some of the use cases:</p>
+
+<ul>
+<li>Host</li>
+<li>Service</li>
+<li>Application</li>
+<li>Configuration</li>
+</ul>
+
+
+<p>These primitives were actual models in the Noah code base with a strict
+contract on them. As an example, Hosts must have a status and can have
+any number of services associated with them. Services MUST be tied
+explicity to a host. Applications can have Configurations (or not) and
+Configurations can belong to any number of Applications or not.
+Additionally, I had another "data type" that I was simply calling
+Ephemerals. This is similar to the Zookeeper znode model. Originally I
+intended for Ephemerals to be just that - ephemeral. But I've backed off
+that plan. In Noah, Ephemerals can be either persistent or truely
+ephemeral (not yet implemented).</p>
+
+<p>So now I had a data model to work with. A place to store information and
+flexibility to allow people to use the predefined primitives or the
+ephemerals for storing arbitrary bits of information.</p>
+
+<h1>Living the disconnected life</h1>
+
+<p>As I said, the model for my implementation was "disconnected". When
+thinking about how to implement Watches in a disconnected model, the
+only thing that made sense to me was a callback system. Clients would
+register an interest on an object in the system and when that object
+changed, they would get notified by the method of their choosing.</p>
+
+<p>One thing about Watches in Zookeeper that annoys me is that they're
+one-shot deals. If you register a watch on a znode, once that watch is
+triggered, you have to REREGISTER the watch. First off this creates, as
+documented by the ZK project, a window of opportunity where you could
+miss another change to that watch. Let's assume you aren't using a
+language where interacting with Zookeeper is a synchronous process:</p>
+
+<ul>
+<li>Connect to ZK</li>
+<li>Register watch on znode</li>
+<li>Wait</li>
+<li>Change happens</li>
+<li>Watch fires</li>
+<li>Process watch event</li>
+<li>Reregister watch on znode</li>
+</ul>
+
+
+<p>In between those last two steps, you risk missing activity on the znode.
+In the Noah world, watches are persistent. This makes sense for two
+reasons. The first is that the latency between a watch callback being
+fired and proccessed could be much higher than the persistent connection
+in ZK. The window of missed messages is simply much greater. We could
+easily be talking 100's of milliseconds of latency just to get the
+message and more so to reregister the watch.</p>
+
+<p>Secondly, the registration of Watches in Noah is, by nature of Noah's
+design and as a byproduct, disconnected from the consumer of those
+watches. This offers much greater flexibility in what watches can do.
+Let's look at a few examples.</p>
+
+<p>First off, it's important to understand how Noah handles callbacks. The
+message format of a callback in Noah is simply a JSON representation of
+the changed state of an object and some metadata about the action taken
+(i.e. delete, create, update). Watches can be registered on distinct
+objects, a given path (and thus all the children under that path) and
+further refined down to a given action. Out of the box, Noah ships with
+one callback handler - http. This means that when you register a watch
+on a path or object, you provide an http endpoint where Noah can post
+the aforementioned JSON message. What you do with it from there is up to
+you.</p>
+
+<p>By virtue of the above, the callback system is also designed to be
+'pluggable' for lack of a better word. While the out of the box
+experience is an http post, you could easily write a callback handler
+that posted the message to an AMQP exchange or wrote the information to
+disk as a flat file. The only requirement is that you represent the
+callback location as a single string. The string will be parsed as a url
+and broken down into tokens that determine which plugin to call.</p>
+
+<p>So this system allows for you to distribute watches to multiple systems
+with a single callback. Interestingly enough, this same watch callback
+system forms the basis of how Noah servers will share changes with each
+other in the future.</p>
+
+<h1>Wrap up - Part 1</h1>
+
+<p>So wrapping up what I've discussed, here are the key take aways:</p>
+
+<ul>
+<li>Noah is a 'port' of specific Zookeeper functionality to a
+disconnected and asynchronous world</li>
+<li>Noah uses HTTP and JSON as the interface to the server</li>
+<li>Noah has both traditional ZK-style Ephemerals as well as opinionated
+Primitives</li>
+<li>Noah uses a pluggable callback system to approximate the Watch
+functionality in Zookeeper</li>
+<li>Clients can be written in any language that can speak HTTP and
+understand JSON (yes, even a shell script)</li>
+</ul>
+
+
+<h1>Part 2 and beyond</h1>
+
+<p>In part two of this series we'll discuss some of the additions to Noah
+that aren't a part of Zookeeper such as Tags and Links. Part 3 will
+cover the underlying technology which I am intentionally not discussing
+at this point. Part 4 will be a roadmap of my future plans for Noah.</p>
+]]></content>
+  </entry>
+  
+</feed>

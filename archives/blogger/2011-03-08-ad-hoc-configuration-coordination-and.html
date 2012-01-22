@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Ad-Hoc Configuration, Coordination and the value of change - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="For those who don&#8217;t know, I&#8217;m currently in Boston for DevOps Days. It&#8217;s been amazing so far and I&#8217;ve met some wonderful peo...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lusis.org/archives/blogger/2011-03-08-ad-hoc-configuration-coordination-and.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lusis.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Ad-Hoc Configuration, Coordination and the Value of Change</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">For those who don&#8217;t know, I&#8217;m currently in Boston for DevOps Days. It&#8217;s been amazing so far and I&#8217;ve met some wonderful people. One thing that was REALLY awesome was the open space program that Patrick set up. You won&#8217;t believe it works until you&#8217;ve tried it. It&#8217;s really powerful.<br /><br />In one of our open spaces, the topic of ZooKeeper came up. At this point I made a few comments, and at the additional prodding of everyone went into a discussion about ZooKeeper and Noah. I have a tendency to monopolize discussions around topics I&#8217;m REALLY passionate about so many thanks for everyone who insisted I go on ;)<br /><br /><span class="Apple-style-span" style="font-size: x-large;">Slaughter the deviants!</span><br />The most interesting part of the discussion about ZooKeeper (or at least the part I found most revealing) was that people tended to have trouble really seeing the value in it. One of the things I&#8217;ve really wanted to do with Noah is provide (via the wiki) some really good use cases about where it makes sense.<br /><br />I was really excited to get a chance to talk with &nbsp;Alex Honor (one of the co-founders of DTO along with Damon Edwards) about his ideas after his really interesting blog post around <a href="http://dev2ops.org/blog/2011/2/16/peanut-butter-in-my-chocolate-convergence-vs-ad-hoc-control.html">ad-hoc configuration.</a>&nbsp;If you haven&#8217;t read it, I suggest you do so.<br /><br />Something that often gets brought up and, oddly, overlooked at the same time is the where ad-hoc change fits into a properly managed environment (using a tool like puppet or chef).<br /><br />At this point, many of you have gone crazy over the thought of polluting your beautifully organized environment with something so dirty as ad-hoc changes. I mean, here we&#8217;ve spent all this effort on describing our infrastructure as code and you want to come in and make a random, &#8220;undocumented&#8221; change? Perish the thought!<br /><br />However, as with any process or philosophy, strict&nbsp;adherence&nbsp;with out understanding WHEN to deviate will only lead to frustration. Yes, there is a time to deviate and knowing when is the next level of maturity in configuration management.<br /><br /><span class="Apple-style-span" style="font-size: large;">So when do I deviate</span><br />Sadly, knowing when it&#8217;s okay to deviate is as much a learning experience as it was getting everything properly configured in the first place. To make it even worse, that knowledge is most often specific to the environment in which you operate. The whole point of the phrase ad-hoc is that it&#8217;s..well&#8230;ad-hoc. It&#8217;s 1 part improvisation/.5 parts stumbling in the dark and the rest is backfilled with a corpus of experience. I don&#8217;t say this to sound elitist.<br /><br />So, really, when do I deviate. When/where/why and how do I deviate from this beautifully described environment? Let&#8217;s go over some use cases and point out that you&#8217;re probably ALREADY doing it to some degree.<br /><br /><span class="Apple-style-span" style="font-size: large;">Production troubleshooting</span><br />The most obvious example of acceptable deviation is troubleshooting. We pushed code, our metrics are all screwed up and we need to know what the hell just happened. Let&#8217;s crank up our logging.<br /><br />At this point, changing your log level, you&#8217;ve deviated from what your system of record (your CM tool) says you should be. Our manifests, our cookbooks, our templates all have us using a loglevel of ERROR but we just bumped up one server to DEBUG. so we could troubleshoot. That system is now a snowflake. Unless you change that log level back to ERROR, you know have one system that will, until you do a puppetrun of chef-client run is different than all the other servers of the class/role.<br /><br />Would you codify that in the manifest? No. This is an exception. A (should be) short-lived exception to the rules you&#8217;ve defined.<br /><br /><span class="Apple-style-span" style="font-size: large;">Dynamic environments</span><br />Another area where you might deviate is in highly elastic environments. Let&#8217;s say you&#8217;ve reached the holy grail of elasticity. You&#8217;re growing and shrinking capacity based on some external trigger. You can&#8217;t codify this. I might run 20 instances of my app server now but drop back down to 5 instances when the &#8220;event&#8221; has passed. In a highly elastic environment, are you running your convergence tool after every spin up? Not likely. In an &#8220;event&#8221; you don&#8217;t want to have to take down your load balancer (and thus affect service to the existing intstances) just to add capacity. A bit of a contrived example but you get the idea.<br /><br /><span class="Apple-style-span" style="font-size: x-large;">So what&#8217;s the answer?</span><br />I am by far not the smartest cookie in the tool shed but I&#8217;m opinionated so that has to count for something. These &#8220;exception&#8221; events are where I see additional tools like Zookeeper (or my pet project Noah) stepping in to handle things.<br /><br />Distributed coordination, dynamically reconfigurable code, elasticity and environment-aware applications.<br />These are all terms I&#8217;ve used to describe this concept to people. Damon Edwards provided me with the last one and I really like it.<br /><br /><span class="Apple-style-span" style="font-size: large;">Enough jibber-jabber, hook a brother up!</span><br />So before I give you the ability to shoot yourself in the foot, you should be aware of a few things:<br /><br /><br /><ul><li>It&#8217;s not a system of record</li></ul><br />Your DDCS (dynamic distributed coordination service as I&#8217;ll call it because I can&#8217;t ever use enough buzzwords) is NOT your system of record. It can be but it shouldn&#8217;t be. Existing tools provide that service very well and they do it in an idempotent manner.<br /><br /><br /><ul><li>Know your configuration</li></ul><br />This is VERY important. As I said before, much of this is environment specific.&nbsp;The category of information you&#8217;re changing in this way is more &#8220;transient&#8221; or &#8220;point-in-time&#8221;. Any given atom of configuration information has a specific value associated with it. Different levels of volatility. Your JDBC connection string is probably NOT going to change that often. However, the number of application servers might be at different amounts of capacity based on some dynamic external factor.<br /><br /><br /><ul><li>Your environment is dynamic and so should be your response</li></ul><br />This is where I probably get some pushback. Just as one of the goals of &#8220;devops&#8221; was to deal with, what Jesse Robbins described to day as misalignment of incentive, there&#8217;s an internal struggle where some values are simply fluctuating in near real time. This is what we&#8217;re trying to address.<br /><br /><br /><ul><li>It is not plug and play</li></ul><br />One thing that Chef and Puppet do very well is that you can, with next to no change to your systems, predefine how something should look or behave and have those tools &#8220;make it so&#8221;.<br /><br />With these realtime/dynamic configuration atoms your application needs to be aware of them and react to them intelligently.<br /><br /><span class="Apple-style-span" style="font-size: large;">Okay seriously. Get to the point</span><br />So let&#8217;s take walk through a scenario where we might implement this ad-hoc philosophy in a way that gives us the power we&#8217;re seeking.<br /><br /><span class="Apple-style-span" style="font-size: large;">The base configuration</span><br /><br /><ul><li>&nbsp;application server (fooapp) uses memcached, two internal services called &#8220;lookup&#8221; and &#8220;evaluate&#8221; and a data store of somekind.</li><li>&#8220;lookup&#8221; and &#8220;evaluate&#8221; are internally developed applications that provide private REST endpoints for providing a dictionary service (lookup) and a business rule parser of some kind (evaluate).</li><li>Every component&#8217;s base configuration (including the data source that &#8220;lookup&#8221; and &#8220;evaluation&#8221; use) is managed, configured and controlled by puppet/chef.</li></ul><br /><br />In a standard world, we store the ip/port mappings for &#8220;lookup&#8221; and &#8220;evaluate&#8221; in our CM tool and tags those. When we do a puppet/chef client run, the values for those servers are populated based on the ip/port information our EXISTING &#8220;lookup&#8221;/&#8221;evaluate&#8221; servers.<br /><br />This works. It&#8217;s being done right now.<br /><br /><span class="Apple-style-span" style="font-size: large;">So where&#8217;s the misalignment?</span><br />What do you do when you want to spin up another &#8220;lookup&#8221;/&#8221;evaluate&#8221; server? Well you would probably use a bootstrap of some kind and apply, via the CM tool, the changes to those values. However this now means that for this to take effect across your &#8220;fooapp&#8221; servers you need to do a manual run of your CM client. Based on the feedback I&#8217;ve seen across various lists, this is where the point of contention exists.<br /><br />What about any untested CM changes (a new recipe for instance). I don&#8217;t want to apply that but if I run my CM tool, I&#8217;ve now not only pulled those unintentional changes but also forced a bounce of all of my fooapp servers. So as a side product of scaling capacity to meet demand, I&#8217;ve now reduced my capacity at another point just to make my application aware of the new settings.<br /><br /><span class="Apple-style-span" style="font-size: x-large;">Enter Noah</span><br />This is where the making your application aware of its environment and allowing it to dynamically reconfigure itself pays off.<br /><br />Looking at our base example now, let&#8217;s do a bit of&nbsp;architectural work&nbsp;around this new model.<br /><br /><br /><ul><li>My application no longer hardcodes a base list of servers prodviding &#8220;lookup&#8221; and &#8220;evaluate&#8221; services.</li><li>My application understands the value of a given configuration atom</li><li>Instead of the hardcoded list, we convert those configuration atoms akin to something like a singleton pattern that points to a bootstrap endpoint.</li><li>FooApp provides some sot of &#8220;endpoint&#8221; where it can be notified of changes to the number/ip addresses or urls available a a given of our services. This can also be proxied via another endpoint.</li><li>The &#8220;bootstrap&#8221; location is managed by our CM tool based on some more concrete configuration - the location of the bootstrap server.</li></ul><br /><br />Inside our application, we&#8217;re now:<br /><br /><br /><ul><li>Pulling a list of &#8220;lookup&#8221;/&#8221;evaluate&#8221; servers from the bootstrap url (i.e. http://noahserver/s/evaluate)</li><li>Registering a &#8220;watch&#8221; on the above &#8220;path&#8221; and providing an in-application endpoint to be notified when they change.</li><li>validating at startup if the results of the bootstrap call provide valid information (i.e. doing a quick connection test to each of the servers provided by the bootstrap lookup or a subset thereof)</li></ul><br /><br />If we dynamically add a new transient &#8220;lookup&#8221; server, Noah fires a notification to the provided endpoint with the details of the change. The application will receive a message saying &#8220;I have a new &#8216;lookup&#8217; server available&#8221;. It will run through some sanity checks to make sure that the new &#8220;lookup&#8221; server really does exist and works. It then appends the new server to the list of existing (permanent servers) and start taking advantage of the increase in capacity.<br /><br />That&#8217;s it. How you implement the &#8220;refresh&#8221; and &#8220;validation&#8221; mechanisms is entirely language specific. This also doesn&#8217;t, despite my statements&nbsp;previously, have to apply to transient resources. The new &#8220;lookup&#8221; server could be a permanent addition to my infra. Of course this would have been captured as part of the bootstrapping process if that were the case.<br /><br /><span class="Apple-style-span" style="font-size: large;">Nutshell</span><br />And that&#8217;s it in a nutshell. All of this is availalbe in Noah and Zookeeer right now. Noah is currently restricted to http POST endpoints but that will be expanded. Zookeeper treats watches as ephemeral. Once the event has fired, you must&nbsp;register&nbsp;that same watch. With Noah, watches are permanent.<br /><br /><span class="Apple-style-span" style="font-size: large;">Takeaway</span><br />I hope the above has made sense. This was just a basic introduction to some of the concepts and design goals. There are plenty of OTHER use cases for ZooKeeper alone. So the key take aways are:<br /><br /><br /><ul><li>Know the value of your configuration data</li><li>Know when and where to use that data</li><li>Don&#8217;t supplant your existing CM tool but instead enhance it.</li></ul><br /><br /><span class="Apple-style-span" style="font-size: large;">Links</span><br /><a href="http://goo.gl/iTPQD">Noah</a><br /><a href="http://goo.gl/WGCxY">ZooKeeper</a><br /><a href="http://goo.gl/oVgbx">Hadoop Book</a> (which has some AMAZING detail around ZooKeeper, the technology and use cases<div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-1243779692897033900?l=lusislog.blogspot.com' alt='' /></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+
+
+
+      
+
+<span class="categories">
+  
+    Liquid error: undefined method `sort!' for nil:NilClass
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.lusis.org/archives/blogger/2011-03-08-ad-hoc-configuration-coordination-and.html" data-via="lusis" data-counturl="http://blog.lusis.org/archives/blogger/2011-03-08-ad-hoc-configuration-coordination-and.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/22/scale10x-recap/">Scale10x Recap</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/02/2011-in-review/">2011-in-review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/22/github-trolling-for-fun-and-profit/">Github Trolling for Fun and Profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/deploy-all-the-things/">Deploy ALL the Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/rollbacks-and-other-deployment-myths/">Rollbacks and other deployment myths</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

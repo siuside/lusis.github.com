@@ -1,0 +1,2496 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[blog dot lusis]]></title>
+  <link href="http://blog.lusis.org/atom.xml" rel="self"/>
+  <link href="http://blog.lusis.org/"/>
+  <updated>2012-01-22T11:25:44-08:00</updated>
+  <id>http://blog.lusis.org/</id>
+  <author>
+    <name><![CDATA[John E. Vincent]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Scale10x Recap]]></title>
+    <link href="http://blog.lusis.org/blog/2012/01/22/scale10x-recap/"/>
+    <updated>2012-01-22T07:02:00-08:00</updated>
+    <id>http://blog.lusis.org/blog/2012/01/22/scale10x-recap</id>
+    <content type="html"><![CDATA[<p>This past week I had the awesome pleasure of participating in my first <a href="http://www.socallinuxexpo.org/">SoCal Linux Expo</a>. As I later discovered, this was the 10th installment of this awesome event (hence the 10x).</p>
+
+<h1>The email and enStratus</h1>
+
+<p>I got an email from <a href="https://twitter.com/irabinovitch">Ilan Rabinovitch</a> just as things were going down with me headed to <a href="http://enstratus.com">enStratus</a>. Since the event was going to be right around the time I started, I pretty much put it out of my mind.
+Then I realized that <a href="https://twitter.com/botchagalupe">my boss</a> was going to be attending. I figured it wouldn&#8217;t hurt to ask and it was decided that I would shadow John on his trip to enStratus HQ for my manditory cultural immersion (translation: does the fat redneck own a winter coat?) and on to SCaLE. While I didn&#8217;t make it to Minnesota (diverted to San Jose on business), I did still make it to the conference.</p>
+
+<p>I had an awesome time in San Francisco and San Jose. I got to meet a great bunch of folks and geek out hardcore.</p>
+
+<h1>Monitoring sucks</h1>
+
+<p>Ilan asked me if I would be willing to be on a panel about the whole <a href="https://github.com/monitoringsucks">#monitoringsucks</a> thing. We were able to score a great panel of folks:</p>
+
+<ul>
+<li>Simon Jakesch from Zenoss</li>
+<li>James Litton from PagerDuty</li>
+<li>Jody Mulkey from Shopzilla</li>
+</ul>
+
+
+<p>The event was awesome. I did some minor introductions, got the ball rolling with some questions and then we let the audience take it from there.
+The participation was AWESOME. We had great questions from the audience and the feedback I got AFTER the fact was mindblowing. One particular post-panel question is worth a blog post in its own right.</p>
+
+<p>One thing that really stood out was this: People just don&#8217;t know where to start. The landscape is pretty &#8220;cluttered&#8221;. <a href="https://twitter.com/cwebber">Chris Webber</a> brought up a very salient point that I sometimes forget; When we talk about &#8220;monitoring&#8221;, we&#8217;re really talking about multiple things - collection, alerting, visualization, trending and multitudes of other aspects.</p>
+
+<p>I got asked several times in the hallway - &#8220;What should I use?&#8221; or &#8220;What do you think about <foo>?&#8221;. My first response was always &#8220;What are you using now?&#8221;.</p>
+
+<p>I like to think I&#8217;m pretty pragmatic. I love the new shiny. I love pretty graphs. I&#8217;m a technologist. However, I know when to be realistic. My thought process goes something like this:</p>
+
+<h2>Do you have something in place now?</h2>
+
+<h3>Yes</h3>
+
+<p>Why are you looking to switch? Is it unreliable? Is it painful to configure? Basically, if it&#8217;s getting the job done and has relatively minor overhead there&#8217;s no reason to switch.
+The pain points for me with monitoring solutions usually come much later. It doesn&#8217;t scale or scaling it is difficult. It doesn&#8217;t provide the visibility I need. It&#8217;s unreliable (usually do to scaling problems).
+Until then, use what you&#8217;ve got and be guard for early signs of problems like check latency going up or missed notifications.</p>
+
+<p>If you have a configuration management solution in place, it probably has native support for configuring Nagios. When you add a new host to your environment, you only need to tell your CM tool to run on your monitoring server. If you&#8217;ve done any sort of logical grouping, you&#8217;ll have the right things monitored quickly.</p>
+
+<h3>No</h3>
+
+<p>If you don&#8217;t have ANYTHING in place, you need to cover two bases pretty quick:</p>
+
+<ul>
+<li>Outside-In Checks: is my site up and responding timely?</li>
+<li>Stupid stuff: Are my disks filling up? Is my database slave behind?</li>
+</ul>
+
+
+<p>For outside in checks, use something quick and easy like Pingdom. For the inside checks, don&#8217;t underestimate the power of a cron job. If you want something a bit more packaged, look at <a href="http://mmonit.com">monit</a>. It&#8217;s dead simple and can get you to a safe place.</p>
+
+<h2>A note on visibility</h2>
+
+<p>Monitoring tools are great but many times they fall down when you need to diagnose a problem ex post facto. If you went the simple route, you probably don&#8217;t have any real trending data. This is where many complaints start to come from folks. You end up monitoring the same thing twice - once for alerting systems like Nagios and another time for your visualization, trending and other engines. When you reach this point, start looking at things like Sensu or all-in-one solutions that, while cumbersome and imprecise use the same collected data - Zenoss, Zabbix, Icinga (originally a fork of Nagios).</p>
+
+<p>The event was recorded (both audio and video) but I have no timeframe on when it&#8217;s going to be available but I&#8217;ll let you know as soon as it&#8217;s up.</p>
+
+<h1>The rest of the conference</h1>
+
+<p>The rest of the conference was epic as well. Being that this was my first time, I didn&#8217;t know what to expect. The thing that most stood out was the number of children. This was probably the most family friendly conference I&#8217;ve ever been to. Encouraging stuff. Plenty of events and in fact an entire track dedicated to children.</p>
+
+<p>I didn&#8217;t get to attend as many talks as I wanted to. While the facility was really nice, the building is like a faraday cage. My phone spent what little battery life it had just trying to get a signal. I spent quite a bit of time running back to my room to charge up. <a href="https://twitter.com/cwebber">Chris Webber</a> totally got me hooked on portable chargers.</p>
+
+<h1>Juju talk</h1>
+
+<p><em>disclaimer: I&#8217;m fully aware that Juju is undergoing heavy active development and is a very young project</em></p>
+
+<p>One of the talks I attended was on <a href="http://juju.ubuntu.com">Juju</a>. I was probably a bit harsh on Juju when it was first announced. The original name was much better and the whole witch doctor thing just doesn&#8217;t sit well with me.</p>
+
+<p>I also hate the tag line - &#8220;DevOps distilled&#8221;. It&#8217;s marketing pure and simple. I have very little tolerance for things that bill themselves as a &#8220;devops tool&#8221; or &#8220;for devops&#8221;.</p>
+
+<p>But more than the name, something about Juju didn&#8217;t feel right. After the talk, something still doesn&#8217;t feel right. While I don&#8217;t like pooping all over someone else&#8217;s hard work so writing this part is tough.</p>
+
+<h2>Where does it fit?</h2>
+
+<p>Right now, I don&#8217;t think Juju even knows where it fits. It&#8217;s got some great ideas and on any other day, I&#8217;d be all over it. The problem is that Juju tries to do too much in some areas and not enough in others.</p>
+
+<p>Parts of Juju are EXACTLY what I see as my primary use case for Noah. The service orchestration is great. The ideas are pretty solid. Juju even uses ZooKeeper under the hood.</p>
+
+<h2>Services not servers</h2>
+
+<p>Everyone knows that I preach the mantra of &#8220;services matter. hosts don&#8217;t&#8221;</p>
+
+<p>The problem is that in an attempt to be the Nagios (unlimited flexibility) of configuration management, it can&#8217;t actually do enough in that area. Because it only concerns itself with services (and the configuration of them), it doesn&#8217;t do enough to manage the host. Just because the end state is &#8220;I&#8217;m serving a web page&#8221; doesn&#8217;t mean you should ignore the host its running on. Since Juju isn&#8217;t designed to deal with that (and actually LACKS any primitives to do it), you&#8217;re left with needing to manage a system in multiple places - once with your CM tool and then again with the charms.</p>
+
+<p>Someone said it best when he described Juju as &#8220;apt for services&#8221;. It&#8217;s quite evident that the same broken mentality that apt takes to managing packages is applied to Juju as well. Charms have upgrade and downgrade steps. They&#8217;re just as complicated too. Not only is there no standard (since charms can be written in any language) it&#8217;s actually detrimental. The reason for a common DSL or language like the ones exposed by CM tools is not some academic mental masturbation. It&#8217;s repeatability and efficiency. I can go into a puppet shop and look at a module and know what it does. I can look at most chef recipes (outside of ones that might use a custom LWRP) and know what&#8217;s going on.</p>
+
+<p>In the Juju world, a single charm could be written in one spot in Python and another spot in Bash. It pushes too much responsibility to the end user NOT to mess something up. I dare say that idemopotence doesn&#8217;t even exist in Juju.</p>
+
+<h2>A fair shake</h2>
+
+<p>Again, I&#8217;m going to do some more playing around with Juju. I think it can meet a critical need for folks but I think they need to revisit what problem they&#8217;re trying to accomplish. I appreciate the work they&#8217;ve done and I&#8217;m totally excited that orchestration is getting the proper attention. The presenters were fantastic.</p>
+
+<h1>Other stuff</h1>
+
+<p>I attended a really good talk about the history of Openstack and where it&#8217;s going. It was great. As someone who is working with openstack professionally now (and had just dealt with some of its warts not 3 days before hand), I found it very valuable. Also congrats to the speaker, <a href="https://twitter.com/anotherjesse">Jesse Andrews</a> on the birth of his first child!</p>
+
+<p>I managed to make it to Brendan Gregg&#8217;s talk as well. If you ever have the opportunity to hear him speak, you should take it. While I&#8217;m not a SmartOS user, the talk was really not about that. I walked out with some amazing insight on how smart people troubleshoot performance problems. Very well done.</p>
+
+<h1>The hallway track</h1>
+
+<p>Of course the real value in any conference is the hallway track. The chance to interact with your peers. I met so many smart people (some twice because I suck at remembering faces at first - sorry!). Chatting with folks like C. Flores, Jason Cook, Sean O&#8217;Meara, Chris Webber, Dave Rawks, Matt Ray, Matt Silvey and so many others that I can&#8217;t keep straight in my head. Everyone was awesome and I hope that you were able to get as much out of me as I got out of you.</p>
+
+<p>Thanks again to Ilan for the invitation and for running such an amazing conference.</p>
+
+<p>Also, little known made-up fact: Lusis is Tagalog for &#8220;He who eats with both hands&#8221;&#8230;..</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2011-in-review]]></title>
+    <link href="http://blog.lusis.org/blog/2012/01/02/2011-in-review/"/>
+    <updated>2012-01-02T15:40:00-08:00</updated>
+    <id>http://blog.lusis.org/blog/2012/01/02/2011-in-review</id>
+    <content type="html"><![CDATA[<p>The holidays are a busy time for me. I was hoping to get this written before the end of the year but it didn&#8217;t happen.</p>
+
+<!-- more -->
+
+
+<p>I can say, wihtout a doubt, that 2011 has been the most awesome year both professionally and personally in my life. And I have pretty much everyone else to thank for it.</p>
+
+<h1>Some special shoutouts</h1>
+
+<p>There are so many folks to thank for this year. I owe so many beers that I can&#8217;t keep count. I can&#8217;t possibly thank everyone but I want to throw a few special shoutouts to folks.</p>
+
+<h2>My wife</h2>
+
+<p>Why she puts up with my shit, I&#8217;ll never know. Needless to say, without her this year would have been radically different. She managed two toddlers by herself on almost every trip I took. She&#8217;s been nothing but encouraging and she also helps keep me grounded by reminding me what&#8217;s important.</p>
+
+<h2><a href="http://twitter.com/patrickdebois">Patrick DeBois</a></h2>
+
+<p>Thanks for giving me the opportunity to help with the DevOps Days events. Through the events I&#8217;ve met some of the most amazing people in the world. The DevOps community is a wonderful group of folks and I would never have met half of them if Patrick hadn&#8217;t given me the opportunity to participate.</p>
+
+<h2><a href="http://verticalacuity.com">Vertical Acuity</a></h2>
+
+<p>While I&#8217;m sad to be leaving friends behind, VA was amazing in letting me travel so much. Not only that but they trusted and valued my opinion on so many things. Whoever takes my place will be lucky to work with such an awesome group of folks.</p>
+
+<h2><a href="http://twitter.com/botchagalupe">John Willis</a></h2>
+
+<p>Not only for being a good friend but for giving me an opportunity to work with him at enStratus.</p>
+
+<h2><a href="http://twitter.com/puppetmasterd">Luke Kanies</a>, <a href="http://twitter.com/kartar">James Turnbull</a>, <a href="http://twitter.com/cruzfox">Jose Palafox</a> and the Puppet Labs crew</h2>
+
+<p>Puppet Labs gets double the thanks - for giving me the opportunity to talk about my project at PuppetConf and also for sponsoring me to travel to Goteborg and speak. The whole crew over there is amazing.</p>
+
+<h2><a href="http://twitter.com/damonedwards">Damon Edwards</a>, <a href="http://twitter.com/alexhonor">Alex Honor</a> and <a href="http://www.dtosolutions.com">DTO Solutions</a></h2>
+
+<p>I&#8217;m grateful to DTO for giving me the opportunity to attend Velocity and letting me be a booth babe. Damon and Alex both have been forces of awesome for the DevOps community.</p>
+
+<h2><a href="http://twitter.com/potus98">John Christian</a></h2>
+
+<p>John asked me early on to help with the Atlanta DevOps meetups and I&#8217;m glad he did. He stands alone in the corporate bullshit world of the financial services industry. He tought me a lot and I want to thank him for it.</p>
+
+<h2><a href="http://twitter.com/lnxchk">Mandi Walls</a></h2>
+
+<p>For being pretty much awesome by listening to my ranting, letting me bounce ideas off her. And for being my sister from another mother.</p>
+
+<h2><a href="http://twitter.com/schisamo">Seth Chisamore</a></h2>
+
+<p>For the various lunches, talks, introductions and meetup involvement. Local folks rock. Seth rocks.</p>
+
+<h2><a href="http://twitter.com/jordansissel">Jordan Sissel</a></h2>
+
+<p>For being awesome, down to earth and not an asshole. And for all the code. And for giving me the honor of contributing to SysAdvent.</p>
+
+<h2><a href="http://twitter.com/kelseyhightower">Kelsey Hightower</a></h2>
+
+<p>For helping me navigate my foray into the world of Python (technically that was a few years ago). Also for showing folks how to just get shit done.</p>
+
+<h2>Everyone else</h2>
+
+<p>I can&#8217;t possible fit everyone here&#8217;s an abbreviated list of folks, in no specific order, who have impacted me this year off the top of my head. If I leave you off, please don&#8217;t take offense. I&#8217;m shooting from the cuff here.</p>
+
+<p><a href="http://twitter.com/bradleyktaylor">Bradley Taylor</a>, <a href="http://twitter.com/wfarr">Will Farrington</a>, <a href="http://twitter.com/coreyhaines">Corey Haines</a>, <a href="http://twitter.com/dysinger">Tim Dysinger</a>, <a href="http://twitter.com/miller_joe">Joe Miller</a>, <a href="http://twitter.com/roidrage">Mathias Meyer</a>, <a href="http://twitter.com/vvuksan">Vladimir Vuksan</a>, <a href="http://twitter.com/adamhjk">Adam Jacob</a>, <a href="http://twitter.com/portertech">Sean Porter</a>, <a href="http://twitter.com/bascule">Tony Arcieri</a>, <a href="http://twitter.com/ripienaar">R.I. Pienaar</a>, <a href="http://twitter.com/adamfblahblah">Adam Fletcher</a>, <a href="http://twitter.com/anthonygoddard">Anthony Goddard</a>, <a href="http://twitter.com/williamsjoe">Joe Williams</a>, <a href="http://twitter.com/boorad">Brad Anderson</a>, Cat Muecke (alas, Cat does not tweet!), <a href="http://twitter.com/harlanbarnes">Harlan Barnes</a>, <a href="http://twitter.com/geemus">Wesley Beary</a>, <a href="http://twitter.com/mitchellh">Mitchell Hashimoto</a>, <a href="http://twitter.com/wayneeseguin">Wayne Seguin</a>, <a href="http://twitter.com/kallistec">Dan DeLeo</a>, <a href="http://twitter.com/jtimberman">Josh Timberman</a>, <a href="http://twitter.com/kantrn">Noah Kantrowitz</a>, <a href="http://twitter.com/littleidea">Andrew Clay Schafer</a>, <a href="http://twitter.com/markimbriaco">Mark Imbriaco</a>, <a href="http://twitter.com/lordcope">Stephen Nelson-Smith</a>, <a href="http://twitter.com/garethr">Gareth Rushgrove</a>, <a href="http://twitter.com/ianmeyer">Ian Meyer</a>, <a href="http://twitter.com/f3ew">Devdas Bhagat</a>, <a href="http://twitter.com/actionjack">Martin Jackson</a>, <a href="http://twitter.com/mleinart">Michael Leinartas</a>, <a href="http://twitter.com/KrisBuytaert">Kris Buytaert</a>, <a href="http://twitter.com/solarce">Brandon Burton</a>, <a href="http://twitter.com/altobey">Al Tobey</a>, <a href="http://twitter.com/matthew_jones">Matthew Jones</a>, <a href="http://twitter.com/builddoctor">Julian Simpson</a>, <a href="http://twitter.com/macros">Jason Cook</a>, <a href="http://twitter.com/jiboumans">Jos Boumans</a>, <a href="http://twitter.com/susanpotter">Susan Potter</a>, <a href="http://twitter.com/thommay">Thom May</a>, <a href="http://twitter.com/kit_plummer">Kit Plummer</a>, <a href="http://twitter.com/sascha_d">Sascha Bates</a>, <a href="http://twitter.com/unclebobmartin">Bob Martin</a>, <a href="http://twitter.com/bdha">Bryan Horstmann-Allen</a>, <a href="http://twitter.com/benjaminws">Benjamin W. Smith</a>, <a href="http://twitter.com/ches">Ches Martin</a>, <a href="http://twitter.com/obfuscurity">Jason Dixon</a>, <a href="http://twitter.com/philiph">Phil Hollenback</a>, <a href="http://twitter.com/rockpapergoat">Nate St. Germain</a>, <a href="http://twitter.com/ohlol">Scott Smith</a>, <a href="http://twitter.com/seancribbs">Sean Cribbs</a>, <a href="http://twitter.com/argv0">Andy Gross</a>, <a href="http://twitter.com/benr">Ben Rockwood</a>, <a href="http://twitter.com/jamesc_000">James Casey</a>, <a href="http://twitter.com/lhazlewood">Les Hazlewood</a>, <a href="http://twitter.com/aditzel">Allan Ditzel</a>, <a href="http://twitter.com/mariusducea">Marius Ducea</a>, <a href="http://twitter.com/noahcampbell">Noah Campbell</a>, <a href="http://twitter.com/timanglade">Tim Anglade</a>, <a href="http://twitter.com/atmos">Corey Donohoe</a>, <a href="http://twitter.com/standaloneSA">Matt Simmons</a>, <a href="http://twitter.com/ernestmueller">Ernest Mueller</a>, <a href="http://twitter.com/auxesis">Lindsay Holmwood</a>, <a href="http://twitter.com/redbluemagenta">Christian Paredes</a>, <a href="http://twitter.com/_masterzen_">Brice Figureau</a>, <a href="http://twitter.com/griggheo">Grig Gheorghiu</a>, <a href="http://twitter.com/dje">Darrin Eden</a>, <a href="http://twitter.com/kimchy">Shay Banon</a>, <a href="http://twitter.com/ramonvanalteren">Ramon Van Alteren</a> and so many others.</p>
+
+<h1>Software that changed my world</h1>
+
+<p>I also wanted to give a shoutout to a few projects that pretty much changed how I thought about the software world around me.</p>
+
+<h2><a href="http://elasticsearch.org">ElasticSearch</a></h2>
+
+<p>ElasticSearch has beeen, bar none, in my top two amazing things the past year. Having first heard about it via Logstash, when I started digging in it blew my mind. The one thing that amazed me most about ES was the Zen discovery. It&#8217;s like the first time you heard about consistent hashing. It&#8217;s one of those things that makes you say &#8220;how the fuck did I not think of this first?&#8221;. The other thing that I find awesome is that ES not only makes scaling up painless but scaling DOWN (which is the hard part) is just as easy. As a sysadmin, ElasticSearch has been the most pleasant bit of infrastructure I&#8217;ve ever had the pleasure of standing up.</p>
+
+<h2><a href="http://zeromq.org">0mq</a></h2>
+
+<p>The other thing that amazed me this year was 0mq. 0mq essentially makes the difficult and next to impossible things possible. I am not lying when I say that every project I have floating around in my head is either built around or has a perfect spot for 0mq. Along with ElasticSearch, it has fundamentally changed how I think about software, infrastructure and more.</p>
+
+<h2><a href="http://zookeeper.apache.org">Apache ZooKeeper</a></h2>
+
+<p>While I&#8217;m not a fan of ZooKeeper on several levels, It would be wrong to totally ignore it. For the longest time, ZK stood alone in what it provided. People are building amazing things with it and it inspired me to write Noah.</p>
+
+<h2><a href="http://logstash.net">Logstash</a></h2>
+
+<p>At first I was pretty dismissive of Logstash. Mainly because I didn&#8217;t have a real need. Then I started digging in and realized that Logstash is only tangentially about logs. Logstash is kind of what you always wanted a pipe to be. Arbitrary input, arbitrary filtering, arbitrary output. The use cases for logstash are so much greater when you stop thinking about logs and start thinking about moving data.</p>
+
+<h2><a href="http://erlang.org">Erlang</a>, <a href="http://www.erlang.org/doc/design_principles/users_guide.html">OTP</a> and <a href="http://basho.com">Riak</a></h2>
+
+<p>While my Erlang only extends to passable reading, via Riak, I found a desire to learn more about it. The biggest thing that stuck in my head and also changed the way I think is the Actor model. For the first time that I can remember, a concept made perfect sense to me. While learning Erlang in earnest is a goal for 2012, I think about how simple and understandable the Actor model was.</p>
+
+<h2><a href="http://celluloid.github.com">Celluloid</a></h2>
+
+<p>Following up on the Actor model, I have mad respect for Tony Arcieri. If you look back at his projects, they all follow a similar theme: improving the concurrency story on Ruby. He&#8217;s tenacious and passionate about something that most people would have (and if they&#8217;re arrogant dickfaces) laughed at by now. Celluloid brings some amazing functionality to Ruby inspired by Erlang and OTP. I find myself defaulting to it whenever I need to even think about concurrency in Ruby. Even outside of that, it encourages good behaviour with threads and reduces the chances you&#8217;ll fuck something up. The companion project, DCell, is something I&#8217;m itching to work with as well.</p>
+
+<h2><a href="http://codeascraft.etsy.com/2011/02/15/measure-anything-measure-everything/">Statsd</a> and <a href="http://graphite.wikidot.com/">Graphite</a></h2>
+
+<p>If this past year was about anything, it was about metrics. Lots and lots of metrics. Etsy pushed out statsd and brought metrics collection to the masses. Coda Hale gave an amazing talk on metrics and released the code to back it up. Shooting in the dark sucks. You need numbers. Collect ALL the metrics.</p>
+
+<h1>Final Thoughts</h1>
+
+<p>The world of open source and the community around devops is amazing. I learned from and met so many people in 2011. I&#8217;m hoping that 2012 is the year that I can give back to them in some small way. Thanks to everyone for making this past year amazing.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Github Trolling for Fun and Profit]]></title>
+    <link href="http://blog.lusis.org/blog/2011/11/22/github-trolling-for-fun-and-profit/"/>
+    <updated>2011-11-22T21:43:00-08:00</updated>
+    <id>http://blog.lusis.org/blog/2011/11/22/github-trolling-for-fun-and-profit</id>
+    <content type="html"><![CDATA[<p>Last Friday was a pretty crappy day.</p>
+
+<!-- more -->
+
+
+<p>I&#8217;m a fairly <em>active</em> Twitter user.</p>
+
+<p>Patrick has joked that it&#8217;s as if I have Twitter wired directly to my brain. It&#8217;s not far from the truth.
+I like to engage people and normally Twitter is great medium for engaging folks. Unfortunately, the message size limit makes Twitter an imperfect medium for involved discussions.</p>
+
+<p>I know better but sometimes I forget.</p>
+
+<p>Anyway, last friday I realized near the end of the day that I had pretty much gone off the rails. If I wasn&#8217;t bitching about Maven and Java, I was involved in random discussions about the SaltStack project. Combine that with normal inane bullshit and I somehow managed to pull off a 60+ tweets. It took a comment by <code>roidrage</code> on IRC to point out that I really needed to calm down.</p>
+
+<p>With that, I declared communication blackout for the weekend. I decided to go to happy hour and spend the weekend just having fun with the family. It was awesome. So sorry for the sheer number of people I managed to piss off on Friday.</p>
+
+<h1>Trolling Github</h1>
+
+<p>One of the things I also decided to do not stress about making time to hack. I knew that if I got working on one of my projects, I would totally stay distracted thinking about it.</p>
+
+<p>So I went trolling. On Github.</p>
+
+<p>I was just poking around Github, when I saw in my feed that some commits were done to the <a href="https://github.com/imatix/zguide">user&#8217;s guide for ZeroMQ</a>. Because I have a serious geek woody for ZeroMQ, I got wrapped up reading the guide and looking at some of the more advanced examples. I&#8217;ve got some ideas I want to implement in Ark and Noah that involved 0mq so I figured it would be time well spent.</p>
+
+<p>Now if anyone has bothered to read the <a href="http://zguide.zeromq.org/">zguide</a>, you&#8217;ll know that one of the BEST parts is the code samples. Seriously. They have examples for all of the architectures in almost every language. I don&#8217;t know a single goddamn person who knows <a href="http://en.wikipedia.org/wiki/HaXe">Haxe</a>, but there are examples in the guide for Haxe. You can see an example of what I&#8217;m talking about <a href="http://zguide.zeromq.org/page:all#Divide-and-Conquer">here</a>.</p>
+
+<p>Notice at the bottom the list of examples for languages. If you mouse over the last entry, many times you&#8217;ll get multiples highlighted. This means that chunk of highlighted languages doesn&#8217;t have any examples written.</p>
+
+<p>I noticed that quite a few of the advanced ones didn&#8217;t have Ruby versions. I started back at the beginning of the guide until I found the first one that didn&#8217;t have a Ruby example - the <code>interrupt</code> example.</p>
+
+<h1>Challenge Accepted</h1>
+
+<p>So here I am - resolved not to work on any of my own projects and knowing that I didn&#8217;t have time to get involved with something TOO heavy. I decided to fork the guide and start adding missing Ruby examples.</p>
+
+<p>Now I only got two example done the entire weekend. This mainly revolved around how limited my time was but also around getting REALLY comfortable with <a href="https://github.com/chuckremes/ffi-rzmq">ffi-rzmq</a>. I wanted to make sure that the examples I wrote had the write mix of idiomatic Ruby and yet explicit enough for someone who didn&#8217;t know the specifics of <code>ffi-rzmq</code>.</p>
+
+<p>One that I really struggled with was this one:</p>
+
+<p><a href="https://github.com/imatix/zguide/commit/4c231d1023819152813fad09a45458bd33cb02a9">https://github.com/imatix/zguide/commit/4c231d1023819152813fad09a45458bd33cb02a9
+</a></p>
+
+<p>If you get familiar with the zguide, you&#8217;ll see a lot of references to <code>zhelpers</code>. It&#8217;s really just a bunch of boilerplate code that helps keep the actual examples to a nice consumable chunk size. There was not a <code>zhelpers</code> for the Ruby examples. I looked at the others to get an idea of what kinds of things were in there. In relation to the <code>identity</code> examples, there was a dump helper that just dumped the contents of a message. If you look at the <a href="https://github.com/imatix/zguide/blob/master/examples/Python/zhelpers.py">Python</a> and <a href="https://github.com/imatix/zguide/blob/master/examples/C/zhelpers.h">C</a> examples for <code>dump</code>, you&#8217;ll see how they pull the identity of the message out. An interesting comparision, is how the <a href="https://github.com/imatix/zguide/blob/master/examples/Scala/utils.scala">Scala</a> version of <code>dump</code> works.</p>
+
+<p>Instead of focusing on duplicating the strategy employed by the C and Python versions, I went with something that fit how <code>ffi-rzmq</code> works a bit more. I realized that the point was not the content of the helpers so much as the end result, showing that 0mq would generate an identity for a message if one wasn&#8217;t explcitly provided.</p>
+
+<p>I&#8217;m quite sure that at some point, ZMQ::Message objects will get an attribute accessor to simply return the identity. Right now the code base is under a bit of a refactor.</p>
+
+<h1>Call to Action</h1>
+
+<p>I really want to encourage others to do something like this. No pressure. Just troll Github. Look at some projects that are interesting. Look at the open issues. Fork, fix a bug or two and make some pull requests. After that, go on your merry way. No obligations. At worst, you&#8217;ve spent some time sharpening your skills. At best, however, you&#8217;ve made a lasting contribution.</p>
+
+<p>And shit, it doesn&#8217;t even have to be a code contribution. If you can grok the project well enough, add some wiki pages.</p>
+
+<p>I dunno. Github just has this amazingly easy flow for contribution. Do unto others and all that.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Deploy ALL the Things]]></title>
+    <link href="http://blog.lusis.org/blog/2011/10/18/deploy-all-the-things/"/>
+    <updated>2011-10-18T06:59:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/10/18/deploy-all-the-things</id>
+    <content type="html"><![CDATA[<p><em>This is part 2 in a post on deployment strategies. The previous post is located <a href="http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths/">here</a></em></p>
+
+<p>My previous post covered some of the annoying excuses and complaints that people like to use when discussing deployments. The big take away should have been the following:</p>
+
+<ul>
+<li>The risk associated with deploying new code is not in the deploy itself but everything you did up to that point.</li>
+<li>The way to make deploying new code less risky is to do it more often, not less.</li>
+<li>Create a culture and environment that enables and encourages small, frequent releases.</li>
+<li>Everything fails. Embrace failure.</li>
+<li>Make deploys trivial, automated and tolerant of failure.</li>
+</ul>
+
+
+<p>I want to make one thing perfectly clear. I&#8217;ve said this several times before. You can get 90% of the way to a fully automated environment, never go that last 10% and still be better off than you were before. I understand that people have regulations, requirements and other things that prevent a fully automated system. You don&#8217;t ever have to flip that switch but you should strive to get as close as possible.</p>
+
+<!--more-->
+
+
+<h1>Understanding the role of operations</h1>
+
+<p>Operations is an interesting word. Outside of the field of IT it means something completely different than everywhere else in the business world. <a href="http://en.wikipedia.org/wiki/Business_operations">According to Wikipedia</a>:</p>
+
+<blockquote><p>Business operations encompasses three fundamental management imperatives that collectively aim to maximize value harvested from business assets</p>
+
+<ul>
+<li><p>Generate recurring income</p></li>
+<li><p>Increase the value of the business assets</p></li>
+<li><p>Secure the income and value of the business</p></li>
+</ul>
+</blockquote>
+
+<p>IT operations traditionally does nothing in that regard. Instead IT operations has become about cock blocking and being greybeareded gatekeepers who always say &#8220;No&#8221; regardless of the question. We shunt the responsibility off to the development staff and then, in some sick game of &#8216;fuck you&#8217;, we do all we can to prevent the code from going live. This is unsustainable; counter-productive; and in a random twist of fate, self destructive.</p>
+
+<p>One thing I&#8217;ve always tried to get my operations and sysadmin peers to understand is that we are fundamentally a cost center. Unless we are in the business of managing systems for profit, we provide no direct benefit to the company. This is one of the reasons I&#8217;m so gung-ho on automation. <a href="https://twitter.com/botchagalupe">John Willis</a> really resonated with me in the first Devops Cafe podcast when he talked about the 80/20 split. Traditionally operations staff spends 80% of its time dealing with bullshit fire-fighting muck and 20% actually providing value to the business. The idea that we can flip that and become contributing members of our respective companies is amazing.</p>
+
+<p>Don&#8217;t worry. I&#8217;ll address development down below but I felt it was important to set my perspective down before going any further.</p>
+
+<h1>Technical Debt and Risk Management</h1>
+
+<p>Glancing back to my list of take-aways from the last post, I make a pretty bold (to some people) statement. When I say that deploy risk is not the deploy itself but everything up to that point, I&#8217;m talking about technical debt.</p>
+
+<p>Technical debt takes many forms and is the result of both concious, deliberate choices as well as unintended side-effects. Some examples of that are:</p>
+
+<ul>
+<li>Lack of or insufficient testing and associated</li>
+<li>Overreliance on time consuming manual processes</li>
+<li>Shortcuts to meet deadlines - both artifical and real</li>
+<li>Violation of the 10-minute maxim</li>
+<li>Technological choices</li>
+<li>Cultural choices</li>
+<li>Fiscal limitations</li>
+</ul>
+
+
+<p>All of these things can lead to technical debt - the accumulation of dead bodies in the room as a byproduct of how we work. At best, someone at least acknowledges they exist. At worst, we stock up on clothespins, pinch our nostrils shut and hope no one notices the stench. Let&#8217;s address a couple of foundational things before we get into the fun stuff.</p>
+
+<h2>Testing</h2>
+
+<p>Test coverage is one of the easiest ways to manage risk in software development. One of the first things to go in a pinch is testing. Even that assumes that testing was actually a priority at some point. I&#8217;m not going to harp on things like 100% code coverage. As I said previously, humans tend to overcompensate. Test coverage is also, however, one of the easiest places to get your head above water. If you don&#8217;t have a culture of committment to testing, it&#8217;s hard but not impossible to get started. You don&#8217;t have to shutdown development for a week.</p>
+
+<ol>
+<li>Start by having a commitment to write tests for any new code going forth.</li>
+<li>As bugs arise in untested code, make a test case for the bug a requirement to close the bug.</li>
+<li>Find a small victory in existing code. Create test coverage for low hanging fruit.</li>
+<li>Plan for a schedule to cover any remaining code</li>
+</ol>
+
+
+<p>The key here is baby steps. Small victories. Think Fezzik in &#8216;The Princess Bride&#8217; - <em>&#8220;I want you to feel like you&#8217;re winning&#8221;.</em></p>
+
+<p>Testing is one of the foundations you have to have to reach deploy nirvana. System administrators have a big responsiblity here. Running tests has to be painless, unobstrusive and performant. You should absolutely stand up something like Jenkins that actually runs your test suite on check-in. As that test suite grows, you&#8217;ll need to be able to provide the capacity to grow with it. That&#8217;s where the next point can be so important.</p>
+
+<h2>Manual processes</h2>
+
+<p>Just as testing is a foundation on the code side, operations has a commensurate responsibility to reduce the number of human hands involved with creating systems. We humans, despite the amazing potential that our brains provide, are generally stupid. We make mistakes. Repeatability is not something we&#8217;re good at. Some sort of automated and repeatable configuration management strategy needs to be adopted. As with testing, you can make some amazing progress in baby steps by introducing some sort of proper configuration management going forward. I don&#8217;t recommend you attempt to retrofit complex automation on top of existing systems beyond some basics. Otherwise you&#8217;ll be spending too much time trying to differentiate between &#8220;legacy&#8221; and &#8220;new&#8221; servers roles. If you are using some sort of virtualization or cloud provider like EC2, this is a no brainer. It&#8217;s obviously a bit harder when you&#8217;re using physical hardware but still doable.</p>
+
+<p>Have you ever played the little travel puzzle game where you have a grid of moving squares? The idea is the same. You need just ONE empty system that you can work with to automate. Pick your simplest server role such as an apache webserver. Using something like Puppet or Chef, write the &#8216;code&#8217; that will create that role. Don&#8217;t get bogged down in the fancy stuff the tools provide. Keep it simple at first. Once you think you&#8217;ve got it all worked out, blow the server away and apply that code from bootstrap. Red, green, refactor. Once you&#8217;re comfortable that you can reprovision that server from bare metal, move it into service. Make sure you have your own set of &#8216;test cases&#8217; that ensure the provisioned state is the correct one. This will become important later on.</p>
+
+<p>Take whatever server it&#8217;s replacing and do the same for the next role. When I came on board with my company I spent many useless cycles trying to retrofit an automation process on top of existing systems. In the end, I opted to take a few small victories (using Chef in this case):</p>
+
+<ol>
+<li>Create a base role that is non-destructive to existing configuration and systems. In my case, this was managing yum repos and user accounts.</li>
+<li>Pick the &#8216;simplest&#8217; component in our infrastructure and start creating a role for it.</li>
+<li>Spin up a new EC2 instance and test the role over and over until it works.</li>
+<li>Terminate the instance and apply the role on top with a fresh one.</li>
+<li>Replace the old instances providing that role with the new ones and move to the next role.</li>
+</ol>
+
+
+<p>Using this strategy, I was able to replace all of our legacy instances for the first and second tiers of our stack in a couple of months time. We are now at the point where, assuming Amazon plays nice with instance creation, we can have any role in those tiers recreated at a moment&#8217;s notice. Again, this will directly contribute to how we mitigate risk later on.</p>
+
+<h2>10 minute maxim</h2>
+
+<p>I came up with this from first principles so I&#8217;m sure there&#8217;s a better name for it. The idea is simply this:</p>
+
+<blockquote><p>Any problem that has to be solved in five minutes can be afforded 10 minutes to think about the solution.</p></blockquote>
+
+<p>System Administrators often pride ourselves on how cleverly and quickly we can solve a problem. It&#8217;s good for our egos. It&#8217;s not, however, good for our company. Take a little extra time and consider the longer term impact of what solution you&#8217;re about to do. Step away from the desk and move. Consult peers. Many times I&#8217;ve come to the conclusion that my first instinct was the right one. However more often than not, I&#8217;ve come across another solution that would create less technical debt for us to deal with later.</p>
+
+<p>A correlary to this is the decision to &#8216;fix it or kick it&#8217;. That is &#8216;Do we spend an unpredictable amount of time trying to solve some obscure issue or do we simply recreate the instance providing the service from our above configuration management&#8217;. If you&#8217;ve gone through the previous step, you have should have amazing code confidence in your infrastructure. This is very important to have with Amazon EC2 where you can have an instance perform worse overtime thanks to the wonders of oversubscription and noisy neighbors.</p>
+
+<p>Fuck that. Provision a new instance and run your smoke tests (I/O test for instance). If the smoke tests fail, throw it away and start a new one. It&#8217;s amazing the freedom of movement afforded by being able to describe your infrastructure as code.</p>
+
+<h1>Getting back to deploys</h1>
+
+<p>I would say that without the above, most of the stuff from here on out is pretty pointless. While you <strong>CAN</strong> do automated and non-offhour deploys without the above, you&#8217;re really setting yourself up for failure. Whether it&#8217;s a system change or new code, you need to be able to ensure that that some baseline criteria can be met. Now that we&#8217;ve got the foundation though, we can build on it and finally adopt some distinct strategies for releases.</p>
+
+<h1>Building on the foundation</h1>
+
+<p>The next areas you need to work on are a bit harder.</p>
+
+<h2>Metrics and monitoring</h2>
+
+<p>Shooting in the dark sucks. Without some sort of baseline metric, you authoritatively say whether or not a deploy was &#8216;good&#8217;. If it moves, graph it. If it moves, monitor it. You need to leverage systems like <a href="https://github.com/etsy/statsd">statsd</a> (available in non-node.js flavors as well) that can accept metrics easily from your application and make them availabile in the amazing <a href="http://graphite.wikidot.com/">graphite</a>.</p>
+
+<p>The key here is that getting those metrics be as frictionless as possible. To fully understand this, watch <a href="http://pivotallabs.com/talks/139-metrics-metrics-everywhere">this presentation from Coda Hale of Yammer</a>. Coda has also created a kick-ass metrics library for the JVM and others have duplicated his efforts in their respective languages.</p>
+
+<h2>Backwards compatibility</h2>
+
+<p>You need to adopt a culture of backwards compatibility between releases. This is not Microsoft levels we&#8217;re talking about. This affects interim releases. As soon as you have upgraded all the components, you clean up the cruft and move on. This is critical to getting to zero/near-zero downtime deploys.</p>
+
+<h2>Reduce interdependencies</h2>
+
+<p>I won&#8217;t go into the whole SOA buzzword bingo game here except to say that treating your internal systems like a third party vendor can have some benefits. You don&#8217;t need to isolate the teams but you need to stop with shit like RMI. Have an established and versioned interface between your components. If component A needs to make a REST call to component B, upgrades to the B API should be versioned. A needs version 1 of B&#8217;s api. Meanwhile new component C can use version 2 of the API.</p>
+
+<h2>Automation as a default</h2>
+
+<p>While this ties a lot into the testing and configuration management topics, the real goal here is that you adopt a posture of automation by default. The reason for this should be clear in <a href="http://www.startuplessonslearned.com/2009/07/how-to-conduct-five-whys-root-cause.html">Eric Ries&#8217; &#8220;Five Whys&#8221; post</a>:</p>
+
+<blockquote><p>Five Whys will often pierce the illusion of separate departments and discover the human problems that lurk beneath the surface of supposedly technical problems.</p></blockquote>
+
+<p>One of the best ways to eliminate human problems is to take the human out of the problem. Machines are very good at doing things repeatedly and doing them the same way every single time. Humans are not good at this. Let the machines do it.</p>
+
+<h1>Deploy Strategies</h1>
+
+<p>Here are some of the key strategies that I (and others) have found effective for making deploys a non issue.</p>
+
+<h2>Dark Launches</h2>
+
+<p>The idea here is that for any new code path you insert in the system, you actually exercise it before it goes live. Let&#8217;s face it, you can never REALLY simulate production traffic. The only way to truly test if code is performant or not is to get it out there. With a dark launch, you&#8217;re still making new database calls but using your handy dandy metrics culture above, you now know how performant it really is. When it gets to acceptable levels, make it visible to the user.</p>
+
+<h2>Feature flags</h2>
+
+<p>Feature flags are amazing and one of the neat tricks that people who perform frequent deploys leverage. The idea is that you make aspects of your application into a series of toggles. In the event that some feature is causing issues, you can simply disable it through some admin panel or API call. Not only does this let you degrade gracefully but it also provides for a way to A/B test new features. With a bit more thought put into the process, you can enable a new feature for a subset of users. People love to feel special. Being a part of something like a &#8220;beta&#8221; channel is an awesome way to build advocates of your system.</p>
+
+<h2>Smoke testing at startup</h2>
+
+<p>This is one that I really like. The idea is simply that your application has a basic set of &#8216;tests&#8217; it runs through at startup. If any of those tests fail, the code is rolled back.</p>
+
+<p>Now this is where someone will call me a hypocrite because I said you should and can never really roll back. You&#8217;re partially right. In my mind, however, it&#8217;s not the same thing. I consider code deployed once it&#8217;s taken production traffic. Up until that point, it&#8217;s just &#8216;pre-work&#8217; essentially. Let&#8217;s take a random API service in our stack. I&#8217;m assuming you have two API servers in this case.</p>
+
+<ul>
+<li>Take one out of service</li>
+<li>Deploy code</li>
+<li>Smoke tests run</li>
+<li>If smoke tests fail, stop new code and start old code</li>
+<li>If smoke tests pass, start sending production traffic to server</li>
+<li>If acceptable, push to other server</li>
+<li>profit!</li>
+</ul>
+
+
+<p>Now you might see a bit of gotcha there. I intentionally left out a step. This is a bit different than how shops like Wealthfront do it. They actually <strong>DO</strong> roll back if production monitoring fails. My preference is to use something similar to <a href="https://github.com/igrigorik/em-proxy">em-proxy</a> to do a sort of mini-dark launch before actually turning it over to end-users. You don&#8217;t have to actually use em-proxy. You could write your own or use something like RabbitMQ or other messaging system. This doesn&#8217;t always work depending on the service the component is providing but it does provide another level of &#8216;comfort&#8217;.</p>
+
+<p>Of course this only works if you maintain backwards compatibility.</p>
+
+<h2>Backwards Compatibility</h2>
+
+<p>This is probably the hardest of all to accomplish. You may be limited by your technology stack or even some poor decision made years ago. Backwards compatibility also applies to more than just your software stack. This is pretty much a critical component of managing database changes with zero downtime.</p>
+
+<h2>Code related</h2>
+
+<p>Your code needs to understand &#8216;versions&#8217; of what it needs. If you leverage some internal API, you need to maintain support for an older version of that API until all users are upgrade. Always be deprecating and NEVER EVER redefine what something means. Don&#8217;t change a property or setting that means &#8220;This is my database server hostname&#8221; to &#8220;This is my mail server hostname&#8221;. Instead create a new property, start using it and remove the old on in a future release. Don&#8217;t laugh, I&#8217;ve seen this done. As much as I have frustrations with Java, constructor overloading is a good example of backwards compatibility.</p>
+
+<h3>Database related</h3>
+
+<p>Specifically as it relates to databases, consider some of the following approaches:</p>
+
+<ul>
+<li>Never perform backwards incompatible schema changes.</li>
+<li>Don&#8217;t perform ALTERs on really large tables. Create a new table that updated systems use and copy on read to the new table. Migrate older records in the background.</li>
+<li>Consider isolating access to a given table via a service. Instead of giving all your applications access to the &#8216;users&#8217; table, create a users service that does that.</li>
+<li>Start exercising code paths to new tables early by leveraging dark launches</li>
+</ul>
+
+
+<p>Some of these techniques would make Codd spin in his grave.</p>
+
+<p>We&#8217;re undergoing a similar situation right now. We originally stored a large amount of &#8216;blob&#8217; data in Voldemort. This was a bit perplexing as we were already leveraging S3 for similar data. To migrate that data (several hundred gigs) we took the following approach:</p>
+
+<ul>
+<li>Deploy a minor release that writes and new data to both Voldemort and S3.</li>
+<li>Start a &#8216;copy&#8217; job in the background to migrate older data</li>
+<li>Continue to migrate data</li>
+<li>When the migration is finished, we&#8217;ll deploy a new release that uses S3 exclusively</li>
+<li>Profit (because we get to terminate a few m1.large EC2 instances)</li>
+</ul>
+
+
+<p>This worked really well in this scenario. These aren&#8217;t new techniques either. Essentially, we&#8217;re doing a variation of a two-phase commit.</p>
+
+<p>Now you might think that all this backwards compatibility creates cruft. It does. Again, this is something that requires a cultural shift. When things are no longer needed, you need to clean up the code. This prevents bloat and makes understanding it down the road so much easier.</p>
+
+<h1>Swinging like a boss</h1>
+
+<p>Here&#8217;s another real world example:</p>
+
+<p>Our code base originally used a home-rolled load balancing technique to communicate with one of our internal services. Additionally, all communication happened over RPC using Hessian. Eventually this became untenable and we decided to move to RabbitMQ and JSON. This was a pretty major change but at face value, we should have been able to manage with dual interfaces on the provider of the service. That didn&#8217;t happen.</p>
+
+<p>You see, to be able to use the RabbitMQ libraries, we had to upgrade our version of Spring. Again, not a big deal. However our version of Hessian was so old that the version of Hessian we would have to use with the new version of Spring was backwards incompatible. This is yak shaving at its finest, folks. So basically we had to upgrade 5 different components all at once just to get to where we wanted and NEEDED to be for the long term.</p>
+
+<p>Since I had already finished coding our chef cookbooks, we went down the path of duplicating our entire front-end stack. What made this even remotely possible was the fact that we were using configuration management in the first place. Here&#8217;s how it went down:</p>
+
+<ul>
+<li>Duplicate the various components in a new Chef environment called &#8216;prodB&#8217;</li>
+<li>Push new code to these new components</li>
+<li>Add the new components to the ELBs and internal load balancers for a very short 5-10 minute window. Sort of a mini-A/B test.</li>
+<li>Check the logs for anything that stood out. Validated the expected behavior of the new systems. Thsi also gave us a chance to &#8216;load-test&#8217; our rabbitmq setup. We actually did catch a few small bugs this way.</li>
+</ul>
+
+
+<p>Once we were sure that things looked good, we swung all the traffic to the new instances and pulled the old ones out. We never even bothered to upgrade the old instances. We just shut them down.</p>
+
+<p>Obviously this technique doesn&#8217;t work for everyone. If you&#8217;re using physical hardware, it&#8217;s much more costly and harder to pull off. Even internally, however, you can leverage virtualization to make these kinds of things possible.</p>
+
+<h2>Bitrot</h2>
+
+<p>What should be the real story in this is that bitrot happens. Don&#8217;t slack on keeping third-party libraries current. If a third-party library introduces a breaking change and it affects more than one part of your stack, you probably have a bit too tight of a coupling between resources.</p>
+
+<h1>Wrap up/Take away</h1>
+
+<p>This post came out longer than I had planned. I hope it&#8217;s provided you with some information and things to consider. Companies of all shapes, markets and sizes are doing continuous deployment, zero downtime deploys and all sorts of things that we never considered possible. Look at companies like Wealthfront, IMVU, Flickr and Etsy. Google around for phrases like &#8216;continuous deployment&#8217; and &#8216;continuous delivery&#8217;.</p>
+
+<p>I&#8217;m also painfully aware that even with these tricks, some folks simply cannot do them. There are many segments of industry that might not even allow for this. That doesn&#8217;t mean that some of these ideas can&#8217;t be implemented on a smaller scale.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Rollbacks and other deployment myths]]></title>
+    <link href="http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths/"/>
+    <updated>2011-10-18T00:35:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths</id>
+    <content type="html"><![CDATA[<p>I came across an interesting post today via HN. I&#8217;m surprised (only moderately) that I missed it the first time around since this is right up my alley:</p>
+
+<p><a href="http://briancrescimanno.com/2011/09/29/why-are-you-still-deploying-overnight/">Why are you still deploying overnight?</a></p>
+
+<p>I thought this post was particularly apropos for several reasons. I just got back from DevOpsDays EU <strong>AND</strong> I&#8217;m currently in the process of refactoring our deploy process.</p>
+
+<p>I&#8217;m breaking this up into two parts since it&#8217;s a big topic. The first one will cover the more &#8220;theoretical&#8221; aspects of the issue while the second will provide more concrete information.</p>
+
+<!--more-->
+
+
+<h1>Myths, Lies and other bullshit</h1>
+
+<p>Before I go any further, we should probably clear up a few things.</p>
+
+<p>Understand, first and foremost, that I&#8217;m no spring chicken in this business. I&#8217;ve worked in what we now call web operations and I&#8217;ve worked in traditional financial environments (multiple places). If it CAN go wrong, it has gone wrong for me. Shit, I&#8217;ve been the guy who dictated that we had to deploy after hours.</p>
+
+<p>Also, this is not a &#8220;tell you what to do&#8221; post.</p>
+
+<p>So what are some of the myths and other crap people like to pull out when having these discussions?</p>
+
+<ul>
+<li>Change == Risk</li>
+<li>Deploys are risky</li>
+<li>Rollbacks</li>
+<li>Nothing fails</li>
+<li>SLAs</li>
+</ul>
+
+
+<p>There&#8217;s plenty more but these are some of the key ones that I hear.</p>
+
+<h2>Change is change</h2>
+
+<p>There is nothing inherent in change that makes it risky, dangerous or anything more than change. Change is neither good or bad. It&#8217;s just change.</p>
+
+<p>The idea that change has a risk associated with it is entirely a human construct. We have this false assumption that if we don&#8217;t change something then nothing can go wrong.
+At first blush that would make sense, right? If it ain&#8217;t broke, don&#8217;t fix it.</p>
+
+<p>Why do we think this? It&#8217;s mainly because we&#8217;re captives to our own fears. We changed something once, somewhere, and everything went tango uniform. The first reaction after a bad experience is never to do whatever caused that bad experience again. This makes sense in quite a few cases. Touch fire, get burned. Don&#8217;t touch fire, don&#8217;t get burned!</p>
+
+<p>However this pain response tends to bleed over into areas. We deployed code one time that took the site down. We changed something and bad things happened. Engage overcompensation - We should never change anything.</p>
+
+<h2>Deploys are not risky</h2>
+
+<p>As with change, a deploy (a change in and of itself) is not inherently risky. Is there a risk associated with a deploy? Yes but understand that the risk associated with pushing out new code is the culmination of everything you&#8217;ve done up to that point.</p>
+
+<p>I can&#8217;t even begin to count the number of ways that a deploy or release has gone wrong for me. Configuration settings were missed. Code didn&#8217;t run properly. The wrong code was deployed. You name it, I&#8217;ve probably seen it.</p>
+
+<p>The correct response to this is <strong>NOT</strong> to stop doing deploys, do them off-hours or do them less often. Again with the overcompensation.</p>
+
+<p>The correct way to handle deployment problems is to do MORE deploys. Practice. Paraphrasing myself here from an HN comment:</p>
+
+<blockquote><p>Make deploys trivial, automated and tolerant to failure because everything fails.</p></blockquote>
+
+<p>&#8220;Release early, release often&#8221; isn&#8217;t just about time to market. The way to reduce risk is not to add more risky behavior (introducing more vectors for shit to go wrong). The way to reduce the risk associated with deploys is to break them into smaller chunks.</p>
+
+<p>You need to stop thinking like Subversion and start thinking like Git.</p>
+
+<p>One of the reasons people don&#8217;t feel comfortable performing deploys during the day is because deploys are such a big deal. You&#8217;ve got to make deploys a non-issue.</p>
+
+<h2>Rollbacks are a myth</h2>
+
+<p>Yes, it&#8217;s true. You can never roll back. You can&#8217;t go back in time. You can fake it but understand that it&#8217;s typically more risky to rollback than rolling forward. Always be rolling forward.</p>
+
+<p>The difficulty in rolling forward is that it requires a shift in how you think. You need to create a culture and environment that enables, encourages and allows for small and frequent changes.</p>
+
+<h2>Everything fails. Embrace failure.</h2>
+
+<p>It amazes me that in this day and age people seem to think you can prevent failure. Not only can you not prevent it, you should embrace it. Learn to accept that failure will happen.  Often spending your effort decreasing MTTR (mean time to recovery) as opposed to increasing MTBF (mean time between failures) is a much better investment. Failure is not a question of &#8216;if&#8217; but a question of &#8216;when&#8217;.</p>
+
+<p>Systems should be designed to be tolerant of failure. This is not easy, it&#8217;s not always cheap and it can be quite painful at first. Failure sucks. Especially as systems administrators, we tend to personalize a failure in our systems as a personal failure.</p>
+
+<p>The best way to deal with failure is to make failure a non-issue. If it&#8217;s going to happen and you can&#8217;t prevent it, why stress over trying to prevent it? This absolutely doesn&#8217;t mean that you should do some level of due dilligence. I&#8217;m not saying that you should give up. What I&#8217;m saying is that you should design a robust system that handles failures gracefully and returns you to service as quickly as possible. It&#8217;s called fault TOLERANCE for a reason.</p>
+
+<h2>SLAs are not about servers</h2>
+
+<p>SLAs are in general fairly silly things. Before you get all twisted and ranty, let me clarify. SLAs have value but the majority of that value is to the provider of the SLA and not the person on the other end. SLAs are a lot like backup policies.</p>
+
+<p>Look at it this way. I&#8217;m giving you an SLA for four nines of availability. That allows me to take around 50 minutes of downtime a year. Of course you assume that means 50 minutes spread over a year. What you fail to realize is that I can take all 50 minutes at once and still meet my SLA. Taking 50 minutes at one time is much more impacting than taking ten 5-minute outages. What&#8217;s worse is I can take that downtime not only in one chunk but I can take it at the worst possible time for you.</p>
+
+<p>The other side of SLAs is that we tend to equate them with servers as opposed to services. The SLA is a <em>Service Level Agreement</em>. Not a <em>Server Level Agreement</em>. Services are what matters, not servers.</p>
+
+<p>When you start to equate an SLA with a specific server, you&#8217;ve already lost.</p>
+
+<h1>Wrap up and part 2</h1>
+
+<p>As I said, this topic is too big to fit in one post. The next post will go into specifics about strategies and techniques that will hopefully give you ideas on how to make deploys less painful.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Configuration Management Divide]]></title>
+    <link href="http://blog.lusis.org/blog/2011/08/22/the-configuration-management-divide/"/>
+    <updated>2011-08-22T22:07:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/08/22/the-configuration-management-divide</id>
+    <content type="html"><![CDATA[<p><em>wherein John admits he was wrong about something</em></p>
+
+<p>As I was checking my Github feed tonight (as I&#8217;ve been known to do on occassion), I saw an update for a project that I was watching. This project is, for all intents and purposes, a redo of Capistrano with some additional system management stuff on top. From the description:</p>
+
+<blockquote><p>All together mixed to make your life easier.
+As mentioned before do is a fun mix of capistrano, rake, thor and brew.
+With XXXXX you are be able to do easily common task on your local or remote machine. The aim of XXXXX is to become the unique and universal tool language that permit you to make your own brew, apt-get or yum package, same syntax for all your machine.</p></blockquote>
+
+<p>Now I&#8217;ve said before I&#8217;m a tool junkie. I&#8217;m always looking for ideas and inspiration from other tools. I also love to contribute where I can.
+What bothered me particularly about this project is that it felt like a &#8220;solved problem&#8221;.</p>
+
+<!-- more -->
+
+
+<h2>Open mouth, insert foot (at least partially)</h2>
+
+<p>So at DevOps Days Mt. View this year, I made a statement. I said with quite a bit of firmness that I thought configuration management was a solved problem. I didn&#8217;t get a chance to clarify what I meant by that. At least not before <a href="http://twitter.com/littleidea">Andrew Clay Shafer</a> strongly disagreed with me. Before I go any further, I want to clarify what I meant by that.</p>
+
+<p>I, personally, feel like there comes a point where a class of tool reaches a certain level that makes it &#8220;good enough&#8221;. So what is good enough?
+By &#8220;good enough&#8221;, I mean that it solves the first in a broader series of problems. By no means am I implying that we should no longer pursue improvement. But what I am suggesting is that at a certain point, tools are refining the first stage of what they do.</p>
+
+<p>When we get to this point in a class of tool (let&#8217;s stick with CM), we start to see gaps in what it can do. At this point, you get a rush of tools that attempt to fill that gap. What we essentially do is try and figure out if the gap should be filled by the tool or does it make sense to exist apart. So taking the discussion I was involved in at the time - orchestration, what I was attempting to say (epic fail, I might add) is that the current crop of configuration management tools have reached a usable point where they do enough (for now). What we&#8217;re seeing as questions now are &#8220;How do I think beyond the single node where this tool is running?&#8221;. What we might find is that functionality DOES belong in our CM tool. We might also find that, no, we need this to exist apart from it for whatever reasons. Basically I was attempting to say &#8220;Hey, CM is in a pretty good state right now. Let&#8217;s tackle these OTHER problems and regroup later&#8221;.</p>
+
+<p>So where was I <a href="http://youtu.be/V3y3QoFnqZc">wrong</a>?</p>
+
+<h2>Developers, developers, developers</h2>
+
+<p>I made the following comment on Twitter earlier:</p>
+
+<blockquote><p>The sheer number of what are essentially Capistrano clones makes me realize that the config. management message fails to resonate somewhere.</p></blockquote>
+
+<p>What I find most interesting about these various &#8220;clones&#8221; is that they&#8217;re all created by developers. People apparently pine for the days of Capistrano. Come to think of it though, who blames them?</p>
+
+<p>As I look at the current crop of configuration management tools, and follow various tweets and blog posts I realize that people either aren&#8217;t aware of tools like puppet and chef or, in the worst cases, they feel that they&#8217;re too much hassle/too complicated to deal with. What we&#8217;re seeing is the developer community starting to come to the same realizations that the sysadmin community came to a while ago. What&#8217;s also interesting is that the sysadmin community is coming to the same realizations that developers came to a while ago.</p>
+
+<p>It&#8217;s like some crazy romantic movie where the two lovebirds, destined to be together in the end have the pivotal mix-up scene. He leaves the bar to stop her from getting on the airplane. Meanwhile she heads to the bar upon realizing that she can&#8217;t get on the plane without him.</p>
+
+<p>People are going to great lengths, either out of ignorance* about available tools or from frustration about the complexities involved.</p>
+
+<h2>So where&#8217;s the divide?</h2>
+
+<p>I think the divide is in the message. While I still stand behind the statement that the &#8220;dev&#8221; vs &#8220;ops&#8221; ratios are regionally specific, I&#8217;m starting to agree that the current crop of tools <strong>ARE</strong> very operationally focused. That&#8217;s not a bad thing either. Remember that the tools were created by people who were primarily by sysadmins.</p>
+
+<p>When you look at the tools created by people who were primarily developers, what do you see?</p>
+
+<ul>
+<li>Apache Whirr</li>
+<li>Do</li>
+<li>Fabric</li>
+<li>Capistrano</li>
+<li>Glu</li>
+<li>DeployML</li>
+</ul>
+
+
+<p>What&#8217;s interesting about all of these tools is that they&#8217;re designed to get the code out there as easily as possible or to stand up a stack as quickly as possible. What&#8217;s frustrating for me, as primariy a sysadmin, is that I see the pain points that will come down the road. These tools don&#8217;t really scale. Yes, sometimes you need &#8220;ssh in a for loop&#8221; however inherting these types of environments can be painful. Concepts like idemopotence and repeatability don&#8217;t exist. They generally don&#8217;t take into account the non-functional requirements. They certainly don&#8217;t handle multiple operating environments or distributions very well.</p>
+
+<p>What&#8217;s really sad is that the end goal is the same. We just want to automate away the annoying parts of our jobs so we can get on to more important shit.</p>
+
+<h3>You arrogant prick</h3>
+
+<p>I figured I&#8217;d get that out of the way now. It&#8217;s very easy to dismiss these concerns as some pissy sysadmin but I don&#8217;t think that&#8217;s entirely fair. Remember what I said earlier. Sysadmins are starting to come to realizations that developers had a long time ago. The same exists for developers. Both sides, regardless of primary role, still have much to learn from each other.</p>
+
+<h2>What do we do?</h2>
+
+<p>I&#8217;m going to share a fairly generic dirty little secret. Developers don&#8217;t want to write puppet manifests/modules. They don&#8217;t want to write chef cookbooks/recipes. In most every situation I&#8217;ve been in, there has been little interest in those tools from outside the sysadmin community. That&#8217;s changing. I think as people are getting introduced to the power they have, they come around. But there&#8217;s still a gap. Is the gap around deployment? Partially. I think the gap also exists around configuration. Obviously I&#8217;m biased in that statement.</p>
+
+<p>A bit of a personal story. At my previous company, we were a puppet shop. We tried to get developers to contribute to the modules. It didn&#8217;t work. It just didn&#8217;t make sense. It&#8217;s not that they were stupid. It&#8217;s that it was an extra step. &#8220;Oh you mean I have to put that variable over here instead of in my configuration file? That&#8217;s annoying because I have to be able to test locally&#8221;. What ended up happening was that one of the guys on the operations side learned just enough Java to write lookup classes himself. Instead of us populating hosts using ERB templates, we were now querying Cobbler for classes using XML-RPC. There were some other factors at play, mind you. It was a really large company with developers who came from the silo&#8217;d worldview. There was also quite a bit of ass-covering attitude running around.</p>
+
+<p>This is why I&#8217;m so bullish on bridge tools like Noah and even Vagrant. We&#8217;re all attempting to do the same thing. Bridge that last little bit between the two groups. Find a common ground. Noah is attempting to bridge that by allowing the information to be &#8220;shared&#8221; between teams. ZooKeeper let&#8217;s the developers manage it all themselves (just push this app out, we&#8217;ll find each other). Vagrant takes the route of bringing the world of production down to the developer desktop.</p>
+
+<p>But none of these tools address the deploy issue. Do we want to use the Opscode deploy cookbook? We can but it&#8217;s fairly opinionated**. Maybe we decide to use FPM to generate native system packages and roll those out with a Puppet run? Putting on my fairly small developer hat, none of these sounds really appealing to me. Maybe as the java developer, I just want to use JRebel. That&#8217;s nice but what about the configuration elements? Do we now write code to ask Puppet or Chef for a list of nodes with a given class or role?</p>
+
+<p>Look at what Netflix does (not that I approve really). They roll entire fucking AMIs for releases. While the sysadmin in me is choking back the bile at the inflexibility of that, stepping into another perspective says &#8220;It works and I don&#8217;t have to deal with another server just to manage my systems&#8221;.</p>
+
+<h2>I don&#8217;t have all the answers</h2>
+
+<p>That much is obvious. What I can say is that I see a need. I&#8217;m addressing it the way I think is best but I still see gaps. Shared configuration is still complicated. Deploy is still complicated. While I would generally agree that things like rolling back are the wrong approach, I also realize that not everyone is at the point where they can roll-forward through a bad deploy. Hell, we do all of our deploys with Jenkins and some really ugly bash scripts and knife scripts.</p>
+
+<p>I&#8217;d love any commentary folks might have. I&#8217;ll leave you with a few comments from other&#8217;s on twitter when I made my original comment:</p>
+
+<blockquote><p>Capistrano serves a different need. Rapid deployment with rollback isn&#8217;t implicit in the current crop config mgmt tools - <a href="https://twitter.com/altobey">@altobey</a></p>
+
+<p>deploying code with a CM tool (eg, the chef <code>deploy</code> resource) is a grey area for me. for example: does rollback really fit? - <a href="https://twitter.com/dpiddee">@dpiddee</a></p>
+
+<p>or that it might be missing some use case? - <a href="https://twitter.com/jordansissel">@jordansissel</a></p>
+
+<p>I&#8217;ve played with using deployml in its local only mode kicking off deploys with mcollective, worked really nice - <a href="https://twitter.com/ripienaar">@ripienaar</a></p>
+
+<p>Roll forward, never back. - <a href="https://twitter.com/bdha">@bdha</a></p>
+
+<p>This is a fight I have at least two or three times at every conference I speak at and in a bucket load of other places - <a href="https://twitter.com/kartar">@kartar</a></p>
+
+<p>further thought: I consider capistrano to be one impl of a &#8220;deployment service&#8221; on the same level as, say, a CM tool  - <a href="https://twitter.com/dpiddee">@dpiddee</a></p></blockquote>
+
+<ul>
+<li>&#8220;Ignorance&#8221;: I don&#8217;t mean ignorance in the sense of stupidity. I mean it strictly in the sense of not having knowledge of something. No judgement is implied</li>
+<li>&#8220;Opinionated&#8221; - Opinionated isn&#8217;t bad. It&#8217;s just opinionated.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Migrating From Blogger]]></title>
+    <link href="http://blog.lusis.org/blog/2011/08/13/migrating-from-blogger/"/>
+    <updated>2011-08-13T21:50:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/08/13/migrating-from-blogger</id>
+    <content type="html"><![CDATA[<p>Many, many years ago I started blogging. It&#8217;s fun and I like to feel self-important by dumping my ideas. I enjoy writing so blogging is cool like that.</p>
+
+<p>Over the past 12 years I&#8217;ve gone through various tools to help me do that (in no particular order):</p>
+
+<ul>
+<li>PHPnuke</li>
+<li>Postnuke</li>
+<li>Moveable Type</li>
+<li>Plone</li>
+<li>CakePHP</li>
+<li>rst2html vim plugin</li>
+<li>Blogger</li>
+<li>Wordpress</li>
+<li>Homegrown shit</li>
+</ul>
+
+
+<p>With the exception of one, all of these tools were simply a pain in the ass. They required lots of moving pieces, we&#8217;re bug ridden and security nightmares.
+The one tool I enjoyed the most?</p>
+
+<p>rst2html in Vim</p>
+
+<p>The only reason I used those tools was because I hated writing HTML. I hated dealing with styling. About 3 years ago I finally settled on using Blogger. Now I&#8217;m changing again.</p>
+
+<!--more-->
+
+
+<h1>Blogger and Markdown</h1>
+
+<p>While I was perfectly happy with Blogger, one thing that kept annoying me was that writing posts became tedious. Working inside a textarea widget was still painful. I used Scribefire for a while in Firefox. For the last 4 months or so, I&#8217;ve been writing my blog posts in Markdown, manually converting them to HTML with pandoc and then pasting them into blogger.</p>
+
+<p>I tried the google CLI tools but I still had to massage the generated output so I never bothered to automate any of the posting part. Additionally, as much more of posts became technical, I found myself jumping over to gists and pasting the embedded content link into the posts. The whole workflow sucked.</p>
+
+<h1>Octopress and Github</h1>
+
+<p>The other day I came across <a href="https://github.com/imathis/octopress">Octopress</a>. The default style was attractive. It handled code VERY well. Best of all, I could work in Vim, run a few rake commands and my content would be published to Github.</p>
+
+<p>WIN!</p>
+
+<p>I find this workflow MUCH easier and sane. It&#8217;s very coder friendly.</p>
+
+<p>What&#8217;s also nice is that, should github go away (god forbid), I have everything here self-contained to run on my own server.</p>
+
+<h1>Old posts</h1>
+
+<p>I&#8217;m currently in the process of redoing what blogger posts I have that weren&#8217;t already in Markdown. I&#8217;m converting the more &#8220;popular&#8221; posts first and then I&#8217;ll get the remainder. It&#8217;s a little painful but the light at the end of the tunnel is that I only have to do this once.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fun With Celluloid]]></title>
+    <link href="http://blog.lusis.org/blog/2011/08/13/fun-with-celluloid/"/>
+    <updated>2011-08-13T00:30:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/08/13/fun-with-celluloid</id>
+    <content type="html"><![CDATA[<p><em>warning! This is a really long post</em></p>
+
+<p>In the course of rewriting the <a href="https://github.com/lusis/Noah">Noah</a> callback daemon, I started to get really frustrated with EventMachine. This is nothing against EventMachine by any stretch of the imagination. I really like it.</p>
+
+<p>What I was having issues with is making the plugin framework as dirt simple as possible. By using EM, I had no choice but to require folks to understand how EM works. This primarily meant not blocking the reactor. Additionally, through no fault of EM, I was starting to get mired in callback spaghetti.</p>
+
+<h1>Actors</h1>
+
+<p>I&#8217;ve mentioned several times before that I love the actor model. It makes sense to me. The idea of mailboxes and message passing is really simple to understand. For a while, there was project that implemented actors on top of EM called Revactor but it stalled. I started following the author (Tony Arcieri) on GitHub to see if he would ever update it. He did not but I caught wind of his new project and it was pretty much exactly what I was looking for.</p>
+
+<p>Actors have a proven track record in Erlang and the Akka framework for Scala and Java uses them as well.</p>
+
+<h1>Celluloid</h1>
+
+<!--more-->
+
+
+<p><a href="https://github.com/tarcieri/celluloid">Celluloid</a> is an implementation of Actors on Ruby. At this point, it lacks some of the more advanced features of the Akka and Erlang implementations. However Tony is very bullish about Celluloid and is pretty awesome in general.</p>
+
+<p>I&#8217;m not going to go over Celluloid basics in too much detail. Tony does an awesome job in the <a href="http://celluloid.github.com/">README</a> for the project. What I want to talk more about is how I want to use it for Noah and what capabilities it has/is missing for that use case.</p>
+
+<h1>Noah callbacks</h1>
+
+<p>I won&#8217;t bore you with a rehash of Noah. I&#8217;ve written a ton of blog posts (and plan to write more). However for this discussion, it&#8217;s important to understand what Noah callbacks need to do.</p>
+
+<h2>Quick recap</h2>
+
+<p>Any object in Noah can be &#8220;watched&#8221;. This is directly inspired by ZooKeeper. Because Noah is stateless, however, watches need to work a little differently. The primary difference is that Noah&#8217;s watches are asynch. As a side-effect of that, we get some really cool additional functionality. So what does a Noah watch consist of?</p>
+
+<ul>
+<li>An absolute or partial path to and endpoint in the system</li>
+<li>A URI-style location for notification of changes to that path</li>
+</ul>
+
+
+<p>Let&#8217;s say you had a small sinatra application running on all your servers. Its only job was to be a listener for messages from Noah. This daemon will be responsible for rewriting your <code>hosts</code> file with any hosts that are created, modified or deleted on your network.</p>
+
+<p>In this case, you might register your watch with a path of <code>/hosts/</code> and an endpoint of <code>http://machinename:port/update_hosts</code>. Any time a host object is created, updated or deleted Noah will send the JSON representation of that object state along with the operation performed to that endpoint. Let&#8217;s say you also want to know about some configuration setting that has changed which lives at <code>/configurations/my_config_file.ini</code>. Let&#8217;s put a kink in that. You want that watch to drop its message onto a RabbitMQ exchange.</p>
+
+<p>So now we have the following information that we need to act on:</p>
+
+<ul>
+<li><code>{:endpoint =&gt; 'http://machine:port/update_hosts', :pattern =&gt; '//noah/hosts'}</code></li>
+<li><code>{:endpoint =&gt; 'amqp://host:port/exchange?durable=true', :pattern =&gt; '//noah/configurations/my_config_file.ini'}</code></li>
+</ul>
+
+
+<p>Not so hard right? But we also have some additional moving parts. Something needs to monitor Redis for these various CRUD messages. We need to compare them against a list of endpoints that want notification about those messages. We also need to intercept any messages from Redis that are new endpoints being registered. Oh and we also need to know about failed endpoints so we can track and eventually evict them. Obviously we don&#8217;t want to stop http messages from going out because AMQP is slow. Imagine if we implemented FTP endpoint support! Essentially we need high concurrency not only on each &#8216;class&#8217; of endpoint (http, amqp, ftp whatever) but also within each class of endpoint. If any individual endpoint attempt crashes for any reason, we need to take some action (eviction for instance) and not impact anyone else.</p>
+
+<h1>Doing it with Celluloid</h1>
+
+<p>So thinking about how we would do this with actors, I came up with the following basic actors:</p>
+
+<ul>
+<li>RedisActor <em>watches the Redis pubsub backend</em></li>
+<li>HTTPActor <em>handles HTTP endpoints - a &#8216;worker&#8217;</em></li>
+<li>AMQPActor <em>handles AMQP endpoints - a &#8216;worker&#8217;</em></li>
+<li>BrokerActor <em>responsible for intercepting endpoint CRUD operations and also determining which actors to send messages to for processing</em></li>
+</ul>
+
+
+<p>As I said previously, we also need to ensure that if any worker crashes, that it gets replaced. Otherwise we would eventually lose all of our workers.</p>
+
+<p>With this information, we can start to build a tree that looks something like this:</p>
+
+<pre><code>- Master process
+    |_Redis
+    |_Broker
+    |_HTTPPool
+    |    |_Worker
+    |    |_Worker
+    |_AMQPPool
+        |_Worker
+        |_Worker
+</code></pre>
+
+<p>The master process is responsible for handling the Redis, Broker and Pool actors. Each pool actor is responsible for its workers. Not really visible in the ASCII above is how messages flow:</p>
+
+<ul>
+<li>Master process spawns Redis, Broker, HTTPPool and AMQPPool as supervised processes.</li>
+<li>Each pool type spins up a set of supervised workers.</li>
+<li>Master process makes an HTTP request to the Noah server for all existing watches (synchronous)</li>
+<li>It sends a message with those watches to the Broker so it can build its initial list.(synchronous)</li>
+<li>Redis actor watches pubsub.</li>
+<li>Watch messages are sent to a mailbox on the Broker. (synchronous)</li>
+<li>The rest to a different mailbox on the broker.</li>
+<li>The broker performs some filtering to determine if any registered watches care about the message. If so, those are sent to the appropriate pool. (async)</li>
+<li>Each Pool selects a worker and tells him the endpoint and the message</li>
+<li>The worker delivers the message</li>
+</ul>
+
+
+<p>Where this became a slight problem with Celluloid is that it lacks two bits of functionality currently:</p>
+
+<ul>
+<li>Supervision trees</li>
+<li>Pool primitives</li>
+</ul>
+
+
+<p>Right now in Celluloid, there is no way to build &#8220;pools&#8221; of supervised processes. The supervised part is important. If a process is supervised, crashes will be trapped and the process will be restarted.</p>
+
+<p>So how did we &#8220;fake&#8221; this with the existing functionality?</p>
+
+<p>The generic tree was fairly easy. The main Ruby process creates supervised processes for each actor:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">RedisActor</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>    <span class="n">log</span><span class="o">.</span><span class="n">info</span> <span class="s2">&quot;starting redis actor&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">start</span>
+</span><span class='line'>   <span class="c1"># start watching redis</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">BrokerActor</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
+</span><span class='line'>  <span class="c1"># constructor</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">process_watch</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1">#...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">do_work</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1">#...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">HTTPPool</span>
+</span><span class='line'>  <span class="c1"># you get the idea</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@http_pool</span> <span class="o">=</span> <span class="no">HTTPPool</span><span class="o">.</span><span class="n">supervise_as</span> <span class="ss">:http_pool</span><span class="p">,</span> <span class="s2">&quot;http_pool&quot;</span>
+</span><span class='line'><span class="vi">@broker_actor</span> <span class="o">=</span> <span class="no">BrokerActor</span><span class="o">.</span><span class="n">supervise_as</span> <span class="ss">:broker_actor</span><span class="p">,</span> <span class="s2">&quot;broker&quot;</span>
+</span><span class='line'><span class="vi">@redis_actor</span> <span class="o">=</span> <span class="no">RedisActor</span><span class="o">.</span><span class="n">supervise_as</span> <span class="ss">:redis_actor</span><span class="p">,</span> <span class="s2">&quot;redis&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The workers were a bit more complicated. What I ended up doing was something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">HTTPWorker</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:name</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">do_work</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># Work to send the message</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">HTTPPool</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
+</span><span class='line'>  <span class="no">WORKERS</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:workers</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>    <span class="vi">@workers</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="no">WORKERS</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="nb">id</span><span class="o">|</span>
+</span><span class='line'>      <span class="vi">@workers</span><span class="o">[</span><span class="nb">id</span><span class="o">]</span> <span class="o">=</span> <span class="no">HTTPWorker</span><span class="o">.</span><span class="n">supervise_as</span> <span class="s2">&quot;http_worker_</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">to_sym</span><span class="p">,</span> <span class="s2">&quot;http_worker_</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">do_work</span>
+</span><span class='line'>    <span class="vi">@workers</span><span class="o">.</span><span class="n">sample</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">do_work</span> <span class="s2">&quot;msg&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The problem as it stands is that we can&#8217;t really have &#8220;anonymous&#8221; supervised processes. Each actor that&#8217;s created goes into Celluloid&#8217;s registry. We need a programatic way to look those up so we use <code>supervise\_as</code> to give them a name.</p>
+
+<p>This gives us our worker pool. Now Redis can shovel messages to the broker who filters them. He sends a unit of work to a Pool which then selects a random worker to do the REAL work. Should any actor crash, he will be restarted. Because each actor is isolated, A crash in talking to redis, doesn&#8217;t cause our existing workers to stop sending messages.</p>
+
+<p>Obviously this a fairly naive implementation. We&#8217;re missing some really important functionality here.</p>
+
+<ul>
+<li>detecting busy workers</li>
+<li>detecting dead workers (yes we still need to do this)</li>
+<li>alternate worker selection mechanisms (cyclical for instance)</li>
+<li>crash handling</li>
+<li>backlog handling</li>
+</ul>
+
+
+<p>You might wonder why we care if a worker is dead or not? Currently Celluloid buffers messages in each actor until the can be dealt with. In the case of our Pool, it will select a worker and buffer any messages if the worker is blocked. If our worker crashes on its current unit of work, it returns control to the pool. The pool then attempts to send the worker the next message but the worker is dead and hasn&#8217;t respawned yet.</p>
+
+<h1>Some code to play with</h1>
+
+<p>Yes, we&#8217;ve finally made it to the end.</p>
+
+<p>I&#8217;ve created a fun little sinatra application to make it easier for me to test my pools. It consists of a generic Pool class that can be subclassed and take a the name of a worker class as an argument. When a worker gets a message of &#8220;die&#8221;, it will raise an exception thus simulating a crash. Additionally, the &#8220;message processing&#8221; logic includes sleep to simulate long running work.</p>
+
+<p>The reason Sinatra is in the mix is to provide an easy way for me to fire off simulated requests to the pool so I can experiment with different approaches. Eventually, Celluloid will have a proper Pool construct. I plan on using this as the basis for a pull request. You can see it here. Please feel free to fork and experiment with me. It&#8217;s really fun.</p>
+
+<div><script src='https://gist.github.com/1143369.js?file='></script>
+<noscript><pre><code>require 'celluloid'
+require 'logger'
+require 'uuid'
+require 'sinatra/base'
+
+# This is just a simple demo of a possible Pool implementation for Celluloid
+# The sinatra interface exists just to do some testing of crashing workers and the like
+
+# TODO
+# Create a busy worker registry of some kind
+# Implement a small stats page
+
+LOGGER = Logger.new(STDOUT)
+LOGGER.progname = &quot;noah-agent&quot;
+Celluloid.logger = LOGGER
+
+class WorkerError &lt; Exception; end
+
+class Pool
+  include Celluloid::Actor
+  #trap_exit :worker_exception_handler
+
+  attr_reader :workers, :busy_workers
+
+  def initialize(name, opts = {:num_workers =&gt; 10, :worker_class =&gt; Worker})
+    @name = name
+    @workers = []
+    @busy_workers = []
+    LOGGER.info(&quot;Pool #{name} starting up&quot;)
+    opts[:num_workers].times do |worker|
+      start_worker(opts[:worker_class])
+    end
+  end
+
+  def start_worker(klass)
+    worker_id = gen_worker_id
+    LOGGER.info(&quot;Pool #{@name} is starting a #{klass.to_s} worker&quot;)
+    wkr = klass.supervise_as &quot;#{@name}_worker_#{worker_id}&quot;.to_sym, &quot;#{@name}_worker_#{worker_id}&quot;
+    @workers &lt;&lt; wkr
+  end
+
+  def notify_worker(msg)
+    worker = self.get_worker
+    @busy_workers &lt;&lt; worker.name
+    worker.work msg
+    @busy_workers.delete worker.name
+  end
+
+  def worker_exception_handler(actor, reason)
+    LOGGER.debug(&quot;Worker #{actor.name} crashed because #{reason}. You should see a doctor about that&quot;)
+  end
+
+  
+  protected
+  def gen_worker_id
+    Digest::SHA1.hexdigest(UUID.generate)
+  end
+
+  def get_worker
+    worker = @workers.sample.actor
+    LOGGER.info(&quot;Found Worker: #{worker.name} in the pool&quot;)
+    if worker.alive?
+      worker
+    else
+      LOGGER.error &quot;Worker #{worker.name} was dead. Retrying!&quot;
+      self.get_worker
+    end
+  end
+
+end
+
+class MyWorker
+  include Celluloid::Actor
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def work(msg)
+    LOGGER.info(&quot;Message for you sir! #{msg}&quot;)
+    case msg
+    when &quot;die&quot;
+      # Simulate some long-running work that crashes
+      sleep 15
+      raise WorkerError, &quot;Boo got shot!&quot;
+    else
+      # Simulate some long-running work here
+      sleep 30
+      LOGGER.debug(&quot;Hey there camper! #{@name} is doing some work for you&quot;)
+    end
+  end
+
+end
+
+class TestApp &lt; Sinatra::Base
+  @pool = Pool.supervise_as :my_cool_pool, &quot;MyCoolPool&quot;, {:num_workers =&gt; 30, :worker_class =&gt; MyWorker}
+  configure do
+    set :app_file, __FILE__
+    set :logging, false
+    set :dump_errors, false
+    set :run, false
+    set :server, &quot;thin&quot;
+    set :pool, @pool
+  end
+
+  put '/scale' do
+    settings.pool.actor.start_worker(MyWorker)
+    &quot;Added a worker&quot;
+  end
+
+  get '/stats' do
+    &quot;Worker count: #{settings.pool.actor.workers.size}\n Busy workers: #{settings.pool.actor.busy_workers.size}&quot;
+  end
+
+  put '/die' do
+    settings.pool.actor.notify_worker! &quot;die&quot;
+  end
+
+  put '/send' do
+    settings.pool.actor.notify_worker! request.body.read
+  end
+end
+
+app = TestApp
+app.run!</code></pre></noscript></div>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Monitoring Sucks - Watch your language]]></title>
+    <link href="http://blog.lusis.org/blog/2011/07/21/monitoring-sucks-watch-your-language/"/>
+    <updated>2011-07-21T15:19:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/07/21/monitoring-sucks-watch-your-language</id>
+    <content type="html"><![CDATA[<p><em>The following post is a recap of what was discussed in the 07/21/11 #monitoringsucks irc meeting</em></p>
+
+<p>Before I get any further, I just want to thank everyone who attended,
+either in virtual person or in spirit. There have been so many awesome
+discussions going around this topic since we started. I am truly
+priviledged to interact with each and every one of you. I struggle to
+count myself a peer and I can only hope that I provide something in
+return.</p>
+
+<p>I mentioned to someone today that I’m literally sick of the current
+landscape. I consider the current crop of monitoring solutions to be
+technologically bankrupt. The situation is fairly untenable at this
+point.</p>
+
+<p>I just installed (after having a total loss of an existing Zenoss setup)
+Nagios again. I’m not joking when I say that it depressed the everliving
+hell out of me. The monitoring landscape simply has not kept up with
+modern developments. At first it was mildly frustrating. Then it was
+annoying. Now it’s actually a detriment.</p>
+
+<p>Now that we have that out of the way….</p>
+
+<!--more-->
+
+
+<h1>Darmok and Jalad at Tanagra</h1>
+
+<p>Communication is important. Like Picard and Dathon, we’ve been stranded
+on a planet with shitty monitoring tools and we’re unable to communicate
+about the invisibile threat of suck because we aren’t even speaking the
+same language. I say event, you hear trigger, I mean data point. So the
+first order of business was to try and agree on a set of terms. It was
+decided that we would consider these things primitives. Here they are:</p>
+
+<p>Please read through this before jumping to any conclusions. I promise it
+will all become clear (as mud).</p>
+
+<h2>metric</h2>
+
+<p><em>a numeric or boolean data point</em></p>
+
+<p>The data type of a metric was something of a sticking point. People were
+getting hung up on data points being various things (a log message, a
+“status”, a value). We needed something to describe the origin. The
+single “thing” that triggered it all. That thing is a metric.</p>
+
+<p>So why numeric <em>OR</em> boolean? It was pretty clear that many people
+considered, and rightly so I would argue, that a state change is a
+metric. A good example given by <a href="http://twitter.com/cwebber">Christopher Webber</a> is that of a BGP route going away.
+Why is this a less valid data point than the amount of disk space in use
+or the latency from one host to another? Frankly, it’s not.</p>
+
+<p>But here’s where it gets fuzzy. What about a log message. Surely that’s a data point and thus a metric.</p>
+
+<p>Yes and No. The <em>presence</em> of a log message is a data point. But it’s a boolean. The log message itself?</p>
+
+<h2>context</h2>
+
+<p><em>metadata about a metric</em></p>
+
+<p>Now metadata itself is a loaded term but in this scope, the “human
+readable” attributes are considered context. Going back to our log
+example. The presence of the log message is a metric. The log message
+itself is context. Here’s the thing. You want to know if there is an
+error message in a log file. The type of error, the error message text?
+That’s context for the metric to use in determining a course of action.</p>
+
+<p>Plainly speaking, metrics are for machines. Context is for humans. This
+leads us to….</p>
+
+<h2>event</h2>
+
+<p><em>metric combined with context</em></p>
+
+<p>This is still up in the air but the general consensus was that this was
+a passable definition. The biggest problem with a group of domain
+experts is that they are frequently unable to accept semantic
+approximation. Take the discussion of Erlang Spawned process:</p>
+
+<ul>
+<li>It’s sort of like a VM on a VM</li>
+<li>NO IT’S NOT.</li>
+<li><em>headdesk</em></li>
+</ul>
+
+
+<p>The fact is that an Erlang spawned process has shades of a virtual
+machine is irrelevant to the domain expert. We found similar discussions
+around what we would call the combination of a metric and its context.
+But where do events come from?</p>
+
+<h2>resource</h2>
+
+<p><em>the source of a metric</em></p>
+
+<p>Again, we could get into arguments around what a resource is. One thing
+that was painfully obvious is that we’re all sick and tired of being
+tied to the Host and Service model. It’s irrelevant. These constructs
+are part “legacy” and part “presentation”.</p>
+
+<p>Any modern monitoring thought needs to realize that metrics no longer
+come from physical hosts or are service states. In the modern world,
+we’re taking a holistic view of monitoring that includes not only bare
+metal but business matters. The number of sales is a metric but it’s not
+tied to a server. It’s tied to the business as a whole. The source of
+your metrics is a resource. So now that we have this information - a
+metric, its context and who generated it - what do we do? We take….</p>
+
+<h2>action</h2>
+
+<p><em>a response to a given metric</em></p>
+
+<p>What response? It doesn’t MATTER. Remember that these are primitives.
+The response is determined by components of your monitoring
+infrastructure. Humans note the context. Graphite graphs it. Nagios
+alerts on it. ESPER correlates it with other metrics. Don’t confuse
+scope here. From this point on, whatever happens has is all decided on
+by a given component. It’s all about perspective and aspects.</p>
+
+<h1>Temba, his arms wide</h1>
+
+<p>I’m sure through much of that, you were thinking “alerting! graphing!
+correlation!”. Yes, that was pretty much what happened during the
+meeting as well. Everyone has pretty much agreed (I think) at this point
+that any new monitoring systems should be modular in nature. As <a href="http://twitter.com/obfuscurity">Jason
+Dixon</a> put it - “Voltron”. No single
+system that attempts to do everything will meet everyone’s needs.
+However, with a common dictionary and open APIs you should be able to
+build a system that DOES meet your needs. So what are those components?
+Sadly this part is not as fleshed out. We simply ran out of time.
+However we did come up with a few basics:</p>
+
+<h2>Collection</h2>
+
+<p><em>getting the metrics</em></p>
+
+<p>It doesn’t matter if it’s push or pull. It doesn’t matter what the
+transport is - async or point-to-point. Somehow, you have to get a
+metric from a resource.</p>
+
+<h2>Event Processing</h2>
+
+<p><em>taking action</em></p>
+
+<p>Extract the metric and resource from an event. Do something with it.
+Maybe you send the metric to another component. Maybe you “present” it
+or send it somewhere to be presented. Maybe you perform a change on a
+resource (restarting a service). Essentially the decision engine.</p>
+
+<h2>Presentation</h2>
+
+<p>While you might be thinking of graphing here, that’s a type of
+presentation. You know what else is presentation? An email alert. Stick
+with me. I know what’s going through your head. No..not that…the other
+thing.</p>
+
+<h2>Analytics</h2>
+
+<p>This is pretty much correlation. We didn’t get a REAL solid defintion
+here but everyone was in agreement that some sort of analytics is a
+distinct component.</p>
+
+<h2>The “other” stuff</h2>
+
+<p>As I said, we had to kind of cut “official” things short. There was
+various discussion around Storage and Configuration. Storage I
+personally can see as a distinct component but Configuration not so
+much. Configuration is an aspect of a component but not a component
+itself.</p>
+
+<h2>Logical groupings</h2>
+
+<p>Remember when I said I know what you’re thinking? This is what I think
+it was.</p>
+
+<p>You can look at the above items and from different angles they look
+similar. I mean sending an email feels more like event processing than
+presentation. You’d probably be right. By that token, drawing a point on
+a graph is technically processing an event. The fact is many components
+have a bit of a genetic bond. Not so much parent/child or sibling but
+more like cousins. In all honesty, if I were building an event
+processing component, I’d probably handle sending the email right there.
+Why send it to another component? That makes perfect sense. Graphing?
+Yeah I’ll let graphite handle that but I can do service restarts and
+send emails. Maybe you have an intelligent graphing component that can
+do complex correlation inband. That makes sense too.</p>
+
+<p>I’m quite sure that we’ll have someone who writes a kickass event
+processor that happens to send email. I’m cool with that. I just don’t
+want to be bound to ONLY being able to send emails because that’s all
+your decision system supports.</p>
+
+<h1>Shaka, when the walls fell</h1>
+
+<p>Speaking personally, I really feel like today’s discussion was VERY
+productive. I know that you might not agree with everything here. Things
+are always up for debate. The only thing I ask is that at some point,
+we’re all willing to say “I know that this definition isn’t EXACTLY how
+I would describe something but it’s close enough to work”.</p>
+
+<p>So what are the next steps? I think we’ve got enough information and
+consensus here for people to start moving forward with some things. One
+exercise, inspired by something Matt Ray said, that we agreed would be
+REALLY productive is to take an existing application and map what it
+does to our primitives and components. Matt plans on doing that with
+Zenoss since that’s what he knows best.</p>
+
+<p>Let me give an example:</p>
+
+<p>Out of the box, Nagios supports Hosts and Services which map pretty
+cleanly to resources. It is does not only collection but event
+processing and presentation. It not only supports metrics but also
+context (Host down is the boolean metric. “Response timeout” is the
+context. Through something like pnp4nagios, it can support different
+presentations. It has very basic set of Analytic functionality.</p>
+
+<p>Meanwhile Graphite is, in my mind, strictly presentation and deals only
+with metrics. It does support both numeric and boolean metrics. It also
+has basic resource functionality but it’s not hardwired. It doesn’t
+really do event handling in the strict sense. Analytics is left to the
+human mind. It certainly doesn’t support context.</p>
+
+<p>I’d love to see more of these evaluations.</p>
+
+<p>Also, I know there are tons of “words” that we didn’t cover - thresholds
+for instance. While there wasn’t a total consensus, there was some
+agreement that somethings were attributes of a component but not a
+primitive itself. It was also accepted that components themselves would
+be primitives. You correlation engine might aggregate (another word) a
+group of metrics and generate an event. At that point, your correlation
+engine is now a resource with its own metrics (25 errors) and context
+(“number of errors across application servers exceeded acceptable
+limits”) which could be then sent to an event processor.</p>
+
+<p>That’s the beauty of the Voltron approach and not binding a resource to
+a construct like a Host.</p>
+
+<h1>Special note to the Aussies</h1>
+
+<p>I’m very sorry that we couldn’t get everyone together. I’ve scheduled
+another meeting where we can start from scratch just like this one, or
+build on what was discussed already. I’m flexible and willing to wake up
+at whatever time works best for you guys</p>
+
+<p>Thanks again to everyone who attended. If you couldn’t be there, I hope
+you can make the next one.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why Monitoring Sucks]]></title>
+    <link href="http://blog.lusis.org/blog/2011/06/05/why-monitoring-sucks/"/>
+    <updated>2011-06-05T16:30:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/06/05/why-monitoring-sucks</id>
+    <content type="html"><![CDATA[<p><em>(and what we&#8217;re doing about it)</em></p>
+
+<p>About two weeks ago someone made a tweet. At this point, I don&#8217;t
+remember who said it but the gist was that &#8220;monitoring sucks&#8221;. I
+happened to be knee-deep in frustrating bullshit around that topic and
+was currently evaluating the same effing tools I&#8217;d evaluated at every
+other company over the past 10 years or so. So I did what seems to be
+S.O.P for me these days. I started something.</p>
+
+<!--more-->
+
+
+<h1>But does monitoring REALLY suck?</h1>
+
+<p>Heck no! Monitoring is AWESOME. Metrics are AWESOME. I love it. Here&#8217;s
+what I don&#8217;t love: - Having my hands tied with the model of host and
+service bindings. - Having to set up &#8220;fake&#8221; hosts just to group
+arbitrary metrics together - Having to either collect metrics twice -
+once for alerting and another for trending - Only being able to see my
+metrics in 5 minute intervals - Having to chose between shitty interface
+but great monitoring or shitty monitoring but great interface - Dealing
+with a monitoring system that thinks <strong>IT</strong> is the system of truth for
+my environment - Perl (I kid&#8230;sort of) - Not actually having any real
+choices</p>
+
+<p>Yes, yes I know:</p>
+
+<blockquote><p>You can just combine Nagios + collectd + graphite + cacti +
+pnp4nagios and you have everything you need!</p></blockquote>
+
+<p>Seriously? Kiss my ass. I&#8217;m a huge fan of the Unix pipeline philosophy
+but, christ, have you ever heard the phrase &#8220;antipattern&#8221;?</p>
+
+<h1>So what the hell are you going to do about it?</h1>
+
+<p>I&#8217;m going to let smart people be smart and do smart things.</p>
+
+<p>Step one was getting everyone who had similar complaints together on
+IRC. That went pretty damn well. Step two was creating a github repo.
+Seriously. Step two should ALWAYS be &#8220;create a github repo&#8221;. Step three?
+Hell if I know.</p>
+
+<p>Here&#8217;s what I do know. There are plenty of frustrated system
+administrators, developers, engineers, &#8220;devops&#8221; and everything under the
+sun who don&#8217;t want much. All they really want is for shit to work. When
+shit breaks, they want to be notified. They want pretty graphs. They
+want to see business metrics along side operational ones. They want to
+have a 52-inch monitor in the office that everyone can look at and say:</p>
+
+<blockquote><p>See that red dot? That&#8217;s bad. Here&#8217;s what was going on when we got
+that red dot. Let&#8217;s fix that shit and go get beers</p></blockquote>
+
+<h1>About the &#8220;repo&#8221;</h1>
+
+<p>So the plan I have in place for the repository is this. We don&#8217;t really
+need code. What we need is an easy way for people to contribute ideas.
+The plan I have in place for this is partially underway. There&#8217;s now a
+<em>monitoringsucks</em> organization on Github. Pretty much anyone who is
+willing to contribute can get added to the team. The idea is that, as
+smart people think of smart shit, we can create new repository under
+some unifying idea and put blog posts, submodules, reviews,
+ideas..whatever into that repository so people have an easy place to go
+get information. I&#8217;d like to assign someone per repository to be the
+owner. We&#8217;re all busy but this is something we&#8217;re all highly interested
+in. If we spread the work out and allow easy contribution, then we can
+get some real content up there.</p>
+
+<p>I also want to keep the repos as light and cacheable as possible. The
+organization is under the github &#8220;free&#8221; plan right now and I&#8217;d like to
+keep it that way.</p>
+
+<h2>Blog Posts Repo</h2>
+
+<p>This repo serves as a place to collect general information about blog
+posts people come across. Think of it as hyper-local delicious in a
+DVCS.</p>
+
+<p>Currently, by virtue of the first commit, Michael Conigliaro is the
+&#8220;owner&#8221;. You can follow him on twitter and github as @mconigliaro</p>
+
+<h2>IRC Logs Repo</h2>
+
+<p>This repo is a log of any &#8220;scheduled&#8221; irc sessions. Personally, I don&#8217;t
+think we need a distinct #monitoringsucks channel but people want to
+keep it around. The logs in this repo are not full logs. Just those from
+when someone says &#8220;Hey smart people. Let&#8217;s think of smart shit at this
+date/time&#8221; on twitter.</p>
+
+<p>Currently <strong>I</strong> appear to be the owner of this repo. I would love for
+someone who can actually make the logs look good to take this over.</p>
+
+<h2>Tools Repo</h2>
+
+<p>This repo is really more of a &#8220;curation&#8221; repo. The plan is that each
+directory is the name of some tool with two things it in:</p>
+
+<ul>
+<li>A README.md as a review of the tool</li>
+<li>A submodule link to the tool&#8217;s repo (where appropriate)</li>
+</ul>
+
+
+<p>Again, I think I&#8217;m running point on this one. Please note that the
+submodule links APPEAR to have some sort of UI issue on github. Every
+submodule appears to point to Dan DeLeo&#8217;s &#8216;critical&#8217; project.</p>
+
+<h2>Metrics Catalog Repo</h2>
+
+<p>This is our latest member and it already has an official manager! Jason
+Dixon (@obfuscurity on github/twitter - jdixon on irc) suggested it so
+he get&#8217;s to run it ;) The idea here is that this will serves as a set of
+best practices around what metrics you might want to collect and why.
+I&#8217;m leaving the organization up to Jason but I suggested a
+per-app/service/protocol directory.</p>
+
+<h1>Wrap Up</h1>
+
+<p>So that&#8217;s where we are. Where it goes, I have no idea. I just want to
+help where ever I can. If you have any ideas, hit me up on
+twitter/irc/github/email and let me know. It might help to know that if
+you suggest something, you&#8217;ll probably be made the person reponsible for
+it ;)</p>
+
+<p><strong>Update!</strong></p>
+
+<p>It was our good friend Sean Porter (@portertech on twitter), that we
+have to thank for all of this ;)</p>
+
+<p>  <a href="https://picasaweb.google.com/lh/photo/Zi1k9F_7lBKjcN8dtJlXXQ?feat=embedwebsite"><img src="https://lh5.googleusercontent.com/-O6mNvCvCPyU/TexPV1P9YaI/AAAAAAAAAWk/7ZQ8BkXUyn8/s144/monitoring-sucks.png" alt="image" /></a>
+  From <a href="https://picasaweb.google.com/lusisjv/PublicPhotos?feat=embedwebsite">Public Photos</a></p>
+
+<p><strong>Update (again)</strong></p>
+
+<p>It was kindly pointed out that I never actually included a link to the
+repositories. Here they are:</p>
+
+<p><a href="https://github.com/monitoringsucks">https://github.com/monitoringsucks</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[On Noah - Part 4]]></title>
+    <link href="http://blog.lusis.org/blog/2011/05/19/on-noah-part-4/"/>
+    <updated>2011-05-19T19:01:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/05/19/on-noah-part-4</id>
+    <content type="html"><![CDATA[<p><em>This is the fourth part in a series on Noah. <a href="http://goo.gl/l3Mgt">Part 1</a>, <a href="http://goo.gl/Nj2TN">Part 2</a> and <a href="http://goo.gl/RsZtZ">Part 3</a> are available as well</em></p>
+
+<p>In Part 1 and 2 of this series I covered background on Zookeeper and
+discussed the similarities and differences between it and Noah. Part 3
+was about the components underneath Noah that make it tick.</p>
+
+<p>This post is about the &#8220;future&#8221; of Noah. Since I&#8217;m a fan of Fourcast
+podcast, I thought it would be nice to do an immediate, medium and long
+term set of goals.</p>
+
+<!--more-->
+
+
+<h1>Immediate Future - the road to 1.0</h1>
+
+<p>In the most immediate future there are a few things that need to happen.
+These are in no specific order.</p>
+
+<ul>
+<li><p>General</p>
+
+<ul>
+<li>Better test coverage ESPECIALLY around the watch subsystem</li>
+<li>Full code comment coverage</li>
+<li>Chef cookbooks/Puppet manifests for doing a full install</li>
+<li>&#8220;fatty&#8221; installers for a standalone server</li>
+<li>Documentation around operational best practices</li>
+<li>Documentation around clustering, redundancy and hadr</li>
+<li>Documentation around integration best practices</li>
+<li>Performance testing</li>
+</ul>
+</li>
+<li><p>Noah Server</p>
+
+<ul>
+<li>Expiry flags and reaping for Ephemerals</li>
+<li>Convert mime-type in Configurations to make sense</li>
+<li>Untag and Unlink support</li>
+<li>Refactor how you specify Redis connection information</li>
+<li>Integrated metrics for monitoring (failed callbacks, expired
+ephemeral count, that kind of stuff)</li>
+</ul>
+</li>
+<li><p>Watcher callback daemon</p>
+
+<ul>
+<li>Make the HTTP callback plugin more flexible</li>
+<li>Finish binscript for the watcher daemon</li>
+</ul>
+</li>
+<li><p>Other</p>
+
+<ul>
+<li>Finish <a href="http://goo.gl/B65aL">Boat</a></li>
+<li>Finish NoahLite LWRP for Chef (using Boat)</li>
+<li>A few more HTTP-based callback plugins (Rundeck, Jenkins)</li>
+</ul>
+</li>
+</ul>
+
+
+<p>Now that doesn&#8217;t look like a very cool list but it&#8217;s a lot of work for
+one person. I don&#8217;t blame anyone for not getting excited about it. The
+goal now is to get a functional and stable application out the door that
+people can start using. Mind you I think it&#8217;s usable now (and I&#8217;m
+already using it in &#8220;production&#8221;).</p>
+
+<p>Obviously if anyone has something else they&#8217;d like to see on the list,
+let me know.</p>
+
+<h1>Medium Rare</h1>
+
+<p>So beyond that 1.0 release, what&#8217;s on tap? Most of the work will
+probably occur around the watcher subsystem and the callback daemon.
+However there are a few key server changes I need to implement.</p>
+
+<ul>
+<li><p>Server</p>
+
+<ul>
+<li>Full ACL support on every object at every level</li>
+<li>Token-based and SSH key based credentialing</li>
+<li>Optional versioning on every object at every level</li>
+<li>Accountability/Audit trail</li>
+<li>Implement a long-polling interface for inband watchers</li>
+</ul>
+</li>
+<li><p>Watcher callback daemon</p>
+
+<ul>
+<li>Decouple the callback daemon from the Ruby API of the server.
+Instead the daemon itself needs to be a full REST client of the
+Noah server</li>
+<li>Break out the &#8220;official&#8221; callback daemon into a distinct package</li>
+</ul>
+</li>
+<li><p>Clients</p>
+
+<ul>
+<li>Sinatra Helper</li>
+</ul>
+</li>
+</ul>
+
+
+<p>Also during this period, I want to spend time building up the ecosystem
+as a whole. You can see a general mindmap of that
+<a href="https://github.com/lusis/Noah/wiki/Ecosystem">here</a>.</p>
+
+<p>Going into a bit more detail&#8230;</p>
+
+<h2>Tokens and keys</h2>
+
+<p>It&#8217;s plainly clear that something which has the ability to make runtime
+environment changes needs to be secure. The first thing to roll off the
+line post-1.0 will be that functionality. Full ACL support for all
+entries will be enabled and in can be set at any level in the namespace
+just the same as Watches.</p>
+
+<h2>Versioning and Auditing</h2>
+
+<p>Again for all entires and levels in the namespace, versioning and
+auditing will be allowed. The intention is that the number of revisions
+and audit entries are configurable as well - not just an enable/disable
+bit.</p>
+
+<h2>In-band watches</h2>
+
+<p>While I&#8217;ve lamented the fact that watches were in-band only in
+Zookeeper, there&#8217;s a real world need for that model. The idea of
+long-polling functionality is something I&#8217;d actually like to have by 1.0
+but likely won&#8217;t happen. The intent is simply that when you call say
+<code>/some/path/watch</code>, you can pass an optional flag in the message stating
+that you want to watch that endpoint for a fixed amount of time for any
+changes. Optionally a way to subscribe to all changes over long-polling
+for a fixed amount of time is cool too.</p>
+
+<h2>Agent changes</h2>
+
+<p>These two are pretty high on my list. As I said, there&#8217;s a workable
+solution with minimal tech debt going into the 1.0 release but long
+term, this needs to be a distinct package. A few other ideas I&#8217;m kicking
+around are allowing configurable filtering on WHICH callback types an
+agent will handle. The idea is that you can specify that this invocation
+only handle http callbacks while this other one handles AMQP.</p>
+
+<h2>Sinatra Helper</h2>
+
+<p>One idea I&#8217;d REALLY like to come to fruition is the Sinatra Helper. I
+envision it working something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="nb">require</span> <span class="s1">&#39;sinatra/base&#39;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">MyApp</span> <span class="o">&lt;</span> <span class="no">Sinatra</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>    <span class="n">register</span> <span class="no">Noah</span><span class="o">::</span><span class="no">Sinatra</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="n">noah_server</span> <span class="s2">&quot;http://localhost:5678&quot;</span>
+</span><span class='line'>    <span class="n">noah_node_name</span> <span class="s2">&quot;myself&quot;</span>
+</span><span class='line'>    <span class="n">noah_app_name</span> <span class="s2">&quot;MyApp&quot;</span>
+</span><span class='line'>    <span class="n">noah_token</span> <span class="s2">&quot;somerandomlongstring&quot;</span>
+</span><span class='line'>    <span class="n">dynamic_get</span> <span class="ss">:database_server</span>
+</span><span class='line'>    <span class="n">dynamic_set</span> <span class="ss">:some_other_variable</span><span class="p">,</span> <span class="s2">&quot;foobar&quot;</span>
+</span><span class='line'>    <span class="n">watch</span> <span class="ss">:this_other_node</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The idea is that the helper allows you to register your application very
+easily with Noah for other components in your environment to be know. As
+a byproduct, you get the ability to get/set certain configuration
+parameters entirely in Noah. The watch setting is kind of cool as well.
+What will happen is if you decide to <code>watch</code> something this way, the
+helper will create a random (and yes, secure) route in your application
+that watch events can notify. In this way, your Sinatra application can
+be notified of any changes and will automatically &#8220;reconfigure&#8221; itself.</p>
+
+<p>Obviously I&#8217;d love to see other implementations of this idea for other
+languages and frameworks.</p>
+
+<h1>Long term changes</h1>
+
+<p>There aren&#8217;t so much specific list items here as general themes and
+ideas. While I list these as long term, I&#8217;ve already gotten an offer to
+help with some of them so they might actually get out sooner.</p>
+
+<h2>Making Noah itself distributed</h2>
+
+<p>This is something I&#8217;m VERY keen on getting accomplished and would really
+consider it the fruition of what Noah itself does. The idea is simply
+that multiple Noah servers themselves are clients of other Noah servers.
+I&#8217;ve got several ideas about how to accomplish this but I got an
+interesting follow up from someone on Github the other day. He asked
+what my plans were in this area and we had several lengthy emails back
+and forth including an offer to work on this particular issue.</p>
+
+<p>Obviously there are a whole host of issues to consider. Race conditions
+in ordered delivery of Watch callbacks (getting a status &#8220;down&#8221; after a
+status &#8220;up&#8221; when it&#8217;s supposed to be the other way around..) and
+eventual consistency spring to mind first.</p>
+
+<p>The general architecture idea that was offered up is to use
+<a href="https://github.com/derekcollison/nats">NATS</a> as the mechanism for
+accomplishing this. In the same way that there would be AMQP callback
+support, there would be NATS support. Additional Noah servers would only
+need to know one other member to bootstrap and everything else happens
+using the natural flows within Noah.</p>
+
+<p>The other part of that is how to handle the Redis part. The natural
+inclination is to use the upcoming Redis clustering but that&#8217;s not
+something I want to do. I want each Noah server to actually include its
+OWN Redis instance &#8220;embedded&#8221; and not need to rely on any external
+mechanism for replication of the data. Again, the biggest validation of
+what Noah is designed to do is using only Noah itself to do it.</p>
+
+<h2>Move off Redis/Swappable persistence</h2>
+
+<p>If NATS says anything to me, it says &#8220;Why do you even need Redis?&#8221;. If
+you recall, I went with Redis because it solved multiple problems. If I
+can find a persistence mechanism that I can use without any external
+service running, I&#8217;d love to use it.</p>
+
+<h2>ZeroMQ</h2>
+
+<p>If I were to end up moving off Redis, I&#8217;d need a cross platform and
+cross language way to handle the pubsub component. NATS would be the
+first idea but NATS is Ruby only (unless I&#8217;ve missed something). ZeroMQ
+appears to have broad language and platform support so writing custom
+agents in the same vein as the Redis PUBSUB method should be feasible.</p>
+
+<h2>Nanite-style agents</h2>
+
+<p>This is more of a command-and-control topic but a set of
+high-performance specialized agents on systems that can watch the PUBSUB
+backend or listen for callbacks would be awesome. This would allow you
+really integrate Noah into your infrastructure beyond the application
+level. Use it to trigger a puppet or chef run, reboot instances or do
+whatever. This is really about bringing what I wanted to accomplish with
+Vogeler into Noah.</p>
+
+<h2>The PAXOS question</h2>
+
+<p>A lot of people have asked me about this. I&#8217;ll state right now that I
+can only make it through about 20-30% of any reading about Paxos before
+my brain starts to melt. However in the interest of proving myself the
+fool, I think it would be possible to implement some Paxos like
+functionality on top of Noah. Remember that Noah is fundamentally about
+fully disconnected nodes. What better example of a network of unreliable
+processors than ones that never actually talk to each other. The problem
+is that the use case for doing it in Noah is fairly limited so as not to
+be worth it.</p>
+
+<p>The grand scheme is that Noah helps enable the construction of systems
+where you can say &#8220;This component is free to go off and operate in this
+way secure in the knowledge that if something it needs to know changes,
+someone will tell it&#8221;. I did say &#8220;grand&#8221; didn&#8217;t I? At some point, I may
+hit the limit of what I can do using only Ruby. Who knows.</p>
+
+<h1>Wrap up - Part 4</h1>
+
+<p>Again with the recap</p>
+
+<ul>
+<li>Get to 1.0 with a stable and fixed set of functionality</li>
+<li>Nurture the Noah ecosystem</li>
+<li>Make it easy for people to integrate Noah into thier applications</li>
+<li>Get all meta and make Noah itself distributed using Noah</li>
+<li>Minimize the dependencies even more</li>
+<li>Build skynet</li>
+</ul>
+
+
+<p><em>I&#8217;m not kidding on that last one. Ask me about Parrot AR drones and
+Noah sometime</em></p>
+
+<p>If you made it this far, I want to say thank you to anyone who read any
+or all of the parts. Please don&#8217;t hesitate to contact me with any
+questions about the project.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[On Noah - Part 3]]></title>
+    <link href="http://blog.lusis.org/blog/2011/05/18/on-noah-part-3/"/>
+    <updated>2011-05-18T15:14:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/05/18/on-noah-part-3</id>
+    <content type="html"><![CDATA[<p><em>This is the third part in a series on Noah. <a href="http://goo.gl/l3Mgt">Part 1</a> and <a href="http://goo.gl/Nj2TN">Part 2</a> are available as well</em></p>
+
+<p>In Part 1 and 2 of this series I covered background on Zookeeper and
+discussed the similarities and differences between it and Noah. This
+post is discussing the technology stack under Noah and the reasoning for
+it.</p>
+
+<h1>A little back story</h1>
+
+<p>I&#8217;ve told a few people this but my original intention was to use Noah as
+a way to learn Erlang. However this did not work out. I needed to get a
+proof of concept out much quicker than the ramp up time it would take to
+<a href="http://learnyousomeerlang.com/">learn me some Erlang</a>. I had this
+grandiose idea to slap mnesia, riak_core and webmachine into a tasty
+ball of Zookeeper clonage.</p>
+
+<!--more-->
+
+
+<p>I am not a developer by trade. I don&#8217;t have any formal education in
+computer science (or anything for that matter). The reason I mention
+this is to say that programming is hard work for me. This has two side
+effects:</p>
+
+<ul>
+<li>It takes me considerably longer than a working developer to code
+what&#8217;s in my head</li>
+<li>I can only really learn a new language when I have an itch to
+scratch. A real world problem to model.</li>
+</ul>
+
+
+<p>So in the interest of time, I fell back to a language I&#8217;m most
+comfortable with right now, Ruby.</p>
+
+<h1>Sinatra and Ruby</h1>
+
+<p>Noah isn&#8217;t so much a web application as it is this &#8216;api thing&#8217;. There&#8217;s
+no proper front end and honestly, you guys don&#8217;t want to see what my
+design deficient mind would create. I like to joke that in the world of
+MVC, I stick to the M and C. Sure, APIs have views but not in the &#8220;click
+the pretty button sense&#8221;.</p>
+
+<p>I had been doing quite a bit of glue code at the office using
+<a href="http://www.sinatrarb.com">Sinatra</a> (and EventMachine) so I went with
+that. Sinatra is, if you use sheer number of clones in other languages
+as an example, a success for writing API-only applications. I also
+figured that if I wanted to slap something proper on the front, I could
+easily integrate it with <a href="http://www.padrinorb.com">Padrino</a>.</p>
+
+<p>But now I had to address the data storage issue.</p>
+
+<h1>Redis</h1>
+
+<p>Previously, as a way to learn Python at another company, I wrote an
+application called <a href="https://github.com/lusis/vogeler">Vogeler</a>. That
+application had a lot of moving parts - CouchDB for storage and RabbitMQ
+for messaging.</p>
+
+<p>I knew from dealing with CouchDB on CentOS5 that I wasn&#8217;t going to use
+THAT again. Much of it would have been overkill for Noah anyway. I
+realized I really needed nothing more than a key/value store. That
+really left me with either Riak or Redis. I love Riak but it wasn&#8217;t the
+right fit in this case. I needed something with a smaller dependency
+footprint. Mind you Riak is VERY easy to install but managing Erlang
+applications is still a bit edgy for some folks. I needed something
+simpler.</p>
+
+<p>I also realized early on that I needed some sort of basic queuing
+functionality. That really sealed Redis for me. Not only did it have
+zero external dependencies, but it also met the needs for queuing. I
+could use <code>lists</code> as dedicated direct queues and I could use the
+built-in <code>pubsub</code> as a broadcast mechanism. Redis also has a fast atomic
+counter that could be used to approximate the ZK sequence primitive
+should I want to do that.</p>
+
+<p>Additionally, Redis has master/slave (not my first choice) support for
+limited scaling as well as redundancy. One of my original design goals
+was that Noah behave like a traditional web application. This is a model
+ops folks understand very well at this point.</p>
+
+<h1>EventMachine</h1>
+
+<p>When you think asynchronous in the Ruby world, there&#8217;s really only one
+tool that comes to mind, EventMachine. Noah is designed for asynchronous
+networks and is itself asynchronous in its design. The callback agent
+itself uses EventMachine to process watches. As I said previously, this
+is simply using an EM friendly Redis driver that can do <code>PSUBSCRIBE</code>
+(using em-hiredis) and send watch messages (using em-http-request since
+we only support HTTP by default).</p>
+
+<h1>Ohm</h1>
+
+<p>Finally I slapped <a href="http://ohm.keyvalue.org">Ohm</a> on top as the
+abstraction layer for Redis access. Ohm, if you haven&#8217;t used it, is
+simply one of if not the best Ruby library for working with Redis. It&#8217;s
+easily extensible, very transparent and frankly, it just gets the hell
+out of your way. A good example of this is converting some result to a
+hash. By default, Ohm only returns the id of the record. Nothing more.
+It also makes it VERY easy to drop past the abstraction and operate on
+Redis directly. It even provides helpers to get the keys it uses to
+query Redis. A good example of this is in the Linking and Tagging code.
+The following is a method in the Tag model:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="k">def</span> <span class="nf">members</span><span class="o">=</span><span class="p">(</span><span class="n">member</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">key</span><span class="o">[</span><span class="ss">:members</span><span class="o">].</span><span class="n">sadd</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">member</span><span class="o">.</span><span class="n">tag!</span> <span class="nb">self</span><span class="o">.</span><span class="n">name</span> <span class="k">unless</span> <span class="n">member</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">member?</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Because Links and Tags are a one-to-many across multiple models, I drop
+down to Redis and use <code>sadd</code> to add the object to a Redis set of objects
+sharing the same tag.</p>
+
+<p>It also has a very handy feature which is how the core of Watches are
+done. You can define hooks at any phase of Redis interaction - before
+and after saves, creates, updates and deletes. the entire Watch system
+is nothing more than calling these post hooks to format the state of the
+object as JSON, add metadata and send the message using <code>PUBLISH</code>
+messages to Redis with the Noah namespace as the channel.</p>
+
+<h1>Distribution vectors</h1>
+
+<p>I&#8217;ve used this phrase with a few people. Essentially, I want as many
+people as possible to be able to use the Noah server component. I&#8217;ve
+kept the Ruby dependencies to a minimum and I&#8217;ve made sure that every
+single one works on MRI 1.8.7 up to 1.9.2 as well as JRuby. I already
+distribute the most current release as a war that can be deployed to a
+container or run standalone. I want the lowest barrier to entry to get
+the broadest install base possible. When a new PaaS offering comes out,
+I pester the hell out of anyone I can find associated with it so I can
+get deploy instructions written for Noah. So far you can run it on
+Heroku (using the various hosted Redis providers), CloudFoundry and
+dotcloud.</p>
+
+<p>I&#8217;m a bit more lax on the callback daemon. Because it can be written in
+any language that can talk to the Redis pubsub system and because it has
+&#8220;stricter&#8221; performance needs, I&#8217;m willing to make the requirements for
+the &#8220;official&#8221; daemon more stringent. It currently ONLY works on MRI
+(mainly due to the em-hiredis requirement).</p>
+
+<h2>Doing things differently</h2>
+
+<p>Some people have asked me why I didn&#8217;t use technology A or technology B.
+I think I addressed that mostly above but I&#8217;ll tackle a couple of key
+ones.</p>
+
+<p>ZeroMQ</p>
+
+<p>The main reason for not using 0mq was that I wasn&#8217;t really aware of it.
+Were I to start over and still be using Ruby, I&#8217;d probably give it a
+good strong look. The would still be the question of the storage
+component though. There&#8217;s still a possible place for it that I&#8217;ll
+address in part four.</p>
+
+<p>NATS</p>
+
+<p>This was something I simply had no idea about until I started poking
+around the CloudFoundry code base. I can almost guarantee that NATS will
+be a part of Noah in the future. Expect much more information about that
+in part four.</p>
+
+<p>MongoDB</p>
+
+<p>You have got to be kidding me, right? I don&#8217;t trust my data (or anyone
+else&#8217;s for that matter) to a product that doesn&#8217;t understand what
+durability means when we&#8217;re talking about databases.</p>
+
+<p>Insert favorite data store here</p>
+
+<p>As I said, Redis was the best way to get multiple required functionality
+into a single product. Why does a data storage engine have a pubsub
+messaging subsystem built in? I don&#8217;t know off the top of my head but
+I&#8217;ll take it.</p>
+
+<h2>Wrap up - Part 3</h2>
+
+<p>So again, because I evidently like recaps, here&#8217;s the take away:</p>
+
+<ul>
+<li>The key components in Noah are Redis and Sinatra</li>
+<li>Noah is written in Ruby because of time constraints in learning a
+new language</li>
+<li>Noah strives for the server component to have the broadest set of
+distribution vectors as possible</li>
+<li>Ruby dependencies are kept to a minimum to ensure the previous point</li>
+<li>The lightest possible abstractions (Ohm) are used.</li>
+<li>Stricter requirements exist for non-server components because of
+flexibility in alternates</li>
+<li>I really should learn me some erlang</li>
+<li>I&#8217;m not a fan of MongoDB</li>
+</ul>
+
+
+<p>If you haven&#8217;t guessed, I&#8217;m doing one part a night in this series.
+Tomorrow is part four which will cover the future plans for Noah. I&#8217;m
+also planning on a bonus part five to cover things that didn&#8217;t really
+fit into the first four.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[On Noah - Part 2]]></title>
+    <link href="http://blog.lusis.org/blog/2011/05/17/on-noah-part-2/"/>
+    <updated>2011-05-17T15:38:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/05/17/on-noah-part-2</id>
+    <content type="html"><![CDATA[<p><em>This is the second part in a series on Noah. Part 1 is available</em> <a href="http://goo.gl/l3Mgt">here</a></p>
+
+<p>In part one of this series, I went over a little background about
+ZooKeeper and how the basic Zookeeper concepts are implemented in Noah.
+In this post, I want to go over a little bit about a few things that
+Noah does differently.</p>
+
+<!--more-->
+
+
+<h2>Noah Primitives</h2>
+
+<p>As mentioned in the previous post, Noah has 5 essential data types, four
+of which are what I&#8217;ve interchangeably refered to as either Primitives
+and Opinionated models. The four primitives are Host, Service,
+Application and Configuration. The idea was to map some common use cases
+for Zookeeper and Noah onto a set of objects that users would find
+familiar.</p>
+
+<p>You might detect a bit of Nagios inspiration in the first two.</p>
+
+<ul>
+<li><strong>Host:</strong>
+  Analogous to a traditional host or server. The machine or instance running the operating system. Unique by name.</li>
+<li><strong>Service:</strong>
+  Typically mapped to something like HTTP or HTTPS. Think of this as the listening port on a Host. Services must be bound to Hosts. Unique by service name and host name.</li>
+<li><strong>Application:</strong>
+  Apache, your application (rails, php, java, whatever). There&#8217;s a subtle difference here from Service. Unique by name.</li>
+<li><strong>Configuration:</strong>
+  A distinct configuration element. Has a one-to-many relationship with Applications. Supports limited mime typing.</li>
+</ul>
+
+
+<p>Hosts and Services have a unique attribute known as <code>status</code>. This is a
+required attribute and is one of <code>up</code>,<code>down</code> or <code>pending</code>. These
+primitives would work very well integrated into the OS init process.
+Since Noah is curl-friendly, you could add something globally to init
+scripts that updated Noah when your host is starting up or when some
+critical init script starts. If you were to imagine Noah primitives as
+part of the OSI model, these are analagous to Layers 2 and 3.</p>
+
+<p>Applications and Configurations are intended to feel more like Layer 7
+(again, using our OSI model analogy). The differentiation is that your
+application might be a Sinatra or Java application that has a set of
+Configurations associated with it. Interestingly enough, you might
+choose to have something like Tomcat act as both a Service AND an
+Application. The aspect of Tomcat as a Service is different than the
+Java applications running in the container or even Tomcat&#8217;s own
+configurations (such as logging).</p>
+
+<p>One thing I&#8217;m trying to pull off with Configurations is limited
+mime-type support. When creating a Configuration in Noah, you can assign
+a <code>format</code> attribute. Currently 3 formats or types are understood:</p>
+
+<ul>
+<li>string</li>
+<li>json</li>
+<li>yaml</li>
+</ul>
+
+
+<p>The idea is that, if you provide a type, we will serve that content back
+to you in that format when you request it (assuming you request it that
+way via HTTP headers). This should allow you to skip parsing the JSON
+representation of the whole object and instead use it directly. Right
+now this list is hardcoded. I have a task to convert this.</p>
+
+<p>Hosts and Services make a great &#8220;canned&#8221; structure for building a
+monitoring system on top of Noah. Applications and Configurations are a
+lightweight configuration management system. Obviously there are more
+uses than that but it&#8217;s a good way to look at it.</p>
+
+<h2>Ephemerals</h2>
+
+<p>Ephemerals, as mentioned previously, are closer to what Zookeeper
+provides. The way I like to describe Ephemerals to people is a &#8216;512 byte
+key/value store with triggers&#8217; (via Watch callbacks). If none of the
+Primitives fit your use case, the Ephemerals make a good place to start.
+Simply send some data in the body of your post to the url and the data
+is stored there. No attempt is made to understand or interpret the data.
+The hierarchy of objects in the Ephemeral namespace is completely
+arbitrary. Data living at <code>/ephemerals/foo</code> has no relationship with
+data living at <code>/ephemerals/foo/bar</code>.</p>
+
+<p>Ephemerals are also not browseable except via a Linking and Tagging.</p>
+
+<h2>Links and Tags</h2>
+
+<p>Links and Tags are, as far as I can tell, unique to Noah compared to
+Zookeeper. Because we namespace against Primitives and Ephemerals, there
+existed the need to visualize objects under a custom hierarchy.
+Currently Links and Tags are the only way to visualize Ephemerals in a
+JSON format.</p>
+
+<p>Tags are pretty standard across the internet by now. You might choose to
+tag a bunch of items as <code>production</code> or perhaps group a set of Hosts and
+Services as <code>out-of-service</code>. Tagging an item is a simple process in the
+API. Simply <code>PUT</code> the name of the tag(s) to the url of a distinct named
+item appended by <code>tag</code>. For instance, the following JSON posted to
+<code>/applications/my_kick_ass_app/tag</code> with tag the Application
+<code>my_kick_ass_app</code> with the tags <code>sinatra</code>, <code>production</code> and <code>foobar</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>   <span class="p">{</span><span class="s2">&quot;tags&quot;</span><span class="o">:</span><span class="p">[</span><span class="s2">&quot;sinatra&quot;</span><span class="p">,</span> <span class="s2">&quot;production&quot;</span><span class="p">,</span> <span class="s2">&quot;foobar&quot;</span><span class="p">]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Links work similar to Tags (including the act of linking) except that
+the top level namespace is now replaced with the name of the Link. The
+top level namespace in Noah for the purposes of Watches is <code>//noah</code>. By
+linking a group of objects together, you will be able to (not yet
+implemented), perform operations such as Watches in bulk. For instance,
+if you wanted to be informed of all changes to your objects in Noah, you
+would create a Watch against <code>//noah/*</code>. This works fine for most people
+but imagine you wanted a more multi-tenant friendly system. By using
+links, you can group ONLY the objects you care about and create the
+watch against that link. So <code>//noah/*</code> becomes <code>//my_organization/*</code> and
+only those changes to items in that namespace will fire for that Watch.</p>
+
+<p>The idea is also that other operations outside of setting Watches can be
+applied to the underlying object in the link as well. The name Link was
+inspired by the idea of symlinking.</p>
+
+<h2>Watches and Callbacks</h2>
+
+<p>In the first post, I mentioned that by nature of Noah being
+&#8220;disconnected&#8221;, Watches were persistent as opposed to one-shot.
+Additionally, because of the pluggable nature of Noah Watches and
+because Noah has no opinion regarding the destination of a fired Watch,
+it becomes very easy to use Noah as a broadcast mechanism. You don&#8217;t
+need to have watches for each interested party. Instead, you can create
+a callback plugin that could dump the messages on an ActiveMQ Fanout
+queue or AMQP broadcast exchange. You could even use multicast to notify
+multiple interested parties at once.</p>
+
+<p>Again, the act of creating a watch and the destination for notifications
+is entirely disconnected from the final client that might use the
+information in that watch event.</p>
+
+<p>Additionally, because of how changes are broadcast internally to Noah,
+you don&#8217;t even have to use the &#8220;official&#8221; Watch method. All actions in
+Noah are published post-commit to a pubsub queue in Redis. Any language
+that supports Redis pubsub can attach directly to the queue and
+PSUBSCRIBE to the entire namespace or a subset. You can write your own
+engine for listening, filtering and notifying clients.</p>
+
+<p>This is exactly how the Watcher daemon works. It attaches to the Redis
+pubsub queue, makes a few API calls for the current registered set of
+watches and then uses the watches to filter messages. When a new watch
+is created, that message is like any other change in Noah. The watcher
+daemon sees that and immediately adds it to its internal filter. This
+means that you can create a new watch, immediately change the watched
+object and the callback will be made.</p>
+
+<h2>Wrap up - Part Two</h2>
+
+<p>So to wrap up:</p>
+
+<ul>
+<li>Noah has 5 basic &#8220;objects&#8221; in the system. Four of those are
+opinionated and come with specific contracts. The other is a &#8220;dumb&#8221;
+key/value store of sorts.</li>
+<li>Noah provides Links and Tags as a way to perform logical grouping of
+these objects. Links replace the top-level hierarchy.</li>
+<li>Watches are persistent. The act of creating a watch and notifying on
+watched objects is disconnected from the final recipient of the
+message. System A can register a watch on behalf of System B.</li>
+<li>Watches are nothing more than a set of filters applied to a Redis
+pubsub queue listener. Any language that supports Redis and its
+pubsub queue can be a processor for watches.</li>
+<li>You don&#8217;t even have to register any Watches in Noah if you choose to
+attach and filter yourself.</li>
+</ul>
+
+
+<p>Part three in this series will discuss the technology stack under Noah
+and the reasoning behind it. A bit of that was touched on in this post.
+Part four is the discussion about long-term goals and roadmaps.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[On Noah - Part 1]]></title>
+    <link href="http://blog.lusis.org/blog/2011/05/16/on-noah-part-1/"/>
+    <updated>2011-05-16T23:16:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/05/16/on-noah-part-1</id>
+    <content type="html"><![CDATA[<p><em>This is the first part in a series of posts going over Noah</em></p>
+
+<p>As you may have heard (from my own mouth no less), I&#8217;ve got a smallish
+side project I&#8217;ve been working on called
+<a href="https://github.com/lusis/Noah">Noah</a>.</p>
+
+<!--more-->
+
+
+<p>It&#8217;s a project I&#8217;ve been wanting to work on for a long time now and
+earlier this year I got off my ass and started hacking. The response has
+been nothing short of overwhelming. I&#8217;ve heard from so many people how
+they&#8217;re excited for it and nothing could drive me harder to work on it
+than that feedback. To everyone who doesn&#8217;t run away when I talk your
+ear off about it, thank you so much.</p>
+
+<p>Since I never really wrote an &#8220;official&#8221; post about it, I thought this
+would be a good opportunity to talk about what it is, what my ideas are
+and where I&#8217;d like to see it go in the future.</p>
+
+<h1>So why Noah?</h1>
+
+<p><em>fair warning. much of the following may be duplicates of information in
+the Noah wiki</em></p>
+
+<p>The inspiration for Noah came from a few places but the biggest
+inspiration is <a href="http://goo.gl/WGCxY">Apache Zookeeper</a>. Zookeeper is one
+of those things that by virtue of its design is a BUNCH of different
+things. It&#8217;s all about perspective. I&#8217;m going to (yet again) paste the
+description of Zookeeper straight from the project site:</p>
+
+<pre><code>ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.
+</code></pre>
+
+<p>Now that might be a bit confusing at first. Which is it? Is it a
+configuration management system? A naming system? It&#8217;s all of them and,
+again, it&#8217;s all about perspective.</p>
+
+<p>Zookeeper, however, has a few problems for my standard use case.</p>
+
+<ul>
+<li>Limited client library support</li>
+<li>Requires persistent connections to the server for full benefit</li>
+</ul>
+
+
+<p>By the first, I mean that the only official language bindings are C and
+Java. There&#8217;s contributed Python support and Twitter maintains a Ruby
+library. However all of these bindings are &#8220;native&#8221; and must be
+compiled. There is also a command-line client that you can use for
+interacting as well - one in Java and two C flavors.</p>
+
+<p>The second is more of a showstopper. Zookeeper uses the client
+connection to the server as in-band signaling. This is how watches
+(discussed in a moment) are communicated to clients. Persistent
+connections are simply not always an option. I can&#8217;t deploy something to
+Heroku or AppEngine that requires that persistent connection. Even if I
+could, it would be cost-prohibitive and honestly wouldn&#8217;t make sense.</p>
+
+<p>Looking at the list of features I loved about ZK, I thought &#8220;How would I
+make that work in the disconnected world?&#8221;. By that I mean what would it
+take to implement any or all of the Zookeeper functionality as a service
+that other applications could use?</p>
+
+<p>From that thought process, I came up with Noah. The name is only a play
+on the concept of a zookeeper and holds no other real significance other
+than irritation at least two people named Noah when I talk about the
+project.</p>
+
+<p>So working through the feature list, I came up with a few things I
+<strong>REALLY</strong> wanted. I wanted Znodes, Watches and I wanted to do it all
+over HTTP so that I could have the broadest set of client support. JSON
+is really the defacto standard for web &#8220;messaging&#8221; at this point so
+that&#8217;s what I went with. Basically the goal was &#8220;If your language can
+make HTTP requests and parse JSON, you can write a Noah client&#8221;</p>
+
+<h1>Znodes and Noah primitives</h1>
+
+<p>Zookeeper has a shared hierarchical namespace similar to a UNIX
+filesystem. Points in the hierarchy are called <code>znodes</code>. Essentially
+these are arbitrary paths where you can store bits of data - up to 1MB
+in size. These znodes are unique absolute paths. For instance:</p>
+
+<pre><code>//systems/foo/bar/networks/kansas/router-1/router-2
+</code></pre>
+
+<p>Each fully qualified path is a unique znode. Znodes can be ephemeral or
+persistent. Zookeeper also has some primitives that can be applied to
+znodes such as &#8216;sequence`.</p>
+
+<p>When I originally started working on Noah, so that I could work with a
+model, I created some base primitives that would help me demonstrate an
+example of some of the use cases:</p>
+
+<ul>
+<li>Host</li>
+<li>Service</li>
+<li>Application</li>
+<li>Configuration</li>
+</ul>
+
+
+<p>These primitives were actual models in the Noah code base with a strict
+contract on them. As an example, Hosts must have a status and can have
+any number of services associated with them. Services MUST be tied
+explicity to a host. Applications can have Configurations (or not) and
+Configurations can belong to any number of Applications or not.
+Additionally, I had another &#8220;data type&#8221; that I was simply calling
+Ephemerals. This is similar to the Zookeeper znode model. Originally I
+intended for Ephemerals to be just that - ephemeral. But I&#8217;ve backed off
+that plan. In Noah, Ephemerals can be either persistent or truely
+ephemeral (not yet implemented).</p>
+
+<p>So now I had a data model to work with. A place to store information and
+flexibility to allow people to use the predefined primitives or the
+ephemerals for storing arbitrary bits of information.</p>
+
+<h1>Living the disconnected life</h1>
+
+<p>As I said, the model for my implementation was &#8220;disconnected&#8221;. When
+thinking about how to implement Watches in a disconnected model, the
+only thing that made sense to me was a callback system. Clients would
+register an interest on an object in the system and when that object
+changed, they would get notified by the method of their choosing.</p>
+
+<p>One thing about Watches in Zookeeper that annoys me is that they&#8217;re
+one-shot deals. If you register a watch on a znode, once that watch is
+triggered, you have to REREGISTER the watch. First off this creates, as
+documented by the ZK project, a window of opportunity where you could
+miss another change to that watch. Let&#8217;s assume you aren&#8217;t using a
+language where interacting with Zookeeper is a synchronous process:</p>
+
+<ul>
+<li>Connect to ZK</li>
+<li>Register watch on znode</li>
+<li>Wait</li>
+<li>Change happens</li>
+<li>Watch fires</li>
+<li>Process watch event</li>
+<li>Reregister watch on znode</li>
+</ul>
+
+
+<p>In between those last two steps, you risk missing activity on the znode.
+In the Noah world, watches are persistent. This makes sense for two
+reasons. The first is that the latency between a watch callback being
+fired and proccessed could be much higher than the persistent connection
+in ZK. The window of missed messages is simply much greater. We could
+easily be talking 100&#8217;s of milliseconds of latency just to get the
+message and more so to reregister the watch.</p>
+
+<p>Secondly, the registration of Watches in Noah is, by nature of Noah&#8217;s
+design and as a byproduct, disconnected from the consumer of those
+watches. This offers much greater flexibility in what watches can do.
+Let&#8217;s look at a few examples.</p>
+
+<p>First off, it&#8217;s important to understand how Noah handles callbacks. The
+message format of a callback in Noah is simply a JSON representation of
+the changed state of an object and some metadata about the action taken
+(i.e. delete, create, update). Watches can be registered on distinct
+objects, a given path (and thus all the children under that path) and
+further refined down to a given action. Out of the box, Noah ships with
+one callback handler - http. This means that when you register a watch
+on a path or object, you provide an http endpoint where Noah can post
+the aforementioned JSON message. What you do with it from there is up to
+you.</p>
+
+<p>By virtue of the above, the callback system is also designed to be
+&#8216;pluggable&#8217; for lack of a better word. While the out of the box
+experience is an http post, you could easily write a callback handler
+that posted the message to an AMQP exchange or wrote the information to
+disk as a flat file. The only requirement is that you represent the
+callback location as a single string. The string will be parsed as a url
+and broken down into tokens that determine which plugin to call.</p>
+
+<p>So this system allows for you to distribute watches to multiple systems
+with a single callback. Interestingly enough, this same watch callback
+system forms the basis of how Noah servers will share changes with each
+other in the future.</p>
+
+<h1>Wrap up - Part 1</h1>
+
+<p>So wrapping up what I&#8217;ve discussed, here are the key take aways:</p>
+
+<ul>
+<li>Noah is a &#8216;port&#8217; of specific Zookeeper functionality to a
+disconnected and asynchronous world</li>
+<li>Noah uses HTTP and JSON as the interface to the server</li>
+<li>Noah has both traditional ZK-style Ephemerals as well as opinionated
+Primitives</li>
+<li>Noah uses a pluggable callback system to approximate the Watch
+functionality in Zookeeper</li>
+<li>Clients can be written in any language that can speak HTTP and
+understand JSON (yes, even a shell script)</li>
+</ul>
+
+
+<h1>Part 2 and beyond</h1>
+
+<p>In part two of this series we&#8217;ll discuss some of the additions to Noah
+that aren&#8217;t a part of Zookeeper such as Tags and Links. Part 3 will
+cover the underlying technology which I am intentionally not discussing
+at this point. Part 4 will be a roadmap of my future plans for Noah.</p>
+]]></content>
+  </entry>
+  
+</feed>

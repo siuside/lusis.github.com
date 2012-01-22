@@ -1,0 +1,495 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>On Noah - Part 2 - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="This is the second part in a series on Noah. Part 1 is available hereIn part one of this series, I went over a little background aboutZooKeeper and...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lusis.org/blog/2011/05/17/on-noah-part-2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lusis.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">On Noah - Part 2</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-05-17T15:38:00-07:00" pubdate  data-updated="true" >May 17<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><em>This is the second part in a series on Noah. Part 1 is available</em> <a href="http://goo.gl/l3Mgt">here</a></p>
+
+<p>In part one of this series, I went over a little background about
+ZooKeeper and how the basic Zookeeper concepts are implemented in Noah.
+In this post, I want to go over a little bit about a few things that
+Noah does differently.</p>
+
+<!--more-->
+
+
+<h2>Noah Primitives</h2>
+
+<p>As mentioned in the previous post, Noah has 5 essential data types, four
+of which are what I&#8217;ve interchangeably refered to as either Primitives
+and Opinionated models. The four primitives are Host, Service,
+Application and Configuration. The idea was to map some common use cases
+for Zookeeper and Noah onto a set of objects that users would find
+familiar.</p>
+
+<p>You might detect a bit of Nagios inspiration in the first two.</p>
+
+<ul>
+<li><strong>Host:</strong>
+  Analogous to a traditional host or server. The machine or instance running the operating system. Unique by name.</li>
+<li><strong>Service:</strong>
+  Typically mapped to something like HTTP or HTTPS. Think of this as the listening port on a Host. Services must be bound to Hosts. Unique by service name and host name.</li>
+<li><strong>Application:</strong>
+  Apache, your application (rails, php, java, whatever). There&#8217;s a subtle difference here from Service. Unique by name.</li>
+<li><strong>Configuration:</strong>
+  A distinct configuration element. Has a one-to-many relationship with Applications. Supports limited mime typing.</li>
+</ul>
+
+
+<p>Hosts and Services have a unique attribute known as <code>status</code>. This is a
+required attribute and is one of <code>up</code>,<code>down</code> or <code>pending</code>. These
+primitives would work very well integrated into the OS init process.
+Since Noah is curl-friendly, you could add something globally to init
+scripts that updated Noah when your host is starting up or when some
+critical init script starts. If you were to imagine Noah primitives as
+part of the OSI model, these are analagous to Layers 2 and 3.</p>
+
+<p>Applications and Configurations are intended to feel more like Layer 7
+(again, using our OSI model analogy). The differentiation is that your
+application might be a Sinatra or Java application that has a set of
+Configurations associated with it. Interestingly enough, you might
+choose to have something like Tomcat act as both a Service AND an
+Application. The aspect of Tomcat as a Service is different than the
+Java applications running in the container or even Tomcat&#8217;s own
+configurations (such as logging).</p>
+
+<p>One thing I&#8217;m trying to pull off with Configurations is limited
+mime-type support. When creating a Configuration in Noah, you can assign
+a <code>format</code> attribute. Currently 3 formats or types are understood:</p>
+
+<ul>
+<li>string</li>
+<li>json</li>
+<li>yaml</li>
+</ul>
+
+
+<p>The idea is that, if you provide a type, we will serve that content back
+to you in that format when you request it (assuming you request it that
+way via HTTP headers). This should allow you to skip parsing the JSON
+representation of the whole object and instead use it directly. Right
+now this list is hardcoded. I have a task to convert this.</p>
+
+<p>Hosts and Services make a great &#8220;canned&#8221; structure for building a
+monitoring system on top of Noah. Applications and Configurations are a
+lightweight configuration management system. Obviously there are more
+uses than that but it&#8217;s a good way to look at it.</p>
+
+<h2>Ephemerals</h2>
+
+<p>Ephemerals, as mentioned previously, are closer to what Zookeeper
+provides. The way I like to describe Ephemerals to people is a &#8216;512 byte
+key/value store with triggers&#8217; (via Watch callbacks). If none of the
+Primitives fit your use case, the Ephemerals make a good place to start.
+Simply send some data in the body of your post to the url and the data
+is stored there. No attempt is made to understand or interpret the data.
+The hierarchy of objects in the Ephemeral namespace is completely
+arbitrary. Data living at <code>/ephemerals/foo</code> has no relationship with
+data living at <code>/ephemerals/foo/bar</code>.</p>
+
+<p>Ephemerals are also not browseable except via a Linking and Tagging.</p>
+
+<h2>Links and Tags</h2>
+
+<p>Links and Tags are, as far as I can tell, unique to Noah compared to
+Zookeeper. Because we namespace against Primitives and Ephemerals, there
+existed the need to visualize objects under a custom hierarchy.
+Currently Links and Tags are the only way to visualize Ephemerals in a
+JSON format.</p>
+
+<p>Tags are pretty standard across the internet by now. You might choose to
+tag a bunch of items as <code>production</code> or perhaps group a set of Hosts and
+Services as <code>out-of-service</code>. Tagging an item is a simple process in the
+API. Simply <code>PUT</code> the name of the tag(s) to the url of a distinct named
+item appended by <code>tag</code>. For instance, the following JSON posted to
+<code>/applications/my_kick_ass_app/tag</code> with tag the Application
+<code>my_kick_ass_app</code> with the tags <code>sinatra</code>, <code>production</code> and <code>foobar</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>   <span class="p">{</span><span class="s2">&quot;tags&quot;</span><span class="o">:</span><span class="p">[</span><span class="s2">&quot;sinatra&quot;</span><span class="p">,</span> <span class="s2">&quot;production&quot;</span><span class="p">,</span> <span class="s2">&quot;foobar&quot;</span><span class="p">]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Links work similar to Tags (including the act of linking) except that
+the top level namespace is now replaced with the name of the Link. The
+top level namespace in Noah for the purposes of Watches is <code>//noah</code>. By
+linking a group of objects together, you will be able to (not yet
+implemented), perform operations such as Watches in bulk. For instance,
+if you wanted to be informed of all changes to your objects in Noah, you
+would create a Watch against <code>//noah/*</code>. This works fine for most people
+but imagine you wanted a more multi-tenant friendly system. By using
+links, you can group ONLY the objects you care about and create the
+watch against that link. So <code>//noah/*</code> becomes <code>//my_organization/*</code> and
+only those changes to items in that namespace will fire for that Watch.</p>
+
+<p>The idea is also that other operations outside of setting Watches can be
+applied to the underlying object in the link as well. The name Link was
+inspired by the idea of symlinking.</p>
+
+<h2>Watches and Callbacks</h2>
+
+<p>In the first post, I mentioned that by nature of Noah being
+&#8220;disconnected&#8221;, Watches were persistent as opposed to one-shot.
+Additionally, because of the pluggable nature of Noah Watches and
+because Noah has no opinion regarding the destination of a fired Watch,
+it becomes very easy to use Noah as a broadcast mechanism. You don&#8217;t
+need to have watches for each interested party. Instead, you can create
+a callback plugin that could dump the messages on an ActiveMQ Fanout
+queue or AMQP broadcast exchange. You could even use multicast to notify
+multiple interested parties at once.</p>
+
+<p>Again, the act of creating a watch and the destination for notifications
+is entirely disconnected from the final client that might use the
+information in that watch event.</p>
+
+<p>Additionally, because of how changes are broadcast internally to Noah,
+you don&#8217;t even have to use the &#8220;official&#8221; Watch method. All actions in
+Noah are published post-commit to a pubsub queue in Redis. Any language
+that supports Redis pubsub can attach directly to the queue and
+PSUBSCRIBE to the entire namespace or a subset. You can write your own
+engine for listening, filtering and notifying clients.</p>
+
+<p>This is exactly how the Watcher daemon works. It attaches to the Redis
+pubsub queue, makes a few API calls for the current registered set of
+watches and then uses the watches to filter messages. When a new watch
+is created, that message is like any other change in Noah. The watcher
+daemon sees that and immediately adds it to its internal filter. This
+means that you can create a new watch, immediately change the watched
+object and the callback will be made.</p>
+
+<h2>Wrap up - Part Two</h2>
+
+<p>So to wrap up:</p>
+
+<ul>
+<li>Noah has 5 basic &#8220;objects&#8221; in the system. Four of those are
+opinionated and come with specific contracts. The other is a &#8220;dumb&#8221;
+key/value store of sorts.</li>
+<li>Noah provides Links and Tags as a way to perform logical grouping of
+these objects. Links replace the top-level hierarchy.</li>
+<li>Watches are persistent. The act of creating a watch and notifying on
+watched objects is disconnected from the final recipient of the
+message. System A can register a watch on behalf of System B.</li>
+<li>Watches are nothing more than a set of filters applied to a Redis
+pubsub queue listener. Any language that supports Redis and its
+pubsub queue can be a processor for watches.</li>
+<li>You don&#8217;t even have to register any Watches in Noah if you choose to
+attach and filter yourself.</li>
+</ul>
+
+
+<p>Part three in this series will discuss the technology stack under Noah
+and the reasoning behind it. A bit of that was touched on in this post.
+Part four is the discussion about long-term goals and roadmaps.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-05-17T15:38:00-07:00" pubdate  data-updated="true" >May 17<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/blogger-posts/'>blogger posts</a>, <a class='category' href='/blog/categories/noah/'>noah</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.lusis.org/blog/2011/05/17/on-noah-part-2/" data-via="lusis" data-counturl="http://blog.lusis.org/blog/2011/05/17/on-noah-part-2/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2011/05/16/on-noah-part-1/" title="Previous Post: On Noah - Part 1">&laquo; On Noah - Part 1</a>
+      
+       
+        <a class="basic-alignment right" href="/blog/2011/05/18/on-noah-part-3/" title="next Post: On Noah - Part 3">On Noah - Part 3 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/22/scale10x-recap/">Scale10x Recap</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/02/2011-in-review/">2011-in-review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/22/github-trolling-for-fun-and-profit/">Github Trolling for Fun and Profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/deploy-all-the-things/">Deploy ALL the Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/rollbacks-and-other-deployment-myths/">Rollbacks and other deployment myths</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.lusis.org/blog/2011/05/17/on-noah-part-2/';
+        var disqus_url = 'http://blog.lusis.org/blog/2011/05/17/on-noah-part-2/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

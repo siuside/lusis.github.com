@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Distributions and Dynamic Languages - A Manifesto - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="BackgroundThere&#8217;s been a lot of talk recently on Twitter and in various posts across the Intertubes about how the various distributions handl...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lusis.org/archives/blogger/2010-09-29-distributions-and-dynamic-languages.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lusis.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Distributions and Dynamic Languages - a Manifesto</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><strong><span style="font-size:large;">Background</span></strong></p><p>There&#8217;s been a lot of talk recently on Twitter and in various posts across the Intertubes about how the various distributions handle dynamic languages and the package system those languages use. This has been a sore spot for me for a LONG time. Recently I had a chance to &#8220;stub out&#8221; my feelings in a <a href="http://news.ycombinator.com/item?id=1725354">comment on HN</a>. I&#8217;ve been meaning to write this post for a few weeks but just haven&#8217;t had the time. I&#8217;m making the time now.</p><p>Distro vendors find themselves in an interesting spot. In general, the difference between Linux distributions has boiled down to a few categories:</p><ul><li>Support</li><li>Management tools</li><li>Package format</li><li>Default desktop</li></ul><p>For the home/desktop user, the last two (and more importantly the last one) are the biggest deciding factors. For the &#8220;enterprise&#8221; user, the first is typically key. But not all enterprises are enterprises. Would anyone argue that Facebook or Google or Twitter are not enterprise users? Of course not. However those companies don&#8217;t tend to need the same level of support and have the same hang-ups as Coca-Cola or Home Depot. The latter two companies are the traditional enterprise that does things like troubleshoot servers when they fail. The former are the forward thinking companies that say &#8220;Fuck it. Pull the server and put another one in. We don&#8217;t have time for this &#8216;bench&#8217; shit.&#8221;</p><p>In the same vein, the first group of companies are the kind that use Linux as a platform where the second group uses RedHat or Suse as an OS to host JBoss or Oracle or DB2. Those vendors say &#8220;We run on distros X and Y and we only support those&#8221;. You don&#8217;t have a choice in the second group. The first group may have standardized on a distro but the distro itself is also irrelevant. Those companies use Chef and Puppet and similar tools to totally abstract that out. The distro becomes a commodity. They just want Linux.</p><p>This is the new type of company and this is the type of company that distro vendors have to worry about.</p><p>So having said that, how does those tie into the dynamic language debacle of late? Increasingly, applications in the PaaS/SaaS space are being written in dynamic languages. The product is just different than Oracle or DB2. So these companies need to consider which distro will make using those dynamic languages as easy as possible. Frankly, they&#8217;ve all pretty much fucked it up. The main reason? Traditional software products.</p><p>The biggest selling point of an enterprise distro was support. That, or the fact that you were required to run RedHat or Suse for your RAC cluster. One of the main reasons that enterprise distros were able to be supported platforms for Oracle or DB2 is that they &#8220;stabilized&#8221; things. In this case that meant long term support (LTS) models and a consistent base operating system. If you ported your product to run on RHEL4, you could guarantee that RedHat would never break compatibility for the life of that product support cycle (I think it&#8217;s 7 years right now?). You could also be assured that version X of a package would be available for the platform should you need it. </p><p><strong><span style="font-size:large;">The Problem</span></strong></p><p>That worked fine for binary COTS products. Not so fine for the world of dynamic languages where new versions of a Gem or Python package come out daily. And ESPECIALLY not when the language package system allows for multiple versions of the same package to be installed alongside each other. But is this really a big deal? The distros can just upgrade python to 2.7 right? Nope and the reason why?</p><p>Management tools</p><p>I don&#8217;t fault the distro vendors for using python (as an example) as the higher level management language for the OS. In fact, having now gotten into Python, I think it&#8217;s a wonderful idea. It is, language wars aside, a very approachable and consistent language. It allows them to quickly iterate those tools and especially in the case of Python, the core language changes very little. It&#8217;s mature.</p><p>So now distro vendors have gone and written core parts of the operating system to use Python. Combine that with the package manager restrictions and LTS and you have a system where, if you upgrade Python, you&#8217;ve broken the system beyond repair. This is why RHEL5 is still on Python 2.4. </p><p>This is the where we find ourselves today. Distro vendors have to continually package all the python modules they want to supply in native package format to the version of the runtime they use. Eventually the module/gem maintainer is going to stop supporting that module on such old runtimes. Now they essentially have to maintain backports for the life of the LTS terms. This is madness. Why would you put yourself in this situation? I didn&#8217;t know this but FreeBSD evidently solved this problem a while ago by moving all core scripts away from Perl.</p><p><strong><span style="font-size:large;">The Manifesto</span></strong></p><p>So here&#8217;s my manifesto. My suggestion if you will as a long time Linux user, enterprise customer and dynamic language programmer.</p><p>Stop it. Get out of the game now. As much as you would like to think your customers care about LTS for Perl/Python/Ruby, they don&#8217;t. Your LTS is irrelevant six months after you cut a new release of a distro. RHEL6 is shipping with Ruby 1.8.6. Seriously? Not even 1.8.7? I understand they have a long development cycle for new distro versions which is why I&#8217;m saying get out. You can&#8217;t keep up.</p><p></p><blockquote>But what about our management tools?</blockquote><p></p><p>I&#8217;ve solved that for you to. system-python, system-ruby, system-perl. Isolate them. Treat them as you would <i>/opt/python</i> or <i>/opt/ruby</i>. Make them untouchable. Minimize your reliance on any module/gem/library you don&#8217;t directly maintain (i.e. a gtk python module). Understand that you will be wasting resource on backporting this module for 5 or 7 years. No more <i>&#8216;/usr/bin/env python&#8217;</i>. Shebang that bastard to something like <i>&#8216;/usr/lib/system-python/bin/python&#8217;</i></p><p>So now that you&#8217;ve isolated that dependency, what about people who don&#8217;t WANT to compile a new ruby or python vm? How do you provide value to them? The ActiveState model. <i>/usr/lib/python27</i>, <i>/usr/lib/python31</i>, <i>/usr/lib/ruby187</i>. </p><p>But wasn&#8217;t the point of this whole discussion around DLR package management? We don&#8217;t want to maintain a package per vm version of some library. </p><p>Then don&#8217;t.</p><p>This is where the onus is on the language writers. Your package format needs to FULLY support installing from a locally hosted repo of some kind. You may not believe it but not every server has internet access. At our company, NONE of the servers can get to the Internet. The still serve content TO the internet but can&#8217;t get out. Not by proxy. Not at all.</p><p>We&#8217;re essentially forced to download python packages or jar files and copy them to a maven server or host them from apache to use them internally. Either that, or package them as RPMs. With the python packages, it&#8217;s especially annoying because, while pip will happily pull from any apache-served directory of tarballs, we can&#8217;t push from setup.py to it. We don&#8217;t have ANY metadata associated with it at all.</p><p>So Ruby/Python/Perl guys, you need to either provide a PyPi/Gem server package that operates in the same way as your public repos do or make those tools operate EXACTLY the same with a local file path as they do with a URL. Look at <i>createrepo</i> for RPMs for an idea of how it can work if you need to. Additionally, tools like <a href="http://rvm.beginrescueend.com/">RVM</a> and virtualenv really need to work with distro vendors. RVM does a stellar job at this point. Virtualenv has a way to go.</p><p>So now the distro vendors have things isolated. They ship said language repo server and by default point all the local language package tools to that repo path or server. Now if the user chooses to grab module X from PyPi to host locally, they&#8217;ve made that decision. It doesn&#8217;t break they OS. You don&#8217;t offer support for it unless you really want to and this whole fucking problem goes away.</p><p>EDIT: </p><p>I realize I&#8217;m not saying anything new here. I also realize that distro vendors realize that the distro itself is a commodity. RedHat figured that out a long time ago. Look at the JBoss purchase and everything since then. Additionally, virtualization removes any reason you might have for picking distro X over distro Y because of hardware support in the distro. </p><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-7691281226421176123?l=lusislog.blogspot.com' alt='' /></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+
+
+
+      
+
+<span class="categories">
+  
+    Liquid error: undefined method `sort!' for nil:NilClass
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.lusis.org/archives/blogger/2010-09-29-distributions-and-dynamic-languages.html" data-via="lusis" data-counturl="http://blog.lusis.org/archives/blogger/2010-09-29-distributions-and-dynamic-languages.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/22/scale10x-recap/">Scale10x Recap</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/02/2011-in-review/">2011-in-review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/22/github-trolling-for-fun-and-profit/">Github Trolling for Fun and Profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/deploy-all-the-things/">Deploy ALL the Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/rollbacks-and-other-deployment-myths/">Rollbacks and other deployment myths</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

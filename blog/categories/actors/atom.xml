@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: actors | blog dot lusis]]></title>
+  <link href="http://blog.lusis.org/blog/categories/actors/atom.xml" rel="self"/>
+  <link href="http://blog.lusis.org/"/>
+  <updated>2012-01-22T11:25:44-08:00</updated>
+  <id>http://blog.lusis.org/</id>
+  <author>
+    <name><![CDATA[John E. Vincent]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Fun With Celluloid]]></title>
+    <link href="http://blog.lusis.org/blog/2011/08/13/fun-with-celluloid/"/>
+    <updated>2011-08-13T00:30:00-07:00</updated>
+    <id>http://blog.lusis.org/blog/2011/08/13/fun-with-celluloid</id>
+    <content type="html"><![CDATA[<p><em>warning! This is a really long post</em></p>
+
+<p>In the course of rewriting the <a href="https://github.com/lusis/Noah">Noah</a> callback daemon, I started to get really frustrated with EventMachine. This is nothing against EventMachine by any stretch of the imagination. I really like it.</p>
+
+<p>What I was having issues with is making the plugin framework as dirt simple as possible. By using EM, I had no choice but to require folks to understand how EM works. This primarily meant not blocking the reactor. Additionally, through no fault of EM, I was starting to get mired in callback spaghetti.</p>
+
+<h1>Actors</h1>
+
+<p>I've mentioned several times before that I love the actor model. It makes sense to me. The idea of mailboxes and message passing is really simple to understand. For a while, there was project that implemented actors on top of EM called Revactor but it stalled. I started following the author (Tony Arcieri) on GitHub to see if he would ever update it. He did not but I caught wind of his new project and it was pretty much exactly what I was looking for.</p>
+
+<p>Actors have a proven track record in Erlang and the Akka framework for Scala and Java uses them as well.</p>
+
+<h1>Celluloid</h1>
+
+<!--more-->
+
+
+<p><a href="https://github.com/tarcieri/celluloid">Celluloid</a> is an implementation of Actors on Ruby. At this point, it lacks some of the more advanced features of the Akka and Erlang implementations. However Tony is very bullish about Celluloid and is pretty awesome in general.</p>
+
+<p>I'm not going to go over Celluloid basics in too much detail. Tony does an awesome job in the <a href="http://celluloid.github.com/">README</a> for the project. What I want to talk more about is how I want to use it for Noah and what capabilities it has/is missing for that use case.</p>
+
+<h1>Noah callbacks</h1>
+
+<p>I won't bore you with a rehash of Noah. I've written a ton of blog posts (and plan to write more). However for this discussion, it's important to understand what Noah callbacks need to do.</p>
+
+<h2>Quick recap</h2>
+
+<p>Any object in Noah can be "watched". This is directly inspired by ZooKeeper. Because Noah is stateless, however, watches need to work a little differently. The primary difference is that Noah's watches are asynch. As a side-effect of that, we get some really cool additional functionality. So what does a Noah watch consist of?</p>
+
+<ul>
+<li>An absolute or partial path to and endpoint in the system</li>
+<li>A URI-style location for notification of changes to that path</li>
+</ul>
+
+
+<p>Let's say you had a small sinatra application running on all your servers. Its only job was to be a listener for messages from Noah. This daemon will be responsible for rewriting your <code>hosts</code> file with any hosts that are created, modified or deleted on your network.</p>
+
+<p>In this case, you might register your watch with a path of <code>/hosts/</code> and an endpoint of <code>http://machinename:port/update_hosts</code>. Any time a host object is created, updated or deleted Noah will send the JSON representation of that object state along with the operation performed to that endpoint. Let's say you also want to know about some configuration setting that has changed which lives at <code>/configurations/my_config_file.ini</code>. Let's put a kink in that. You want that watch to drop its message onto a RabbitMQ exchange.</p>
+
+<p>So now we have the following information that we need to act on:</p>
+
+<ul>
+<li><code>{:endpoint =&gt; 'http://machine:port/update_hosts', :pattern =&gt; '//noah/hosts'}</code></li>
+<li><code>{:endpoint =&gt; 'amqp://host:port/exchange?durable=true', :pattern =&gt; '//noah/configurations/my_config_file.ini'}</code></li>
+</ul>
+
+
+<p>Not so hard right? But we also have some additional moving parts. Something needs to monitor Redis for these various CRUD messages. We need to compare them against a list of endpoints that want notification about those messages. We also need to intercept any messages from Redis that are new endpoints being registered. Oh and we also need to know about failed endpoints so we can track and eventually evict them. Obviously we don't want to stop http messages from going out because AMQP is slow. Imagine if we implemented FTP endpoint support! Essentially we need high concurrency not only on each 'class' of endpoint (http, amqp, ftp whatever) but also within each class of endpoint. If any individual endpoint attempt crashes for any reason, we need to take some action (eviction for instance) and not impact anyone else.</p>
+
+<h1>Doing it with Celluloid</h1>
+
+<p>So thinking about how we would do this with actors, I came up with the following basic actors:</p>
+
+<ul>
+<li>RedisActor <em>watches the Redis pubsub backend</em></li>
+<li>HTTPActor <em>handles HTTP endpoints - a 'worker'</em></li>
+<li>AMQPActor <em>handles AMQP endpoints - a 'worker'</em></li>
+<li>BrokerActor <em>responsible for intercepting endpoint CRUD operations and also determining which actors to send messages to for processing</em></li>
+</ul>
+
+
+<p>As I said previously, we also need to ensure that if any worker crashes, that it gets replaced. Otherwise we would eventually lose all of our workers.</p>
+
+<p>With this information, we can start to build a tree that looks something like this:</p>
+
+<pre><code>- Master process
+    |_Redis
+    |_Broker
+    |_HTTPPool
+    |    |_Worker
+    |    |_Worker
+    |_AMQPPool
+        |_Worker
+        |_Worker
+</code></pre>
+
+<p>The master process is responsible for handling the Redis, Broker and Pool actors. Each pool actor is responsible for its workers. Not really visible in the ASCII above is how messages flow:</p>
+
+<ul>
+<li>Master process spawns Redis, Broker, HTTPPool and AMQPPool as supervised processes.</li>
+<li>Each pool type spins up a set of supervised workers.</li>
+<li>Master process makes an HTTP request to the Noah server for all existing watches (synchronous)</li>
+<li>It sends a message with those watches to the Broker so it can build its initial list.(synchronous)</li>
+<li>Redis actor watches pubsub.</li>
+<li>Watch messages are sent to a mailbox on the Broker. (synchronous)</li>
+<li>The rest to a different mailbox on the broker.</li>
+<li>The broker performs some filtering to determine if any registered watches care about the message. If so, those are sent to the appropriate pool. (async)</li>
+<li>Each Pool selects a worker and tells him the endpoint and the message</li>
+<li>The worker delivers the message</li>
+</ul>
+
+
+<p>Where this became a slight problem with Celluloid is that it lacks two bits of functionality currently:</p>
+
+<ul>
+<li>Supervision trees</li>
+<li>Pool primitives</li>
+</ul>
+
+
+<p>Right now in Celluloid, there is no way to build "pools" of supervised processes. The supervised part is important. If a process is supervised, crashes will be trapped and the process will be restarted.</p>
+
+<p>So how did we "fake" this with the existing functionality?</p>
+
+<p>The generic tree was fairly easy. The main Ruby process creates supervised processes for each actor:</p>
+
+<p>``` ruby</p>
+
+<pre><code>class RedisActor
+  include Celluloid::Actor
+  def initialize(name)
+    @name = name
+    log.info "starting redis actor"
+  end
+
+  def start
+   # start watching redis
+  end
+end
+class BrokerActor
+  include Celluloid::Actor
+  # constructor
+  def process_watch(msg)
+    #...
+  end
+  def do_work(msg)
+    #...
+  end
+end
+
+class HTTPPool
+  # you get the idea
+end
+
+@http_pool = HTTPPool.supervise_as :http_pool, "http_pool"
+@broker_actor = BrokerActor.supervise_as :broker_actor, "broker"
+@redis_actor = RedisActor.supervise_as :redis_actor, "redis"
+</code></pre>
+
+<p>```</p>
+
+<p>The workers were a bit more complicated. What I ended up doing was something like this:</p>
+
+<p>``` ruby</p>
+
+<pre><code>class HTTPWorker
+  include Celluloid::Actor
+
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+  def do_work(ep, msg)
+    # Work to send the message
+  end
+end
+
+class HTTPPool
+  include Celluloid::Actor
+  WORKERS = 10
+
+  attr_reader :workers
+
+  def initialize(name)
+    @name = name
+    @workers = []
+    WORKERS.times do |id|
+      @workers[id] = HTTPWorker.supervise_as "http_worker_#{id}".to_sym, "http_worker_#{id}"
+    end
+  end
+  def do_work
+    @workers.sample.actor.do_work "msg"
+  end
+end
+</code></pre>
+
+<p>```</p>
+
+<p>The problem as it stands is that we can't really have "anonymous" supervised processes. Each actor that's created goes into Celluloid's registry. We need a programatic way to look those up so we use <code>supervise\_as</code> to give them a name.</p>
+
+<p>This gives us our worker pool. Now Redis can shovel messages to the broker who filters them. He sends a unit of work to a Pool which then selects a random worker to do the REAL work. Should any actor crash, he will be restarted. Because each actor is isolated, A crash in talking to redis, doesn't cause our existing workers to stop sending messages.</p>
+
+<p>Obviously this a fairly naive implementation. We're missing some really important functionality here.</p>
+
+<ul>
+<li>detecting busy workers</li>
+<li>detecting dead workers (yes we still need to do this)</li>
+<li>alternate worker selection mechanisms (cyclical for instance)</li>
+<li>crash handling</li>
+<li>backlog handling</li>
+</ul>
+
+
+<p>You might wonder why we care if a worker is dead or not? Currently Celluloid buffers messages in each actor until the can be dealt with. In the case of our Pool, it will select a worker and buffer any messages if the worker is blocked. If our worker crashes on its current unit of work, it returns control to the pool. The pool then attempts to send the worker the next message but the worker is dead and hasn't respawned yet.</p>
+
+<h1>Some code to play with</h1>
+
+<p>Yes, we've finally made it to the end.</p>
+
+<p>I've created a fun little sinatra application to make it easier for me to test my pools. It consists of a generic Pool class that can be subclassed and take a the name of a worker class as an argument. When a worker gets a message of "die", it will raise an exception thus simulating a crash. Additionally, the "message processing" logic includes sleep to simulate long running work.</p>
+
+<p>The reason Sinatra is in the mix is to provide an easy way for me to fire off simulated requests to the pool so I can experiment with different approaches. Eventually, Celluloid will have a proper Pool construct. I plan on using this as the basis for a pull request. You can see it here. Please feel free to fork and experiment with me. It's really fun.</p>
+
+<p><div><script src='https://gist.github.com/1143369.js?file='></script>
+<noscript><pre><code>require 'celluloid'
+require 'logger'
+require 'uuid'
+require 'sinatra/base'
+
+# This is just a simple demo of a possible Pool implementation for Celluloid
+# The sinatra interface exists just to do some testing of crashing workers and the like
+
+# TODO
+# Create a busy worker registry of some kind
+# Implement a small stats page
+
+LOGGER = Logger.new(STDOUT)
+LOGGER.progname = &quot;noah-agent&quot;
+Celluloid.logger = LOGGER
+
+class WorkerError &lt; Exception; end
+
+class Pool
+  include Celluloid::Actor
+  #trap_exit :worker_exception_handler
+
+  attr_reader :workers, :busy_workers
+
+  def initialize(name, opts = {:num_workers =&gt; 10, :worker_class =&gt; Worker})
+    @name = name
+    @workers = []
+    @busy_workers = []
+    LOGGER.info(&quot;Pool #{name} starting up&quot;)
+    opts[:num_workers].times do |worker|
+      start_worker(opts[:worker_class])
+    end
+  end
+
+  def start_worker(klass)
+    worker_id = gen_worker_id
+    LOGGER.info(&quot;Pool #{@name} is starting a #{klass.to_s} worker&quot;)
+    wkr = klass.supervise_as &quot;#{@name}_worker_#{worker_id}&quot;.to_sym, &quot;#{@name}_worker_#{worker_id}&quot;
+    @workers &lt;&lt; wkr
+  end
+
+  def notify_worker(msg)
+    worker = self.get_worker
+    @busy_workers &lt;&lt; worker.name
+    worker.work msg
+    @busy_workers.delete worker.name
+  end
+
+  def worker_exception_handler(actor, reason)
+    LOGGER.debug(&quot;Worker #{actor.name} crashed because #{reason}. You should see a doctor about that&quot;)
+  end
+
+  
+  protected
+  def gen_worker_id
+    Digest::SHA1.hexdigest(UUID.generate)
+  end
+
+  def get_worker
+    worker = @workers.sample.actor
+    LOGGER.info(&quot;Found Worker: #{worker.name} in the pool&quot;)
+    if worker.alive?
+      worker
+    else
+      LOGGER.error &quot;Worker #{worker.name} was dead. Retrying!&quot;
+      self.get_worker
+    end
+  end
+
+end
+
+class MyWorker
+  include Celluloid::Actor
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def work(msg)
+    LOGGER.info(&quot;Message for you sir! #{msg}&quot;)
+    case msg
+    when &quot;die&quot;
+      # Simulate some long-running work that crashes
+      sleep 15
+      raise WorkerError, &quot;Boo got shot!&quot;
+    else
+      # Simulate some long-running work here
+      sleep 30
+      LOGGER.debug(&quot;Hey there camper! #{@name} is doing some work for you&quot;)
+    end
+  end
+
+end
+
+class TestApp &lt; Sinatra::Base
+  @pool = Pool.supervise_as :my_cool_pool, &quot;MyCoolPool&quot;, {:num_workers =&gt; 30, :worker_class =&gt; MyWorker}
+  configure do
+    set :app_file, __FILE__
+    set :logging, false
+    set :dump_errors, false
+    set :run, false
+    set :server, &quot;thin&quot;
+    set :pool, @pool
+  end
+
+  put '/scale' do
+    settings.pool.actor.start_worker(MyWorker)
+    &quot;Added a worker&quot;
+  end
+
+  get '/stats' do
+    &quot;Worker count: #{settings.pool.actor.workers.size}\n Busy workers: #{settings.pool.actor.busy_workers.size}&quot;
+  end
+
+  put '/die' do
+    settings.pool.actor.notify_worker! &quot;die&quot;
+  end
+
+  put '/send' do
+    settings.pool.actor.notify_worker! request.body.read
+  end
+end
+
+app = TestApp
+app.run!</code></pre></noscript></div>
+</p>
+]]></content>
+  </entry>
+  
+</feed>

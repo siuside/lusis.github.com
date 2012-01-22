@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Annoyances with OpenNMS - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="So my company has an existing install of OpenNMS and Cacti. I don&#8217;t like to barrel through the gate and make changes. I&#8217;m trying to wor...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lusis.org/archives/blogger/2009-05-14-annoyances-with-opennms.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lusis.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Annoyances With OpenNMS</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">So my company has an existing install of OpenNMS and Cacti. I don&#8217;t like to barrel through the gate and make changes. I&#8217;m trying to work within the system here. So I come from a Nagios world. If I need something monitored, I write a script for it. Nagios handles it. My status can be up, down, warning, critical or unknown.<br /><br />In Nagios, I do the following to add a new service to a host:<br />1) Define a check command.<br />2) Add a service to the host using that check command<br />3) Profit<br /><br />About the check command:<br />Most likely, one is already defined but in the case of fairness I&#8217;m going with a brand new check. Let&#8217;s use the one I&#8217;m beating my head against in OpenNMS - MySQL Replication status. So I have a script written. It runs some queries and gives me replication status. Additionally, I&#8217;m grabbing replication latency. I use this information to determine a more &#8220;fine grained&#8221; status. Being up or down is pointless if my slaves are 4 hours behind the master.<br /><br />So I make my script take a few parameters - A warning level, a critical level and the hostname.  So I have the following bits of configuration information:<br /><br /><code><br />define command {<br />command_name     check_mysql_replication<br />command_line $USER99$/check_mysql_replication -h $HOSTADDRESS$ -u $USER1$ -p $USER2$ -w $ARG1$ -c $ARG2$<br />}<br /></code><br /><br />What the above gives me is the most flexible way to monitor replication on a system. Each hostgroup or host can have different levels for warning or critical. I could even change the USER macros into ARG so that I can pass the credentials. Oh and that script can be written in any language I like.<br /><br />Then I add the service to my host/hostgroup. Let&#8217;s assume that all my slaves are in a hostgroup together:<br /><br /><code><br />define service {<br />use                               production-service<br />hostgroup_name                    mysql-slaves<br />service_description               MySQL Replication Status<br />check_command                     check_mysql_replication!200!400<br />}<br /></code><br />There. Now replication is being monitored for that group of hosts. I get performance data. I get alerts based on warning vs. critical. All done.<br /><br />EVIDENTLY, in OpenNMS I simply can&#8217;t do this. To be fair, there&#8217;s a different set of eyes that should be used with OpenNMS. It&#8217;s a network monitoring system. Network. Network. Everything is centered around that.<br /><br />So to accomplish the same thing in OpenNMS, I&#8217;ve gotten about this far:<br /><br />1) Create a script. No hardship. I&#8217;m doing it anyway. This script looks a little different though. Let me paste the actual one here:<br /><br /><code><br />#!/bin/sh<br />#. /opt/sysops/lib/init<br /><br />POLLHOST=""<br /><br />while [ "$1" != "" ]; do<br />if [ "$1" = "--hostname" ]; then<br />shift<br />POLLHOST=$1<br />break<br />else<br />shift<br />fi<br />done<br /><br />if [ "$POLLHOST" = "" ]; then<br />echo FAIL no host specified<br />exit 1<br />fi<br /><br />QUERYPFX="mysql -u USERNAME --password=PASSWORD -h ${POLLHOST} --xml -Bse"<br />SLAVESTATUS=`${QUERYPFX} "show slave status;" | grep Slave_IO_Running | awk -F'[<|>]' '{print $3}'`<br /><br />if [ "$SLAVESTATUS" = "Yes" ]; then<br />printf "SUCCESS\n"<br />exit 0<br />else<br />printf "FAIL\n"<br />printf "Status check returned: ${SLAVESTATUS}\n" 1>&amp;2<br />exit 1<br />fi<br /><br />#. /opt/sysops/lib/uninit<br /></code><br />Now I have to edit an XML file (poller-configuration.xml). I had to do this as a package because I didn&#8217;t want it applied to ALL boxes where MySQL is discovered. Only slaves:<br /><br /><code><br />&lt;package name="MySQL-Replication-Slaves"&gt;<br />   &lt;filter&gt;IPADDR IPLIKE *.*.*.*&lt;/filter&gt;<br />   &lt;include-url xmlns=""&gt;file:/opt/opennms/include/mysql-replication-slaves.cfg&lt;/include-url&gt;<br />   &lt;rrd step="300"&gt;<br />       &lt;rra xmlns=""&gt;RRA:AVERAGE:0.5:1:2016&lt;/rra&gt;<br />       &lt;rra xmlns=""&gt;RRA:AVERAGE:0.5:12:1488&lt;/rra&gt;<br />       &lt;rra xmlns=""&gt;RRA:AVERAGE:0.5:288:366&lt;/rra&gt;<br />       &lt;rra xmlns=""&gt;RRA:MAX:0.5:288:366&lt;/rra&gt;<br />       &lt;rra xmlns=""&gt;RRA:MIN:0.5:288:366&lt;/rra&gt;<br />   &lt;/rrd&gt;<br />   &lt;service name="MySQL-Replication" interval="300000"<br />       user-defined="false" status="on"&gt;<br />       &lt;parameter key="script" value="/scripts/cacti/checkrepl.sh"/&gt;<br />       &lt;parameter key="banner" value="SUCCESS"/&gt;<br />       &lt;parameter key="retry" value="1"/&gt;<br />       &lt;parameter key="timeout" value="3000"/&gt;<br />       &lt;parameter key="rrd-repository" value="/opt/opennms/share/rrd/response"/&gt;<br />       &lt;parameter key="ds-name" value="replication-status"/&gt;<br />   &lt;/service&gt;<br />   &lt;outage-calendar xmlns=""&gt;Nightly backup of atlsvrdbs03&lt;/outage-calendar&gt;<br />   &lt;downtime begin="0" end="60000" interval="30000"/&gt;<br />   &lt;downtime begin="60000" end="43200000" interval="60000"/&gt;<br />   &lt;downtime begin="43200000" end="432000000" interval="600000"/&gt;<br />   &lt;downtime begin="432000000" delete="true"/&gt;<br />&lt;/package&gt;<br /></code><br /><br />And additionally:<br /><br /><code><br />&lt;monitor service="MySQL-Replication" class-name="org.opennms.netmgt.poller.monitors.GpMonitor"/&gt;<br /></code><br /><br />There. Oh but wait, I also have to add something to a file called capsd-configuration.xml:<br /><br /><code><br /> &lt;protocol-plugin protocol="MySQL-Replication" class-name="org.opennms.netmgt.capsd.plugins.GpPlugin" scan="on" user-defined="true"&gt;<br /> &lt;property key="script" value="/scripts/cacti/checkrepl.sh" /&gt;<br /> &lt;property key="banner" value="SUCCESS" /&gt;<br /> &lt;property key="timeout" value="3000" /&gt;<br /> &lt;property key="retry" value="1" /&gt;<br />&lt;/protocol-plugin&gt;<br /></code><br /><br />I think that&#8217;s it. Now I have to wait for the scanner to run (or force it) to tie that poll to the servers in the range I defined. One thing you&#8217;ll note is this GpPlugin that&#8217;s being used. That&#8217;s called the General Purpose Poller. It&#8217;s basically the scripting interface. If you want to poll some arbitrary data that isn&#8217;t via a predefined plugin or via SNMP, that&#8217;s the way you have to do it.<br /><br />The limitation of this is that it handles the poll in binary only. Either it&#8217;s up or down. This goes back to the origins as a network monitoring system. The port is up or the port is down. The host is up or the host is down.<br /><br />Over the years it appears that they&#8217;ve added other &#8220;plugins&#8221; that can handle information differently. These plugins support thresholding for alarms but really only in the area of latency in polling the service. Additionally, they appear to be simple port opens to the remote service - basically check_tcp in the Nagios world. There are some exceptions. I think the DNS plugin actually does a lookup. Some of the L2 related plugins do things like threshold on bandwidth. There&#8217;s also a disk usage plugin that thresholds on free space. The Radius plugin actually tries to authenticate against the Radius server.<br /><br />Then there&#8217;s probably my biggest gripe. These are all written in Java. I&#8217;m not a java programmer. I don&#8217;t want to have to write a god forsaken polling plugin in Java. If I need something faster than a perl/ruby/bash script for my plugin then I&#8217;ll see about writing it in C but I&#8217;ve yet to come across that case.<br /><br />So now I&#8217;m sitting at point where at least opennms knows when replication isn&#8217;t running. I can modify my script to check latency and if it&#8217;s over a certain point throw a FAIL but that&#8217;s script-wide. I can&#8217;t set it on a host by host basis. Replication is a bad example but it&#8217;s not hard to imagine a situation where two servers running the same service would have different thresholds. In the OpenNMS case, I&#8217;d have to account for all that logic in my script.<br /><br />But John OpenNMS supports Nagios plugins, you might be thinking.<br /><br />No they don&#8217;t. They support NRPE. This means I have to have all my scripts installed on every single host I monitor AND I have to install the agent on the system itself. Why should I have to do that when, with other systems, I can do all the work from the script on the monitoring server?<br /><br />Oh but you can use extTable.extEntry in snmpd.conf. Same problem as NRPE without the agent hassle. I still have to copy the scripts to the remote server.<br /><br />So after spending all morning googling, I might be able to do what I want (i.e. thresholding) if I hook another program into my script that&#8217;s distributed with OpenNMS - send-event.pl. However the documentation on send-event.pl is SORELY lacking. Maybe I don&#8217;t speak OpenNMS well enough for my google-foo to work but I can describe the exact same set of results I get every single time I look for ANYTHING related to send-event.pl:<br /><br />1) Forcing the OpenNMS engine to discover a new node or restart a specific process within opennms using send-event.pl<br />2) Vague references with no actual code on using send-event.pl and SEC or swatch for log parsing. Of course these are all dated as OpenNMS has actually added a syslog plugin now.<br /><br />And evidently, there&#8217;s some XML editing that has to go on before I can actually do anything with send-event.pl. My experimentations this morning went like this:<br /><br /><code><br />./send-event.pl uei.opennms.org/internal/capsd/updateService localhost \<br />--interface 10.0.101.107 -n 107 --service MySQL-Replication --severity 6 --descr "Replication lagging"<br /></code><br /><br />Now I know I didn&#8217;t get it entirely right. Let&#8217;s forget for a moment the cryptic uei.opennms.org stuff. All I&#8217;m trying to do is send an event (send-event.pl sounds like the right tool) to opennms for a given node. I want that to be the equivilent of an SNMP trap. I know the uei line is wrong but I can&#8217;t find a simple list of the uei strings that are valid to take a stab. There&#8217;s a shell script called UEIList.sh but it complains about missing dependent shell scripts AND fires up java to do the work. Why is it so hard to have that list in the OpenNMS wiki with some notes about each one?<br /><br />So after all these machinations, I&#8217;m still left with a half-assed implementation of replication monitoring in OpenNMS.<br /><br />I would love for someone to point me to a rough outline of what I&#8217;m trying to accomplish in OpenNMS. I&#8217;ve hit every single link I could find. I&#8217;ve viewed EVERY SINGLE RESULT from google and the mailing lists that had send-event.pl in them. Maybe I&#8217;m going down the wrong track. Maybe I&#8217;m not looking at it the right way.<br /><br />I asked my boss yesterday if there was any emotional attachment to OpenNMS and he said there wasn&#8217;t. Right now they have cacti and opennms running. Double polling on most things just to get graphs into Cacti for trending purposes. At least by switching to Nagios, I can have the perfdata dumped to an RRD and just have cacti around for display purposes. Or I can have cacti continue to do some of the polling and have nagios check the RRD for data to alert on.<br /><br />I&#8217;m giving OpenNMS another day and if I can&#8217;t make any headway, I&#8217;m switching to Nagios.<div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-3578623523310972027?l=lusislog.blogspot.com' alt='' /></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+
+
+
+      
+
+<span class="categories">
+  
+    Liquid error: undefined method `sort!' for nil:NilClass
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.lusis.org/archives/blogger/2009-05-14-annoyances-with-opennms.html" data-via="lusis" data-counturl="http://blog.lusis.org/archives/blogger/2009-05-14-annoyances-with-opennms.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/22/scale10x-recap/">Scale10x Recap</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/02/2011-in-review/">2011-in-review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/22/github-trolling-for-fun-and-profit/">Github Trolling for Fun and Profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/deploy-all-the-things/">Deploy ALL the Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/rollbacks-and-other-deployment-myths/">Rollbacks and other deployment myths</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rollbacks and other deployment myths - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="I came across an interesting post today via HN. I&#8217;m surprised (only moderately) that I missed it the first time around since this is right up...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lusis.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Rollbacks and Other Deployment Myths</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-10-18T00:35:00-07:00" pubdate  data-updated="true" >Oct 18<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I came across an interesting post today via HN. I&#8217;m surprised (only moderately) that I missed it the first time around since this is right up my alley:</p>
+
+<p><a href="http://briancrescimanno.com/2011/09/29/why-are-you-still-deploying-overnight/">Why are you still deploying overnight?</a></p>
+
+<p>I thought this post was particularly apropos for several reasons. I just got back from DevOpsDays EU <strong>AND</strong> I&#8217;m currently in the process of refactoring our deploy process.</p>
+
+<p>I&#8217;m breaking this up into two parts since it&#8217;s a big topic. The first one will cover the more &#8220;theoretical&#8221; aspects of the issue while the second will provide more concrete information.</p>
+
+<!--more-->
+
+
+<h1>Myths, Lies and other bullshit</h1>
+
+<p>Before I go any further, we should probably clear up a few things.</p>
+
+<p>Understand, first and foremost, that I&#8217;m no spring chicken in this business. I&#8217;ve worked in what we now call web operations and I&#8217;ve worked in traditional financial environments (multiple places). If it CAN go wrong, it has gone wrong for me. Shit, I&#8217;ve been the guy who dictated that we had to deploy after hours.</p>
+
+<p>Also, this is not a &#8220;tell you what to do&#8221; post.</p>
+
+<p>So what are some of the myths and other crap people like to pull out when having these discussions?</p>
+
+<ul>
+<li>Change == Risk</li>
+<li>Deploys are risky</li>
+<li>Rollbacks</li>
+<li>Nothing fails</li>
+<li>SLAs</li>
+</ul>
+
+
+<p>There&#8217;s plenty more but these are some of the key ones that I hear.</p>
+
+<h2>Change is change</h2>
+
+<p>There is nothing inherent in change that makes it risky, dangerous or anything more than change. Change is neither good or bad. It&#8217;s just change.</p>
+
+<p>The idea that change has a risk associated with it is entirely a human construct. We have this false assumption that if we don&#8217;t change something then nothing can go wrong.
+At first blush that would make sense, right? If it ain&#8217;t broke, don&#8217;t fix it.</p>
+
+<p>Why do we think this? It&#8217;s mainly because we&#8217;re captives to our own fears. We changed something once, somewhere, and everything went tango uniform. The first reaction after a bad experience is never to do whatever caused that bad experience again. This makes sense in quite a few cases. Touch fire, get burned. Don&#8217;t touch fire, don&#8217;t get burned!</p>
+
+<p>However this pain response tends to bleed over into areas. We deployed code one time that took the site down. We changed something and bad things happened. Engage overcompensation - We should never change anything.</p>
+
+<h2>Deploys are not risky</h2>
+
+<p>As with change, a deploy (a change in and of itself) is not inherently risky. Is there a risk associated with a deploy? Yes but understand that the risk associated with pushing out new code is the culmination of everything you&#8217;ve done up to that point.</p>
+
+<p>I can&#8217;t even begin to count the number of ways that a deploy or release has gone wrong for me. Configuration settings were missed. Code didn&#8217;t run properly. The wrong code was deployed. You name it, I&#8217;ve probably seen it.</p>
+
+<p>The correct response to this is <strong>NOT</strong> to stop doing deploys, do them off-hours or do them less often. Again with the overcompensation.</p>
+
+<p>The correct way to handle deployment problems is to do MORE deploys. Practice. Paraphrasing myself here from an HN comment:</p>
+
+<blockquote><p>Make deploys trivial, automated and tolerant to failure because everything fails.</p></blockquote>
+
+<p>&#8220;Release early, release often&#8221; isn&#8217;t just about time to market. The way to reduce risk is not to add more risky behavior (introducing more vectors for shit to go wrong). The way to reduce the risk associated with deploys is to break them into smaller chunks.</p>
+
+<p>You need to stop thinking like Subversion and start thinking like Git.</p>
+
+<p>One of the reasons people don&#8217;t feel comfortable performing deploys during the day is because deploys are such a big deal. You&#8217;ve got to make deploys a non-issue.</p>
+
+<h2>Rollbacks are a myth</h2>
+
+<p>Yes, it&#8217;s true. You can never roll back. You can&#8217;t go back in time. You can fake it but understand that it&#8217;s typically more risky to rollback than rolling forward. Always be rolling forward.</p>
+
+<p>The difficulty in rolling forward is that it requires a shift in how you think. You need to create a culture and environment that enables, encourages and allows for small and frequent changes.</p>
+
+<h2>Everything fails. Embrace failure.</h2>
+
+<p>It amazes me that in this day and age people seem to think you can prevent failure. Not only can you not prevent it, you should embrace it. Learn to accept that failure will happen.  Often spending your effort decreasing MTTR (mean time to recovery) as opposed to increasing MTBF (mean time between failures) is a much better investment. Failure is not a question of &#8216;if&#8217; but a question of &#8216;when&#8217;.</p>
+
+<p>Systems should be designed to be tolerant of failure. This is not easy, it&#8217;s not always cheap and it can be quite painful at first. Failure sucks. Especially as systems administrators, we tend to personalize a failure in our systems as a personal failure.</p>
+
+<p>The best way to deal with failure is to make failure a non-issue. If it&#8217;s going to happen and you can&#8217;t prevent it, why stress over trying to prevent it? This absolutely doesn&#8217;t mean that you should do some level of due dilligence. I&#8217;m not saying that you should give up. What I&#8217;m saying is that you should design a robust system that handles failures gracefully and returns you to service as quickly as possible. It&#8217;s called fault TOLERANCE for a reason.</p>
+
+<h2>SLAs are not about servers</h2>
+
+<p>SLAs are in general fairly silly things. Before you get all twisted and ranty, let me clarify. SLAs have value but the majority of that value is to the provider of the SLA and not the person on the other end. SLAs are a lot like backup policies.</p>
+
+<p>Look at it this way. I&#8217;m giving you an SLA for four nines of availability. That allows me to take around 50 minutes of downtime a year. Of course you assume that means 50 minutes spread over a year. What you fail to realize is that I can take all 50 minutes at once and still meet my SLA. Taking 50 minutes at one time is much more impacting than taking ten 5-minute outages. What&#8217;s worse is I can take that downtime not only in one chunk but I can take it at the worst possible time for you.</p>
+
+<p>The other side of SLAs is that we tend to equate them with servers as opposed to services. The SLA is a <em>Service Level Agreement</em>. Not a <em>Server Level Agreement</em>. Services are what matters, not servers.</p>
+
+<p>When you start to equate an SLA with a specific server, you&#8217;ve already lost.</p>
+
+<h1>Wrap up and part 2</h1>
+
+<p>As I said, this topic is too big to fit in one post. The next post will go into specifics about strategies and techniques that will hopefully give you ideas on how to make deploys less painful.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-10-18T00:35:00-07:00" pubdate  data-updated="true" >Oct 18<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/deploy/'>Deploy</a>, <a class='category' href='/blog/categories/devops/'>DevOps</a>, <a class='category' href='/blog/categories/myths/'>Myths</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths/" data-via="lusis" data-counturl="http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2011/08/22/the-configuration-management-divide/" title="Previous Post: The Configuration Management Divide">&laquo; The Configuration Management Divide</a>
+      
+       
+        <a class="basic-alignment right" href="/blog/2011/10/18/deploy-all-the-things/" title="next Post: Deploy ALL the Things">Deploy ALL the Things &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/22/scale10x-recap/">Scale10x Recap</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/02/2011-in-review/">2011-in-review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/22/github-trolling-for-fun-and-profit/">Github Trolling for Fun and Profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/deploy-all-the-things/">Deploy ALL the Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/rollbacks-and-other-deployment-myths/">Rollbacks and other deployment myths</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths/';
+        var disqus_url = 'http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

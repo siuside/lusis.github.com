@@ -1,0 +1,704 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Fun With Celluloid - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="warning! This is a really long postIn the course of rewriting the Noah callback daemon, I started to get really frustrated with EventMachine. This ...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lusis.org/blog/2011/08/13/fun-with-celluloid/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lusis.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Fun With Celluloid</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-13T00:30:00-07:00" pubdate  data-updated="true" >Aug 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><em>warning! This is a really long post</em></p>
+
+<p>In the course of rewriting the <a href="https://github.com/lusis/Noah">Noah</a> callback daemon, I started to get really frustrated with EventMachine. This is nothing against EventMachine by any stretch of the imagination. I really like it.</p>
+
+<p>What I was having issues with is making the plugin framework as dirt simple as possible. By using EM, I had no choice but to require folks to understand how EM works. This primarily meant not blocking the reactor. Additionally, through no fault of EM, I was starting to get mired in callback spaghetti.</p>
+
+<h1>Actors</h1>
+
+<p>I&#8217;ve mentioned several times before that I love the actor model. It makes sense to me. The idea of mailboxes and message passing is really simple to understand. For a while, there was project that implemented actors on top of EM called Revactor but it stalled. I started following the author (Tony Arcieri) on GitHub to see if he would ever update it. He did not but I caught wind of his new project and it was pretty much exactly what I was looking for.</p>
+
+<p>Actors have a proven track record in Erlang and the Akka framework for Scala and Java uses them as well.</p>
+
+<h1>Celluloid</h1>
+
+<!--more-->
+
+
+<p><a href="https://github.com/tarcieri/celluloid">Celluloid</a> is an implementation of Actors on Ruby. At this point, it lacks some of the more advanced features of the Akka and Erlang implementations. However Tony is very bullish about Celluloid and is pretty awesome in general.</p>
+
+<p>I&#8217;m not going to go over Celluloid basics in too much detail. Tony does an awesome job in the <a href="http://celluloid.github.com/">README</a> for the project. What I want to talk more about is how I want to use it for Noah and what capabilities it has/is missing for that use case.</p>
+
+<h1>Noah callbacks</h1>
+
+<p>I won&#8217;t bore you with a rehash of Noah. I&#8217;ve written a ton of blog posts (and plan to write more). However for this discussion, it&#8217;s important to understand what Noah callbacks need to do.</p>
+
+<h2>Quick recap</h2>
+
+<p>Any object in Noah can be &#8220;watched&#8221;. This is directly inspired by ZooKeeper. Because Noah is stateless, however, watches need to work a little differently. The primary difference is that Noah&#8217;s watches are asynch. As a side-effect of that, we get some really cool additional functionality. So what does a Noah watch consist of?</p>
+
+<ul>
+<li>An absolute or partial path to and endpoint in the system</li>
+<li>A URI-style location for notification of changes to that path</li>
+</ul>
+
+
+<p>Let&#8217;s say you had a small sinatra application running on all your servers. Its only job was to be a listener for messages from Noah. This daemon will be responsible for rewriting your <code>hosts</code> file with any hosts that are created, modified or deleted on your network.</p>
+
+<p>In this case, you might register your watch with a path of <code>/hosts/</code> and an endpoint of <code>http://machinename:port/update_hosts</code>. Any time a host object is created, updated or deleted Noah will send the JSON representation of that object state along with the operation performed to that endpoint. Let&#8217;s say you also want to know about some configuration setting that has changed which lives at <code>/configurations/my_config_file.ini</code>. Let&#8217;s put a kink in that. You want that watch to drop its message onto a RabbitMQ exchange.</p>
+
+<p>So now we have the following information that we need to act on:</p>
+
+<ul>
+<li><code>{:endpoint =&gt; 'http://machine:port/update_hosts', :pattern =&gt; '//noah/hosts'}</code></li>
+<li><code>{:endpoint =&gt; 'amqp://host:port/exchange?durable=true', :pattern =&gt; '//noah/configurations/my_config_file.ini'}</code></li>
+</ul>
+
+
+<p>Not so hard right? But we also have some additional moving parts. Something needs to monitor Redis for these various CRUD messages. We need to compare them against a list of endpoints that want notification about those messages. We also need to intercept any messages from Redis that are new endpoints being registered. Oh and we also need to know about failed endpoints so we can track and eventually evict them. Obviously we don&#8217;t want to stop http messages from going out because AMQP is slow. Imagine if we implemented FTP endpoint support! Essentially we need high concurrency not only on each &#8216;class&#8217; of endpoint (http, amqp, ftp whatever) but also within each class of endpoint. If any individual endpoint attempt crashes for any reason, we need to take some action (eviction for instance) and not impact anyone else.</p>
+
+<h1>Doing it with Celluloid</h1>
+
+<p>So thinking about how we would do this with actors, I came up with the following basic actors:</p>
+
+<ul>
+<li>RedisActor <em>watches the Redis pubsub backend</em></li>
+<li>HTTPActor <em>handles HTTP endpoints - a &#8216;worker&#8217;</em></li>
+<li>AMQPActor <em>handles AMQP endpoints - a &#8216;worker&#8217;</em></li>
+<li>BrokerActor <em>responsible for intercepting endpoint CRUD operations and also determining which actors to send messages to for processing</em></li>
+</ul>
+
+
+<p>As I said previously, we also need to ensure that if any worker crashes, that it gets replaced. Otherwise we would eventually lose all of our workers.</p>
+
+<p>With this information, we can start to build a tree that looks something like this:</p>
+
+<pre><code>- Master process
+    |_Redis
+    |_Broker
+    |_HTTPPool
+    |    |_Worker
+    |    |_Worker
+    |_AMQPPool
+        |_Worker
+        |_Worker
+</code></pre>
+
+<p>The master process is responsible for handling the Redis, Broker and Pool actors. Each pool actor is responsible for its workers. Not really visible in the ASCII above is how messages flow:</p>
+
+<ul>
+<li>Master process spawns Redis, Broker, HTTPPool and AMQPPool as supervised processes.</li>
+<li>Each pool type spins up a set of supervised workers.</li>
+<li>Master process makes an HTTP request to the Noah server for all existing watches (synchronous)</li>
+<li>It sends a message with those watches to the Broker so it can build its initial list.(synchronous)</li>
+<li>Redis actor watches pubsub.</li>
+<li>Watch messages are sent to a mailbox on the Broker. (synchronous)</li>
+<li>The rest to a different mailbox on the broker.</li>
+<li>The broker performs some filtering to determine if any registered watches care about the message. If so, those are sent to the appropriate pool. (async)</li>
+<li>Each Pool selects a worker and tells him the endpoint and the message</li>
+<li>The worker delivers the message</li>
+</ul>
+
+
+<p>Where this became a slight problem with Celluloid is that it lacks two bits of functionality currently:</p>
+
+<ul>
+<li>Supervision trees</li>
+<li>Pool primitives</li>
+</ul>
+
+
+<p>Right now in Celluloid, there is no way to build &#8220;pools&#8221; of supervised processes. The supervised part is important. If a process is supervised, crashes will be trapped and the process will be restarted.</p>
+
+<p>So how did we &#8220;fake&#8221; this with the existing functionality?</p>
+
+<p>The generic tree was fairly easy. The main Ruby process creates supervised processes for each actor:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">RedisActor</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>    <span class="n">log</span><span class="o">.</span><span class="n">info</span> <span class="s2">&quot;starting redis actor&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">start</span>
+</span><span class='line'>   <span class="c1"># start watching redis</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">BrokerActor</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
+</span><span class='line'>  <span class="c1"># constructor</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">process_watch</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1">#...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">do_work</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1">#...</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">HTTPPool</span>
+</span><span class='line'>  <span class="c1"># you get the idea</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="vi">@http_pool</span> <span class="o">=</span> <span class="no">HTTPPool</span><span class="o">.</span><span class="n">supervise_as</span> <span class="ss">:http_pool</span><span class="p">,</span> <span class="s2">&quot;http_pool&quot;</span>
+</span><span class='line'><span class="vi">@broker_actor</span> <span class="o">=</span> <span class="no">BrokerActor</span><span class="o">.</span><span class="n">supervise_as</span> <span class="ss">:broker_actor</span><span class="p">,</span> <span class="s2">&quot;broker&quot;</span>
+</span><span class='line'><span class="vi">@redis_actor</span> <span class="o">=</span> <span class="no">RedisActor</span><span class="o">.</span><span class="n">supervise_as</span> <span class="ss">:redis_actor</span><span class="p">,</span> <span class="s2">&quot;redis&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The workers were a bit more complicated. What I ended up doing was something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">HTTPWorker</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:name</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">do_work</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># Work to send the message</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">HTTPPool</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
+</span><span class='line'>  <span class="no">WORKERS</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:workers</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+</span><span class='line'>    <span class="vi">@workers</span> <span class="o">=</span> <span class="o">[]</span>
+</span><span class='line'>    <span class="no">WORKERS</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="nb">id</span><span class="o">|</span>
+</span><span class='line'>      <span class="vi">@workers</span><span class="o">[</span><span class="nb">id</span><span class="o">]</span> <span class="o">=</span> <span class="no">HTTPWorker</span><span class="o">.</span><span class="n">supervise_as</span> <span class="s2">&quot;http_worker_</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">to_sym</span><span class="p">,</span> <span class="s2">&quot;http_worker_</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">do_work</span>
+</span><span class='line'>    <span class="vi">@workers</span><span class="o">.</span><span class="n">sample</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">do_work</span> <span class="s2">&quot;msg&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The problem as it stands is that we can&#8217;t really have &#8220;anonymous&#8221; supervised processes. Each actor that&#8217;s created goes into Celluloid&#8217;s registry. We need a programatic way to look those up so we use <code>supervise\_as</code> to give them a name.</p>
+
+<p>This gives us our worker pool. Now Redis can shovel messages to the broker who filters them. He sends a unit of work to a Pool which then selects a random worker to do the REAL work. Should any actor crash, he will be restarted. Because each actor is isolated, A crash in talking to redis, doesn&#8217;t cause our existing workers to stop sending messages.</p>
+
+<p>Obviously this a fairly naive implementation. We&#8217;re missing some really important functionality here.</p>
+
+<ul>
+<li>detecting busy workers</li>
+<li>detecting dead workers (yes we still need to do this)</li>
+<li>alternate worker selection mechanisms (cyclical for instance)</li>
+<li>crash handling</li>
+<li>backlog handling</li>
+</ul>
+
+
+<p>You might wonder why we care if a worker is dead or not? Currently Celluloid buffers messages in each actor until the can be dealt with. In the case of our Pool, it will select a worker and buffer any messages if the worker is blocked. If our worker crashes on its current unit of work, it returns control to the pool. The pool then attempts to send the worker the next message but the worker is dead and hasn&#8217;t respawned yet.</p>
+
+<h1>Some code to play with</h1>
+
+<p>Yes, we&#8217;ve finally made it to the end.</p>
+
+<p>I&#8217;ve created a fun little sinatra application to make it easier for me to test my pools. It consists of a generic Pool class that can be subclassed and take a the name of a worker class as an argument. When a worker gets a message of &#8220;die&#8221;, it will raise an exception thus simulating a crash. Additionally, the &#8220;message processing&#8221; logic includes sleep to simulate long running work.</p>
+
+<p>The reason Sinatra is in the mix is to provide an easy way for me to fire off simulated requests to the pool so I can experiment with different approaches. Eventually, Celluloid will have a proper Pool construct. I plan on using this as the basis for a pull request. You can see it here. Please feel free to fork and experiment with me. It&#8217;s really fun.</p>
+
+<div><script src='https://gist.github.com/1143369.js?file='></script>
+<noscript><pre><code>require 'celluloid'
+require 'logger'
+require 'uuid'
+require 'sinatra/base'
+
+# This is just a simple demo of a possible Pool implementation for Celluloid
+# The sinatra interface exists just to do some testing of crashing workers and the like
+
+# TODO
+# Create a busy worker registry of some kind
+# Implement a small stats page
+
+LOGGER = Logger.new(STDOUT)
+LOGGER.progname = &quot;noah-agent&quot;
+Celluloid.logger = LOGGER
+
+class WorkerError &lt; Exception; end
+
+class Pool
+  include Celluloid::Actor
+  #trap_exit :worker_exception_handler
+
+  attr_reader :workers, :busy_workers
+
+  def initialize(name, opts = {:num_workers =&gt; 10, :worker_class =&gt; Worker})
+    @name = name
+    @workers = []
+    @busy_workers = []
+    LOGGER.info(&quot;Pool #{name} starting up&quot;)
+    opts[:num_workers].times do |worker|
+      start_worker(opts[:worker_class])
+    end
+  end
+
+  def start_worker(klass)
+    worker_id = gen_worker_id
+    LOGGER.info(&quot;Pool #{@name} is starting a #{klass.to_s} worker&quot;)
+    wkr = klass.supervise_as &quot;#{@name}_worker_#{worker_id}&quot;.to_sym, &quot;#{@name}_worker_#{worker_id}&quot;
+    @workers &lt;&lt; wkr
+  end
+
+  def notify_worker(msg)
+    worker = self.get_worker
+    @busy_workers &lt;&lt; worker.name
+    worker.work msg
+    @busy_workers.delete worker.name
+  end
+
+  def worker_exception_handler(actor, reason)
+    LOGGER.debug(&quot;Worker #{actor.name} crashed because #{reason}. You should see a doctor about that&quot;)
+  end
+
+  
+  protected
+  def gen_worker_id
+    Digest::SHA1.hexdigest(UUID.generate)
+  end
+
+  def get_worker
+    worker = @workers.sample.actor
+    LOGGER.info(&quot;Found Worker: #{worker.name} in the pool&quot;)
+    if worker.alive?
+      worker
+    else
+      LOGGER.error &quot;Worker #{worker.name} was dead. Retrying!&quot;
+      self.get_worker
+    end
+  end
+
+end
+
+class MyWorker
+  include Celluloid::Actor
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def work(msg)
+    LOGGER.info(&quot;Message for you sir! #{msg}&quot;)
+    case msg
+    when &quot;die&quot;
+      # Simulate some long-running work that crashes
+      sleep 15
+      raise WorkerError, &quot;Boo got shot!&quot;
+    else
+      # Simulate some long-running work here
+      sleep 30
+      LOGGER.debug(&quot;Hey there camper! #{@name} is doing some work for you&quot;)
+    end
+  end
+
+end
+
+class TestApp &lt; Sinatra::Base
+  @pool = Pool.supervise_as :my_cool_pool, &quot;MyCoolPool&quot;, {:num_workers =&gt; 30, :worker_class =&gt; MyWorker}
+  configure do
+    set :app_file, __FILE__
+    set :logging, false
+    set :dump_errors, false
+    set :run, false
+    set :server, &quot;thin&quot;
+    set :pool, @pool
+  end
+
+  put '/scale' do
+    settings.pool.actor.start_worker(MyWorker)
+    &quot;Added a worker&quot;
+  end
+
+  get '/stats' do
+    &quot;Worker count: #{settings.pool.actor.workers.size}\n Busy workers: #{settings.pool.actor.busy_workers.size}&quot;
+  end
+
+  put '/die' do
+    settings.pool.actor.notify_worker! &quot;die&quot;
+  end
+
+  put '/send' do
+    settings.pool.actor.notify_worker! request.body.read
+  end
+end
+
+app = TestApp
+app.run!</code></pre></noscript></div>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-13T00:30:00-07:00" pubdate  data-updated="true" >Aug 13<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/actors/'>actors</a>, <a class='category' href='/blog/categories/celluloid/'>celluloid</a>, <a class='category' href='/blog/categories/noah/'>noah</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.lusis.org/blog/2011/08/13/fun-with-celluloid/" data-via="lusis" data-counturl="http://blog.lusis.org/blog/2011/08/13/fun-with-celluloid/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2011/07/21/monitoring-sucks-watch-your-language/" title="Previous Post: Monitoring Sucks - Watch your language">&laquo; Monitoring Sucks - Watch your language</a>
+      
+       
+        <a class="basic-alignment right" href="/blog/2011/08/13/migrating-from-blogger/" title="next Post: Migrating From Blogger">Migrating From Blogger &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/22/scale10x-recap/">Scale10x Recap</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/02/2011-in-review/">2011-in-review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/22/github-trolling-for-fun-and-profit/">Github Trolling for Fun and Profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/deploy-all-the-things/">Deploy ALL the Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/rollbacks-and-other-deployment-myths/">Rollbacks and other deployment myths</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.lusis.org/blog/2011/08/13/fun-with-celluloid/';
+        var disqus_url = 'http://blog.lusis.org/blog/2011/08/13/fun-with-celluloid/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Automating EBS Snapshot validation with @fog - Part 2 - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="This is part 2 in a series of posts I&#8217;m doing - You can read part 1 hereGetting startedI&#8217;m not going to go into too much detail on how ...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lusis.org/archives/blogger/2010-12-02-automating-ebs-snapshot-validation-with_02.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lusis.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Automating EBS Snapshot Validation With @fog - Part 2</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><em>This is part 2 in a series of posts I&#8217;m doing - You can read part 1 <a href="http://goo.gl/sQIrm" target="_blank">here</a></em></p><p>Getting started</p><p>I&#8217;m not going to go into too much detail on how to get started with Fog. There&#8217;s plenty of documentation on the github repo (protip: read the test cases) and Wesley a.k.a @geemus has done some awesome screencasts. I&#8217;m going to assume at this point that you&#8217;ve at least got Fog installed, have an AWS account set up and have Fog talking to it. The best way to verify is to create your .fog yaml file, start the fog command line tool and start looking at some of the collections available to you.</p><p>For the purpose of this series of posts, I&#8217;ve actually created a small script that you can use to spin up two ec2 instances (m1.small) running CentOS 5.5, create four (4) 5GB EBS volumes and attach them to the first instance. In addition to the fog gem, I also have awesome_print installed and use it in place of prettyprint. This is, of course, optional but you should be aware.</p><p><span style="color: #ff0000;"><em><strong>WARNING: The stuff I&#8217;m about to show you will cost you money. I tried to stick to minimal resource usage but please be aware you need to clean up after yourself. If, at any time, you feel like you can&#8217;t follow along with the code or something isn&#8217;t working - terminate your instances/volumes/resources using the control panel or command-line tools. PLEASE DO NOT JUST SIMPLY RUN THESE SCRIPTS WITHOUT UNDERSTANDING THEM. </strong></em></span></p><p>The setup script</p><p>The full setup script is available as gist on github - <a href="https://gist.github.com/724912#file_fog_ebs_demo_setup.rb" target="_blank">https://gist.github.com/724912#file_fog_ebs_demo_setup.rb</a></p><p>Things to note:</p><p></p><ul><li>Change the key_name to a valid key pair you have registered with EC2</li><li>There&#8217;s a stopping point halfway down after the EBS volumes are created. You should actually stop there and read the comments.</li><li>You can run everything inside of an irb session if you like.</li></ul><p></p><p>The first part of the setup script does some basic work for you - it reads in your fog configuration file (~/.fog) and creates an object you can work with (AWS). As I mentioned earlier, we&#8217;re creating two servers - hdb and tdb. HDB is the master server - say your production MySQL database. TDB is the box which will be running as the validation of the snapshots.</p><p><script src="https://gist.github.com/724912.js?file=setup.rb"></script>In the Fog world, there are two big concepts - models and collections. Regardless of cloud provider, there are typically at least two models available - Compute and Storage. Collections are data objects under a given model. For instance in the AWS world, you might have under the Compute model - servers, volumes, snapshots or addresses. One thing that&#8217;s nice about Fog is that, once you establish your connection to your given cloud, most of your interactions are the same across cloud providers.  In the example above, I&#8217;ve created a connection with Amazon using my credentials and have used that Compute connection to create two new servers - hdb and tdb. Notice the options I pass in when I instantiate those servers.</p><ul><li>image_id</li><li>key_name</li></ul><p>If I wanted to make these boxes bigger, I might also pass in &#8216;flavor_id&#8217;. If you&#8217;re running the above code in an irb session, you might see something like the following when you instantiate those servers:  <img style="vertical-align: middle;" src="http://lh6.ggpht.com/_DB1q19qzGOg/TPdKHe3JJsI/AAAAAAAAAQ8/5u0UDnG3F3k/s800/2010-12-02--1291267770_735x483_scrot.png" alt="" width="735" height="483" /> Not all of the fields may be available depending on how long it takes Amazon to spin up the instance. The above shot is after the instance was up and running. For instance, when you first created &#8216;tdb&#8217;, you&#8217;ll probably see &#8220;state&#8221; as pending for quite some time. Fog has a nice helper method for all models call &#8216;wait_for&#8217;. In my case I could do:</p><p>   <span style="font-family: 'andale mono', times;">tdb.wait_for { print &#8220;.&#8221;; ready?}</span> </p><p>And it would print dots across the screen until the instance is ready for me to log in. At the end, it will tell you the amount of time you spent waiting. Very handy.  You have direct access to all of the attributes above via the instance &#8216;tdb&#8217; or &#8216;hdb&#8217;. You can use &#8216;tdb.dns_name&#8217; to get the dns name for use in other parts of your script for example. In my case, after the server &#8216;hdb&#8217; is up and running, I now want to create the four 5GB EBS volumes and attach them to the instance:</p><script src="https://gist.github.com/724912.js?file=create_ebs.rb"></script> <p> </p><p>I&#8217;ve provided four device names (sdi through sdl) and I&#8217;m using the &#8220;volumes&#8221; collection to create them (AWS.volumes.new). As I mentioned earlier, all of the attributes for &#8216;hdb&#8217; and &#8216;tdb&#8217; are accessible by name. In this case, I have to create my volumes in the same availability zone as the hdb instance. Since I didn&#8217;t specify where to create it when I started it, Amazon has graciously chosen &#8216;us-east-1d&#8217; for me. As you can see, I can easily access that as &#8217;<span style="font-family: 'andale mono', times;">hdb.availability_zone</span>&#8217; and pass it to the volume creation section. I&#8217;ve also specified that the volume should be 5GB in size.</p><p>At the point where I&#8217;ve created the volume with &#8216;.new&#8217; it hasn&#8217;t actually been created. I want to bind it to a server first so I simply set the volume.server attribute equal to my server object. Then I &#8216;save&#8217; it. If I were to log into my running instance, I&#8217;d probably see something like this in the &#8216;dmesg&#8217; output now:</p><p><span style="font-family: 'andale mono', times;"> sdj: unknown partition table</span></p><p><span style="font-family: 'andale mono', times;"> sdk: unknown partition table</span></p><p><span style="font-family: 'andale mono', times;"> sdl: unknown partition table</span></p><p><span style="font-family: 'andale mono', times;"> sdi: unknown partition table</span></p><p>As you can see from the comments in the full file, you should stop at this point and setup the volumes on your instance. In my case, I used mdadm and created a RAID0 array using those four volumes. I then formatted them, made a directory and mounted the md0 device to that directory. If you look, you should now have an additional 20GB of free space mounted on /data. Here I might make this the data directory for mysql (which is the case in our production environment). Let&#8217;s just pretend you&#8217;ve done all that. I simulated it with a few text files and a quick 1GB dd. We&#8217;ll consider that the point-in-time that we want to snapshot from. Since there&#8217;s no actual constant data stream going to the volumes, I can assume for this exercise that we&#8217;ve just locked mysql, flushed everything and frozen the XFS filesystem. Let&#8217;s make our snapshots. In this case I&#8217;m going to be using Fog to do the snapshots but in our real environment we&#8217;re using the ec2-consistent-snapshot script from Aelastic. First let&#8217;s take a look at the state of the hdb object:</p><p><img style="vertical-align: middle;" src="http://lh4.ggpht.com/_DB1q19qzGOg/TPdKHMxsJjI/AAAAAAAAAQ4/KbJsUT6B7C0/s800/2010-12-02--1291267751_739x591_scrot.png" alt="" width="739" height="591" /></p><p>Notice that the &#8217;<span style="font-family: 'andale mono', times;">block_device_mapping</span>&#8217; attribute now consist of an array of hashes. Each hash is a subset of the data about the volume attached to it. If you aren&#8217;t seeing this, you might have to run &#8217;<span style="font-family: 'andale mono', times;">hdb.reload</span>&#8217; to refresh the state of the object. To create our snapshots, we&#8217;re going to iterate over the block_device_mapping attribute and use the &#8216;snapshots&#8217; collection to make those snapshots:</p><p><script src="https://gist.github.com/724912.js?file=snapshotting.rb"></script></p><p>One thing you&#8217;ll notice is that I&#8217;m being fairly explicity here. I could shorthand and chain many of these method calls but for clarity, I&#8217;m not. </p><p>And now we have 4 snapshots available to us. The process is fairly instant but sometimes it can lag. As always, you should check the status via the .state attribute of an object to verify that it&#8217;s ready for the next step. Here&#8217;s a shot of our snapshots right now:</p><p><img style="vertical-align: middle;" src="http://lh5.ggpht.com/_DB1q19qzGOg/TPdKHdio4fI/AAAAAAAAARA/E7nWnpwbhY0/s640/2010-12-02--1291267799_569x866_scrot.png" alt="" width="421" height="640" /></p><p>That&#8217;s the end of Part 2. In the next part, we&#8217;ll have a full fledged script that does the work of making the snapshots usable on the &#8216;tdb&#8217; instance.</p><p> </p><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-4813949397326228724?l=lusislog.blogspot.com' alt='' /></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+
+
+
+      
+
+<span class="categories">
+  
+    Liquid error: undefined method `sort!' for nil:NilClass
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.lusis.org/archives/blogger/2010-12-02-automating-ebs-snapshot-validation-with_02.html" data-via="lusis" data-counturl="http://blog.lusis.org/archives/blogger/2010-12-02-automating-ebs-snapshot-validation-with_02.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/22/scale10x-recap/">Scale10x Recap</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/02/2011-in-review/">2011-in-review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/22/github-trolling-for-fun-and-profit/">Github Trolling for Fun and Profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/deploy-all-the-things/">Deploy ALL the Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/rollbacks-and-other-deployment-myths/">Rollbacks and other deployment myths</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

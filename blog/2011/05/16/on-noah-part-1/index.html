@@ -1,0 +1,518 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>On Noah - Part 1 - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="This is the first part in a series of posts going over NoahAs you may have heard (from my own mouth no less), I&#8217;ve got a smallishside project...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://blog.lusis.org/blog/2011/05/16/on-noah-part-1/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.lusis.org" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">On Noah - Part 1</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-05-16T23:16:00-07:00" pubdate  data-updated="true" >May 16<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><em>This is the first part in a series of posts going over Noah</em></p>
+
+<p>As you may have heard (from my own mouth no less), I&#8217;ve got a smallish
+side project I&#8217;ve been working on called
+<a href="https://github.com/lusis/Noah">Noah</a>.</p>
+
+<!--more-->
+
+
+<p>It&#8217;s a project I&#8217;ve been wanting to work on for a long time now and
+earlier this year I got off my ass and started hacking. The response has
+been nothing short of overwhelming. I&#8217;ve heard from so many people how
+they&#8217;re excited for it and nothing could drive me harder to work on it
+than that feedback. To everyone who doesn&#8217;t run away when I talk your
+ear off about it, thank you so much.</p>
+
+<p>Since I never really wrote an &#8220;official&#8221; post about it, I thought this
+would be a good opportunity to talk about what it is, what my ideas are
+and where I&#8217;d like to see it go in the future.</p>
+
+<h1>So why Noah?</h1>
+
+<p><em>fair warning. much of the following may be duplicates of information in
+the Noah wiki</em></p>
+
+<p>The inspiration for Noah came from a few places but the biggest
+inspiration is <a href="http://goo.gl/WGCxY">Apache Zookeeper</a>. Zookeeper is one
+of those things that by virtue of its design is a BUNCH of different
+things. It&#8217;s all about perspective. I&#8217;m going to (yet again) paste the
+description of Zookeeper straight from the project site:</p>
+
+<pre><code>ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.
+</code></pre>
+
+<p>Now that might be a bit confusing at first. Which is it? Is it a
+configuration management system? A naming system? It&#8217;s all of them and,
+again, it&#8217;s all about perspective.</p>
+
+<p>Zookeeper, however, has a few problems for my standard use case.</p>
+
+<ul>
+<li>Limited client library support</li>
+<li>Requires persistent connections to the server for full benefit</li>
+</ul>
+
+
+<p>By the first, I mean that the only official language bindings are C and
+Java. There&#8217;s contributed Python support and Twitter maintains a Ruby
+library. However all of these bindings are &#8220;native&#8221; and must be
+compiled. There is also a command-line client that you can use for
+interacting as well - one in Java and two C flavors.</p>
+
+<p>The second is more of a showstopper. Zookeeper uses the client
+connection to the server as in-band signaling. This is how watches
+(discussed in a moment) are communicated to clients. Persistent
+connections are simply not always an option. I can&#8217;t deploy something to
+Heroku or AppEngine that requires that persistent connection. Even if I
+could, it would be cost-prohibitive and honestly wouldn&#8217;t make sense.</p>
+
+<p>Looking at the list of features I loved about ZK, I thought &#8220;How would I
+make that work in the disconnected world?&#8221;. By that I mean what would it
+take to implement any or all of the Zookeeper functionality as a service
+that other applications could use?</p>
+
+<p>From that thought process, I came up with Noah. The name is only a play
+on the concept of a zookeeper and holds no other real significance other
+than irritation at least two people named Noah when I talk about the
+project.</p>
+
+<p>So working through the feature list, I came up with a few things I
+<strong>REALLY</strong> wanted. I wanted Znodes, Watches and I wanted to do it all
+over HTTP so that I could have the broadest set of client support. JSON
+is really the defacto standard for web &#8220;messaging&#8221; at this point so
+that&#8217;s what I went with. Basically the goal was &#8220;If your language can
+make HTTP requests and parse JSON, you can write a Noah client&#8221;</p>
+
+<h1>Znodes and Noah primitives</h1>
+
+<p>Zookeeper has a shared hierarchical namespace similar to a UNIX
+filesystem. Points in the hierarchy are called <code>znodes</code>. Essentially
+these are arbitrary paths where you can store bits of data - up to 1MB
+in size. These znodes are unique absolute paths. For instance:</p>
+
+<pre><code>//systems/foo/bar/networks/kansas/router-1/router-2
+</code></pre>
+
+<p>Each fully qualified path is a unique znode. Znodes can be ephemeral or
+persistent. Zookeeper also has some primitives that can be applied to
+znodes such as &#8216;sequence`.</p>
+
+<p>When I originally started working on Noah, so that I could work with a
+model, I created some base primitives that would help me demonstrate an
+example of some of the use cases:</p>
+
+<ul>
+<li>Host</li>
+<li>Service</li>
+<li>Application</li>
+<li>Configuration</li>
+</ul>
+
+
+<p>These primitives were actual models in the Noah code base with a strict
+contract on them. As an example, Hosts must have a status and can have
+any number of services associated with them. Services MUST be tied
+explicity to a host. Applications can have Configurations (or not) and
+Configurations can belong to any number of Applications or not.
+Additionally, I had another &#8220;data type&#8221; that I was simply calling
+Ephemerals. This is similar to the Zookeeper znode model. Originally I
+intended for Ephemerals to be just that - ephemeral. But I&#8217;ve backed off
+that plan. In Noah, Ephemerals can be either persistent or truely
+ephemeral (not yet implemented).</p>
+
+<p>So now I had a data model to work with. A place to store information and
+flexibility to allow people to use the predefined primitives or the
+ephemerals for storing arbitrary bits of information.</p>
+
+<h1>Living the disconnected life</h1>
+
+<p>As I said, the model for my implementation was &#8220;disconnected&#8221;. When
+thinking about how to implement Watches in a disconnected model, the
+only thing that made sense to me was a callback system. Clients would
+register an interest on an object in the system and when that object
+changed, they would get notified by the method of their choosing.</p>
+
+<p>One thing about Watches in Zookeeper that annoys me is that they&#8217;re
+one-shot deals. If you register a watch on a znode, once that watch is
+triggered, you have to REREGISTER the watch. First off this creates, as
+documented by the ZK project, a window of opportunity where you could
+miss another change to that watch. Let&#8217;s assume you aren&#8217;t using a
+language where interacting with Zookeeper is a synchronous process:</p>
+
+<ul>
+<li>Connect to ZK</li>
+<li>Register watch on znode</li>
+<li>Wait</li>
+<li>Change happens</li>
+<li>Watch fires</li>
+<li>Process watch event</li>
+<li>Reregister watch on znode</li>
+</ul>
+
+
+<p>In between those last two steps, you risk missing activity on the znode.
+In the Noah world, watches are persistent. This makes sense for two
+reasons. The first is that the latency between a watch callback being
+fired and proccessed could be much higher than the persistent connection
+in ZK. The window of missed messages is simply much greater. We could
+easily be talking 100&#8217;s of milliseconds of latency just to get the
+message and more so to reregister the watch.</p>
+
+<p>Secondly, the registration of Watches in Noah is, by nature of Noah&#8217;s
+design and as a byproduct, disconnected from the consumer of those
+watches. This offers much greater flexibility in what watches can do.
+Let&#8217;s look at a few examples.</p>
+
+<p>First off, it&#8217;s important to understand how Noah handles callbacks. The
+message format of a callback in Noah is simply a JSON representation of
+the changed state of an object and some metadata about the action taken
+(i.e. delete, create, update). Watches can be registered on distinct
+objects, a given path (and thus all the children under that path) and
+further refined down to a given action. Out of the box, Noah ships with
+one callback handler - http. This means that when you register a watch
+on a path or object, you provide an http endpoint where Noah can post
+the aforementioned JSON message. What you do with it from there is up to
+you.</p>
+
+<p>By virtue of the above, the callback system is also designed to be
+&#8216;pluggable&#8217; for lack of a better word. While the out of the box
+experience is an http post, you could easily write a callback handler
+that posted the message to an AMQP exchange or wrote the information to
+disk as a flat file. The only requirement is that you represent the
+callback location as a single string. The string will be parsed as a url
+and broken down into tokens that determine which plugin to call.</p>
+
+<p>So this system allows for you to distribute watches to multiple systems
+with a single callback. Interestingly enough, this same watch callback
+system forms the basis of how Noah servers will share changes with each
+other in the future.</p>
+
+<h1>Wrap up - Part 1</h1>
+
+<p>So wrapping up what I&#8217;ve discussed, here are the key take aways:</p>
+
+<ul>
+<li>Noah is a &#8216;port&#8217; of specific Zookeeper functionality to a
+disconnected and asynchronous world</li>
+<li>Noah uses HTTP and JSON as the interface to the server</li>
+<li>Noah has both traditional ZK-style Ephemerals as well as opinionated
+Primitives</li>
+<li>Noah uses a pluggable callback system to approximate the Watch
+functionality in Zookeeper</li>
+<li>Clients can be written in any language that can speak HTTP and
+understand JSON (yes, even a shell script)</li>
+</ul>
+
+
+<h1>Part 2 and beyond</h1>
+
+<p>In part two of this series we&#8217;ll discuss some of the additions to Noah
+that aren&#8217;t a part of Zookeeper such as Tags and Links. Part 3 will
+cover the underlying technology which I am intentionally not discussing
+at this point. Part 4 will be a roadmap of my future plans for Noah.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-05-16T23:16:00-07:00" pubdate  data-updated="true" >May 16<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/blogger-posts/'>blogger posts</a>, <a class='category' href='/blog/categories/noah/'>noah</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.lusis.org/blog/2011/05/16/on-noah-part-1/" data-via="lusis" data-counturl="http://blog.lusis.org/blog/2011/05/16/on-noah-part-1/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+       
+        <a class="basic-alignment right" href="/blog/2011/05/17/on-noah-part-2/" title="next Post: On Noah - Part 2">On Noah - Part 2 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/22/scale10x-recap/">Scale10x Recap</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/02/2011-in-review/">2011-in-review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/11/22/github-trolling-for-fun-and-profit/">Github Trolling for Fun and Profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/deploy-all-the-things/">Deploy ALL the Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/10/18/rollbacks-and-other-deployment-myths/">Rollbacks and other deployment myths</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://blog.lusis.org/blog/2011/05/16/on-noah-part-1/';
+        var disqus_url = 'http://blog.lusis.org/blog/2011/05/16/on-noah-part-1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
