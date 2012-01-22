@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: community | blog dot lusis]]></title>
-  <link href="http://blog.lusis.org/blog/categories/community/atom.xml" rel="self"/>
-  <link href="http://blog.lusis.org/"/>
-  <updated>2012-01-22T11:25:44-08:00</updated>
-  <id>http://blog.lusis.org/</id>
+  <link href="http://lusis.github.com/blog/categories/community/atom.xml" rel="self"/>
+  <link href="http://lusis.github.com/"/>
+  <updated>2012-01-22T11:41:47-08:00</updated>
+  <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
     
@@ -15,10 +15,13 @@
   
   <entry>
     <title type="html"><![CDATA[Scale10x Recap]]></title>
-    <link href="http://blog.lusis.org/blog/2012/01/22/scale10x-recap/"/>
+    <link href="http://lusis.github.com/blog/2012/01/22/scale10x-recap/"/>
     <updated>2012-01-22T07:02:00-08:00</updated>
-    <id>http://blog.lusis.org/blog/2012/01/22/scale10x-recap</id>
+    <id>http://lusis.github.com/blog/2012/01/22/scale10x-recap</id>
     <content type="html"><![CDATA[<p>This past week I had the awesome pleasure of participating in my first <a href="http://www.socallinuxexpo.org/">SoCal Linux Expo</a>. As I later discovered, this was the 10th installment of this awesome event (hence the 10x).</p>
+
+<!-- more -->
+
 
 <h1>The email and enStratus</h1>
 

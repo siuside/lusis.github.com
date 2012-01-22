@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Strategy | blog dot lusis]]></title>
-  <link href="http://blog.lusis.org/blog/categories/strategy/atom.xml" rel="self"/>
-  <link href="http://blog.lusis.org/"/>
-  <updated>2012-01-22T11:25:44-08:00</updated>
-  <id>http://blog.lusis.org/</id>
+  <link href="http://lusis.github.com/blog/categories/strategy/atom.xml" rel="self"/>
+  <link href="http://lusis.github.com/"/>
+  <updated>2012-01-22T11:41:47-08:00</updated>
+  <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Deploy ALL the Things]]></title>
-    <link href="http://blog.lusis.org/blog/2011/10/18/deploy-all-the-things/"/>
+    <link href="http://lusis.github.com/blog/2011/10/18/deploy-all-the-things/"/>
     <updated>2011-10-18T06:59:00-07:00</updated>
-    <id>http://blog.lusis.org/blog/2011/10/18/deploy-all-the-things</id>
+    <id>http://lusis.github.com/blog/2011/10/18/deploy-all-the-things</id>
     <content type="html"><![CDATA[<p><em>This is part 2 in a post on deployment strategies. The previous post is located <a href="http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths/">here</a></em></p>
 
 <p>My previous post covered some of the annoying excuses and complaints that people like to use when discussing deployments. The big take away should have been the following:</p>

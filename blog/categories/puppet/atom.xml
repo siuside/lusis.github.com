@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: puppet | blog dot lusis]]></title>
-  <link href="http://blog.lusis.org/blog/categories/puppet/atom.xml" rel="self"/>
-  <link href="http://blog.lusis.org/"/>
-  <updated>2012-01-22T11:25:44-08:00</updated>
-  <id>http://blog.lusis.org/</id>
+  <link href="http://lusis.github.com/blog/categories/puppet/atom.xml" rel="self"/>
+  <link href="http://lusis.github.com/"/>
+  <updated>2012-01-22T11:41:47-08:00</updated>
+  <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[The Configuration Management Divide]]></title>
-    <link href="http://blog.lusis.org/blog/2011/08/22/the-configuration-management-divide/"/>
+    <link href="http://lusis.github.com/blog/2011/08/22/the-configuration-management-divide/"/>
     <updated>2011-08-22T22:07:00-07:00</updated>
-    <id>http://blog.lusis.org/blog/2011/08/22/the-configuration-management-divide</id>
+    <id>http://lusis.github.com/blog/2011/08/22/the-configuration-management-divide</id>
     <content type="html"><![CDATA[<p><em>wherein John admits he was wrong about something</em></p>
 
 <p>As I was checking my Github feed tonight (as I've been known to do on occassion), I saw an update for a project that I was watching. This project is, for all intents and purposes, a redo of Capistrano with some additional system management stuff on top. From the description:</p>

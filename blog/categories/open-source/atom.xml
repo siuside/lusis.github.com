@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Open Source | blog dot lusis]]></title>
-  <link href="http://blog.lusis.org/blog/categories/open-source/atom.xml" rel="self"/>
-  <link href="http://blog.lusis.org/"/>
-  <updated>2012-01-22T11:25:44-08:00</updated>
-  <id>http://blog.lusis.org/</id>
+  <link href="http://lusis.github.com/blog/categories/open-source/atom.xml" rel="self"/>
+  <link href="http://lusis.github.com/"/>
+  <updated>2012-01-22T11:41:47-08:00</updated>
+  <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[2011-in-review]]></title>
-    <link href="http://blog.lusis.org/blog/2012/01/02/2011-in-review/"/>
+    <link href="http://lusis.github.com/blog/2012/01/02/2011-in-review/"/>
     <updated>2012-01-02T15:40:00-08:00</updated>
-    <id>http://blog.lusis.org/blog/2012/01/02/2011-in-review</id>
+    <id>http://lusis.github.com/blog/2012/01/02/2011-in-review</id>
     <content type="html"><![CDATA[<p>The holidays are a busy time for me. I was hoping to get this written before the end of the year but it didn't happen.</p>
 
 <!-- more -->
@@ -119,9 +119,9 @@
   
   <entry>
     <title type="html"><![CDATA[Github Trolling for Fun and Profit]]></title>
-    <link href="http://blog.lusis.org/blog/2011/11/22/github-trolling-for-fun-and-profit/"/>
+    <link href="http://lusis.github.com/blog/2011/11/22/github-trolling-for-fun-and-profit/"/>
     <updated>2011-11-22T21:43:00-08:00</updated>
-    <id>http://blog.lusis.org/blog/2011/11/22/github-trolling-for-fun-and-profit</id>
+    <id>http://lusis.github.com/blog/2011/11/22/github-trolling-for-fun-and-profit</id>
     <content type="html"><![CDATA[<p>Last Friday was a pretty crappy day.</p>
 
 <!-- more -->

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: monitoring sucks | blog dot lusis]]></title>
-  <link href="http://blog.lusis.org/blog/categories/monitoring-sucks/atom.xml" rel="self"/>
-  <link href="http://blog.lusis.org/"/>
-  <updated>2012-01-22T11:25:44-08:00</updated>
-  <id>http://blog.lusis.org/</id>
+  <link href="http://lusis.github.com/blog/categories/monitoring-sucks/atom.xml" rel="self"/>
+  <link href="http://lusis.github.com/"/>
+  <updated>2012-01-22T11:41:47-08:00</updated>
+  <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Monitoring Sucks - Watch your language]]></title>
-    <link href="http://blog.lusis.org/blog/2011/07/21/monitoring-sucks-watch-your-language/"/>
+    <link href="http://lusis.github.com/blog/2011/07/21/monitoring-sucks-watch-your-language/"/>
     <updated>2011-07-21T15:19:00-07:00</updated>
-    <id>http://blog.lusis.org/blog/2011/07/21/monitoring-sucks-watch-your-language</id>
+    <id>http://lusis.github.com/blog/2011/07/21/monitoring-sucks-watch-your-language</id>
     <content type="html"><![CDATA[<p><em>The following post is a recap of what was discussed in the 07/21/11 #monitoringsucks irc meeting</em></p>
 
 <p>Before I get any further, I just want to thank everyone who attended,
@@ -269,9 +269,9 @@ you can make the next one.</p>
   
   <entry>
     <title type="html"><![CDATA[Why Monitoring Sucks]]></title>
-    <link href="http://blog.lusis.org/blog/2011/06/05/why-monitoring-sucks/"/>
+    <link href="http://lusis.github.com/blog/2011/06/05/why-monitoring-sucks/"/>
     <updated>2011-06-05T16:30:00-07:00</updated>
-    <id>http://blog.lusis.org/blog/2011/06/05/why-monitoring-sucks</id>
+    <id>http://lusis.github.com/blog/2011/06/05/why-monitoring-sucks</id>
     <content type="html"><![CDATA[<p><em>(and what we're doing about it)</em></p>
 
 <p>About two weeks ago someone made a tweet. At this point, I don't

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: blogger posts | blog dot lusis]]></title>
-  <link href="http://blog.lusis.org/blog/categories/blogger-posts/atom.xml" rel="self"/>
-  <link href="http://blog.lusis.org/"/>
-  <updated>2012-01-22T11:25:44-08:00</updated>
-  <id>http://blog.lusis.org/</id>
+  <link href="http://lusis.github.com/blog/categories/blogger-posts/atom.xml" rel="self"/>
+  <link href="http://lusis.github.com/"/>
+  <updated>2012-01-22T11:41:47-08:00</updated>
+  <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[On Noah - Part 4]]></title>
-    <link href="http://blog.lusis.org/blog/2011/05/19/on-noah-part-4/"/>
+    <link href="http://lusis.github.com/blog/2011/05/19/on-noah-part-4/"/>
     <updated>2011-05-19T19:01:00-07:00</updated>
-    <id>http://blog.lusis.org/blog/2011/05/19/on-noah-part-4</id>
+    <id>http://lusis.github.com/blog/2011/05/19/on-noah-part-4</id>
     <content type="html"><![CDATA[<p><em>This is the fourth part in a series on Noah. <a href="http://goo.gl/l3Mgt">Part 1</a>, <a href="http://goo.gl/Nj2TN">Part 2</a> and <a href="http://goo.gl/RsZtZ">Part 3</a> are available as well</em></p>
 
 <p>In Part 1 and 2 of this series I covered background on Zookeeper and
@@ -303,9 +303,9 @@ questions about the project.</p>
   
   <entry>
     <title type="html"><![CDATA[On Noah - Part 3]]></title>
-    <link href="http://blog.lusis.org/blog/2011/05/18/on-noah-part-3/"/>
+    <link href="http://lusis.github.com/blog/2011/05/18/on-noah-part-3/"/>
     <updated>2011-05-18T15:14:00-07:00</updated>
-    <id>http://blog.lusis.org/blog/2011/05/18/on-noah-part-3</id>
+    <id>http://lusis.github.com/blog/2011/05/18/on-noah-part-3</id>
     <content type="html"><![CDATA[<p><em>This is the third part in a series on Noah. <a href="http://goo.gl/l3Mgt">Part 1</a> and <a href="http://goo.gl/Nj2TN">Part 2</a> are available as well</em></p>
 
 <p>In Part 1 and 2 of this series I covered background on Zookeeper and
@@ -513,9 +513,9 @@ fit into the first four.</p>
   
   <entry>
     <title type="html"><![CDATA[On Noah - Part 2]]></title>
-    <link href="http://blog.lusis.org/blog/2011/05/17/on-noah-part-2/"/>
+    <link href="http://lusis.github.com/blog/2011/05/17/on-noah-part-2/"/>
     <updated>2011-05-17T15:38:00-07:00</updated>
-    <id>http://blog.lusis.org/blog/2011/05/17/on-noah-part-2</id>
+    <id>http://lusis.github.com/blog/2011/05/17/on-noah-part-2</id>
     <content type="html"><![CDATA[<p><em>This is the second part in a series on Noah. Part 1 is available</em> <a href="http://goo.gl/l3Mgt">here</a></p>
 
 <p>In part one of this series, I went over a little background about
@@ -701,9 +701,9 @@ Part four is the discussion about long-term goals and roadmaps.</p>
   
   <entry>
     <title type="html"><![CDATA[On Noah - Part 1]]></title>
-    <link href="http://blog.lusis.org/blog/2011/05/16/on-noah-part-1/"/>
+    <link href="http://lusis.github.com/blog/2011/05/16/on-noah-part-1/"/>
     <updated>2011-05-16T23:16:00-07:00</updated>
-    <id>http://blog.lusis.org/blog/2011/05/16/on-noah-part-1</id>
+    <id>http://lusis.github.com/blog/2011/05/16/on-noah-part-1</id>
     <content type="html"><![CDATA[<p><em>This is the first part in a series of posts going over Noah</em></p>
 
 <p>As you may have heard (from my own mouth no less), I've got a smallish
