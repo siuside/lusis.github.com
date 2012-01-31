@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: amqp | blog dot lusis]]></title>
+  <link href="http://lusis.github.com/blog/categories/amqp/atom.xml" rel="self"/>
+  <link href="http://lusis.github.com/"/>
+  <updated>2012-01-31T01:37:23-05:00</updated>
+  <id>http://lusis.github.com/</id>
+  <author>
+    <name><![CDATA[John E. Vincent]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Load balancing Logstash with AMQP]]></title>
+    <link href="http://lusis.github.com/blog/2012/01/31/load-balancing-logstash-with-amqp/"/>
+    <updated>2012-01-31T01:12:00-05:00</updated>
+    <id>http://lusis.github.com/blog/2012/01/31/load-balancing-logstash-with-amqp</id>
+    <content type="html"><![CDATA[<p>AMQP in Logstash is one of the most complicated parts of the workflow. I've taken it on myself, as the person with the most AMQP experience (both RabbitMQ and Qpid) to try and explain as much as need for logstash users.</p>
+
+<p><a href="https://twitter.com/patrickdebois">Patrick DeBois</a> hit me up with a common logstash design pattern that I felt warranted a full detailed post.</p>
+
+<p><em>Warning: This is an image heavy post. Terminal screenshots are linked to larger versions</em></p>
+
+<h2>Requirements</h2>
+
+<ul>
+<li>No lost messages</li>
+<li>Shipper-only configuration on the source</li>
+<li>Worker-based filtering model</li>
+<li>No duplicate messages</li>
+<li>External ElasticSearch cluster as final destination</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h2>Notes</h2>
+
+<p>We're going to leave the details of filtering and client-side input up to the imagination.
+For this use case we'll simply use <code>stdin</code> as our starting point. You can modify this as you see fit.
+The same goes for filtering. The assumption is that your filters will be correct and not be the source of any messages NOT making it into ElasticSearch.</p>
+
+<p>Each configuration will be explained so don't stress over it at first glance. We're also going to explicitly set some options for the sake of easier comprehension.</p>
+
+<h1>Client-side agent config</h1>
+
+<p>```
+{
+  input {</p>
+
+<pre><code>stdin { debug =&gt; true type =&gt; "host-agent-input" }
+</code></pre>
+
+<p>  }
+  output {</p>
+
+<pre><code>amqp {
+  name =&gt; "logstash-exchange"
+  exchange_type =&gt; "direct"
+  host =&gt; "rabbitmq-server"
+  key =&gt; "logstash-routing-key"
+  durable =&gt; true
+  persistent =&gt; true
+}
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<h2>Config Explained</h2>
+
+<p>The amqp output:</p>
+
+<h3>name</h3>
+
+<p>This is the name that will be provided to RabbitMQ for the exchange. By default, the Bunny driver will auto-generate a name. This won't work in this usecase because the consumers will need a known name. Remember exchanges are for producers. Queues are for consumers. When we wire up the indexer side, we'll need to know the name of the exchange to perform the binding.</p>
+
+<h3>exchange_type</h3>
+
+<p>For this particular design, we want to use a direct exchange. It's the only way we can guarantee that only one copy of a log message will be processed.</p>
+
+<h3>key</h3>
+
+<p>We're going to explicitly set the routing key as direct exchanges do not support wildcard routing key bindings. Again, we'll need this on the consumer side to ensure we get the right messages.</p>
+
+<h3>durable</h3>
+
+<p>This setting controls if the exchange should survive RabbitMQ restarts or not.</p>
+
+<h3>persistent</h3>
+
+<p>This is for the messages. Should they be persisted to disk or not?</p>
+
+<p>Note that for a fully "no lost messages scenario" to work in RabbitMQ, you have to jump through some hoops. This is explain more below.</p>
+
+<h2>Running the agent</h2>
+
+<p>This same configuration should be used on ALL host agents where logs are being read. You can have variation in the inputs. You can have additional outputs however the amqp output stanza above will ensure that all messages will be sent to RabbitMQ.</p>
+
+<h1>Indexer agent config</h1>
+
+<p>```
+input {
+  amqp {</p>
+
+<pre><code>host =&gt; "rabbitmq-server"
+name =&gt; "indexer-queue"
+exchange =&gt; "logstash-exchange"
+key =&gt; "logstash-routing-key"
+exclusive =&gt; false
+durable =&gt; true
+auto_delete =&gt; false
+type =&gt; "logstash-indexer-input"
+</code></pre>
+
+<p>  }
+}</p>
+
+<p>filter {
+  # your filters here
+}</p>
+
+<p>output {
+  elasticsearch {</p>
+
+<pre><code># your elasticsearch settings here
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<h2>Config explained</h2>
+
+<p>The amqp input:</p>
+
+<h3>name</h3>
+
+<p>This is the name that will be provided to RabbitMQ for the queue. Again, as with exchange, we need a known name. The reason for this is that all of our indexers are going to share a common queue. This will make sense in a moment.</p>
+
+<h3>exchange</h3>
+
+<p>This should match exactly with the name of the exchange that was created before in the host-side config.</p>
+
+<h3>key</h3>
+
+<p>This should, again, match the routing key provided in the host-side configuration exactly. <code>direct</code> exchanges do NOT support wildcard routing keys. By providing a routing key, you are creating a <code>binding</code> in RabbitMQ terms. This <code>binding</code> says "I want all messages sent to the <code>logstash-exchange</code> with a routing key of <code>logstash-routing-key</code> to be sent to the queue named <code>indexer-queue</code>.</p>
+
+<h3>exclusive</h3>
+
+<p>As with the exchange in the host-side config, we're going to have multiple workers using this queue. This is another AMQP detail. When you bind a queue to an exchange, a <code>channel</code> is created for the messages to flow across. A single queue can have multiple channels. This is how our worker pool is going to operate.</p>
+
+<p><strong>You do not want a different queue name for each worker despite how weird that sounds</strong></p>
+
+<p>If you give each worker its own queue, then you <strong>WILL</strong> get duplicate messages. It's counterintuitive, I know. Just trust me. The way to ensure that multiple consumers don't see the same message is to use mutliple channels on the same queue.</p>
+
+<h3>durable</h3>
+
+<p>Same as the exchange declarition, this ensures that the queue will stick around if the broker (the RabbitMQ server) restarts.</p>
+
+<h3>auto_delete</h3>
+
+<p>This is the setting most people miss when trying to ensure no lost messages. By default, RabbitMQ will throw away even durable queues once the last user of the queue disconnects.</p>
+
+<h3>type</h3>
+
+<p>This is the standard logstash requirement for inputs. They must have a <code>type</code> defined. Arbitrary string.</p>
+
+<h1>Sidebar on RabbitMQ message reliability</h1>
+
+<p>Simply put, RabbitMQ makes you jump through hoops to ensure that no message is lost. There's a trifecta of settings that you have to have for it to work:</p>
+
+<ul>
+<li>Your exchange must be durable with persistent messages</li>
+<li>Your queue must be durable</li>
+<li>Auto-delete must not be disabled</li>
+</ul>
+
+
+<p><strong>EVEN IF YOU DO ALL THESE THINGS, YOU CAN STILL LOSE MESSAGES!</strong></p>
+
+<h2>Order matters</h2>
+
+<p>I know ... you're thinking "What the F---?". There is still a scenario where you can lose messages. It has to do with how you start things up.</p>
+
+<ul>
+<li>If you start the exchange side but never start the queue side, messages are dropped on the floor</li>
+<li>You can't start the queue side without first starting the exchange side</li>
+</ul>
+
+
+<p>While RabbitMQ let's you predeclare exchanges and queues from the command-line, it normally only creates things when someone asks for it. Since exchanges know nothing about the consumption side of the messages (the queues), creating an exchange with all the right settings does NOT create the queue and thus no binding is ever created.</p>
+
+<p>Conversely, you can't declare a totally durable queue when there is no exchange in place to bind against.</p>
+
+<p>Follow these rules and you'll be okay. You only need to do it once:</p>
+
+<ul>
+<li>Start a producer (the host-side logstash agent)</li>
+<li>Ensure via <code>rabbitmqctl</code> or the management web interface that the exchange exists</li>
+<li>Start one of the consumers (the indexer config)</li>
+</ul>
+
+
+<p>Once the indexer agent has started, you will be good to go. You can shutdown the indexers and messages will start piling up. You can shut everything down - rabbitmq (with backlogged messages), the indexer agent and the host-side agent. When you start RabbitMQ, the queues, exchanges and messages will all still be there. If you start an indexer agent, it will drain the outstanding messages.</p>
+
+<p>However, if you screw the configuration up you'll have to delete the exchange and the queue via <code>rabbitmqctl</code> or the management web interface and start over.</p>
+
+<h1>How it looks visually</h1>
+
+<p>There are two plugins you should install with RabbitMQ:</p>
+
+<ul>
+<li>rabbitmq_management</li>
+<li>rabbitmq_management_visualizer</li>
+</ul>
+
+
+<p>The first will provide a web interface (and HTTP API!) listening on port 55672 of your RabbitMQ server. It provides a really easy way to see messages backlogged, declared exchanges/queue and pretty much everything else. Seeing as it also provides a very nice REST api to everything inside the RabbitMQ server, you'll want it anyway if for nothing but monitoring hooks.</p>
+
+<p>The visualizer is an ad-hoc addon that helps you see the flows through the system. It's not as pretty as the management web interface proper but it gets the job done.</p>
+
+<h1>Starting it all up</h1>
+
+<p>Now we can start things up</p>
+
+<h2>Producers</h2>
+
+<p>We're going to start up our four client side agents. These will create the exchange (or alternately connect to the existing one). If you look at the management interface, you'll see four channels established:</p>
+
+<p>Management view:
+<img src="/images/posts/load-balancing-logstash-with-amqp/amqp-four-channels.png" alt="amqp-four-channels.png" /></p>
+
+<p>Visualizer view:
+<img src="/images/posts/load-balancing-logstash-with-amqp/amqp-four-producers.png" alt="amqp-four-producers.png" /></p>
+
+<p>Remember that until we connect with a consumer configuration (the indexer) messages sent to these exchanges WILL be lost.</p>
+
+<h2>Consumers</h2>
+
+<p>Now we start our indexer configurations - all four of them</p>
+
+<p>Now if we take a peek around the management interface and the visualizer, we start to see some cool stuff.</p>
+
+<p>In the managment interface, you'll see eight total channels - four for the queue and four for the exchange</p>
+
+<p><img src="/images/posts/load-balancing-logstash-with-amqp/amqp-eight-channels.png" alt="amqp-eight-channels.png" /></p>
+
+<p>If you click on "Queues" at the top and then on the entry for our <code>indexer-queue</code>, you'll see more details:</p>
+
+<p><img src="/images/posts/load-balancing-logstash-with-amqp/amqp-indexer-queue-details.png" alt="amqp-indexer-queue-details.png" /></p>
+
+<p>But the real visual is in the visualizer tab. Click on it and then click on the <code>indexer-queue</code> on the far right</p>
+
+<p><img src="/images/posts/load-balancing-logstash-with-amqp/amqp-visualizer-detail.png" alt="amqp-visualizer-detail.png" /></p>
+
+<p>You can see the lines showing the flow of messages.</p>
+
+<p>One thing to make note of about RabbitMQ load balancing. Messages are load balanced across CONSUMERS not QUEUES. There's a subtle distinction there from RabbitMQ's semantic point of view.</p>
+
+<h2>Testing the message flow</h2>
+
+<p>Over in your terminal window, let's send some test messages. For this test, again, I'm using <code>stdin</code> for my origination and <code>stdout</code> to mimic the ElasticSearch destination.</p>
+
+<p>In my first input window, I'm going just type 1 through 4 with a newline after each. This should result in each consumer getting a message round-robin style:</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-amqp/load-balance-test-1.png"><img src="/images/posts/load-balancing-logstash-with-amqp/load-balance-test-1.png" alt="load-balance-test-1.png" /></a></p>
+
+<p>Now I'm going to cycle through the input windows and send a single message from each:</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-amqp/load-balance-test-4.png"><img src="/images/posts/load-balancing-logstash-with-amqp/load-balance-test-4.png" alt="load-balance-test-4.png" /></a></p>
+
+<p>You can see that messages 4-7 were sent round-robin style.</p>
+
+<h2>Testing persistence</h2>
+
+<p>All of this is for naught if we lose messages because our workers are offline. Let's shutdown all of our workers and send a bunch of messages from each input window:</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-amqp/workers-offline-terminal.png"><img src="/images/posts/load-balancing-logstash-with-amqp/workers-offline-terminal.png" alt="workers-offline-terminal.png" /></a></p>
+
+<p>We sent two lines of text per window. This amounts to eight log messages that should be queued up for us. Let's check the management interface:</p>
+
+<p><img src="/images/posts/load-balancing-logstash-with-amqp/eight-messages-waiting.png" alt="eight-messages-waiting.png" /></p>
+
+<p>Now if we stop rabbitmq entirely and restart it, those messages should still be there (along with the queue and exchanges we created).</p>
+
+<p>Once you've verified that, start one of the workers back up. When it comes fully online, it should drain all of the messages from the exchange:</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-amqp/drained-messages.png"><img src="/images/posts/load-balancing-logstash-with-amqp/drained-messages.png" alt="drained-messages.png" /></a></p>
+
+<p>Yep, there they went. The last two messages you get should be the ones from window 4. This is another basic functionality of message queue software in general. Messages should be delivered in the order in which they were recieved.</p>
+
+<h1>One last diagram</h1>
+
+<p>Here's a flowchart I created with Gliffy to show what the high-level overview of our setup would look like. Hope it helps and feel free to hit me up on freenode irc in the <code>#logstash</code> channel or on <a href="https://twitter.com/lusis">twitter</a>.</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png"><img src="/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png" alt="gliffy-overview.png" /></a></p>
+
+<p><em>This post will eventually make its way into the <a href="http://cookbook.logstash.net">Logstash Cookbook Site</a>.</em></p>
+]]></content>
+  </entry>
+  
+</feed>
