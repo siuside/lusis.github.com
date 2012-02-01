@@ -157,10 +157,10 @@ To me this, is the crux of what makes Logstash so awesome. Someone asked me to d
 <h2>Requirements</h2>
 
 <ul>
-<li>No lost messages</li>
+<li>No lost messages in transit/due to inputs or outputs.</li>
 <li>Shipper-only configuration on the source</li>
 <li>Worker-based filtering model</li>
-<li>No duplicate messages</li>
+<li>No duplicate messages due to transit mediums (i.e. fanout is inappropriate as all indexers would see the same message)</li>
 <li>External ElasticSearch cluster as final destination</li>
 </ul>
 

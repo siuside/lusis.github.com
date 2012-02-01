@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2012-02-01T01:52:54-05:00</updated>
+  <updated>2012-02-01T07:36:29-05:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -34,12 +34,16 @@ To me this, is the crux of what makes Logstash so awesome. Someone asked me to d
 <p>If you recall from the post <a href="http://goo.gl/vWyCH">yesterday</a>, we had the following &#8216;requirements&#8217;:</p>
 
 <ul>
-<li>No lost messages</li>
+<li>No lost messages in transit/due to inputs or outputs.</li>
 <li>Shipper only configuration on the source</li>
 <li>Worker based filtering model</li>
-<li>No duplicate messages</li>
+<li>No duplicate messages due to transit mediums (i.e. fanout is inappropriate as all indexers would see the same message)</li>
 </ul>
 
+
+<h2>EDIT</h2>
+
+<p>Originally our list stated the requirements as <em>No lost messages</em> and <em>No duplicate messages</em>. I&#8217;ve amended those with a slight modification to closer reflect the original intent. Please see <a href="http://blog.lusis.org/blog/2012/01/31/load-balancing-logstash-with-amqp/#comment-426175086">comment from Jelle Smet here</a> for details. Thanks Jelle!</p>
 
 <p>Our design looked something like this:</p>
 
@@ -231,16 +235,20 @@ Several things set Redis apart from most key/value systems however:</p>
 <h2>Requirements</h2>
 
 <ul>
-<li>No lost messages</li>
+<li>No lost messages in transit/due to inputs or outputs.</li>
 <li>Shipper-only configuration on the source</li>
 <li>Worker-based filtering model</li>
-<li>No duplicate messages</li>
+<li>No duplicate messages due to transit mediums (i.e. fanout is inappropriate as all indexers would see the same message)</li>
 <li>External ElasticSearch cluster as final destination</li>
 </ul>
 
 
 <!-- more -->
 
+
+<h2>EDIT</h2>
+
+<p>Originally our list stated the requirements as <em>No lost messages</em> and <em>No duplicate messages</em>. I&#8217;ve amended those with a slight modification to closer reflect the original intent. Please see <a href="http://blog.lusis.org/blog/2012/01/31/load-balancing-logstash-with-amqp/#comment-426175086">comment from Jelle Smet here</a> for details. Thanks Jelle!</p>
 
 <h2>Notes</h2>
 
