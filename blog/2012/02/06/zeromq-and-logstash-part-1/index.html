@@ -105,6 +105,10 @@
 <!-- more -->
 
 
+<h1>Edit and update</h1>
+
+<p>Evidently my testing missed a pretty critical usecase - pubsub. It doesn&#8217;t work right now. Due to the way we&#8217;re doing sockopts works for setting topics. However we don&#8217;t have a commensurate setting on the PUB side. I&#8217;ve created <a href="https://logstash.jira.com/browse/LOGSTASH-399">LOGSTASH-399</a> and <a href="https://logstash.jira.com/browse/LOGSTASH-400">LOGSTASH-400</a> to deal with these issues. I am so sorry about that however it doesn&#8217;t change the overall tone and content of this message as <code>pair</code> and <code>pushpull</code> still work.</p>
+
 <h1>A little history</h1>
 
 <p>In January of this year, <a href="https://twitter.com/jordansissel">Jordan</a> merged the first iteration of ZeroMQ support for Logstash. Several people had been asking for it and I had it on my plate to do as well. Funny side note, the pull request for the ZeroMQ plugin was my inspiration for adding <a href="http://logstash.net/docs/1.1.0/plugin-status">plugin_status</a> to Logstash.</p>
