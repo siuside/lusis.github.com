@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2012-02-06T17:08:55-05:00</updated>
+  <updated>2012-02-09T00:04:58-05:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,242 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ZeroMQ and Logstash - Part 2]]></title>
+    <link href="http://lusis.github.com/blog/2012/02/08/zeromq-and-logstash-part-2/"/>
+    <updated>2012-02-08T21:08:00-05:00</updated>
+    <id>http://lusis.github.com/blog/2012/02/08/zeromq-and-logstash-part-2</id>
+    <content type="html"><![CDATA[<p>A few days ago I wrote up some notes on how we&#8217;re making Logstash better by adding ZeroMQ as an option for inputs and outputs. That night we decided to take it a bit further and add support for ZeroMQ as a filter plugin as well.</p>
+
+<!-- more -->
+
+
+<p>I&#8217;ve had a lot of people ask me what&#8217;s so hot about ZeroMQ. It&#8217;s hard to explain but I really would suggest you read the excellent <a href="http://zguide.zeromq.org">zguide</a>. The best way I can describe it is that it&#8217;s sockets on steroids. Sockets that behave the way you would expect sockets to behave as opposed to the way they do now. <a href="http://www.quora.com/What-is-the-background-of-the-just-open-a-socket-meme">Just open a socket!</a>.</p>
+
+<h1>Inputs and Outputs</h1>
+
+<p>I&#8217;m only going to touch briefly on inputs and outputs. They were discussed briefly previously and I have a full fledged post in the wings about it.</p>
+
+<p>They essentially work like the other implementations (AMQP and Redis) with the exception that you don&#8217;t have a broker in the middle. Let me show you:</p>
+
+<pre><code>[Collector 1] ------ load balanced events ----&gt; [Indexer 1, Indexer 2, Indexer 3, Indexer 4]
+[Collector 2] ------ load balanced events ----&gt; [Indexer 1, Indexer 2, Indexer 3, Indexer 4]
+[Collector 3] ------ load balanced events ----&gt; [Indexer 1, Indexer 2, Indexer 3, Indexer 4]
+[Collector 4] ------ load balanced events ----&gt; [Indexer 1, Indexer 2, Indexer 3, Indexer 4]
+</code></pre>
+
+<p>As you can see we&#8217;re doing a pattern very similar to before. We want to send events of our nodes over to a cluster of indexers that do filtering. The difference here is that we don&#8217;t have a broker. Not big deal, right? One less thing to worry about! You don&#8217;t have to learn some new tool just to get some simple load balancing of workers. This works great&#8230;..until you need to scale workers.</p>
+
+<p>Even using awesome configuration management, you&#8217;ve now got to cycle all your collectors to add the new endpoints. This means lost events. This makes me unhappy. It makes you unhappy. The world is sad. Why are you doing this to us?</p>
+
+<p>Luckily I&#8217;ve been authorized by the Franklin Mint to release the source code to an enterprise class ZeroMQ broker that you can use. Not only is it enterprise class but it has built-in clustering. You can <a href="https://github.com/lusis/enterprise-zeromq-broker">grab the code here from github</a>.</p>
+
+<p>Here are the configs for the logstash agents (output.conf is collector config, input.conf is indexer config):</p>
+
+<p>output.conf:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>input { stdin { type =&gt; "stdin" } }
+</span><span class='line'>output {
+</span><span class='line'>  zeromq {
+</span><span class='line'>    topology =&gt; "pushpull"
+</span><span class='line'>    address =&gt; ["tcp://localhost:5555", "tcp://localhost:5557"]
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>input.conf:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>input { 
+</span><span class='line'>  zeromq {
+</span><span class='line'>    type =&gt; "pull-input"
+</span><span class='line'>    topology =&gt; "pushpull"
+</span><span class='line'>    address =&gt; ["tcp://localhost:5556", "tcp://localhost:5558"]
+</span><span class='line'>    mode =&gt; "client"
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>output { stdout { debug =&gt; true }}</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Action shot</h2>
+
+<p>Here&#8217;s a shot of our fancy clustered broker in action (click to zoom):</p>
+
+<p><a href="http://lusis.github.com/images/posts/zeromq-part2/zeromq-broker-ss.png"><img src="http://lusis.github.com/images/posts/zeromq-part2/zeromq-broker-ss.png" alt="zeromq-broker-ss.png" /></a></p>
+
+<p>As you can see the two events we sent were automatically load balanced across our <em>&#8220;brokers&#8221;</em> which then load balanced across our indexers.</p>
+
+<h2>What have we bought ourselves?</h2>
+
+<p>Obviously this is all something of a joke. All we have done is point our collectors at other nodes instead of directly at our indexers. But realize that you can create 2 fixed points on your network with 8 lines of core code and use those as the static information in your indexers and collectors. You can then scale either side without ever having to update a configuration file.</p>
+
+<p>I dare say you can even run those on t1.micro instances on Amazon.</p>
+
+<p>Oh and if you don&#8217;t like Ruby, write it in something else. That&#8217;s the beauty of ZeroMQ.</p>
+
+<h1>Filters</h1>
+
+<p>The thing that has me most excited is the addition of ZeroMQ as a filter to logstash. As you&#8217;ve already seen, ZeroMQ makes it REALLY easy to wire network topologies up with complex patterns. In the inputs and outputs we&#8217;ve exposed a few topologies that make sense. However there&#8217;s another topology that we had not yet exposed because it didn&#8217;t make sense - <code>reqrep</code>.</p>
+
+<h2>REQ/REP</h2>
+
+<p><code>reqrep</code> is short for request and reply. The reason we didn&#8217;t expose it previously is that it didn&#8217;t really make sense with the nature of inputs and outputs. However after talking with Jordan, we decided it actually DID make sense to use it for filters. After all, filters get a request -> do something -> return a response.</p>
+
+<p>If it&#8217;s not immediately clear yet how this makes sense, I&#8217;ve got another example for you. Let&#8217;s take the case of needing to look something up externally to mutate a field. You COULD write a Logstash filter to do this ONE thing for you. Maybe you can make it generic enough to even submit a pull request.</p>
+
+<p>Or you could use a ZeroMQ filter:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>input { stdin { type =&gt; "stdin-type" } }
+</span><span class='line'>filter { zeromq { } }
+</span><span class='line'>output { stdout { debug =&gt; true } }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&#8217;s the code for the filter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;ffi-rzmq&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s2">&quot;json&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">context</span> <span class="o">=</span> <span class="no">ZMQ</span><span class="o">::</span><span class="no">Context</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="no">ZMQ</span><span class="o">::</span><span class="no">REP</span><span class="p">)</span>
+</span><span class='line'><span class="n">socket</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;tcp://*:2121&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;starting up&quot;</span>
+</span><span class='line'><span class="k">while</span> <span class="kp">true</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">socket</span><span class="o">.</span><span class="n">recv_string</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">modified_message</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Message received: </span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="c1"># Simulate using an external data source to </span>
+</span><span class='line'>  <span class="c1"># to something that you need</span>
+</span><span class='line'>  <span class="k">case</span> <span class="n">modified_message</span><span class="o">[</span><span class="s2">&quot;@source&quot;</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">when</span> <span class="s2">&quot;stdin://jvstratusmbp.lusis.org/&quot;</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Doing db lookup&quot;</span>
+</span><span class='line'>    <span class="nb">sleep</span> <span class="mi">10</span>
+</span><span class='line'>    <span class="n">modified_message</span><span class="o">[</span><span class="s2">&quot;@source&quot;</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;john&#39;s laptop&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Message responded: </span><span class="si">#{</span><span class="n">modified_message</span><span class="o">.</span><span class="n">to_json</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="n">socket</span><span class="o">.</span><span class="n">send_string</span><span class="p">(</span><span class="n">modified_message</span><span class="o">.</span><span class="n">to_json</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default, the filter will send the entire event over a ZeroMQ <code>REQ</code> socket to <code>tcp://localhost:2121</code>. It will then take the reply and send it up the chain to the Logstash output with the following results:</p>
+
+<p><a href="http://lusis.github.com/images/posts/zeromq-part2/zeromq-filter-event.png"><img src="http://lusis.github.com/images/posts/zeromq-part2/zeromq-filter-event.png" alt="zeromq-filter-event.png" /></a></p>
+
+<p>Alternately, you can send a single field to the filter and have it to work with:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">input</span> <span class="p">{</span> <span class="n">stdin</span> <span class="p">{</span> <span class="n">type</span> <span class="o">=&gt;</span> <span class="s2">&quot;stdin-test&quot;</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'><span class="n">filter</span> <span class="p">{</span> <span class="n">zeromq</span> <span class="p">{</span> <span class="n">field</span> <span class="o">=&gt;</span> <span class="s2">&quot;@message&quot;</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'><span class="n">output</span> <span class="p">{</span> <span class="n">stdout</span> <span class="p">{</span> <span class="n">debug</span> <span class="o">=&gt;</span> <span class="kp">true</span> <span class="p">}}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and the code:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;ffi-rzmq&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s2">&quot;json&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">context</span> <span class="o">=</span> <span class="no">ZMQ</span><span class="o">::</span><span class="no">Context</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">socket</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="no">ZMQ</span><span class="o">::</span><span class="no">REP</span><span class="p">)</span>
+</span><span class='line'><span class="n">socket</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;tcp://*:2121&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;starting up&quot;</span>
+</span><span class='line'><span class="k">while</span> <span class="kp">true</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">socket</span><span class="o">.</span><span class="n">recv_string</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Recieved message: </span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="n">modified_message</span> <span class="o">=</span> <span class="s2">&quot;this field was changed externally&quot;</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Modified message: </span><span class="si">#{</span><span class="n">modified_message</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="n">socket</span><span class="o">.</span><span class="n">send_string</span><span class="p">(</span><span class="n">modified_message</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and the result:</p>
+
+<p><a href="http://lusis.github.com/images/posts/zeromq-part2/zeromq-filter-field.png"><img src="http://lusis.github.com/images/posts/zeromq-part2/zeromq-filter-field.png" alt="zeromq-filter-field.png" /></a></p>
+
+<p>Many people have been asking for an <code>exec</code> filter for some time now. Dealing with that overhead is insane when coming from the JVM. By doing this type of work over ZeroMQ, there&#8217;s much less overhead AND a reliable conduit for making it happen.</p>
+
+<p>Here&#8217;s just a few of the use cases I could think of:</p>
+
+<ul>
+<li>Artifically throttling your flow. Just use a sleep and return the original event.</li>
+<li>Doing external lookups for replacing parts of the event</li>
+<li>Adding arbitrary tags to a message using external criteria based on the event.</li>
+<li>Moving underperforming filters out of logstash and into an external process that is more performant</li>
+<li>Reducing the need to modify configs in logstash for greater uptime.</li>
+</ul>
+
+
+<h1>Wrap up</h1>
+
+<p>All the ZeroMQ support is currently tagged experimental (hence the warnings you saw in my screenshots). It also exists in the form described only in master. If this interests you at all, please build from master and run some tests of your own. We would love the feedback and any bugs or tips you can provide are always valuable.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ZeroMQ and Logstash - Part 1]]></title>
