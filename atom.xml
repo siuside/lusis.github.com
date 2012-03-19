@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2012-03-07T01:54:28-05:00</updated>
+  <updated>2012-03-19T01:31:33-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,89 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Why you should stop fighting distro vendors]]></title>
+    <link href="http://lusis.github.com/blog/2012/03/16/why-you-should-stop-fighting-distro-vendors/"/>
+    <updated>2012-03-16T14:37:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2012/03/16/why-you-should-stop-fighting-distro-vendors</id>
+    <content type="html"><![CDATA[<p>Recently I saw a tweet from <a href="https://twitter.com/#!/kohsukekawa/status/180717301795008512">Kohsuke Kawaguchi</a> that really got me frustrated.</p>
+
+<!-- more -->
+
+
+<p>I&#8217;ve addressed this topic a bit before <a href="http://lusislog.blogspot.com/2010/09/distributions-and-dynamic-languages.html">here</a>. At the time it was addressing specifically dynamic languages. However the post that Kohsuke wrote (and the post that inspired it) have led me to a new line attitude.</p>
+
+<p><strong>Don&#8217;t bother trying to get your packages into upstream vendor distros</strong></p>
+
+<h1>Wait. What? Let&#8217;s step back a sec</h1>
+
+<p>Let me clarify something first. System packages are a good thing. The hassle has always been with BUILDING those packages. It was simply easier to build the software on the machine and install to <code>/usr/local/</code> than to try and express anything more than the most moderately simple application in RPM or DEB build scripts:</p>
+
+<ul>
+<li>If what you are packaging has dependencies not shipped with the OS, now you&#8217;ve got to package those</li>
+<li>If your dependency conflicts with a vendor-shipped version, you&#8217;re screwed.</li>
+<li>If your dependency is a language runtime, give up.</li>
+<li>If your dependency is a specific version of python, just go into another line of work.</li>
+<li>If it&#8217;s a distro LTS release, just don&#8217;t bother</li>
+</ul>
+
+
+<h1>Ahh but we can work around this!</h1>
+
+<p>Yes, you&#8217;re right. We now have tools like <a href="https://github.com/jordansissel/fpm">fpm</a> that take the pain out of it! Maven has had plugins that generate rpms and debs for you for a while now. Things are looking up! Let&#8217;s just use those tools.</p>
+
+<p>So now you think, I&#8217;ll just get these things submitted to Debian&#8230;.</p>
+
+<p><strong>KABLOCK</strong></p>
+
+<p>I could rant a bit about Debian&#8217;s packaging policy but it&#8217;s addressed in the posts above. So maybe the Fedora people are more flexible?</p>
+
+<p><img src="http://i.imgur.com/px5ug.png" alt="Imgur" /></p>
+
+<p><strong>WAT</strong></p>
+
+<p>So here we have the two major distros that won&#8217;t even consider your package unless you give the end-user the &#8220;freedom&#8221; to make your application unusable. Essentially you are told if you want your package to be included in upstream then you have to make sure they can swap out <code>libfunkytown.so.23</code> with <code>libfunkytown.so.1</code>.</p>
+
+<p>But maybe your application doesn&#8217;t work on that version. So maybe you think, I&#8217;ll just vendor ALL the things and shove it into <code>/opt</code> or <code>/usr/local</code>? Yeah that doesn&#8217;t fly either (for various reasons).</p>
+
+<p>The point is that you&#8217;ll probably never be able to get your package included upstream because you&#8217;ll never be able to jump through the hoops to do it.</p>
+
+<h1>So stop trying</h1>
+
+<p>I know, I know. It would be awesome if you could tell users to just <code>yum install kickass</code> or <code>apt-get install kickass</code> but it&#8217;s not worth it for several reasons as enumerated above.</p>
+
+<p>Distributions are not your friend. One could argue that its not thier job to be your friend. I would even agree with that argument. The distros have (or at least SHOULD have) an allegience to their user base. My argument is that position is directly opposed to your needs as a software provider.</p>
+
+<h2>Things you should not do</h2>
+
+<ul>
+<li>Waste your time trying to ensure that your software works on some busted as old version of libfunkytown that won&#8217;t get upgrade for 7 years.</li>
+<li>Waste your time breaking your application into 436 interdependent subpackages just to please upstream</li>
+<li>Ignore the prexisting dependency management ecosystem of your language of choice (especially if it works)</li>
+</ul>
+
+
+<h2>Things you should do</h2>
+
+<ul>
+<li>Use your language&#8217;s preexisting dependency management system to collect all your dependencies</li>
+<li>Rebar, bundle, virtualenv, mavenize, fatjar whatever ALL the dependencies</li>
+<li>Use FPM or some homegrown script to create a monolithic rpm or deb of your codebase that installs to <code>/opt/appname</code></li>
+<li>Make these packages available to your users on your download site</li>
+<li>Alternately, create a repo and repo config file they can use to stay up to date</li>
+</ul>
+
+
+<p>You will be happy. Your users will be happy. The distros can go lick themselves. We have reached something of a crossroads. As I argued in the previous post, the concept of a distribution is becoming somewhat irrelevant. Distros are more concerned about politics and making statements and broken concepts like software that doesn&#8217;t need upgrading for 7 years (or even 2 years) than providing a framework and ecosystem that encourages developers to target software at it.</p>
+
+<p>If someone takes up the noble cause of trying to get your software included upstream, I would go so far as to make it plainly clear on whatever communication you have that you simply cannot support an unofficial repackaging of your software. Be polite. These are still your potential userbase. Simply state that those were not created by you and that the official packages are here.</p>
+
+<h1>A case in point</h1>
+
+<p>What I&#8217;m suggesting you do is not unheard of and honestly is the most tenable long term path for your users. Look at projects like Vagrant, Chef and Puppet among others. All of these tools are &#8220;owning their availability&#8221; the right way and are arguably providing better end user experiences than getting included in upstream could provide. In fact the experience of official packaging is above and beyond trying to do it yourself. As it should be.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Graphs in operations]]></title>
@@ -3643,217 +3726,6 @@ attach and filter yourself.</li>
 <p>Part three in this series will discuss the technology stack under Noah
 and the reasoning behind it. A bit of that was touched on in this post.
 Part four is the discussion about long-term goals and roadmaps.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[On Noah - Part 1]]></title>
-    <link href="http://lusis.github.com/blog/2011/05/16/on-noah-part-1/"/>
-    <updated>2011-05-16T23:16:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2011/05/16/on-noah-part-1</id>
-    <content type="html"><![CDATA[<p><em>This is the first part in a series of posts going over Noah</em></p>
-
-<p>As you may have heard (from my own mouth no less), I&#8217;ve got a smallish
-side project I&#8217;ve been working on called
-<a href="https://github.com/lusis/Noah">Noah</a>.</p>
-
-<!--more-->
-
-
-<p>It&#8217;s a project I&#8217;ve been wanting to work on for a long time now and
-earlier this year I got off my ass and started hacking. The response has
-been nothing short of overwhelming. I&#8217;ve heard from so many people how
-they&#8217;re excited for it and nothing could drive me harder to work on it
-than that feedback. To everyone who doesn&#8217;t run away when I talk your
-ear off about it, thank you so much.</p>
-
-<p>Since I never really wrote an &#8220;official&#8221; post about it, I thought this
-would be a good opportunity to talk about what it is, what my ideas are
-and where I&#8217;d like to see it go in the future.</p>
-
-<h1>So why Noah?</h1>
-
-<p><em>fair warning. much of the following may be duplicates of information in
-the Noah wiki</em></p>
-
-<p>The inspiration for Noah came from a few places but the biggest
-inspiration is <a href="http://goo.gl/WGCxY">Apache Zookeeper</a>. Zookeeper is one
-of those things that by virtue of its design is a BUNCH of different
-things. It&#8217;s all about perspective. I&#8217;m going to (yet again) paste the
-description of Zookeeper straight from the project site:</p>
-
-<pre><code>ZooKeeper is a centralized service for maintaining configuration information, naming, providing distributed synchronization, and providing group services.
-</code></pre>
-
-<p>Now that might be a bit confusing at first. Which is it? Is it a
-configuration management system? A naming system? It&#8217;s all of them and,
-again, it&#8217;s all about perspective.</p>
-
-<p>Zookeeper, however, has a few problems for my standard use case.</p>
-
-<ul>
-<li>Limited client library support</li>
-<li>Requires persistent connections to the server for full benefit</li>
-</ul>
-
-
-<p>By the first, I mean that the only official language bindings are C and
-Java. There&#8217;s contributed Python support and Twitter maintains a Ruby
-library. However all of these bindings are &#8220;native&#8221; and must be
-compiled. There is also a command-line client that you can use for
-interacting as well - one in Java and two C flavors.</p>
-
-<p>The second is more of a showstopper. Zookeeper uses the client
-connection to the server as in-band signaling. This is how watches
-(discussed in a moment) are communicated to clients. Persistent
-connections are simply not always an option. I can&#8217;t deploy something to
-Heroku or AppEngine that requires that persistent connection. Even if I
-could, it would be cost-prohibitive and honestly wouldn&#8217;t make sense.</p>
-
-<p>Looking at the list of features I loved about ZK, I thought &#8220;How would I
-make that work in the disconnected world?&#8221;. By that I mean what would it
-take to implement any or all of the Zookeeper functionality as a service
-that other applications could use?</p>
-
-<p>From that thought process, I came up with Noah. The name is only a play
-on the concept of a zookeeper and holds no other real significance other
-than irritation at least two people named Noah when I talk about the
-project.</p>
-
-<p>So working through the feature list, I came up with a few things I
-<strong>REALLY</strong> wanted. I wanted Znodes, Watches and I wanted to do it all
-over HTTP so that I could have the broadest set of client support. JSON
-is really the defacto standard for web &#8220;messaging&#8221; at this point so
-that&#8217;s what I went with. Basically the goal was &#8220;If your language can
-make HTTP requests and parse JSON, you can write a Noah client&#8221;</p>
-
-<h1>Znodes and Noah primitives</h1>
-
-<p>Zookeeper has a shared hierarchical namespace similar to a UNIX
-filesystem. Points in the hierarchy are called <code>znodes</code>. Essentially
-these are arbitrary paths where you can store bits of data - up to 1MB
-in size. These znodes are unique absolute paths. For instance:</p>
-
-<pre><code>//systems/foo/bar/networks/kansas/router-1/router-2
-</code></pre>
-
-<p>Each fully qualified path is a unique znode. Znodes can be ephemeral or
-persistent. Zookeeper also has some primitives that can be applied to
-znodes such as &#8216;sequence`.</p>
-
-<p>When I originally started working on Noah, so that I could work with a
-model, I created some base primitives that would help me demonstrate an
-example of some of the use cases:</p>
-
-<ul>
-<li>Host</li>
-<li>Service</li>
-<li>Application</li>
-<li>Configuration</li>
-</ul>
-
-
-<p>These primitives were actual models in the Noah code base with a strict
-contract on them. As an example, Hosts must have a status and can have
-any number of services associated with them. Services MUST be tied
-explicity to a host. Applications can have Configurations (or not) and
-Configurations can belong to any number of Applications or not.
-Additionally, I had another &#8220;data type&#8221; that I was simply calling
-Ephemerals. This is similar to the Zookeeper znode model. Originally I
-intended for Ephemerals to be just that - ephemeral. But I&#8217;ve backed off
-that plan. In Noah, Ephemerals can be either persistent or truely
-ephemeral (not yet implemented).</p>
-
-<p>So now I had a data model to work with. A place to store information and
-flexibility to allow people to use the predefined primitives or the
-ephemerals for storing arbitrary bits of information.</p>
-
-<h1>Living the disconnected life</h1>
-
-<p>As I said, the model for my implementation was &#8220;disconnected&#8221;. When
-thinking about how to implement Watches in a disconnected model, the
-only thing that made sense to me was a callback system. Clients would
-register an interest on an object in the system and when that object
-changed, they would get notified by the method of their choosing.</p>
-
-<p>One thing about Watches in Zookeeper that annoys me is that they&#8217;re
-one-shot deals. If you register a watch on a znode, once that watch is
-triggered, you have to REREGISTER the watch. First off this creates, as
-documented by the ZK project, a window of opportunity where you could
-miss another change to that watch. Let&#8217;s assume you aren&#8217;t using a
-language where interacting with Zookeeper is a synchronous process:</p>
-
-<ul>
-<li>Connect to ZK</li>
-<li>Register watch on znode</li>
-<li>Wait</li>
-<li>Change happens</li>
-<li>Watch fires</li>
-<li>Process watch event</li>
-<li>Reregister watch on znode</li>
-</ul>
-
-
-<p>In between those last two steps, you risk missing activity on the znode.
-In the Noah world, watches are persistent. This makes sense for two
-reasons. The first is that the latency between a watch callback being
-fired and proccessed could be much higher than the persistent connection
-in ZK. The window of missed messages is simply much greater. We could
-easily be talking 100&#8217;s of milliseconds of latency just to get the
-message and more so to reregister the watch.</p>
-
-<p>Secondly, the registration of Watches in Noah is, by nature of Noah&#8217;s
-design and as a byproduct, disconnected from the consumer of those
-watches. This offers much greater flexibility in what watches can do.
-Let&#8217;s look at a few examples.</p>
-
-<p>First off, it&#8217;s important to understand how Noah handles callbacks. The
-message format of a callback in Noah is simply a JSON representation of
-the changed state of an object and some metadata about the action taken
-(i.e. delete, create, update). Watches can be registered on distinct
-objects, a given path (and thus all the children under that path) and
-further refined down to a given action. Out of the box, Noah ships with
-one callback handler - http. This means that when you register a watch
-on a path or object, you provide an http endpoint where Noah can post
-the aforementioned JSON message. What you do with it from there is up to
-you.</p>
-
-<p>By virtue of the above, the callback system is also designed to be
-&#8216;pluggable&#8217; for lack of a better word. While the out of the box
-experience is an http post, you could easily write a callback handler
-that posted the message to an AMQP exchange or wrote the information to
-disk as a flat file. The only requirement is that you represent the
-callback location as a single string. The string will be parsed as a url
-and broken down into tokens that determine which plugin to call.</p>
-
-<p>So this system allows for you to distribute watches to multiple systems
-with a single callback. Interestingly enough, this same watch callback
-system forms the basis of how Noah servers will share changes with each
-other in the future.</p>
-
-<h1>Wrap up - Part 1</h1>
-
-<p>So wrapping up what I&#8217;ve discussed, here are the key take aways:</p>
-
-<ul>
-<li>Noah is a &#8216;port&#8217; of specific Zookeeper functionality to a
-disconnected and asynchronous world</li>
-<li>Noah uses HTTP and JSON as the interface to the server</li>
-<li>Noah has both traditional ZK-style Ephemerals as well as opinionated
-Primitives</li>
-<li>Noah uses a pluggable callback system to approximate the Watch
-functionality in Zookeeper</li>
-<li>Clients can be written in any language that can speak HTTP and
-understand JSON (yes, even a shell script)</li>
-</ul>
-
-
-<h1>Part 2 and beyond</h1>
-
-<p>In part two of this series we&#8217;ll discuss some of the additions to Noah
-that aren&#8217;t a part of Zookeeper such as Tags and Links. Part 3 will
-cover the underlying technology which I am intentionally not discussing
-at this point. Part 4 will be a roadmap of my future plans for Noah.</p>
 ]]></content>
   </entry>
   
