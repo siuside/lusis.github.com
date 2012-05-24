@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Configuration Drift and Next-gen CM - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="It always starts with a tweet. However it normally doesn&#8217;t start with a tweet from Cliff Moon.Of all the problems to fix in chef or puppet, t...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/blog/2012/05/24/configuration-drift-and-next-gen-cm/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Configuration Drift and Next-gen CM</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-05-24T01:10:00-04:00" pubdate  data-updated="true" >May 24<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>It always starts with a tweet. However it normally doesn&#8217;t start with a tweet from <a href="https://twitter.com/moonpolysoft">Cliff Moon</a>.</p>
+
+<blockquote><p>Of all the problems to fix in chef or puppet, the diffusion and drift of state that occurs in idiomatic usage seems highest priority.</p></blockquote>
+
+
+
+
+<!-- more -->
+
+
+<p>Now for sure what spawned this comment was something unrelated but it got me thinking. Oddly enough <a href="https://twitter.com/dysinger">Tim Dysinger</a> was either poking around in my head or just had the same idea:</p>
+
+<blockquote><p>Devops tools should move towards an active assertion of state (instead of passive/polling). This the next-level.</p></blockquote>
+
+
+<p>Tim and I hooked up via Skype and bantered about this stuff back and forth. We were on the same wavelength. That&#8217;s pretty cool because Tim is pretty fucking smart (and he was able to explain Maybe Monads to me over dinner).</p>
+
+<h1>My thoughts on the subject</h1>
+
+<p>What follows is something of a brain dump on what both Cliff and Tim had to say. However I&#8217;m going to be scoping in the context of security because</p>
+
+<ul>
+<li><a href="https://twitter.com/beaker">Beaker</a> gave a <a href="http://www.rationalsurvivability.com/presentations/SMCES-Gluecon2012.pdf">presentation at Gluecon today</a> (<em>warning! bigass pdf</em>)</li>
+<li>I work with <a href="https://twitter.com/mortman">David Mortman</a> who is one of the folks I say &#8220;gets it&#8221; w.r.t configuration management and security</li>
+<li>Security was the FIRST context that came to mind</li>
+<li>I was lucky enough to be involved with <a href="https://twitter.com/markburgess_osl">Mark Burgess</a>, <a href="https://twitter.com/cjeffblaine">Jeff Blaine</a> and <a href="https://twitter.com/filler">Nick Silkey</a> about a very similar topic where Mark said</li>
+</ul>
+
+
+<blockquote><p>Good point. I wonder why folks often tear down a perfectly good machine and rebuild it instead of fixing what is broken.</p></blockquote>
+
+
+<p>What I&#8217;m going to say isn&#8217;t new to anyone and smarter folks than I are already working on this (I&#8217;m sure) but this is the Internet. I get to babble too!</p>
+
+<h2>On Drift</h2>
+
+<p>So what exactly <em>IS</em> the problem here? What&#8217;s configuration drift and how the hell does it even happen?</p>
+
+<p>The problem here is that, as Tim said, configuration management systems aren&#8217;t assertive enough. Look at how a typical CM client run behaves:</p>
+
+<ul>
+<li>Hey guys, cm is running</li>
+<li>Oh look, this file doesn&#8217;t look like it&#8217;s supposed to</li>
+<li>/me changes file</li>
+<li>File looks good</li>
+<li>Hey guys, cm isn&#8217;t running anymore</li>
+</ul>
+
+
+<p>That last line is part of the problem. I&#8217;ve talked about my Noah project to largish groups of folks (both Puppet and Chef users) a few times now and the answer to the question of &#8220;Do you leave puppet (or chef) running in the background?&#8221; has always been &#8220;No&#8221;. There are plenty of valid reasons for this but this is what I would consider the primary cause of drift at the node level. Now maybe this isn&#8217;t EXACTLY what Cliff was talking about. I&#8217;m not quite on his level so I sometimes misinterpret but when I heard &#8216;drift of state that occurs in idiomatic usage&#8217;, this was what came to mind.</p>
+
+<p>The thing is that these tools are designed to verify state of a resource at the point they run</p>
+
+<ul>
+<li>Does this file look right? No! Fix it.</li>
+<li>Is this service running? Yes! Cool.</li>
+</ul>
+
+
+<p>And then they go away. They don&#8217;t manage the state of those resources until they next inspect them. The act of managing those resources is not in response to those resources changing but in response to a user ASKING them to be checked. I would even wager that when a user runs <code>chef-client</code> the first thing on her mind isn&#8217;t &#8220;I sure hope chef fixes my sudoers file&#8221; but &#8220;I need chef to update my Nagios configs again&#8221;. The incorrect state of the sudoers file isn&#8217;t really even thought about. That&#8217;s because we shove that stuff into some &#8220;base&#8221; role or group. Something that&#8217;s applied to all nodes in our infrastructure. We don&#8217;t think of a node as being a &#8220;managed sudoers&#8221; node. We think of it as a &#8220;web server&#8221;.</p>
+
+<p>Additionally, because we aren&#8217;t in a constant state of verification about these resources, we may have drift that occurs across nodes of different types whilst they share a common base block. Sure I just ran my CM tool to update my Nagios server but what about my web servers? I don&#8217;t want to run it there because I <strong>KNOW</strong> nothing has changed in the web server role.</p>
+
+<p>To me, this is the &#8220;idiomatic&#8221; usage Cliff spoke about. The tools encourage us to think in terms of composition and reusable patterns but the final function of the node is the way we classify it. Mind you, the answer here is really to run your CM tool in the background but that still doesn&#8217;t take us to the next level. We&#8217;re still exposed to drift even if it&#8217;s for a short period of time. What&#8217;s worse is these tools operate by default with a splay value. This actually makes the drift exposure even worse as you can&#8217;t even guarantee that it will run at the interval specified.</p>
+
+<p>I first heard about CFEngine when Mark talked about &#8220;Anomoly Detection&#8221; at LISA &#8216;04 in Atlanta. My mind was blown but I could never get past the idea that I couldn&#8217;t dictate state immediately. The idea (partially a naive understanding on my part) that systems would not become X when I said &#8220;Become X&#8221; bothered me. The idea that systems have a personality that needs to be respected bothered me.</p>
+
+<p>The point here is that when I want a system to look like X, I want it to look like X right then. I want it to STAY looking like X and I don&#8217;t want it to try and account for localized variations. I might feel differently if I were managing a network of servers that were essentially treated like desktops.</p>
+
+<h2>But does drift really matter?</h2>
+
+<p>Yes and no. If you&#8217;re living the cloud life, probably not. The reason is that resources tend to have a short shelf life. If I&#8217;m autoscaling via &#8216;the cloud&#8217; to meet capacity demands then it&#8217;s highly likely that those systems won&#8217;t be around long enough to drift that far. In the land of configuration management, drift is largely time driven. The longer systems stay around, the greater the chance for drift.</p>
+
+<p>However if you&#8217;re running physical hardware that you don&#8217;t tear down regularly, then drift is likely to become more pronounced. Interestingly enough there&#8217;s a psychological factor at play here. Systems become like pets instead of cattle. We become attached to them. &#8220;Oh that&#8217;s just db1 acting up again. You know it&#8217;s like the oldest one in the fleet&#8221;. People start forgetting that the system will fail (<em>Everything fails. Embrace failure!</em>). The start storing one-off scripts on there. Maybe it&#8217;s core kit and while it&#8217;s managed with Puppet, it&#8217;s not frequently touched.</p>
+
+<p>Here&#8217;s another interesting point. As time progresses and modules, cookbooks, recipes, bundles, promises whatever are more infrequently touched, the confidence in them goes down. I&#8217;ve frequently found myself saying &#8220;Shit&#8230;I wrote that code like&#8230;I don&#8217;t even fucking remember when. I have no idea what would happen if I ran it now.&#8221;. This uncertainty eventually leads to me MANUALLY COMPARING the current state of resources that would be modified with the versions that would be generated. I&#8217;ve even copied comment blocks wholesale from one-off changes I&#8217;ve made into ERB templates just to ensure that a service restart didn&#8217;t happen.</p>
+
+<p>How fucked is that? Pretty fucked, Alex.</p>
+
+<p>This partially leads into a quote from <a href="https://twitter.com/allspaw">John Allspaw</a> on the dangers of OVER automation:</p>
+
+<blockquote><p>Some people, when confronted with a problem, think &#8220;I&#8217;ll use more automation!&#8221; Now they have Three Mile Island problems.</p></blockquote>
+
+
+<p>and is even discussed in <a href="https://twitter.com/mcdonnps">Patrick McDonnell&#8217;s</a> talk at <a href="http://www.youtube.com/watch?v=nSnJCJiZDDU">ChefConf</a>.</p>
+
+<p>I don&#8217;t agree with John 100% on his take but I can totally understand his perspective. Maybe I&#8217;m just more optimistic around exactly how far we can automate.</p>
+
+<h2>So where does security fit into this?</h2>
+
+<p>Here&#8217;s yet another quote from Tim Dysinger on this topic:</p>
+
+<blockquote><p>If a super-user logs in and changes the sshd_config, you could have the service change it back before he even exited vi.  they&#8217;d then find a warning email in their in-box.  if they tried it again, even on another box, it could send a warning to the team lead and lock the user out.</p></blockquote>
+
+
+<p>Mind you security is only one aspect of this thought process. The thing that makes it applicable is that the security domain has already tackled this problem a bit. The problem is it still requires human response. We have tools like Tripwire, Samhain and OSSEC that do active inspection of state but the response is left up to a human. Additionally they&#8217;re cumbersome to configure (even with CM). What&#8217;s missing is the &#8216;glue&#8217; between the two problem spaces.</p>
+
+<p>In my head I envisioned something much like Tim described. In fact I even thought about a way that existing tools could be leveraged. It&#8217;s not pretty but it&#8217;s possible. The idea here, if it wasn&#8217;t already blindingly obvious, is that the response to an event that the security tool recognizes should be to run configuration management to correct the errant state.</p>
+
+<p>There are a few problems with this approach that should also be immediately obvious:</p>
+
+<ul>
+<li>CM is currently an all or nothing approach. Something like the idea behind &#8216;partial run lists&#8217; in Chef could sort of address this</li>
+<li>If we start down the path of partial CM, we now have to take into account dependencies.</li>
+<li>We have no way to express this. We lack primitives with which to build this logic</li>
+<li>Security is still somewhat in the dark ages. Many security decisions are still binary in nature</li>
+</ul>
+
+
+<p>What&#8217;s also missing in this picture is something to identify patterns. So now we&#8217;re bolting three tools together - the tripwire component, our CM tool and some sort of CEP. But again, even if we had this wondertool nirvana, how do we express it?</p>
+
+<p>Let me be clear that I firmly believe that configuration management is absolutely a part of the security story. I stand by my assertion that consistent and repeatable configuration of a system from base OS to in-service is the foundation. Being able to express in code what state a system should have means that you never have to think &#8220;Did I forget to disable that apache module?&#8221; or &#8220;Did I make sure and disable root logins over SSH&#8221;. Where we find gaps in this is how we assert the negative without going insane.</p>
+
+<p>Denied unless explicitly allowed is the mantra I followed for years when I was responsible for security. Ask me some time WHY I got out of security and why I don&#8217;t have ulcers anymore.</p>
+
+<p>The questions I find myself asking are:</p>
+
+<ul>
+<li>If we use our CM system as the source of truth, can we sanely infer policy based on our CM codebase?</li>
+<li>If we use the network as the source of truth, can we sanely infer policy based on our neighbors? Should we even trust our neighbors?</li>
+<li>Do we even have the language to express what we mean and is it flexible and primitive enough to be used in composition? You can only go so far with &#8220;trusted&#8221;, &#8220;untrusted&#8221;,&#8221;mauve&#8221; and &#8220;taupe&#8221;.</li>
+</ul>
+
+
+<h1>Wrap up</h1>
+
+<p>As I said, the original discussion was around configuration drift. I realize I went off on a tangent about security but that was intended as an example. I do believe that folks are working on this idea of &#8220;active assertion of state&#8221; as Tim puts it. I just wanted to brain dump my take on it. I don&#8217;t know that it can be solved with even the most flexible of CM tools. I do feel like it&#8217;s going to have to be a new generation of tool that takes these ideas into account and includes them in a ground-up design.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-05-24T01:10:00-04:00" pubdate  data-updated="true" >May 24<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2012/05/24/configuration-drift-and-next-gen-cm/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2012/05/24/configuration-drift-and-next-gen-cm/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2012/03/20/it-sucks-to-be-right/" title="Previous Post: It sucks to be right">&laquo; It sucks to be right</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/05/24/configuration-drift-and-next-gen-cm/">Configuration Drift and Next-gen CM</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/20/it-sucks-to-be-right/">It sucks to be right</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/16/why-you-should-stop-fighting-distro-vendors/">Why you should stop fighting distro vendors</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/06/graphs-in-operations/">Graphs in operations</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/02/08/zeromq-and-logstash-part-2/">ZeroMQ and Logstash - Part 2</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lusis.github.com/blog/2012/05/24/configuration-drift-and-next-gen-cm/';
+        var disqus_url = 'http://lusis.github.com/blog/2012/05/24/configuration-drift-and-next-gen-cm/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

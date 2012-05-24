@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2012-03-20T10:07:09-04:00</updated>
+  <updated>2012-05-24T02:58:39-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,141 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Configuration Drift and Next-gen CM]]></title>
+    <link href="http://lusis.github.com/blog/2012/05/24/configuration-drift-and-next-gen-cm/"/>
+    <updated>2012-05-24T01:10:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2012/05/24/configuration-drift-and-next-gen-cm</id>
+    <content type="html"><![CDATA[<p>It always starts with a tweet. However it normally doesn&#8217;t start with a tweet from <a href="https://twitter.com/moonpolysoft">Cliff Moon</a>.</p>
+
+<blockquote><p>Of all the problems to fix in chef or puppet, the diffusion and drift of state that occurs in idiomatic usage seems highest priority.</p></blockquote>
+
+
+
+
+<!-- more -->
+
+
+<p>Now for sure what spawned this comment was something unrelated but it got me thinking. Oddly enough <a href="https://twitter.com/dysinger">Tim Dysinger</a> was either poking around in my head or just had the same idea:</p>
+
+<blockquote><p>Devops tools should move towards an active assertion of state (instead of passive/polling). This the next-level.</p></blockquote>
+
+
+<p>Tim and I hooked up via Skype and bantered about this stuff back and forth. We were on the same wavelength. That&#8217;s pretty cool because Tim is pretty fucking smart (and he was able to explain Maybe Monads to me over dinner).</p>
+
+<h1>My thoughts on the subject</h1>
+
+<p>What follows is something of a brain dump on what both Cliff and Tim had to say. However I&#8217;m going to be scoping in the context of security because</p>
+
+<ul>
+<li><a href="https://twitter.com/beaker">Beaker</a> gave a <a href="http://www.rationalsurvivability.com/presentations/SMCES-Gluecon2012.pdf">presentation at Gluecon today</a> (<em>warning! bigass pdf</em>)</li>
+<li>I work with <a href="https://twitter.com/mortman">David Mortman</a> who is one of the folks I say &#8220;gets it&#8221; w.r.t configuration management and security</li>
+<li>Security was the FIRST context that came to mind</li>
+<li>I was lucky enough to be involved with <a href="https://twitter.com/markburgess_osl">Mark Burgess</a>, <a href="https://twitter.com/cjeffblaine">Jeff Blaine</a> and <a href="https://twitter.com/filler">Nick Silkey</a> about a very similar topic where Mark said</li>
+</ul>
+
+
+<blockquote><p>Good point. I wonder why folks often tear down a perfectly good machine and rebuild it instead of fixing what is broken.</p></blockquote>
+
+
+<p>What I&#8217;m going to say isn&#8217;t new to anyone and smarter folks than I are already working on this (I&#8217;m sure) but this is the Internet. I get to babble too!</p>
+
+<h2>On Drift</h2>
+
+<p>So what exactly <em>IS</em> the problem here? What&#8217;s configuration drift and how the hell does it even happen?</p>
+
+<p>The problem here is that, as Tim said, configuration management systems aren&#8217;t assertive enough. Look at how a typical CM client run behaves:</p>
+
+<ul>
+<li>Hey guys, cm is running</li>
+<li>Oh look, this file doesn&#8217;t look like it&#8217;s supposed to</li>
+<li>/me changes file</li>
+<li>File looks good</li>
+<li>Hey guys, cm isn&#8217;t running anymore</li>
+</ul>
+
+
+<p>That last line is part of the problem. I&#8217;ve talked about my Noah project to largish groups of folks (both Puppet and Chef users) a few times now and the answer to the question of &#8220;Do you leave puppet (or chef) running in the background?&#8221; has always been &#8220;No&#8221;. There are plenty of valid reasons for this but this is what I would consider the primary cause of drift at the node level. Now maybe this isn&#8217;t EXACTLY what Cliff was talking about. I&#8217;m not quite on his level so I sometimes misinterpret but when I heard &#8216;drift of state that occurs in idiomatic usage&#8217;, this was what came to mind.</p>
+
+<p>The thing is that these tools are designed to verify state of a resource at the point they run</p>
+
+<ul>
+<li>Does this file look right? No! Fix it.</li>
+<li>Is this service running? Yes! Cool.</li>
+</ul>
+
+
+<p>And then they go away. They don&#8217;t manage the state of those resources until they next inspect them. The act of managing those resources is not in response to those resources changing but in response to a user ASKING them to be checked. I would even wager that when a user runs <code>chef-client</code> the first thing on her mind isn&#8217;t &#8220;I sure hope chef fixes my sudoers file&#8221; but &#8220;I need chef to update my Nagios configs again&#8221;. The incorrect state of the sudoers file isn&#8217;t really even thought about. That&#8217;s because we shove that stuff into some &#8220;base&#8221; role or group. Something that&#8217;s applied to all nodes in our infrastructure. We don&#8217;t think of a node as being a &#8220;managed sudoers&#8221; node. We think of it as a &#8220;web server&#8221;.</p>
+
+<p>Additionally, because we aren&#8217;t in a constant state of verification about these resources, we may have drift that occurs across nodes of different types whilst they share a common base block. Sure I just ran my CM tool to update my Nagios server but what about my web servers? I don&#8217;t want to run it there because I <strong>KNOW</strong> nothing has changed in the web server role.</p>
+
+<p>To me, this is the &#8220;idiomatic&#8221; usage Cliff spoke about. The tools encourage us to think in terms of composition and reusable patterns but the final function of the node is the way we classify it. Mind you, the answer here is really to run your CM tool in the background but that still doesn&#8217;t take us to the next level. We&#8217;re still exposed to drift even if it&#8217;s for a short period of time. What&#8217;s worse is these tools operate by default with a splay value. This actually makes the drift exposure even worse as you can&#8217;t even guarantee that it will run at the interval specified.</p>
+
+<p>I first heard about CFEngine when Mark talked about &#8220;Anomoly Detection&#8221; at LISA &#8216;04 in Atlanta. My mind was blown but I could never get past the idea that I couldn&#8217;t dictate state immediately. The idea (partially a naive understanding on my part) that systems would not become X when I said &#8220;Become X&#8221; bothered me. The idea that systems have a personality that needs to be respected bothered me.</p>
+
+<p>The point here is that when I want a system to look like X, I want it to look like X right then. I want it to STAY looking like X and I don&#8217;t want it to try and account for localized variations. I might feel differently if I were managing a network of servers that were essentially treated like desktops.</p>
+
+<h2>But does drift really matter?</h2>
+
+<p>Yes and no. If you&#8217;re living the cloud life, probably not. The reason is that resources tend to have a short shelf life. If I&#8217;m autoscaling via &#8216;the cloud&#8217; to meet capacity demands then it&#8217;s highly likely that those systems won&#8217;t be around long enough to drift that far. In the land of configuration management, drift is largely time driven. The longer systems stay around, the greater the chance for drift.</p>
+
+<p>However if you&#8217;re running physical hardware that you don&#8217;t tear down regularly, then drift is likely to become more pronounced. Interestingly enough there&#8217;s a psychological factor at play here. Systems become like pets instead of cattle. We become attached to them. &#8220;Oh that&#8217;s just db1 acting up again. You know it&#8217;s like the oldest one in the fleet&#8221;. People start forgetting that the system will fail (<em>Everything fails. Embrace failure!</em>). The start storing one-off scripts on there. Maybe it&#8217;s core kit and while it&#8217;s managed with Puppet, it&#8217;s not frequently touched.</p>
+
+<p>Here&#8217;s another interesting point. As time progresses and modules, cookbooks, recipes, bundles, promises whatever are more infrequently touched, the confidence in them goes down. I&#8217;ve frequently found myself saying &#8220;Shit&#8230;I wrote that code like&#8230;I don&#8217;t even fucking remember when. I have no idea what would happen if I ran it now.&#8221;. This uncertainty eventually leads to me MANUALLY COMPARING the current state of resources that would be modified with the versions that would be generated. I&#8217;ve even copied comment blocks wholesale from one-off changes I&#8217;ve made into ERB templates just to ensure that a service restart didn&#8217;t happen.</p>
+
+<p>How fucked is that? Pretty fucked, Alex.</p>
+
+<p>This partially leads into a quote from <a href="https://twitter.com/allspaw">John Allspaw</a> on the dangers of OVER automation:</p>
+
+<blockquote><p>Some people, when confronted with a problem, think &#8220;I&#8217;ll use more automation!&#8221; Now they have Three Mile Island problems.</p></blockquote>
+
+
+<p>and is even discussed in <a href="https://twitter.com/mcdonnps">Patrick McDonnell&#8217;s</a> talk at <a href="http://www.youtube.com/watch?v=nSnJCJiZDDU">ChefConf</a>.</p>
+
+<p>I don&#8217;t agree with John 100% on his take but I can totally understand his perspective. Maybe I&#8217;m just more optimistic around exactly how far we can automate.</p>
+
+<h2>So where does security fit into this?</h2>
+
+<p>Here&#8217;s yet another quote from Tim Dysinger on this topic:</p>
+
+<blockquote><p>If a super-user logs in and changes the sshd_config, you could have the service change it back before he even exited vi.  they&#8217;d then find a warning email in their in-box.  if they tried it again, even on another box, it could send a warning to the team lead and lock the user out.</p></blockquote>
+
+
+<p>Mind you security is only one aspect of this thought process. The thing that makes it applicable is that the security domain has already tackled this problem a bit. The problem is it still requires human response. We have tools like Tripwire, Samhain and OSSEC that do active inspection of state but the response is left up to a human. Additionally they&#8217;re cumbersome to configure (even with CM). What&#8217;s missing is the &#8216;glue&#8217; between the two problem spaces.</p>
+
+<p>In my head I envisioned something much like Tim described. In fact I even thought about a way that existing tools could be leveraged. It&#8217;s not pretty but it&#8217;s possible. The idea here, if it wasn&#8217;t already blindingly obvious, is that the response to an event that the security tool recognizes should be to run configuration management to correct the errant state.</p>
+
+<p>There are a few problems with this approach that should also be immediately obvious:</p>
+
+<ul>
+<li>CM is currently an all or nothing approach. Something like the idea behind &#8216;partial run lists&#8217; in Chef could sort of address this</li>
+<li>If we start down the path of partial CM, we now have to take into account dependencies.</li>
+<li>We have no way to express this. We lack primitives with which to build this logic</li>
+<li>Security is still somewhat in the dark ages. Many security decisions are still binary in nature</li>
+</ul>
+
+
+<p>What&#8217;s also missing in this picture is something to identify patterns. So now we&#8217;re bolting three tools together - the tripwire component, our CM tool and some sort of CEP. But again, even if we had this wondertool nirvana, how do we express it?</p>
+
+<p>Let me be clear that I firmly believe that configuration management is absolutely a part of the security story. I stand by my assertion that consistent and repeatable configuration of a system from base OS to in-service is the foundation. Being able to express in code what state a system should have means that you never have to think &#8220;Did I forget to disable that apache module?&#8221; or &#8220;Did I make sure and disable root logins over SSH&#8221;. Where we find gaps in this is how we assert the negative without going insane.</p>
+
+<p>Denied unless explicitly allowed is the mantra I followed for years when I was responsible for security. Ask me some time WHY I got out of security and why I don&#8217;t have ulcers anymore.</p>
+
+<p>The questions I find myself asking are:</p>
+
+<ul>
+<li>If we use our CM system as the source of truth, can we sanely infer policy based on our CM codebase?</li>
+<li>If we use the network as the source of truth, can we sanely infer policy based on our neighbors? Should we even trust our neighbors?</li>
+<li>Do we even have the language to express what we mean and is it flexible and primitive enough to be used in composition? You can only go so far with &#8220;trusted&#8221;, &#8220;untrusted&#8221;,&#8221;mauve&#8221; and &#8220;taupe&#8221;.</li>
+</ul>
+
+
+<h1>Wrap up</h1>
+
+<p>As I said, the original discussion was around configuration drift. I realize I went off on a tangent about security but that was intended as an example. I do believe that folks are working on this idea of &#8220;active assertion of state&#8221; as Tim puts it. I just wanted to brain dump my take on it. I don&#8217;t know that it can be solved with even the most flexible of CM tools. I do feel like it&#8217;s going to have to be a new generation of tool that takes these ideas into account and includes them in a ground-up design.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[It sucks to be right]]></title>
@@ -3426,217 +3561,6 @@ Noah sometime</em></p>
 <p>If you made it this far, I want to say thank you to anyone who read any
 or all of the parts. Please don&#8217;t hesitate to contact me with any
 questions about the project.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[On Noah - Part 3]]></title>
-    <link href="http://lusis.github.com/blog/2011/05/18/on-noah-part-3/"/>
-    <updated>2011-05-18T18:14:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2011/05/18/on-noah-part-3</id>
-    <content type="html"><![CDATA[<p><em>This is the third part in a series on Noah. <a href="http://goo.gl/l3Mgt">Part 1</a> and <a href="http://goo.gl/Nj2TN">Part 2</a> are available as well</em></p>
-
-<p>In Part 1 and 2 of this series I covered background on Zookeeper and
-discussed the similarities and differences between it and Noah. This
-post is discussing the technology stack under Noah and the reasoning for
-it.</p>
-
-<h1>A little back story</h1>
-
-<p>I&#8217;ve told a few people this but my original intention was to use Noah as
-a way to learn Erlang. However this did not work out. I needed to get a
-proof of concept out much quicker than the ramp up time it would take to
-<a href="http://learnyousomeerlang.com/">learn me some Erlang</a>. I had this
-grandiose idea to slap mnesia, riak_core and webmachine into a tasty
-ball of Zookeeper clonage.</p>
-
-<!--more-->
-
-
-<p>I am not a developer by trade. I don&#8217;t have any formal education in
-computer science (or anything for that matter). The reason I mention
-this is to say that programming is hard work for me. This has two side
-effects:</p>
-
-<ul>
-<li>It takes me considerably longer than a working developer to code
-what&#8217;s in my head</li>
-<li>I can only really learn a new language when I have an itch to
-scratch. A real world problem to model.</li>
-</ul>
-
-
-<p>So in the interest of time, I fell back to a language I&#8217;m most
-comfortable with right now, Ruby.</p>
-
-<h1>Sinatra and Ruby</h1>
-
-<p>Noah isn&#8217;t so much a web application as it is this &#8216;api thing&#8217;. There&#8217;s
-no proper front end and honestly, you guys don&#8217;t want to see what my
-design deficient mind would create. I like to joke that in the world of
-MVC, I stick to the M and C. Sure, APIs have views but not in the &#8220;click
-the pretty button sense&#8221;.</p>
-
-<p>I had been doing quite a bit of glue code at the office using
-<a href="http://www.sinatrarb.com">Sinatra</a> (and EventMachine) so I went with
-that. Sinatra is, if you use sheer number of clones in other languages
-as an example, a success for writing API-only applications. I also
-figured that if I wanted to slap something proper on the front, I could
-easily integrate it with <a href="http://www.padrinorb.com">Padrino</a>.</p>
-
-<p>But now I had to address the data storage issue.</p>
-
-<h1>Redis</h1>
-
-<p>Previously, as a way to learn Python at another company, I wrote an
-application called <a href="https://github.com/lusis/vogeler">Vogeler</a>. That
-application had a lot of moving parts - CouchDB for storage and RabbitMQ
-for messaging.</p>
-
-<p>I knew from dealing with CouchDB on CentOS5 that I wasn&#8217;t going to use
-THAT again. Much of it would have been overkill for Noah anyway. I
-realized I really needed nothing more than a key/value store. That
-really left me with either Riak or Redis. I love Riak but it wasn&#8217;t the
-right fit in this case. I needed something with a smaller dependency
-footprint. Mind you Riak is VERY easy to install but managing Erlang
-applications is still a bit edgy for some folks. I needed something
-simpler.</p>
-
-<p>I also realized early on that I needed some sort of basic queuing
-functionality. That really sealed Redis for me. Not only did it have
-zero external dependencies, but it also met the needs for queuing. I
-could use <code>lists</code> as dedicated direct queues and I could use the
-built-in <code>pubsub</code> as a broadcast mechanism. Redis also has a fast atomic
-counter that could be used to approximate the ZK sequence primitive
-should I want to do that.</p>
-
-<p>Additionally, Redis has master/slave (not my first choice) support for
-limited scaling as well as redundancy. One of my original design goals
-was that Noah behave like a traditional web application. This is a model
-ops folks understand very well at this point.</p>
-
-<h1>EventMachine</h1>
-
-<p>When you think asynchronous in the Ruby world, there&#8217;s really only one
-tool that comes to mind, EventMachine. Noah is designed for asynchronous
-networks and is itself asynchronous in its design. The callback agent
-itself uses EventMachine to process watches. As I said previously, this
-is simply using an EM friendly Redis driver that can do <code>PSUBSCRIBE</code>
-(using em-hiredis) and send watch messages (using em-http-request since
-we only support HTTP by default).</p>
-
-<h1>Ohm</h1>
-
-<p>Finally I slapped <a href="http://ohm.keyvalue.org">Ohm</a> on top as the
-abstraction layer for Redis access. Ohm, if you haven&#8217;t used it, is
-simply one of if not the best Ruby library for working with Redis. It&#8217;s
-easily extensible, very transparent and frankly, it just gets the hell
-out of your way. A good example of this is converting some result to a
-hash. By default, Ohm only returns the id of the record. Nothing more.
-It also makes it VERY easy to drop past the abstraction and operate on
-Redis directly. It even provides helpers to get the keys it uses to
-query Redis. A good example of this is in the Linking and Tagging code.
-The following is a method in the Tag model:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'> <span class="k">def</span> <span class="nf">members</span><span class="o">=</span><span class="p">(</span><span class="n">member</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">key</span><span class="o">[</span><span class="ss">:members</span><span class="o">].</span><span class="n">sadd</span><span class="p">(</span><span class="n">member</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">member</span><span class="o">.</span><span class="n">tag!</span> <span class="nb">self</span><span class="o">.</span><span class="n">name</span> <span class="k">unless</span> <span class="n">member</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">member?</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Because Links and Tags are a one-to-many across multiple models, I drop
-down to Redis and use <code>sadd</code> to add the object to a Redis set of objects
-sharing the same tag.</p>
-
-<p>It also has a very handy feature which is how the core of Watches are
-done. You can define hooks at any phase of Redis interaction - before
-and after saves, creates, updates and deletes. the entire Watch system
-is nothing more than calling these post hooks to format the state of the
-object as JSON, add metadata and send the message using <code>PUBLISH</code>
-messages to Redis with the Noah namespace as the channel.</p>
-
-<h1>Distribution vectors</h1>
-
-<p>I&#8217;ve used this phrase with a few people. Essentially, I want as many
-people as possible to be able to use the Noah server component. I&#8217;ve
-kept the Ruby dependencies to a minimum and I&#8217;ve made sure that every
-single one works on MRI 1.8.7 up to 1.9.2 as well as JRuby. I already
-distribute the most current release as a war that can be deployed to a
-container or run standalone. I want the lowest barrier to entry to get
-the broadest install base possible. When a new PaaS offering comes out,
-I pester the hell out of anyone I can find associated with it so I can
-get deploy instructions written for Noah. So far you can run it on
-Heroku (using the various hosted Redis providers), CloudFoundry and
-dotcloud.</p>
-
-<p>I&#8217;m a bit more lax on the callback daemon. Because it can be written in
-any language that can talk to the Redis pubsub system and because it has
-&#8220;stricter&#8221; performance needs, I&#8217;m willing to make the requirements for
-the &#8220;official&#8221; daemon more stringent. It currently ONLY works on MRI
-(mainly due to the em-hiredis requirement).</p>
-
-<h2>Doing things differently</h2>
-
-<p>Some people have asked me why I didn&#8217;t use technology A or technology B.
-I think I addressed that mostly above but I&#8217;ll tackle a couple of key
-ones.</p>
-
-<p>ZeroMQ</p>
-
-<p>The main reason for not using 0mq was that I wasn&#8217;t really aware of it.
-Were I to start over and still be using Ruby, I&#8217;d probably give it a
-good strong look. The would still be the question of the storage
-component though. There&#8217;s still a possible place for it that I&#8217;ll
-address in part four.</p>
-
-<p>NATS</p>
-
-<p>This was something I simply had no idea about until I started poking
-around the CloudFoundry code base. I can almost guarantee that NATS will
-be a part of Noah in the future. Expect much more information about that
-in part four.</p>
-
-<p>MongoDB</p>
-
-<p>You have got to be kidding me, right? I don&#8217;t trust my data (or anyone
-else&#8217;s for that matter) to a product that doesn&#8217;t understand what
-durability means when we&#8217;re talking about databases.</p>
-
-<p>Insert favorite data store here</p>
-
-<p>As I said, Redis was the best way to get multiple required functionality
-into a single product. Why does a data storage engine have a pubsub
-messaging subsystem built in? I don&#8217;t know off the top of my head but
-I&#8217;ll take it.</p>
-
-<h2>Wrap up - Part 3</h2>
-
-<p>So again, because I evidently like recaps, here&#8217;s the take away:</p>
-
-<ul>
-<li>The key components in Noah are Redis and Sinatra</li>
-<li>Noah is written in Ruby because of time constraints in learning a
-new language</li>
-<li>Noah strives for the server component to have the broadest set of
-distribution vectors as possible</li>
-<li>Ruby dependencies are kept to a minimum to ensure the previous point</li>
-<li>The lightest possible abstractions (Ohm) are used.</li>
-<li>Stricter requirements exist for non-server components because of
-flexibility in alternates</li>
-<li>I really should learn me some erlang</li>
-<li>I&#8217;m not a fan of MongoDB</li>
-</ul>
-
-
-<p>If you haven&#8217;t guessed, I&#8217;m doing one part a night in this series.
-Tomorrow is part four which will cover the future plans for Noah. I&#8217;m
-also planning on a bonus part five to cover things that didn&#8217;t really
-fit into the first four.</p>
 ]]></content>
   </entry>
   
