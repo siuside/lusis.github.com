@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2012-06-05T17:21:37-04:00</updated>
+  <updated>2012-06-15T11:46:55-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,91 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Why EBS was a bad idea]]></title>
+    <link href="http://lusis.github.com/blog/2012/06/15/why-ebs-was-a-bad-idea/"/>
+    <updated>2012-06-15T09:41:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2012/06/15/why-ebs-was-a-bad-idea</id>
+    <content type="html"><![CDATA[<p>Since I just tweeted about this and I know people would want an explaination, I figured I&#8217;d short circuit 140 character hell and explain why I think EBS was the worst thing Amazon ever did to AWS.</p>
+
+<!-- more -->
+
+
+<p><em>First time I&#8217;ve had to do this but: the following is my personal opinion and in no way reflects any policy or position of my employer</em></p>
+
+<h1>A journey through time</h1>
+
+<p>I remember when EC2 was first unleashed. At the time I was working at Roundbox Media (later Roundbox Global - because we had an office in Costa Rica!). I was asked frequently if we could possibly host some of our production stuff there.</p>
+
+<p>It was pretty much a no go from the start:</p>
+
+<ul>
+<li>No persistent IPs</li>
+<li>No persistent storage</li>
+</ul>
+
+
+<p>Sure we could bake a bunch of stuff into the AMI root but the ephemeral storage wasn&#8217;t big enough to hold a fraction of our data. Still, we leveraged it as much as possible. We ran quite a bit of low risk stuff on it - test installs of our platform and demo sites for customers.</p>
+
+<p>After I left RBX in Feb of 2008, I didn&#8217;t get an opportunity to work with AWS for a year or so and by then quite a bit had changed. If Amazon does one thing really well, it&#8217;s iterating quickly on its service offerings.</p>
+
+<h1>So why is EBS a bad thing?</h1>
+
+<p>For Amazon, EBS is NOT a bad thing. It was probably one of the smartest business moves they made (along with Elastic IPs). They could now claim that EC2 was JUST like running your own kit - you have a SAN! you have static IPs!</p>
+
+<p>The problem is it&#8217;s not.</p>
+
+<h1>The nature of block storage</h1>
+
+<p>Anyone who&#8217;s dealt with any sort of networked filesystem knows the pains it can cause with certain application profiles. Traditional databases are notorious for expecting actual local storage and real block devices. It amazes me the number of people who put up with the pain of running a database in something like vmware using virtual disks hosted on an NFS device.</p>
+
+<p>The point is the block devices have specific semantics and presumptions.</p>
+
+<p>With EBS you&#8217;re promised a tasty block device that your OS can address as if it were local disk. Only it&#8217;s not&#8230;.</p>
+
+<h2>Latency</h2>
+
+<p>Let&#8217;s get the biggest elephant out of the way. EBS is a block device to the OS but under the hood it&#8217;s using the network. It may or may not be shared with non-block device traffic but it&#8217;s still subject to network latencies. God I hope that EBS at least gets its own port on the host side&#8230;</p>
+
+<h2>Shared</h2>
+
+<p>There&#8217;s a whole lot of sharing going on here to:</p>
+
+<ul>
+<li>local bandwidth from the physical server where your instance is to a given EBS subsystem (array, CEC, whatever)</li>
+<li>aggregate bandwidth from all pysical servers talking to a given EBS subsystem</li>
+<li>disk I/O itself on a given EBS subsystem</li>
+</ul>
+
+
+<p>I don&#8217;t know how the connection from server to EBS is done. I would hope at least there are bonded ports or multiple uplinks/multipathing going on. I would REALLY hope that network I/O and Disk I/O are not on the same channel. Regardless, you&#8217;re still sharing whatever the size of that connection is with everyone else on the physical server your instance is on if they&#8217;re using EBS as well.</p>
+
+<p>And the physical EBS array where your volume is? Depending on the size of your EBS volume, you&#8217;re dealing with network I/O on that unit&#8217;s connection from an unknown number of other customers. And to top it off, you&#8217;re not just sharing network bandwidth, you&#8217;re sharing disk bandwidth as well. There are still spindles under there folks. Sticking an API in front of it doesn&#8217;t change the fact that there is spinning rust under the covers.</p>
+
+<p>Above ALL of that, you&#8217;ve got competing workloads - sequential vs random read.</p>
+
+<p>Sure, just stick your root OS volume on that. That&#8217;s a great idea.</p>
+
+<h1>Mixed messages</h1>
+
+<p>To me, however, the biggest problem with EBS is not the latency. It&#8217;s not the shared resources. It&#8217;s not even taking something that is fundamentally locality oriented and trying to shoehorn it into something distributed.</p>
+
+<p>It&#8217;s the fact that it sends the wrong damn message. I&#8217;ve said this before, I&#8217;ll say it again and I&#8217;ll stand by it.</p>
+
+<p><strong>Unless you are willing, able or have designed your applications to have any single part of your infrastructure - connectivity, disk, node, whatever - ripped from under you with no warning whatsoever, you should not be running it on Amazon EC2.</strong></p>
+
+<p>By providing EBS, Amazon sends the message that &#8220;you can treat this just like your own datacenter&#8221;. Just use EBS and you can treat it just like a SAN. Look, we have snapshots!</p>
+
+<p>Hell, I get pissy when folks refer to instances as &#8220;boxes&#8221; and talk about them like they&#8217;re something they physically own. Stop trying to map physical datacenter analogies to AWS. It won&#8217;t work and you&#8217;ll be disappointed.</p>
+
+<p>You want to know the real kicker? You should be designing like this ANYWAY. Yes, you have much greater control over failure points when you run everything yourself. You have much greater control over resource sharing and I/O profiles. That doesn&#8217;t remove the need to design for failure. How far you take it is up to you (and realistically your budget) but when you&#8217;re running on AWS, you need to be much more attentive to it.</p>
+
+<h1>For the record</h1>
+
+<p>I still think AWS and public clouds are awesome. I really do. I think private clouds are just as awesome. The flexibility they offer is almost unmatched but that flexibility comes at a price - performance hits, multiple layers of abstraction and other things.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Monitoring sucking just a little bit less]]></title>
@@ -3249,151 +3334,6 @@ at whatever time works best for you guys</p>
 
 <p>Thanks again to everyone who attended. If you couldn’t be there, I hope
 you can make the next one.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why Monitoring Sucks]]></title>
-    <link href="http://lusis.github.com/blog/2011/06/05/why-monitoring-sucks/"/>
-    <updated>2011-06-05T19:30:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2011/06/05/why-monitoring-sucks</id>
-    <content type="html"><![CDATA[<p><em>(and what we&#8217;re doing about it)</em></p>
-
-<p>About two weeks ago someone made a tweet. At this point, I don&#8217;t
-remember who said it but the gist was that &#8220;monitoring sucks&#8221;. I
-happened to be knee-deep in frustrating bullshit around that topic and
-was currently evaluating the same effing tools I&#8217;d evaluated at every
-other company over the past 10 years or so. So I did what seems to be
-S.O.P for me these days. I started something.</p>
-
-<!--more-->
-
-
-<h1>But does monitoring REALLY suck?</h1>
-
-<p>Heck no! Monitoring is AWESOME. Metrics are AWESOME. I love it. Here&#8217;s
-what I don&#8217;t love: - Having my hands tied with the model of host and
-service bindings. - Having to set up &#8220;fake&#8221; hosts just to group
-arbitrary metrics together - Having to either collect metrics twice -
-once for alerting and another for trending - Only being able to see my
-metrics in 5 minute intervals - Having to chose between shitty interface
-but great monitoring or shitty monitoring but great interface - Dealing
-with a monitoring system that thinks <strong>IT</strong> is the system of truth for
-my environment - Perl (I kid&#8230;sort of) - Not actually having any real
-choices</p>
-
-<p>Yes, yes I know:</p>
-
-<blockquote><p>You can just combine Nagios + collectd + graphite + cacti +
-pnp4nagios and you have everything you need!</p></blockquote>
-
-<p>Seriously? Kiss my ass. I&#8217;m a huge fan of the Unix pipeline philosophy
-but, christ, have you ever heard the phrase &#8220;antipattern&#8221;?</p>
-
-<h1>So what the hell are you going to do about it?</h1>
-
-<p>I&#8217;m going to let smart people be smart and do smart things.</p>
-
-<p>Step one was getting everyone who had similar complaints together on
-IRC. That went pretty damn well. Step two was creating a github repo.
-Seriously. Step two should ALWAYS be &#8220;create a github repo&#8221;. Step three?
-Hell if I know.</p>
-
-<p>Here&#8217;s what I do know. There are plenty of frustrated system
-administrators, developers, engineers, &#8220;devops&#8221; and everything under the
-sun who don&#8217;t want much. All they really want is for shit to work. When
-shit breaks, they want to be notified. They want pretty graphs. They
-want to see business metrics along side operational ones. They want to
-have a 52-inch monitor in the office that everyone can look at and say:</p>
-
-<blockquote><p>See that red dot? That&#8217;s bad. Here&#8217;s what was going on when we got
-that red dot. Let&#8217;s fix that shit and go get beers</p></blockquote>
-
-<h1>About the &#8220;repo&#8221;</h1>
-
-<p>So the plan I have in place for the repository is this. We don&#8217;t really
-need code. What we need is an easy way for people to contribute ideas.
-The plan I have in place for this is partially underway. There&#8217;s now a
-<em>monitoringsucks</em> organization on Github. Pretty much anyone who is
-willing to contribute can get added to the team. The idea is that, as
-smart people think of smart shit, we can create new repository under
-some unifying idea and put blog posts, submodules, reviews,
-ideas..whatever into that repository so people have an easy place to go
-get information. I&#8217;d like to assign someone per repository to be the
-owner. We&#8217;re all busy but this is something we&#8217;re all highly interested
-in. If we spread the work out and allow easy contribution, then we can
-get some real content up there.</p>
-
-<p>I also want to keep the repos as light and cacheable as possible. The
-organization is under the github &#8220;free&#8221; plan right now and I&#8217;d like to
-keep it that way.</p>
-
-<h2>Blog Posts Repo</h2>
-
-<p>This repo serves as a place to collect general information about blog
-posts people come across. Think of it as hyper-local delicious in a
-DVCS.</p>
-
-<p>Currently, by virtue of the first commit, Michael Conigliaro is the
-&#8220;owner&#8221;. You can follow him on twitter and github as @mconigliaro</p>
-
-<h2>IRC Logs Repo</h2>
-
-<p>This repo is a log of any &#8220;scheduled&#8221; irc sessions. Personally, I don&#8217;t
-think we need a distinct #monitoringsucks channel but people want to
-keep it around. The logs in this repo are not full logs. Just those from
-when someone says &#8220;Hey smart people. Let&#8217;s think of smart shit at this
-date/time&#8221; on twitter.</p>
-
-<p>Currently <strong>I</strong> appear to be the owner of this repo. I would love for
-someone who can actually make the logs look good to take this over.</p>
-
-<h2>Tools Repo</h2>
-
-<p>This repo is really more of a &#8220;curation&#8221; repo. The plan is that each
-directory is the name of some tool with two things it in:</p>
-
-<ul>
-<li>A README.md as a review of the tool</li>
-<li>A submodule link to the tool&#8217;s repo (where appropriate)</li>
-</ul>
-
-
-<p>Again, I think I&#8217;m running point on this one. Please note that the
-submodule links APPEAR to have some sort of UI issue on github. Every
-submodule appears to point to Dan DeLeo&#8217;s &#8216;critical&#8217; project.</p>
-
-<h2>Metrics Catalog Repo</h2>
-
-<p>This is our latest member and it already has an official manager! Jason
-Dixon (@obfuscurity on github/twitter - jdixon on irc) suggested it so
-he get&#8217;s to run it ;) The idea here is that this will serves as a set of
-best practices around what metrics you might want to collect and why.
-I&#8217;m leaving the organization up to Jason but I suggested a
-per-app/service/protocol directory.</p>
-
-<h1>Wrap Up</h1>
-
-<p>So that&#8217;s where we are. Where it goes, I have no idea. I just want to
-help where ever I can. If you have any ideas, hit me up on
-twitter/irc/github/email and let me know. It might help to know that if
-you suggest something, you&#8217;ll probably be made the person reponsible for
-it ;)</p>
-
-<p><strong>Update!</strong></p>
-
-<p>It was our good friend Sean Porter (@portertech on twitter), that we
-have to thank for all of this ;)</p>
-
-<p>  <a href="https://picasaweb.google.com/lh/photo/Zi1k9F_7lBKjcN8dtJlXXQ?feat=embedwebsite"><img src="https://lh5.googleusercontent.com/-O6mNvCvCPyU/TexPV1P9YaI/AAAAAAAAAWk/7ZQ8BkXUyn8/s144/monitoring-sucks.png" alt="image" /></a>
-  From <a href="https://picasaweb.google.com/lusisjv/PublicPhotos?feat=embedwebsite">Public Photos</a></p>
-
-<p><strong>Update (again)</strong></p>
-
-<p>It was kindly pointed out that I never actually included a link to the
-repositories. Here they are:</p>
-
-<p><a href="https://github.com/monitoringsucks">https://github.com/monitoringsucks</a></p>
 ]]></content>
   </entry>
   
