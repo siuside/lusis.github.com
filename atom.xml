@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2012-07-09T23:14:13-04:00</updated>
+  <updated>2012-12-18T00:12:01-05:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,338 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How we vagrant]]></title>
+    <link href="http://lusis.github.com/blog/2012/12/17/how-we-vagrant/"/>
+    <updated>2012-12-17T22:10:00-05:00</updated>
+    <id>http://lusis.github.com/blog/2012/12/17/how-we-vagrant</id>
+    <content type="html"><![CDATA[<p>People may or may not have noticed but I&#8217;ve been largely offline for the past 4 weeks or so. This is because I&#8217;ve been in the middle of a pretty heavy redesign of a few key parts of our application stack. This also required me to learn Java so I&#8217;ve been doubly slammed.</p>
+
+<p>As part of that redesign, I worked on what we lovingly refer to internally as the &#8220;solo installer&#8221;. I gave a bit of background on this in a post to the Chef mailing list at one point but I&#8217;ll go over it again as part of this post.</p>
+
+<!-- more -->
+
+
+<h1>Beginnings</h1>
+
+<p>To understand why this is something of a departure for us, it&#8217;s worth understanding from whence we came. enStratus, like most hosted solutions, has experienced largely organic growth. One of the nice things about a SaaS product is that you have the freedom to experiment to some degree. You might be in the middle of a MySQL to Riak migration and still need two data stores for the time being. You might be in the process of changing how some background process works so you&#8217;ve got an older designed system running along side the newer system which is only doing a subset of the work.</p>
+
+<p>With a hosted platform these kinds of things are hidden from the end-user to some degree. They don&#8217;t know what&#8217;s going on behind the scenes and they really don&#8217;t care as long as you&#8217;re doing X, Y and Z that you&#8217;re being paid to do.</p>
+
+<p>Now for those of you running/developing/managing some sort of SaaS/Hosted solution I want you to take a journey with me. Imagine that tomorrow someone walked into your office and said:</p>
+
+<blockquote><p>We need to take our production environment and make it so that a customer can run it on-premise. Oh and it has to be able to run entirely isolated and can&#8217;t always talk back to any external service.</p></blockquote>
+
+
+<p>That&#8217;s pretty much the place enStratus found itself. enStratus is a cloud management platform. Not all clouds are public. Maybe someone wants to use your service but has regulatory needs that prevent them from using it as is. Maybe it needs to run entirely isolated from the rest of the world. There are valid reasons for all of these despite my general attitude towards security theater in the enterprise.</p>
+
+<p>Now you&#8217;ve got an interesting laundry list in front of you:</p>
+
+<ul>
+<li>How do you teach someone to manage this organic &#8220;thing&#8221; you&#8217;ve built?</li>
+<li>How do you take not one application but an entire company and its stack and shove it in a box?</li>
+<li>Do you wrap up all the external components (monitoring, file servers, access control) and deal with those?</li>
+</ul>
+
+
+<p>We aren&#8217;t the first company to do this and we won&#8217;t be the last. Take a look at Github. They offer a private version of Github. But we&#8217;re not just talking about one part of Github - e.g. Gist. We&#8217;re talking about the entire stack the company runs to provide Github as we know it.</p>
+
+<p>Unless you design with this in mind, you can&#8217;t really begin to understand how difficult of a task this can be. As I understand it, Github finally went the appliance route and offer prefab vms with some setup glue. Please correct me if I&#8217;m wrong here.</p>
+
+<h1>Early iterations</h1>
+
+<p>Obviously you can see that this was/is a daunting task. Original versions of our install process were based around a collection of shell scripts. Because of certain details of the stack (such as encryption keys for our key management system), we had to maintain state between each component of the stack when it was installed. Currently there are roughly 7 core components/services that make up enStratus:</p>
+
+<ul>
+<li>The console</li>
+<li>The api endpoint</li>
+<li>The key management subsystem</li>
+<li>The provisioning subsystem</li>
+<li>The directory integration service</li>
+<li>The &#8220;worker&#8221; system</li>
+<li>The &#8220;monitor&#8221; system</li>
+</ul>
+
+
+<p>and those are just the enStratus components. You also need RabbitMQ, MySQL and Riak (as we&#8217;re currently transitioning from MySQL to Riak). All of these things largely talk to each other over some web service or via RabbitMQ. With one or two exceptions, they can all be loadbalanced in an active/active type of configuration and scaled horizontally simply by adding an additional &#8220;whatever&#8221; node.</p>
+
+<p>So the original installation process was a set of shell scripts that persisted some state and this &#8220;state&#8221; file had to be copied between systems. Yes, we could use some sort of external configuration store but that&#8217;s another component that we would have to install just to do the installation.</p>
+
+<h1>Phase two</h1>
+
+<p>One of my coworkers, <a href="https://twitter.com/zomgreg">Greg Moselle</a> was sort of &#8220;sysadmin number one&#8221; at enStratus. This was in addition to his duties as managing all customer installs. So he did what most of us would do and brute forced a workable solution with the original shell scripts. As enStratus started to offer Chef and Puppet support in the product, Greg gets this wild hair up his ass and thinks:</p>
+
+<blockquote><p>I wonder if I can rewrite these shell scripts into something a bit more cross-platform and idempotent using chef-solo.</p></blockquote>
+
+
+<p>You might be thinking the same thing I originally did that this was largely a bad idea. In my mind we had a workable solution for the interim in the existing shell scripts that had the install of enStratus down to a day or so. Pragmatism right? It&#8217;s also worth noting that this was how he wanted to learn Chef&#8230;</p>
+
+<p>So off he goes and does what I recommend any new Puppet or Chef user does - exec resources all over the fucking place. Wrap your shell scripts in <code>exec</code>. Hardcode all the fucking things.</p>
+
+<p>Once he did this, then I started working with him on some basic attributes to make them a bit more flexible. Before too long we had a stack of roles matching different components and we had moved everything from <code>cookbook_file</code> to <code>remote_file</code>. It was still a mess of execs but it worked.</p>
+
+<p>But we still had this &#8220;state&#8221; we had to maintain between runs. This is not going away anytime soon. In production we store this state in attributes and use chef-server. We didn&#8217;t have that luxury here.</p>
+
+<p>Then <a href="https://twitter.com/jimsander">Jim Sander</a> drops in and writes a small setup script that maintains some of that state for us. Basically a wrapper around raw <code>chef-solo</code>. Side note, if you ever need someone to drop some shell scripting knowledge on your ass, Jim&#8217;s the man to see. Ask him about his Tivoli days to really piss him off.</p>
+
+<p>At this point, I start working on cleaning up the recipes as a sort of tutorial for folks. I&#8217;d pick a particular recipe and refactor it to all native resources and make it data driven. I&#8217;d commit these in small chunks so folks could easily see what the differences were easily - stuff like &#8220;instead of execing to call rpm, we&#8217;ll use the yum provider&#8221;.</p>
+
+<p>At this point we&#8217;ve got something pretty far evolved from where we were. Now that we&#8217;ve got this workable chef-solo repository, I decide to hack out a quick Vagrantfile. The problem was it wasn&#8217;t entirely idempotent and we still had some manual steps that had to be dealt with. In addition to finishing up the recipes and ended up rewriting large chunks of the setup script. Now that I had something largely repeatable and localized, we suddenly had a Vagrant setup that folks could use for development. It wasn&#8217;t fully automated but it worked. We also still had this shared state thing.</p>
+
+<p>So I set out to refactor the setup script a bit more. What&#8217;s important to keep in mind is that the primary use-case for this chef-solo repository wasn&#8217;t for Vagrant. This is our &#8220;installer&#8221;. The interesting part to me is that the improvements to how we do on-premise installs are coming as a direct result of making this work better with Vagrant. There&#8217;s a lot of wrapper work tied up in the setup script that wouldn&#8217;t need to be done if we used a base box that had more stuff baked in. However not baking stuff in actually gives us a more real-world scenario for installation.</p>
+
+<p>Additionally we needed to be able to somehow pass user-specific configuration settings into the <code>vagrant up</code> process and get those into <code>chef-solo</code> by way of the setup wrapper. We have things like license keys, hostnames and my personal hated favorite - database credentials - that need to be handled in a way that we can make it so a developer can just type <code>vagrant up</code> and be running. If I have to require someone to edit a json file or anything else, the whole thing will fall flat on its face.</p>
+
+<p>So any time we needed something like that, we added support to the setup wrapper and then used environment variables to pass that information in to vagrant.</p>
+
+<h1>So how do we vagrant?</h1>
+
+<p>We leverage environment variables pretty heavily in our Vagrantfile. If it&#8217;s something that someone might need to tune for whatever reason, it&#8217;s an environment variable that triggers an option to our setup script.</p>
+
+<h2>Current list of tunables</h2>
+
+<p>This is just a subset of the tunables we control via environment variables. The majority of these map directly to options for the setup script:</p>
+
+<ul>
+<li><code>ES_DLPASS</code> and <code>ES_LICENSE</code>: the basic set of credentials needed to fetch our assets and your personal license key.</li>
+<li><code>ES_MEM</code>: this is the result of some of our front end developers having less memory than others.</li>
+<li><code>ES_CACHE</code>: We have an office in New Zealand and bandwidth there is &#8220;challenging&#8221;. This allows us to cache as much as possible between calls to <code>vagrant up</code>. This not only triggers caching of system packages downloaded but also triggers the <code>prefetch</code> option in our setup script that predownloads all the assets. These assets are all stored in the <code>cache</code> directory of the repository which is not coincidently the value of <code>file_cache_path</code> in chef-solo. Remember that we may not always have external network access during installation so we offer a way to warm the <code>cache</code> directory with as many assets as possible.</li>
+<li><code>ES_BOX</code>: let&#8217;s you specify an alternate base box to use. This is how we test the installer on different distros.</li>
+<li><code>ES_DEVDIR</code>: shares an additional directory from the host to the vagrant image. This is how development is done (at least for me). I map this to the root of all of my git repository checkouts.</li>
+<li><code>ES_VAGRANT_NW</code>: Allows you to configure bridged networking in addition to the host-only network we use.</li>
+<li><code>ES_PROFILE</code>: This directly maps to an option in our setup script for persisting state between runs.</li>
+</ul>
+
+
+<p>There are other options that are specific to the enStratus product as well but you get the idea.</p>
+
+<h2>The setup script</h2>
+
+<p>I can&#8217;t post the full thing here but I can give you a general idea of how it works and some of the options it supports. This is a &#8220;sanitized&#8221; truncated version of the help output:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Usage: setup.sh [-h] [-e] [-f] -p &lt;download password&gt; -l &lt;license key&gt; [-s savename] [-c &lt;console hostname&gt;] [-n &lt;number of nodes&gt;] [-m &lt;mapping string&gt;] [-a &lt;optional sourceCidr string&gt;]
+</span><span class='line'>-------------------------------------------------------------------------
+</span><span class='line'>-p: The password for downloading enStratus
+</span><span class='line'>-l: The license key for enStratus
+</span><span class='line'>
+</span><span class='line'>For most single node installations, specify the download password and license key.
+</span><span class='line'>
+</span><span class='line'>optional arguments
+</span><span class='line'>------------------
+</span><span class='line'>-h: This text
+</span><span class='line'>-e: extended help
+</span><span class='line'>-f: fetch-only mode. Downloads and caches *MOST* assets. Requires download password and *WILL* install chef
+</span><span class='line'>-c: Alternate hostname to use for the console. [e.g. cloud.mycompany.com] (default: fqdn of console node)
+</span><span class='line'>-a: Alternate string to use for the sourceCidr entry. You know if you need this.
+</span><span class='line'>-s: A name to identify this installation
+</span><span class='line'>-n: Number of nodes in installation [1,2,4] (default: 1)
+</span><span class='line'>-m: Mapping string [e.g. frontend:192.168.1.1,backend:backend.mydomain.com]
+</span><span class='line'>
+</span><span class='line'>About savename:
+</span><span class='line'>---------------
+</span><span class='line'>Savename is a way to persist settings between runs of enStratus.
+</span><span class='line'>If you specify a save name, a directory will be created under local_settings
+</span><span class='line'>will be created. It will contain a YAML file with your settings as well 4 JSON files.
+</span><span class='line'>
+</span><span class='line'>The YAML file is the source of truth for the named installation. The JSON files MAY
+</span><span class='line'>be recreated if the contents of the YAML file change. They exist to migrate between systems.
+</span><span class='line'>If a save file is found, no other arguments are honored. If you need to change the 
+</span><span class='line'>download password or license key, please update the YAML file itself
+</span><span class='line'>
+</span><span class='line'>If you lose this YAML file you will not be able to recover this enStratus installation.
+</span><span class='line'>You should save it somewhere secure and optionally version it.</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Persisting settings</h3>
+
+<p>One of the &#8220;gotchas&#8221; we have is how do we basically build a node JSON file for chef-solo to use with any information we need to persist. Since we don&#8217;t know the state of all the systems involved when we go in, we have to &#8220;punt&#8221; on a few things. What we end up doing is something we call the <code>savename</code>. If you use this option, the settings you define will be persisted to a directory that git ignores called <code>local_settings</code>. This directory will contain directories named after the above <code>savename</code> parameter. The setup script (written for now in bash) will create a yaml file (easy to do in bash with HEREDOC as opposed to JSON) and also a copy of the generated encryption keys in a plain text file for the customer to store.</p>
+
+<p>The only thing we can count on being on the system up front is the Chef omnibus install (since that&#8217;s a requirement). Instead of complicating things with ruby at this point (and chicken/egg issues since the setup script actually installs chef omnibus), we use the <code>erubis</code> binary that gets installed with omnibus to pass the yaml to to a JSON erb template. That generated JSON is the node json with attribute overrides. We actually support multi-node installation in the setup script if you provide a mapping of where certain components are running when calling setup. If you rerun setup using an existing <code>savename</code> parameter, the yaml file is updated (only certain values) and then regenerate the JSON file.</p>
+
+<h1>The upshot</h1>
+
+<p>The best part of all of this is that we can now say the same process is used when installing enStratus locally in Vagrant, in our dev, staging and production environments (though production uses chef-server) as well as what we install on the customer&#8217;s site. We version this repository around static points in our release cycle. We branch for a new release and create tags at given points in the branch based on either a patch release for enStratus itself in that release OR a patch to the installer itself.</p>
+
+<p>It&#8217;s not all unicorns pooping rainbows. The process is much more complicated than it needs to be but it&#8217;s almost a world of difference from where it was when I started and it was entirely a team effort. This setup allowed us to do full testing to switch entirely off the SunJDK (and the need to manually download the JCE during customer installs) onto OpenJDK. We were able to migrate from Tomcat to Jetty and refactor our build process using this method. I was able to do this work without affecting anyone else. All I had to do when we were ready for full testing was tell everyone to switch branches, run <code>vagrant up</code> and test away.</p>
+
+<h1>Special thanks</h1>
+
+<p>I want to give a serious shout-out to Mitchell Hashimoto and John Bender for the work they did with Vagrant. Last year I said that no two software products impacted my career more than ElasticSearch and ZeroMQ. This year, without a doubt, Vagrant is at the top of that list.</p>
+
+<h1>Addendum</h1>
+
+<p>What follows is the sanitized version of our <code>Vagrantfile</code>. If anyone has any suggestions, I&#8217;m all ears:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Vagrant</span><span class="o">::</span><span class="no">Config</span><span class="o">.</span><span class="n">run</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_BOX&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_BOX&#39;</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;es-dev&quot;</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box_url</span> <span class="o">=</span> <span class="s2">&quot;https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_VAGRANT_NW&#39;</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&quot;bridged&quot;</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:bridged</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="c1"># If you change this address, the conditional logic</span>
+</span><span class='line'>    <span class="c1"># in console.rb will break</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:hostonly</span><span class="p">,</span> <span class="s2">&quot;172.16.129.19&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># These entries allow you to run code locally and talk to a</span>
+</span><span class='line'>  <span class="c1"># &quot;working set&quot; of data services</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">15000</span>   <span class="c1"># api</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">3302</span><span class="p">,</span> <span class="mi">3302</span>     <span class="c1"># dispatcher</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">2013</span><span class="p">,</span> <span class="mi">2013</span>     <span class="c1"># km</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">5672</span><span class="p">,</span> <span class="mi">5672</span>     <span class="c1"># RabbitMQ (autostarts)</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">8098</span><span class="p">,</span> <span class="mi">8098</span>     <span class="c1"># Riak HTTP (autostarts)</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">8097</span><span class="p">,</span> <span class="mi">8097</span>     <span class="c1"># Riak protobuf (autostarts)</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">3306</span><span class="p">,</span> <span class="mi">3306</span>     <span class="c1"># MySQL (autostarts)</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">55672</span><span class="p">,</span> <span class="mi">55672</span>   <span class="c1"># RabbitMQ management interface</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_MEM&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">customize</span> <span class="o">[</span><span class="s2">&quot;modifyvm&quot;</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="s2">&quot;--memory&quot;</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_MEM&#39;</span><span class="o">]]</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">customize</span>  <span class="o">[</span><span class="s2">&quot;modifyvm&quot;</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="s2">&quot;--memory&quot;</span><span class="p">,</span> <span class="mi">8192</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_DEVDIR&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">share_folder</span> <span class="s2">&quot;es-dev-data&quot;</span><span class="p">,</span> <span class="s2">&quot;/es_dev_data&quot;</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_DEVDIR&#39;</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_CACHE&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Shared cache enabled&quot;</span>
+</span><span class='line'>    <span class="no">FileUtils</span><span class="o">.</span><span class="n">mkdir_p</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;cache&quot;</span><span class="p">,</span><span class="s2">&quot;apt&quot;</span><span class="p">,</span><span class="s2">&quot;partial&quot;</span><span class="p">))</span> <span class="k">unless</span> <span class="no">Dir</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;cache&quot;</span><span class="p">,</span><span class="s2">&quot;apt&quot;</span><span class="p">,</span> <span class="s2">&quot;partial&quot;</span><span class="p">))</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">share_folder</span><span class="p">(</span><span class="s2">&quot;apt&quot;</span><span class="p">,</span> <span class="s2">&quot;/var/cache/apt/archives&quot;</span><span class="p">,</span> <span class="s2">&quot;cache/apt&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="ss">:shell</span> <span class="k">do</span> <span class="o">|</span><span class="n">shell</span><span class="o">|</span>
+</span><span class='line'>    <span class="no">ES_LICENSE</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_LICENSE&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="no">ES_DLPASS</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_DLPASS&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="no">ES_PROFILE</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_PROFILE&#39;</span><span class="o">]</span> <span class="o">||</span> <span class="s2">&quot;vagrant-</span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">to_i</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="no">ES_LICENSE</span><span class="o">.</span><span class="n">nil?</span> <span class="ow">or</span> <span class="no">ES_DLPASS</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;You must set the environment variables: ES_LICENSE and ES_DLPASS!&quot;</span>
+</span><span class='line'>      <span class="nb">exit</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="no">ES_CLOUD</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_CLOUD&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="no">ES_CIDR</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_CIDR&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="no">ES_DEBUG</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_DEBUG&#39;</span><span class="o">]</span> <span class="o">||</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="n">setup_opts</span> <span class="o">=</span> <span class="s2">&quot;-l </span><span class="si">#{</span><span class="no">ES_LICENSE</span><span class="si">}</span><span class="s2"> -p </span><span class="si">#{</span><span class="no">ES_DLPASS</span><span class="si">}</span><span class="s2"> -s </span><span class="si">#{</span><span class="no">ES_PROFILE</span><span class="si">}</span><span class="s2"> &quot;</span>
+</span><span class='line'>    <span class="n">setup_opts</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;-c </span><span class="si">#{</span><span class="no">ES_CLOUD</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="k">if</span> <span class="no">ES_CLOUD</span>
+</span><span class='line'>    <span class="n">setup_opts</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;-a </span><span class="si">#{</span><span class="no">ES_CIDR</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="k">if</span> <span class="no">ES_CIDR</span>
+</span><span class='line'>    <span class="no">ES_DEBUG</span> <span class="p">?</span> <span class="n">chef_opts</span><span class="o">=</span><span class="s2">&quot;-l debug -L local_settings/</span><span class="si">#{</span><span class="no">ES_PROFILE</span><span class="si">}</span><span class="s2">/chef-run.log&quot;</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>    <span class="n">shell</span><span class="o">.</span><span class="n">inline</span> <span class="o">=</span> <span class="s2">&quot;cd /vagrant; ./setup.sh </span><span class="si">#{</span><span class="n">setup_opts</span><span class="si">}</span><span class="s2">; chef-solo -j local_settings/</span><span class="si">#{</span><span class="no">ES_PROFILE</span><span class="si">}</span><span class="s2">/single_node.json -c solo.rb </span><span class="si">#{</span><span class="n">chef_opts</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_POSTRUN&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="ss">:shell</span> <span class="k">do</span> <span class="o">|</span><span class="n">shell</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">shell</span><span class="o">.</span><span class="n">inline</span> <span class="o">=</span> <span class="s2">&quot;chef-solo -j /vagrant/local_settings/</span><span class="si">#{</span><span class="no">ES_PROFILE</span><span class="si">}</span><span class="s2">/single_node.json -c /vagrant/solo.rb -o </span><span class="se">\&quot;</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_POSTRUN&#39;</span><span class="o">]</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[What production means]]></title>
@@ -2781,401 +3113,6 @@ The one tool I enjoyed the most?</p>
 <h1>Old posts</h1>
 
 <p>I&#8217;m currently in the process of redoing what blogger posts I have that weren&#8217;t already in Markdown. I&#8217;m converting the more &#8220;popular&#8221; posts first and then I&#8217;ll get the remainder. It&#8217;s a little painful but the light at the end of the tunnel is that I only have to do this once.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Fun With Celluloid]]></title>
-    <link href="http://lusis.github.com/blog/2011/08/13/fun-with-celluloid/"/>
-    <updated>2011-08-13T00:30:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2011/08/13/fun-with-celluloid</id>
-    <content type="html"><![CDATA[<p><em>warning! This is a really long post</em></p>
-
-<p>In the course of rewriting the <a href="https://github.com/lusis/Noah">Noah</a> callback daemon, I started to get really frustrated with EventMachine. This is nothing against EventMachine by any stretch of the imagination. I really like it.</p>
-
-<p>What I was having issues with is making the plugin framework as dirt simple as possible. By using EM, I had no choice but to require folks to understand how EM works. This primarily meant not blocking the reactor. Additionally, through no fault of EM, I was starting to get mired in callback spaghetti.</p>
-
-<h1>Actors</h1>
-
-<p>I&#8217;ve mentioned several times before that I love the actor model. It makes sense to me. The idea of mailboxes and message passing is really simple to understand. For a while, there was project that implemented actors on top of EM called Revactor but it stalled. I started following the author (Tony Arcieri) on GitHub to see if he would ever update it. He did not but I caught wind of his new project and it was pretty much exactly what I was looking for.</p>
-
-<p>Actors have a proven track record in Erlang and the Akka framework for Scala and Java uses them as well.</p>
-
-<h1>Celluloid</h1>
-
-<!--more-->
-
-
-<p><a href="https://github.com/tarcieri/celluloid">Celluloid</a> is an implementation of Actors on Ruby. At this point, it lacks some of the more advanced features of the Akka and Erlang implementations. However Tony is very bullish about Celluloid and is pretty awesome in general.</p>
-
-<p>I&#8217;m not going to go over Celluloid basics in too much detail. Tony does an awesome job in the <a href="http://celluloid.github.com/">README</a> for the project. What I want to talk more about is how I want to use it for Noah and what capabilities it has/is missing for that use case.</p>
-
-<h1>Noah callbacks</h1>
-
-<p>I won&#8217;t bore you with a rehash of Noah. I&#8217;ve written a ton of blog posts (and plan to write more). However for this discussion, it&#8217;s important to understand what Noah callbacks need to do.</p>
-
-<h2>Quick recap</h2>
-
-<p>Any object in Noah can be &#8220;watched&#8221;. This is directly inspired by ZooKeeper. Because Noah is stateless, however, watches need to work a little differently. The primary difference is that Noah&#8217;s watches are asynch. As a side-effect of that, we get some really cool additional functionality. So what does a Noah watch consist of?</p>
-
-<ul>
-<li>An absolute or partial path to and endpoint in the system</li>
-<li>A URI-style location for notification of changes to that path</li>
-</ul>
-
-
-<p>Let&#8217;s say you had a small sinatra application running on all your servers. Its only job was to be a listener for messages from Noah. This daemon will be responsible for rewriting your <code>hosts</code> file with any hosts that are created, modified or deleted on your network.</p>
-
-<p>In this case, you might register your watch with a path of <code>/hosts/</code> and an endpoint of <code>http://machinename:port/update_hosts</code>. Any time a host object is created, updated or deleted Noah will send the JSON representation of that object state along with the operation performed to that endpoint. Let&#8217;s say you also want to know about some configuration setting that has changed which lives at <code>/configurations/my_config_file.ini</code>. Let&#8217;s put a kink in that. You want that watch to drop its message onto a RabbitMQ exchange.</p>
-
-<p>So now we have the following information that we need to act on:</p>
-
-<ul>
-<li><code>{:endpoint =&gt; 'http://machine:port/update_hosts', :pattern =&gt; '//noah/hosts'}</code></li>
-<li><code>{:endpoint =&gt; 'amqp://host:port/exchange?durable=true', :pattern =&gt; '//noah/configurations/my_config_file.ini'}</code></li>
-</ul>
-
-
-<p>Not so hard right? But we also have some additional moving parts. Something needs to monitor Redis for these various CRUD messages. We need to compare them against a list of endpoints that want notification about those messages. We also need to intercept any messages from Redis that are new endpoints being registered. Oh and we also need to know about failed endpoints so we can track and eventually evict them. Obviously we don&#8217;t want to stop http messages from going out because AMQP is slow. Imagine if we implemented FTP endpoint support! Essentially we need high concurrency not only on each &#8216;class&#8217; of endpoint (http, amqp, ftp whatever) but also within each class of endpoint. If any individual endpoint attempt crashes for any reason, we need to take some action (eviction for instance) and not impact anyone else.</p>
-
-<h1>Doing it with Celluloid</h1>
-
-<p>So thinking about how we would do this with actors, I came up with the following basic actors:</p>
-
-<ul>
-<li>RedisActor <em>watches the Redis pubsub backend</em></li>
-<li>HTTPActor <em>handles HTTP endpoints - a &#8216;worker&#8217;</em></li>
-<li>AMQPActor <em>handles AMQP endpoints - a &#8216;worker&#8217;</em></li>
-<li>BrokerActor <em>responsible for intercepting endpoint CRUD operations and also determining which actors to send messages to for processing</em></li>
-</ul>
-
-
-<p>As I said previously, we also need to ensure that if any worker crashes, that it gets replaced. Otherwise we would eventually lose all of our workers.</p>
-
-<p>With this information, we can start to build a tree that looks something like this:</p>
-
-<pre><code>- Master process
-    |_Redis
-    |_Broker
-    |_HTTPPool
-    |    |_Worker
-    |    |_Worker
-    |_AMQPPool
-        |_Worker
-        |_Worker
-</code></pre>
-
-<p>The master process is responsible for handling the Redis, Broker and Pool actors. Each pool actor is responsible for its workers. Not really visible in the ASCII above is how messages flow:</p>
-
-<ul>
-<li>Master process spawns Redis, Broker, HTTPPool and AMQPPool as supervised processes.</li>
-<li>Each pool type spins up a set of supervised workers.</li>
-<li>Master process makes an HTTP request to the Noah server for all existing watches (synchronous)</li>
-<li>It sends a message with those watches to the Broker so it can build its initial list.(synchronous)</li>
-<li>Redis actor watches pubsub.</li>
-<li>Watch messages are sent to a mailbox on the Broker. (synchronous)</li>
-<li>The rest to a different mailbox on the broker.</li>
-<li>The broker performs some filtering to determine if any registered watches care about the message. If so, those are sent to the appropriate pool. (async)</li>
-<li>Each Pool selects a worker and tells him the endpoint and the message</li>
-<li>The worker delivers the message</li>
-</ul>
-
-
-<p>Where this became a slight problem with Celluloid is that it lacks two bits of functionality currently:</p>
-
-<ul>
-<li>Supervision trees</li>
-<li>Pool primitives</li>
-</ul>
-
-
-<p>Right now in Celluloid, there is no way to build &#8220;pools&#8221; of supervised processes. The supervised part is important. If a process is supervised, crashes will be trapped and the process will be restarted.</p>
-
-<p>So how did we &#8220;fake&#8221; this with the existing functionality?</p>
-
-<p>The generic tree was fairly easy. The main Ruby process creates supervised processes for each actor:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">RedisActor</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
-</span><span class='line'>    <span class="n">log</span><span class="o">.</span><span class="n">info</span> <span class="s2">&quot;starting redis actor&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">start</span>
-</span><span class='line'>   <span class="c1"># start watching redis</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'><span class="k">class</span> <span class="nc">BrokerActor</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
-</span><span class='line'>  <span class="c1"># constructor</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">process_watch</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-</span><span class='line'>    <span class="c1">#...</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">do_work</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-</span><span class='line'>    <span class="c1">#...</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">HTTPPool</span>
-</span><span class='line'>  <span class="c1"># you get the idea</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="vi">@http_pool</span> <span class="o">=</span> <span class="no">HTTPPool</span><span class="o">.</span><span class="n">supervise_as</span> <span class="ss">:http_pool</span><span class="p">,</span> <span class="s2">&quot;http_pool&quot;</span>
-</span><span class='line'><span class="vi">@broker_actor</span> <span class="o">=</span> <span class="no">BrokerActor</span><span class="o">.</span><span class="n">supervise_as</span> <span class="ss">:broker_actor</span><span class="p">,</span> <span class="s2">&quot;broker&quot;</span>
-</span><span class='line'><span class="vi">@redis_actor</span> <span class="o">=</span> <span class="no">RedisActor</span><span class="o">.</span><span class="n">supervise_as</span> <span class="ss">:redis_actor</span><span class="p">,</span> <span class="s2">&quot;redis&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The workers were a bit more complicated. What I ended up doing was something like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">HTTPWorker</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:name</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">do_work</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
-</span><span class='line'>    <span class="c1"># Work to send the message</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">HTTPPool</span>
-</span><span class='line'>  <span class="kp">include</span> <span class="no">Celluloid</span><span class="o">::</span><span class="no">Actor</span>
-</span><span class='line'>  <span class="no">WORKERS</span> <span class="o">=</span> <span class="mi">10</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kp">attr_reader</span> <span class="ss">:workers</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
-</span><span class='line'>    <span class="vi">@workers</span> <span class="o">=</span> <span class="o">[]</span>
-</span><span class='line'>    <span class="no">WORKERS</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="nb">id</span><span class="o">|</span>
-</span><span class='line'>      <span class="vi">@workers</span><span class="o">[</span><span class="nb">id</span><span class="o">]</span> <span class="o">=</span> <span class="no">HTTPWorker</span><span class="o">.</span><span class="n">supervise_as</span> <span class="s2">&quot;http_worker_</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">to_sym</span><span class="p">,</span> <span class="s2">&quot;http_worker_</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">do_work</span>
-</span><span class='line'>    <span class="vi">@workers</span><span class="o">.</span><span class="n">sample</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">do_work</span> <span class="s2">&quot;msg&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The problem as it stands is that we can&#8217;t really have &#8220;anonymous&#8221; supervised processes. Each actor that&#8217;s created goes into Celluloid&#8217;s registry. We need a programatic way to look those up so we use <code>supervise\_as</code> to give them a name.</p>
-
-<p>This gives us our worker pool. Now Redis can shovel messages to the broker who filters them. He sends a unit of work to a Pool which then selects a random worker to do the REAL work. Should any actor crash, he will be restarted. Because each actor is isolated, A crash in talking to redis, doesn&#8217;t cause our existing workers to stop sending messages.</p>
-
-<p>Obviously this a fairly naive implementation. We&#8217;re missing some really important functionality here.</p>
-
-<ul>
-<li>detecting busy workers</li>
-<li>detecting dead workers (yes we still need to do this)</li>
-<li>alternate worker selection mechanisms (cyclical for instance)</li>
-<li>crash handling</li>
-<li>backlog handling</li>
-</ul>
-
-
-<p>You might wonder why we care if a worker is dead or not? Currently Celluloid buffers messages in each actor until the can be dealt with. In the case of our Pool, it will select a worker and buffer any messages if the worker is blocked. If our worker crashes on its current unit of work, it returns control to the pool. The pool then attempts to send the worker the next message but the worker is dead and hasn&#8217;t respawned yet.</p>
-
-<h1>Some code to play with</h1>
-
-<p>Yes, we&#8217;ve finally made it to the end.</p>
-
-<p>I&#8217;ve created a fun little sinatra application to make it easier for me to test my pools. It consists of a generic Pool class that can be subclassed and take a the name of a worker class as an argument. When a worker gets a message of &#8220;die&#8221;, it will raise an exception thus simulating a crash. Additionally, the &#8220;message processing&#8221; logic includes sleep to simulate long running work.</p>
-
-<p>The reason Sinatra is in the mix is to provide an easy way for me to fire off simulated requests to the pool so I can experiment with different approaches. Eventually, Celluloid will have a proper Pool construct. I plan on using this as the basis for a pull request. You can see it here. Please feel free to fork and experiment with me. It&#8217;s really fun.</p>
-
-<div><script src='https://gist.github.com/1143369.js?file='></script>
-<noscript><pre><code>require 'celluloid'
-require 'logger'
-require 'uuid'
-require 'sinatra/base'
-
-# This is just a simple demo of a possible Pool implementation for Celluloid
-# The sinatra interface exists just to do some testing of crashing workers and the like
-
-# TODO
-# Create a busy worker registry of some kind
-# Implement a small stats page
-
-LOGGER = Logger.new(STDOUT)
-LOGGER.progname = &quot;noah-agent&quot;
-Celluloid.logger = LOGGER
-
-class WorkerError &lt; Exception; end
-
-class Pool
-  include Celluloid::Actor
-  #trap_exit :worker_exception_handler
-
-  attr_reader :workers, :busy_workers
-
-  def initialize(name, opts = {:num_workers =&gt; 10, :worker_class =&gt; Worker})
-    @name = name
-    @workers = []
-    @busy_workers = []
-    LOGGER.info(&quot;Pool #{name} starting up&quot;)
-    opts[:num_workers].times do |worker|
-      start_worker(opts[:worker_class])
-    end
-  end
-
-  def start_worker(klass)
-    worker_id = gen_worker_id
-    LOGGER.info(&quot;Pool #{@name} is starting a #{klass.to_s} worker&quot;)
-    wkr = klass.supervise_as &quot;#{@name}_worker_#{worker_id}&quot;.to_sym, &quot;#{@name}_worker_#{worker_id}&quot;
-    @workers &lt;&lt; wkr
-  end
-
-  def notify_worker(msg)
-    worker = self.get_worker
-    @busy_workers &lt;&lt; worker.name
-    worker.work msg
-    @busy_workers.delete worker.name
-  end
-
-  def worker_exception_handler(actor, reason)
-    LOGGER.debug(&quot;Worker #{actor.name} crashed because #{reason}. You should see a doctor about that&quot;)
-  end
-
-  
-  protected
-  def gen_worker_id
-    Digest::SHA1.hexdigest(UUID.generate)
-  end
-
-  def get_worker
-    worker = @workers.sample.actor
-    LOGGER.info(&quot;Found Worker: #{worker.name} in the pool&quot;)
-    if worker.alive?
-      worker
-    else
-      LOGGER.error &quot;Worker #{worker.name} was dead. Retrying!&quot;
-      self.get_worker
-    end
-  end
-
-end
-
-class MyWorker
-  include Celluloid::Actor
-  attr_reader :name
-
-  def initialize(name)
-    @name = name
-  end
-
-  def work(msg)
-    LOGGER.info(&quot;Message for you sir! #{msg}&quot;)
-    case msg
-    when &quot;die&quot;
-      # Simulate some long-running work that crashes
-      sleep 15
-      raise WorkerError, &quot;Boo got shot!&quot;
-    else
-      # Simulate some long-running work here
-      sleep 30
-      LOGGER.debug(&quot;Hey there camper! #{@name} is doing some work for you&quot;)
-    end
-  end
-
-end
-
-class TestApp &lt; Sinatra::Base
-  @pool = Pool.supervise_as :my_cool_pool, &quot;MyCoolPool&quot;, {:num_workers =&gt; 30, :worker_class =&gt; MyWorker}
-  configure do
-    set :app_file, __FILE__
-    set :logging, false
-    set :dump_errors, false
-    set :run, false
-    set :server, &quot;thin&quot;
-    set :pool, @pool
-  end
-
-  put '/scale' do
-    settings.pool.actor.start_worker(MyWorker)
-    &quot;Added a worker&quot;
-  end
-
-  get '/stats' do
-    &quot;Worker count: #{settings.pool.actor.workers.size}\n Busy workers: #{settings.pool.actor.busy_workers.size}&quot;
-  end
-
-  put '/die' do
-    settings.pool.actor.notify_worker! &quot;die&quot;
-  end
-
-  put '/send' do
-    settings.pool.actor.notify_worker! request.body.read
-  end
-end
-
-app = TestApp
-app.run!</code></pre></noscript></div>
-
-
-
 ]]></content>
   </entry>
   
