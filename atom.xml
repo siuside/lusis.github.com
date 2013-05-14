@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2013-05-13T22:55:55-04:00</updated>
+  <updated>2013-05-13T22:59:21-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -28,7 +28,7 @@
 <p>One thing that caught my eye/ear when I could listen/watch was an excellent presentation by <a href="https://twitter.com/seancribbs">Sean Cribbs</a>. Sean holds a special place in my hero worship pantheon for a few reasons:</p>
 
 <ul>
-<li>I first heard about Riak on one of the first episodes of the ChangeLog show (along with <a href="https://twitter.com/argv0">Andy Gross</a>. It and the whole NoSQL thing made sense then</li>
+<li>I first heard about Riak on one of the first episodes of the ChangeLog show (along with <a href="https://twitter.com/argv0">Andy Gross</a>). It and the whole NoSQL thing made sense then</li>
 <li>Sean is a pretty fucking down to earth person. He graciously drove down to one of our local meetups. Uber friendly and an awesome advocate for Basho and Riak.</li>
 <li>He&#8217;s a really awesome presenter and if you&#8217;ve never had the priviledge of seeing him (live stream or in person), he rocks the mic.</li>
 </ul>
@@ -41,7 +41,7 @@
 <p>I want to say a bit about client libraries. Regardless of what they talk to (though I&#8217;ll be talking specifically about database client libraries), this is something many companies get wrong.</p>
 
 <p>Everyone knows I&#8217;m not the biggest MongoDB/10Gen fan in the world. I won&#8217;t go into detail about the technical reasons behind that. Many others have done a much more eloquent dive into that topic.
-As much as it&#8217;s easy to make fun of MongoDB as being an marketing-driven database, they did get one thing right. They owned thier client driver availability. Not only did they own and maintain all the drivers but they largely had the same API across the various languages.</p>
+As much as it&#8217;s easy to make fun of MongoDB as being an marketing-driven database, they did get one thing right. They owned their client driver availability. Not only did they own and maintain all the drivers but they largely had the same API across the various languages.</p>
 
 <p>Then again, they had to. Other databases/applications offer a REST-ish interface over HTTP (or plain-text interface like Redis) so they can punt a bit. Got a libcurl port for your language? You&#8217;re set. MongoDB has its own protocol and that god-forsaken BSON shitshow.</p>
 
