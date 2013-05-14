@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2013-03-02T23:09:18-05:00</updated>
+  <updated>2013-05-13T22:55:55-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,97 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Smart Clients]]></title>
+    <link href="http://lusis.github.com/blog/2013/05/13/smart-clients/"/>
+    <updated>2013-05-13T21:17:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2013/05/13/smart-clients</id>
+    <content type="html"><![CDATA[<p>Currently <a href="http://ricon.io/east.html">RICON|EAST</a> is going on in NYC. <a href="https://twitter.com/tsantero">Tom Santero</a> and the whole Basho crew is doing an awesome job if the content available via the live stream and twitters is to be believed.</p>
+
+<!--more-->
+
+
+<p><em>(please note this is my first blog entry post-D. As such and because I&#8217;ve yet to talk to any legal folks, I should state that this does not represent any opinion or policy of Dell)</em></p>
+
+<p>One thing that caught my eye/ear when I could listen/watch was an excellent presentation by <a href="https://twitter.com/seancribbs">Sean Cribbs</a>. Sean holds a special place in my hero worship pantheon for a few reasons:</p>
+
+<ul>
+<li>I first heard about Riak on one of the first episodes of the ChangeLog show (along with <a href="https://twitter.com/argv0">Andy Gross</a>. It and the whole NoSQL thing made sense then</li>
+<li>Sean is a pretty fucking down to earth person. He graciously drove down to one of our local meetups. Uber friendly and an awesome advocate for Basho and Riak.</li>
+<li>He&#8217;s a really awesome presenter and if you&#8217;ve never had the priviledge of seeing him (live stream or in person), he rocks the mic.</li>
+</ul>
+
+
+<p>So in Sean&#8217;s presentation he&#8217;s talking about some changes to the Ruby client library for Riak. Many of the changes make the Ruby library a proper smart client. Read <a href="https://github.com/basho/riak-ruby-client/wiki/Connecting-to-Riak">this wiki</a> wiki entry under <strong>Connecting to Clusters</strong> for some of the features. It&#8217;s awesome (especially the transport-related failure handling).</p>
+
+<h1>Client libraries in general</h1>
+
+<p>I want to say a bit about client libraries. Regardless of what they talk to (though I&#8217;ll be talking specifically about database client libraries), this is something many companies get wrong.</p>
+
+<p>Everyone knows I&#8217;m not the biggest MongoDB/10Gen fan in the world. I won&#8217;t go into detail about the technical reasons behind that. Many others have done a much more eloquent dive into that topic.
+As much as it&#8217;s easy to make fun of MongoDB as being an marketing-driven database, they did get one thing right. They owned thier client driver availability. Not only did they own and maintain all the drivers but they largely had the same API across the various languages.</p>
+
+<p>Then again, they had to. Other databases/applications offer a REST-ish interface over HTTP (or plain-text interface like Redis) so they can punt a bit. Got a libcurl port for your language? You&#8217;re set. MongoDB has its own protocol and that god-forsaken BSON shitshow.</p>
+
+<p>One of the benefits, however, of a plain-text or HTTP-based protocol is that it&#8217;s a pattern we can grok as operators and developers. We load balance webservers. We speak to third-party APIs. It&#8217;s not the most EFFICIENT but it&#8217;s a known quantity. It&#8217;s also, as I said, REALLY fucking easy to add support to your language of choice. No need to FFI some c library or make a binary extension. Any language worth its salt has http client support in stdlib (even if it&#8217;s as big a pile of dog squeeze as net/http). Again, most languages also have libcurl support for something better.</p>
+
+<h1>Back to smart clients</h1>
+
+<p>I largely dislike applications that require smart clients to get the full benefit. As an operations person, I&#8217;m USUALLY using a dynamic language like python, ruby or perl to access the system as opposed to directly from the application. This was my biggest gripe with ZooKeeper (as I&#8217;ve said many times in the past). It&#8217;s also been one of my points of contention with Datomic. If you aren&#8217;t on a JVM language, you&#8217;re shit out of luck for now. Yes, JRuby makes this billions of times easier for those of us using Ruby but Jython is still not where it needs to be for modern Python.</p>
+
+<p>I also had this problem with Voldemort. Disclaimer this is 2-3 year old data from running Voldemort in production. AFAIK, it&#8217;s still the case. For the sake of this discussion, we&#8217;re going to ignore data opacity. At the time, the only way to fully access the data in and maintain a Voldemort cluster was from the JVM. I ended up writing quite a bit of JRuby wrapper around StoreClient just to see the data we had in Voldemort.</p>
+
+<p>Riak (and as another example, ElasticSearch) is nice in this regard. It&#8217;s HTTP. I can curl it from a shell script. I can use the Ruby library Basho is maintaining. If I&#8217;m using a language without &#8216;official&#8217; support, I can write my own. All the metadata is largely attached to http headers and even monitoring is done via the <code>/ping</code> and <code>/stats</code> urls. Something I didn&#8217;t realize until today (thanks to <a href="https://twitter.com/b6n">Benjamin Black</a>) is that the stats interface actually exposes stuff I had previously glossed over including cluster topology. This is where the meat of the discussion on twitter today happened.</p>
+
+<h1>Operational Happiness</h1>
+
+<p>My original statements on this discussion related to using haproxy in front of your Riak cluster. There are several reasons I prefer this but a quick sidebar</p>
+
+<h2>Seed Nodes</h2>
+
+<p>I&#8217;ve had some minor operational experience with Cassandra (nothing to write home about) but one of the things that always bothered me was the idea of &#8216;seed nodes&#8217;. Let me be clear that Cassandra and Riak are pretty much the only two datastores I&#8217;d feel comfortable using these days (with the nod going to Riak) in any sort of scalable environment. Postgres has earned its way back to my into my graces but MySQL can <em>insert Louis C.K. euphemism here</em>.</p>
+
+<p>My problem with seed nodes is the idea that I have special nodes. These nodes have to be hard-coded in a config file somewhere or discovered by some other method. I could store them as DNS lookups but now I&#8217;ve got to deal with TTLs on DNS. And I&#8217;ve got to deal with the fact that DNS doesn&#8217;t actually care if the host I&#8217;ve been given is actually alive or not.</p>
+
+<p>I could store this information in ZooKeeper but what if I don&#8217;t actually have native ZK support in that database? I&#8217;ve got to write something that populates ZK when a new node is available and it&#8217;s not actually a live check. I still have to test that host first. Yes you should do that anyway but it&#8217;s a valid point.</p>
+
+<p>So if I&#8217;m storing seed nodes as DNS names in a config file, I can never change those names without either rolling out new code or configs. That might require a restart somewhere. If I&#8217;m clever, I could probably make that an administrative hook in my application (think JMX) where I can fiddle the seed list. I can poll a config file for changes. I can do a lot of thing but none of them are &#8220;optimal&#8221; to me.</p>
+
+<h2>Back to haproxy</h2>
+
+<p>My prefered method of using Riak is to stick everything behind haproxy. There are several reasons for this but here are a few reasons (note we&#8217;re going to assume use of CM at this point):</p>
+
+<ul>
+<li>Operationally, haproxy nodes are easier to manage than application configs (depending on the application).</li>
+<li>Many times, at different companies, we&#8217;ve had to roll our own layer on top of a client library (or even write our own due to licensing issues). Load-balancing is not neccessarily a core application developer competency (and it&#8217;s bitten me in the ass before).</li>
+<li>From an operational perspective, I can bring nodes in and out of service in haproxy for maintenance without needing to inform the client or have it waste cycles with stale node detection. It simply will never talk to an out of service backend.</li>
+</ul>
+
+
+<p>Basically the haproxy crew has already done all the work in load balancing HTTP connections intelligently and they&#8217;re pretty damn good at it. I love my developers and I know the folks writing the various libraries I use are smart people but again it goes back to core competency. Note that Basho gets a nod here, however, in that I&#8217;m pretty sure that, what with writing webmachine, they grok http pretty well.</p>
+
+<p>I&#8217;ve even gone the approach of using haproxy on every system that needs to connect to some backend locally. This totally eliminates the idea of fixed points in the network for connections (at the expense of having to deal with a bit of drift between CM runs). If I wanted to, I could even make multiple riak clusters transparent behind haproxy (though I can only think of a few REALLY specific use cases for that).</p>
+
+<h2>Trade offs</h2>
+
+<p>Yes there are trade-offs to this approach. As Ben pointed out, the Riak stats interface is really powerful from a topology perspective. A REALLY smart riak client can discovery data layout and make deeply intelligent decisions on that.</p>
+
+<p>With other applications like ElasticSearch I can actually become a full fledged cluster member as a non-data node and actually offload some of the work of the cluster for scatter/gather type operations using the Java library.</p>
+
+<p>With haproxy, I don&#8217;t get those types of benefits.</p>
+
+<h2>What I do get</h2>
+
+<p>Outside of the maintainability of haproxy (which is, again, subjective) I get one benefit I <strong>CAN&#8217;T</strong> get with smart clients that is, unfortunately, neccessary with many customers - a more narrow network allowance.</p>
+
+<p>Enterprises are interesting beasts and still think in terms of traditional tiered application stacks. Nothing wrong with that and it does have SOME security benefits but many deployments I&#8217;ve been involved with have official policies that &#8216;data tiers&#8217; (whatever the hell those are) must be protected in a dedicated network behind an additional firewall. So here&#8217;s Riak, a &#8216;data tier&#8217;, that we have to have with as small an ingress as possible. That rules out smart clients of the toplogy-aware variety. So we stick haproxy in the mix. We tell them to use a load balancer. Some folks use an internal F5 HA pair with some sort of VRRP. We&#8217;ll set up haproxy + keepalived or some other combination depending.</p>
+
+<h1>TMTOWTDI</h1>
+
+<p>One of the things that Riak allows is this level of flexibility. I can use HTTP and haproxy. I can use HTTP and smart client. I can use protobufs and haproxy or a smart client. It&#8217;s really that flexible. I happen to prefer the haproxy approach for reasons I&#8217;ve already mentioned but I totally grok that some folks want a more intelligent client approach. Some folks would argue that there&#8217;s a right way and a wrong way but I don&#8217;t see it like that. What I see is a datastore that, just like it letting me control the consistency levels I want, let&#8217;s me control HOW I access that data.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Future of Noah]]></title>
@@ -3083,114 +3174,6 @@ At first blush that would make sense, right? If it ain&#8217;t broke, don&#8217;
 <h1>Wrap up and part 2</h1>
 
 <p>As I said, this topic is too big to fit in one post. The next post will go into specifics about strategies and techniques that will hopefully give you ideas on how to make deploys less painful.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Configuration Management Divide]]></title>
-    <link href="http://lusis.github.com/blog/2011/08/22/the-configuration-management-divide/"/>
-    <updated>2011-08-22T22:07:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2011/08/22/the-configuration-management-divide</id>
-    <content type="html"><![CDATA[<p><em>wherein John admits he was wrong about something</em></p>
-
-<p>As I was checking my Github feed tonight (as I&#8217;ve been known to do on occassion), I saw an update for a project that I was watching. This project is, for all intents and purposes, a redo of Capistrano with some additional system management stuff on top. From the description:</p>
-
-<blockquote><p>All together mixed to make your life easier.
-As mentioned before do is a fun mix of capistrano, rake, thor and brew.
-With XXXXX you are be able to do easily common task on your local or remote machine. The aim of XXXXX is to become the unique and universal tool language that permit you to make your own brew, apt-get or yum package, same syntax for all your machine.</p></blockquote>
-
-<p>Now I&#8217;ve said before I&#8217;m a tool junkie. I&#8217;m always looking for ideas and inspiration from other tools. I also love to contribute where I can.
-What bothered me particularly about this project is that it felt like a &#8220;solved problem&#8221;.</p>
-
-<!-- more -->
-
-
-<h2>Open mouth, insert foot (at least partially)</h2>
-
-<p>So at DevOps Days Mt. View this year, I made a statement. I said with quite a bit of firmness that I thought configuration management was a solved problem. I didn&#8217;t get a chance to clarify what I meant by that. At least not before <a href="http://twitter.com/littleidea">Andrew Clay Shafer</a> strongly disagreed with me. Before I go any further, I want to clarify what I meant by that.</p>
-
-<p>I, personally, feel like there comes a point where a class of tool reaches a certain level that makes it &#8220;good enough&#8221;. So what is good enough?
-By &#8220;good enough&#8221;, I mean that it solves the first in a broader series of problems. By no means am I implying that we should no longer pursue improvement. But what I am suggesting is that at a certain point, tools are refining the first stage of what they do.</p>
-
-<p>When we get to this point in a class of tool (let&#8217;s stick with CM), we start to see gaps in what it can do. At this point, you get a rush of tools that attempt to fill that gap. What we essentially do is try and figure out if the gap should be filled by the tool or does it make sense to exist apart. So taking the discussion I was involved in at the time - orchestration, what I was attempting to say (epic fail, I might add) is that the current crop of configuration management tools have reached a usable point where they do enough (for now). What we&#8217;re seeing as questions now are &#8220;How do I think beyond the single node where this tool is running?&#8221;. What we might find is that functionality DOES belong in our CM tool. We might also find that, no, we need this to exist apart from it for whatever reasons. Basically I was attempting to say &#8220;Hey, CM is in a pretty good state right now. Let&#8217;s tackle these OTHER problems and regroup later&#8221;.</p>
-
-<p>So where was I <a href="http://youtu.be/V3y3QoFnqZc">wrong</a>?</p>
-
-<h2>Developers, developers, developers</h2>
-
-<p>I made the following comment on Twitter earlier:</p>
-
-<blockquote><p>The sheer number of what are essentially Capistrano clones makes me realize that the config. management message fails to resonate somewhere.</p></blockquote>
-
-<p>What I find most interesting about these various &#8220;clones&#8221; is that they&#8217;re all created by developers. People apparently pine for the days of Capistrano. Come to think of it though, who blames them?</p>
-
-<p>As I look at the current crop of configuration management tools, and follow various tweets and blog posts I realize that people either aren&#8217;t aware of tools like puppet and chef or, in the worst cases, they feel that they&#8217;re too much hassle/too complicated to deal with. What we&#8217;re seeing is the developer community starting to come to the same realizations that the sysadmin community came to a while ago. What&#8217;s also interesting is that the sysadmin community is coming to the same realizations that developers came to a while ago.</p>
-
-<p>It&#8217;s like some crazy romantic movie where the two lovebirds, destined to be together in the end have the pivotal mix-up scene. He leaves the bar to stop her from getting on the airplane. Meanwhile she heads to the bar upon realizing that she can&#8217;t get on the plane without him.</p>
-
-<p>People are going to great lengths, either out of ignorance* about available tools or from frustration about the complexities involved.</p>
-
-<h2>So where&#8217;s the divide?</h2>
-
-<p>I think the divide is in the message. While I still stand behind the statement that the &#8220;dev&#8221; vs &#8220;ops&#8221; ratios are regionally specific, I&#8217;m starting to agree that the current crop of tools <strong>ARE</strong> very operationally focused. That&#8217;s not a bad thing either. Remember that the tools were created by people who were primarily by sysadmins.</p>
-
-<p>When you look at the tools created by people who were primarily developers, what do you see?</p>
-
-<ul>
-<li>Apache Whirr</li>
-<li>Do</li>
-<li>Fabric</li>
-<li>Capistrano</li>
-<li>Glu</li>
-<li>DeployML</li>
-</ul>
-
-
-<p>What&#8217;s interesting about all of these tools is that they&#8217;re designed to get the code out there as easily as possible or to stand up a stack as quickly as possible. What&#8217;s frustrating for me, as primariy a sysadmin, is that I see the pain points that will come down the road. These tools don&#8217;t really scale. Yes, sometimes you need &#8220;ssh in a for loop&#8221; however inherting these types of environments can be painful. Concepts like idemopotence and repeatability don&#8217;t exist. They generally don&#8217;t take into account the non-functional requirements. They certainly don&#8217;t handle multiple operating environments or distributions very well.</p>
-
-<p>What&#8217;s really sad is that the end goal is the same. We just want to automate away the annoying parts of our jobs so we can get on to more important shit.</p>
-
-<h3>You arrogant prick</h3>
-
-<p>I figured I&#8217;d get that out of the way now. It&#8217;s very easy to dismiss these concerns as some pissy sysadmin but I don&#8217;t think that&#8217;s entirely fair. Remember what I said earlier. Sysadmins are starting to come to realizations that developers had a long time ago. The same exists for developers. Both sides, regardless of primary role, still have much to learn from each other.</p>
-
-<h2>What do we do?</h2>
-
-<p>I&#8217;m going to share a fairly generic dirty little secret. Developers don&#8217;t want to write puppet manifests/modules. They don&#8217;t want to write chef cookbooks/recipes. In most every situation I&#8217;ve been in, there has been little interest in those tools from outside the sysadmin community. That&#8217;s changing. I think as people are getting introduced to the power they have, they come around. But there&#8217;s still a gap. Is the gap around deployment? Partially. I think the gap also exists around configuration. Obviously I&#8217;m biased in that statement.</p>
-
-<p>A bit of a personal story. At my previous company, we were a puppet shop. We tried to get developers to contribute to the modules. It didn&#8217;t work. It just didn&#8217;t make sense. It&#8217;s not that they were stupid. It&#8217;s that it was an extra step. &#8220;Oh you mean I have to put that variable over here instead of in my configuration file? That&#8217;s annoying because I have to be able to test locally&#8221;. What ended up happening was that one of the guys on the operations side learned just enough Java to write lookup classes himself. Instead of us populating hosts using ERB templates, we were now querying Cobbler for classes using XML-RPC. There were some other factors at play, mind you. It was a really large company with developers who came from the silo&#8217;d worldview. There was also quite a bit of ass-covering attitude running around.</p>
-
-<p>This is why I&#8217;m so bullish on bridge tools like Noah and even Vagrant. We&#8217;re all attempting to do the same thing. Bridge that last little bit between the two groups. Find a common ground. Noah is attempting to bridge that by allowing the information to be &#8220;shared&#8221; between teams. ZooKeeper let&#8217;s the developers manage it all themselves (just push this app out, we&#8217;ll find each other). Vagrant takes the route of bringing the world of production down to the developer desktop.</p>
-
-<p>But none of these tools address the deploy issue. Do we want to use the Opscode deploy cookbook? We can but it&#8217;s fairly opinionated**. Maybe we decide to use FPM to generate native system packages and roll those out with a Puppet run? Putting on my fairly small developer hat, none of these sounds really appealing to me. Maybe as the java developer, I just want to use JRebel. That&#8217;s nice but what about the configuration elements? Do we now write code to ask Puppet or Chef for a list of nodes with a given class or role?</p>
-
-<p>Look at what Netflix does (not that I approve really). They roll entire fucking AMIs for releases. While the sysadmin in me is choking back the bile at the inflexibility of that, stepping into another perspective says &#8220;It works and I don&#8217;t have to deal with another server just to manage my systems&#8221;.</p>
-
-<h2>I don&#8217;t have all the answers</h2>
-
-<p>That much is obvious. What I can say is that I see a need. I&#8217;m addressing it the way I think is best but I still see gaps. Shared configuration is still complicated. Deploy is still complicated. While I would generally agree that things like rolling back are the wrong approach, I also realize that not everyone is at the point where they can roll-forward through a bad deploy. Hell, we do all of our deploys with Jenkins and some really ugly bash scripts and knife scripts.</p>
-
-<p>I&#8217;d love any commentary folks might have. I&#8217;ll leave you with a few comments from other&#8217;s on twitter when I made my original comment:</p>
-
-<blockquote><p>Capistrano serves a different need. Rapid deployment with rollback isn&#8217;t implicit in the current crop config mgmt tools - <a href="https://twitter.com/altobey">@altobey</a></p>
-
-<p>deploying code with a CM tool (eg, the chef <code>deploy</code> resource) is a grey area for me. for example: does rollback really fit? - <a href="https://twitter.com/dpiddee">@dpiddee</a></p>
-
-<p>or that it might be missing some use case? - <a href="https://twitter.com/jordansissel">@jordansissel</a></p>
-
-<p>I&#8217;ve played with using deployml in its local only mode kicking off deploys with mcollective, worked really nice - <a href="https://twitter.com/ripienaar">@ripienaar</a></p>
-
-<p>Roll forward, never back. - <a href="https://twitter.com/bdha">@bdha</a></p>
-
-<p>This is a fight I have at least two or three times at every conference I speak at and in a bucket load of other places - <a href="https://twitter.com/kartar">@kartar</a></p>
-
-<p>further thought: I consider capistrano to be one impl of a &#8220;deployment service&#8221; on the same level as, say, a CM tool  - <a href="https://twitter.com/dpiddee">@dpiddee</a></p></blockquote>
-
-<ul>
-<li>&#8220;Ignorance&#8221;: I don&#8217;t mean ignorance in the sense of stupidity. I mean it strictly in the sense of not having knowledge of something. No judgement is implied</li>
-<li>&#8220;Opinionated&#8221; - Opinionated isn&#8217;t bad. It&#8217;s just opinionated.</li>
-</ul>
-
 ]]></content>
   </entry>
   
