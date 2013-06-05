@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2013-05-13T22:59:21-04:00</updated>
+  <updated>2013-06-04T22:29:58-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,80 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[DevOps - The title match]]></title>
+    <link href="http://lusis.github.com/blog/2013/06/04/devops-the-title-match/"/>
+    <updated>2013-06-04T21:38:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2013/06/04/devops-the-title-match</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve noticed an annoying trend recently. I was content to ignore it for a while but now it&#8217;s getting almost stupid. That trend is the job title of &#8220;DevOps&#8221;.</p>
+
+<!-- more -->
+
+
+<p>I came across an article tonight that confused the hell out of me. It was an interview. The outlet wasn&#8217;t a technical one per se but it was a technical interview none the less.</p>
+
+<p>This part is what confused me (<em>highlights mine</em>):</p>
+
+<blockquote><p>To do this requires a well-integrated platform that is full of capabilities for the **developer**; contemplates the needs of **DevOps**; provides command, control and visibility for **operations**; and is &#8230;.</p></blockquote>
+
+
+<p>To quote an internet-famous person:</p>
+
+<p><strong>WAT</strong></p>
+
+<h2>Stepping back</h2>
+
+<p>I don&#8217;t like the idea of <em>devops</em> as a job title in the first place. I don&#8217;t like it as a role either. It makes no sense. You don&#8217;t call someone an <em>agile</em> so why would you call them a <em>devop</em>?</p>
+
+<p>My problem lies in the fact that it implies that there&#8217;s something wrong with being a sysadmin, operations person, developer or whatnot. Not only that but the idea behind devops is the elimination of silos, not the creation of new ones.</p>
+
+<p>I have, however, made a bit of peace with the fact that <em>devops</em> has become a replacement title of sorts for <em>sysadmin</em> or <em>developer</em>.</p>
+
+<p>I get the problem domain. Companies want to be able to qualify the types of people they want. The phrase <em>devops</em> carries a certain meaning with it. People are trying to leverage that. In other cases, it&#8217;s become a codeword for &#8220;generalist&#8221; or &#8220;technologist&#8221;. And, yes, even in some cases it&#8217;s become a code word for &#8220;doing both development and ops work&#8221;</p>
+
+<h2>What does devops mean though</h2>
+
+<p>Here&#8217;s the secret. I&#8217;ll tell you EXACTLY what devops means.</p>
+
+<p>Devops means giving a shit about your job enough to not pass the buck. Devops means giving a shit about your job enough to want to learn all the parts and not just your little world.</p>
+
+<p>Developers need to understand infrastructure. Operations people need to understand code. People need to fucking work with each other and not just occupy space next to each other.</p>
+
+<p>I worked at a company several years ago. We created a dedicated devops team. The rationale was solid - the company had a monolithic idea of roles and titles. We also had a large group on both sides that were only interested in doing their little bit and going home. By creating this title/team, it was easier at a company level to justify them working on non-standard projects.</p>
+
+<p>So a &#8220;devops&#8221; team was created. This was a small team of what essentially boiled down to &#8220;super sysadmins&#8221;. We wrote puppet manifests, worked with the developers to automate build processes&#8230;shit like that.</p>
+
+<p>What ended up happening was that the devops team was seen as elitist by the operations team, nosy and invasive by the developers and everyone just passed the blame on to them - &#8220;Devops did that. Not us&#8221;</p>
+
+<h2>So back to that quote</h2>
+
+<p>Having said all that, what about the quote?</p>
+
+<p>This is indicative of the problem I described above. I think I&#8217;ve finally figured out the question I want to ask people who think this way:</p>
+
+<p>If devops is a distinct role/title apart from development and operations, then what the fuck does a &#8220;devop&#8221; do?</p>
+
+<p>Let&#8217;s look at that quote again. It implies that:</p>
+
+<ul>
+<li>&#8220;command, control and visibility&#8221; is something developers have no need for</li>
+<li>operations won&#8217;t need the same capabilities as developers</li>
+<li>There&#8217;s a third group that has an entirely different set of needs</li>
+</ul>
+
+
+<p>What is that third group? What possible aspect outside of development and operations of the IT needs of a company do those two groups not think affects them in some way and thus have a vested interest in being involved? <em>(Yes I&#8217;m aware companies have dbas, security and what not - those are shitty silos too)</em></p>
+
+<p>This topic comes up all the time on various mailing lists and it never seems to really reach any sort of consensus. So I&#8217;m asking you. If a &#8220;devops&#8221; is something different than someone in operations or development, someone different than a sysadmin or developer&#8230;.</p>
+
+<p>What the fuck is it?</p>
+
+<h2>Disclaimer</h2>
+
+<p>This post was writting on an airplane with an annoying passenger in front of me, quite a bit of rum in me and a lack of sleep. I&#8217;m guessing it really doesn&#8217;t look any different than any other post though does it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Smart Clients]]></title>
@@ -3078,102 +3152,6 @@ I like to engage people and normally Twitter is great medium for engaging folks.
 <p>This post came out longer than I had planned. I hope it&#8217;s provided you with some information and things to consider. Companies of all shapes, markets and sizes are doing continuous deployment, zero downtime deploys and all sorts of things that we never considered possible. Look at companies like Wealthfront, IMVU, Flickr and Etsy. Google around for phrases like &#8216;continuous deployment&#8217; and &#8216;continuous delivery&#8217;.</p>
 
 <p>I&#8217;m also painfully aware that even with these tricks, some folks simply cannot do them. There are many segments of industry that might not even allow for this. That doesn&#8217;t mean that some of these ideas can&#8217;t be implemented on a smaller scale.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rollbacks and other deployment myths]]></title>
-    <link href="http://lusis.github.com/blog/2011/10/18/rollbacks-and-other-deployment-myths/"/>
-    <updated>2011-10-18T00:35:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2011/10/18/rollbacks-and-other-deployment-myths</id>
-    <content type="html"><![CDATA[<p>I came across an interesting post today via HN. I&#8217;m surprised (only moderately) that I missed it the first time around since this is right up my alley:</p>
-
-<p><a href="http://briancrescimanno.com/2011/09/29/why-are-you-still-deploying-overnight/">Why are you still deploying overnight?</a></p>
-
-<p>I thought this post was particularly apropos for several reasons. I just got back from DevOpsDays EU <strong>AND</strong> I&#8217;m currently in the process of refactoring our deploy process.</p>
-
-<p>I&#8217;m breaking this up into two parts since it&#8217;s a big topic. The first one will cover the more &#8220;theoretical&#8221; aspects of the issue while the second will provide more concrete information.</p>
-
-<!--more-->
-
-
-<h1>Myths, Lies and other bullshit</h1>
-
-<p>Before I go any further, we should probably clear up a few things.</p>
-
-<p>Understand, first and foremost, that I&#8217;m no spring chicken in this business. I&#8217;ve worked in what we now call web operations and I&#8217;ve worked in traditional financial environments (multiple places). If it CAN go wrong, it has gone wrong for me. Shit, I&#8217;ve been the guy who dictated that we had to deploy after hours.</p>
-
-<p>Also, this is not a &#8220;tell you what to do&#8221; post.</p>
-
-<p>So what are some of the myths and other crap people like to pull out when having these discussions?</p>
-
-<ul>
-<li>Change == Risk</li>
-<li>Deploys are risky</li>
-<li>Rollbacks</li>
-<li>Nothing fails</li>
-<li>SLAs</li>
-</ul>
-
-
-<p>There&#8217;s plenty more but these are some of the key ones that I hear.</p>
-
-<h2>Change is change</h2>
-
-<p>There is nothing inherent in change that makes it risky, dangerous or anything more than change. Change is neither good or bad. It&#8217;s just change.</p>
-
-<p>The idea that change has a risk associated with it is entirely a human construct. We have this false assumption that if we don&#8217;t change something then nothing can go wrong.
-At first blush that would make sense, right? If it ain&#8217;t broke, don&#8217;t fix it.</p>
-
-<p>Why do we think this? It&#8217;s mainly because we&#8217;re captives to our own fears. We changed something once, somewhere, and everything went tango uniform. The first reaction after a bad experience is never to do whatever caused that bad experience again. This makes sense in quite a few cases. Touch fire, get burned. Don&#8217;t touch fire, don&#8217;t get burned!</p>
-
-<p>However this pain response tends to bleed over into areas. We deployed code one time that took the site down. We changed something and bad things happened. Engage overcompensation - We should never change anything.</p>
-
-<h2>Deploys are not risky</h2>
-
-<p>As with change, a deploy (a change in and of itself) is not inherently risky. Is there a risk associated with a deploy? Yes but understand that the risk associated with pushing out new code is the culmination of everything you&#8217;ve done up to that point.</p>
-
-<p>I can&#8217;t even begin to count the number of ways that a deploy or release has gone wrong for me. Configuration settings were missed. Code didn&#8217;t run properly. The wrong code was deployed. You name it, I&#8217;ve probably seen it.</p>
-
-<p>The correct response to this is <strong>NOT</strong> to stop doing deploys, do them off-hours or do them less often. Again with the overcompensation.</p>
-
-<p>The correct way to handle deployment problems is to do MORE deploys. Practice. Paraphrasing myself here from an HN comment:</p>
-
-<blockquote><p>Make deploys trivial, automated and tolerant to failure because everything fails.</p></blockquote>
-
-<p>&#8220;Release early, release often&#8221; isn&#8217;t just about time to market. The way to reduce risk is not to add more risky behavior (introducing more vectors for shit to go wrong). The way to reduce the risk associated with deploys is to break them into smaller chunks.</p>
-
-<p>You need to stop thinking like Subversion and start thinking like Git.</p>
-
-<p>One of the reasons people don&#8217;t feel comfortable performing deploys during the day is because deploys are such a big deal. You&#8217;ve got to make deploys a non-issue.</p>
-
-<h2>Rollbacks are a myth</h2>
-
-<p>Yes, it&#8217;s true. You can never roll back. You can&#8217;t go back in time. You can fake it but understand that it&#8217;s typically more risky to rollback than rolling forward. Always be rolling forward.</p>
-
-<p>The difficulty in rolling forward is that it requires a shift in how you think. You need to create a culture and environment that enables, encourages and allows for small and frequent changes.</p>
-
-<h2>Everything fails. Embrace failure.</h2>
-
-<p>It amazes me that in this day and age people seem to think you can prevent failure. Not only can you not prevent it, you should embrace it. Learn to accept that failure will happen.  Often spending your effort decreasing MTTR (mean time to recovery) as opposed to increasing MTBF (mean time between failures) is a much better investment. Failure is not a question of &#8216;if&#8217; but a question of &#8216;when&#8217;.</p>
-
-<p>Systems should be designed to be tolerant of failure. This is not easy, it&#8217;s not always cheap and it can be quite painful at first. Failure sucks. Especially as systems administrators, we tend to personalize a failure in our systems as a personal failure.</p>
-
-<p>The best way to deal with failure is to make failure a non-issue. If it&#8217;s going to happen and you can&#8217;t prevent it, why stress over trying to prevent it? This absolutely doesn&#8217;t mean that you should do some level of due dilligence. I&#8217;m not saying that you should give up. What I&#8217;m saying is that you should design a robust system that handles failures gracefully and returns you to service as quickly as possible. It&#8217;s called fault TOLERANCE for a reason.</p>
-
-<h2>SLAs are not about servers</h2>
-
-<p>SLAs are in general fairly silly things. Before you get all twisted and ranty, let me clarify. SLAs have value but the majority of that value is to the provider of the SLA and not the person on the other end. SLAs are a lot like backup policies.</p>
-
-<p>Look at it this way. I&#8217;m giving you an SLA for four nines of availability. That allows me to take around 50 minutes of downtime a year. Of course you assume that means 50 minutes spread over a year. What you fail to realize is that I can take all 50 minutes at once and still meet my SLA. Taking 50 minutes at one time is much more impacting than taking ten 5-minute outages. What&#8217;s worse is I can take that downtime not only in one chunk but I can take it at the worst possible time for you.</p>
-
-<p>The other side of SLAs is that we tend to equate them with servers as opposed to services. The SLA is a <em>Service Level Agreement</em>. Not a <em>Server Level Agreement</em>. Services are what matters, not servers.</p>
-
-<p>When you start to equate an SLA with a specific server, you&#8217;ve already lost.</p>
-
-<h1>Wrap up and part 2</h1>
-
-<p>As I said, this topic is too big to fit in one post. The next post will go into specifics about strategies and techniques that will hopefully give you ideas on how to make deploys less painful.</p>
 ]]></content>
   </entry>
   

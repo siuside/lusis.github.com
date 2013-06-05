@@ -4,7 +4,7 @@
   <title><![CDATA[Category: development | blog dot lusis]]></title>
   <link href="http://lusis.github.com/blog/categories/development/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2013-05-13T22:59:21-04:00</updated>
+  <updated>2013-06-04T22:29:58-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,79 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[DevOps - The title match]]></title>
+    <link href="http://lusis.github.com/blog/2013/06/04/devops-the-title-match/"/>
+    <updated>2013-06-04T21:38:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2013/06/04/devops-the-title-match</id>
+    <content type="html"><![CDATA[<p>I've noticed an annoying trend recently. I was content to ignore it for a while but now it's getting almost stupid. That trend is the job title of "DevOps".</p>
+
+<!-- more -->
+
+
+<p>I came across an article tonight that confused the hell out of me. It was an interview. The outlet wasn't a technical one per se but it was a technical interview none the less.</p>
+
+<p>This part is what confused me (<em>highlights mine</em>):</p>
+
+<p><blockquote><p>To do this requires a well-integrated platform that is full of capabilities for the <strong>developer</strong>; contemplates the needs of <strong>DevOps</strong>; provides command, control and visibility for <strong>operations</strong>; and is ....</p></blockquote></p>
+
+<p>To quote an internet-famous person:</p>
+
+<p><strong>WAT</strong></p>
+
+<h2>Stepping back</h2>
+
+<p>I don't like the idea of <em>devops</em> as a job title in the first place. I don't like it as a role either. It makes no sense. You don't call someone an <em>agile</em> so why would you call them a <em>devop</em>?</p>
+
+<p>My problem lies in the fact that it implies that there's something wrong with being a sysadmin, operations person, developer or whatnot. Not only that but the idea behind devops is the elimination of silos, not the creation of new ones.</p>
+
+<p>I have, however, made a bit of peace with the fact that <em>devops</em> has become a replacement title of sorts for <em>sysadmin</em> or <em>developer</em>.</p>
+
+<p>I get the problem domain. Companies want to be able to qualify the types of people they want. The phrase <em>devops</em> carries a certain meaning with it. People are trying to leverage that. In other cases, it's become a codeword for "generalist" or "technologist". And, yes, even in some cases it's become a code word for "doing both development and ops work"</p>
+
+<h2>What does devops mean though</h2>
+
+<p>Here's the secret. I'll tell you EXACTLY what devops means.</p>
+
+<p>Devops means giving a shit about your job enough to not pass the buck. Devops means giving a shit about your job enough to want to learn all the parts and not just your little world.</p>
+
+<p>Developers need to understand infrastructure. Operations people need to understand code. People need to fucking work with each other and not just occupy space next to each other.</p>
+
+<p>I worked at a company several years ago. We created a dedicated devops team. The rationale was solid - the company had a monolithic idea of roles and titles. We also had a large group on both sides that were only interested in doing their little bit and going home. By creating this title/team, it was easier at a company level to justify them working on non-standard projects.</p>
+
+<p>So a "devops" team was created. This was a small team of what essentially boiled down to "super sysadmins". We wrote puppet manifests, worked with the developers to automate build processes...shit like that.</p>
+
+<p>What ended up happening was that the devops team was seen as elitist by the operations team, nosy and invasive by the developers and everyone just passed the blame on to them - "Devops did that. Not us"</p>
+
+<h2>So back to that quote</h2>
+
+<p>Having said all that, what about the quote?</p>
+
+<p>This is indicative of the problem I described above. I think I've finally figured out the question I want to ask people who think this way:</p>
+
+<p>If devops is a distinct role/title apart from development and operations, then what the fuck does a "devop" do?</p>
+
+<p>Let's look at that quote again. It implies that:</p>
+
+<ul>
+<li>"command, control and visibility" is something developers have no need for</li>
+<li>operations won't need the same capabilities as developers</li>
+<li>There's a third group that has an entirely different set of needs</li>
+</ul>
+
+
+<p>What is that third group? What possible aspect outside of development and operations of the IT needs of a company do those two groups not think affects them in some way and thus have a vested interest in being involved? <em>(Yes I'm aware companies have dbas, security and what not - those are shitty silos too)</em></p>
+
+<p>This topic comes up all the time on various mailing lists and it never seems to really reach any sort of consensus. So I'm asking you. If a "devops" is something different than someone in operations or development, someone different than a sysadmin or developer....</p>
+
+<p>What the fuck is it?</p>
+
+<h2>Disclaimer</h2>
+
+<p>This post was writting on an airplane with an annoying passenger in front of me, quite a bit of rum in me and a lack of sleep. I'm guessing it really doesn't look any different than any other post though does it?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Why you should stop fighting distro vendors]]></title>
