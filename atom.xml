@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2013-06-04T22:29:58-04:00</updated>
+  <updated>2013-08-11T16:43:17-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,103 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Go for System Administrators]]></title>
+    <link href="http://lusis.github.com/blog/2013/08/11/go-for-system-administrators/"/>
+    <updated>2013-08-11T15:44:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2013/08/11/go-for-system-administrators</id>
+    <content type="html"><![CDATA[<blockquote><p>If I never directly touch a Go concurrency primitive, I&#8217;m convinced I&#8217;m going to write all my cli apps with it just for ease of deployment.</p></blockquote>
+
+
+<!-- more -->
+
+
+<p>This is something I said the other day. I figured it deserved a more detailed blog post.</p>
+
+<h2>NKTOB</h2>
+
+<p>Most people who know me professionally know two things about me:</p>
+
+<ul>
+<li>I&#8217;m fairly pragmatic and somewhat conservative about technology decisions</li>
+<li>I&#8217;m a language tourist</li>
+</ul>
+
+
+<p>This second one is something Bryan Berry attributed to me in an early FoodFight episode. What&#8217;s interesting is the two things seemingly conflict.</p>
+
+<p>I love learning new programming languages. This comes as a pretty big shock to me on a regular basis because I&#8217;m not a professional programmer. I didn&#8217;t go to college for programming (I actually didn&#8217;t go to college at all). My career in IT has been pretty much 100% focused on the area of operations. Anything I&#8217;ve ever touched - qa, dba, dev - has always been from that lens and to satisfy some need operationally.</p>
+
+<p>So it&#8217;s weird that I find myself 18 years later having a working knowledge of ruby, python, perl, java and a few other languages to a lesser degree. Mainly I come to new languages to scratch an itch.</p>
+
+<p>This leads me to picking up Go.</p>
+
+<p>If you haven&#8217;t heard of Go, there are countless articles, blog posts and a shitload of new tooling written in it. The latest batch of hotness around linux containers and new deployment models (docker) is based on Go. There are also quite a few other &#8220;big&#8221; name projects built in Go as well - packer, etcd. Mozilla is doing all new internal tooling in Go (as I understand it) and quite a few folks are switching to it.</p>
+
+<p>Mind you I don&#8217;t pick up languages based on popularity. I don&#8217;t care for JavaScript and Node at all, for instance. Originally I had no interest in Go either. I figured it was another Google experiment that was more academic than anything else. Besides, if I had to get a handle on a c-like language, why not just learn C and be done with it?</p>
+
+<p>I actually attempted that route working on a PAM module for StormPath. While it was somewhat satisfying, it was ultimately VERY frustrating.</p>
+
+<h2>So why Go now?</h2>
+
+<p>One of the reasons I decided to give Go another shot was that it appeared to be around for the long haul after all. That made at least a contender for me.
+But then some of the tooling I was using operationally was being built in Go. Since I wanted to be able to fix issues in those tools (especially considering they were new projects which would surely need fixes) I really needed to pick up on the language.</p>
+
+<p>However one tool really pushed me that last step - <a href="https://github.com/coreos/etcd">etcd</a>.</p>
+
+<p>You can read up on etcd yourself but if you know my history with <a href="https://github.com/lusis/Noah">Noah</a>, you realize WHY I have such an interest in this.</p>
+
+<p>What surprised me was when I decided that I&#8217;d probably be writing a lot of tooling myself in Go.</p>
+
+<h2>On Pragmatism</h2>
+
+<p>All the internal tooling my team develops at Dell Enstratius is written in Python. This was a pragmatic choice for us:</p>
+
+<ul>
+<li>It&#8217;s the least common denominator on platforms our product supports (So it will always be on customer systems)</li>
+<li>It&#8217;s rigid in the right ways for new programmers (of which we had quite a few on our team)</li>
+<li>Regardless of skill level with Python, you can usually look at someone else&#8217;s code and follow it thanks to the previous item</li>
+</ul>
+
+
+<p>Why didn&#8217;t we go with Ruby considering I was personally much stronger at Ruby and we had some Ruby experience via Chef internally?</p>
+
+<ul>
+<li>Have you seen the state of Ruby on distros?</li>
+<li>We didn&#8217;t want to conflict with any possible customer tooling using Ruby</li>
+<li>Not enough rigidity for the new folks</li>
+<li>As comfortable as I am at Ruby, because of the flexibility of the language and metaprogramming, it can be downright impossible to navigate someone else&#8217;s code</li>
+</ul>
+
+
+<p>Our team weighed all the options here and we all agreed on Python. I set out to write a library for accessing our API. This would give us a foundation for our tooling as well as serve as a reference project - with tests, project structure, bin scripts and the like - for new tooling.</p>
+
+<p>Things are/were going great up until a recent situation with a customer. We try and minimize dependencies in our tooling for obvious reasons. However there are a few libraries that just make things SO much easier - <a href="https://github.com/kennethreitz/requests">requests</a>, <a href="https://github.com/kennethreitz/envoy">envoy</a>. We also like to use <a href="http://fabfile.org">Fabric</a> to wrap some things up.</p>
+
+<p>However we ran into a situation where a customer refused to let us pull packages in externally. So while we could &#8220;sneakernet&#8221; the bulk of our tools over, some things wouldn&#8217;t work. Tracking down all the transitive deps and vendoring everything was a pain in the ass.</p>
+
+<p>This is what lead to my statement above.</p>
+
+<h2>Tooling in Go</h2>
+
+<p>Go, while not as tight a feedback loop as Python, is still pretty tight. Compilations happen fast and you can test fairly quickly. But the dependency issue is really the killer. It simply doesn&#8217;t exist. I can take that binary I compiled and move it around with no problem without needing the runtime installed. There are lots of batteries included in the stdlib as well.</p>
+
+<p>I can also compile that same code on osx, windows or linux with no modification. This bit us in Python with some of our deps as well.</p>
+
+<p>As I said, while the tooling I&#8217;m currently writing has no need for any of the advanced concurrency stuff in go, it&#8217;s nice that&#8217;s it there out of the box should I want to use it.</p>
+
+<h2>This isn&#8217;t a switching story</h2>
+
+<p>We&#8217;re not switching to Go for our tooling but I probably will. I&#8217;m already working on writing a wrapper for our API in Go so I can duplicate some of the tools. This will be really handy when I&#8217;m on a system where dependencies are limited. That&#8217;s really what this post is about.</p>
+
+<p>If you&#8217;re in operations, there is no reason you shouldn&#8217;t learn Go.</p>
+
+<p>The syntax is easy. The stuff that made C painful is largely hidden from you. Meanwhile you don&#8217;t need to worry about what version of Python or Ruby is installed on your systems. It&#8217;s a great language to use for bootstrap tools where you don&#8217;t yet have your deps installed. It&#8217;ll also help should you start adopting tools like docker, packer or etcd.</p>
+
+<p>Give it a shot.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[DevOps - The title match]]></title>
@@ -2910,248 +3007,6 @@ I like to engage people and normally Twitter is great medium for engaging folks.
 <p>And shit, it doesn&#8217;t even have to be a code contribution. If you can grok the project well enough, add some wiki pages.</p>
 
 <p>I dunno. Github just has this amazingly easy flow for contribution. Do unto others and all that.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Deploy ALL the Things]]></title>
-    <link href="http://lusis.github.com/blog/2011/10/18/deploy-all-the-things/"/>
-    <updated>2011-10-18T06:59:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2011/10/18/deploy-all-the-things</id>
-    <content type="html"><![CDATA[<p><em>This is part 2 in a post on deployment strategies. The previous post is located <a href="http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths/">here</a></em></p>
-
-<p>My previous post covered some of the annoying excuses and complaints that people like to use when discussing deployments. The big take away should have been the following:</p>
-
-<ul>
-<li>The risk associated with deploying new code is not in the deploy itself but everything you did up to that point.</li>
-<li>The way to make deploying new code less risky is to do it more often, not less.</li>
-<li>Create a culture and environment that enables and encourages small, frequent releases.</li>
-<li>Everything fails. Embrace failure.</li>
-<li>Make deploys trivial, automated and tolerant of failure.</li>
-</ul>
-
-
-<p>I want to make one thing perfectly clear. I&#8217;ve said this several times before. You can get 90% of the way to a fully automated environment, never go that last 10% and still be better off than you were before. I understand that people have regulations, requirements and other things that prevent a fully automated system. You don&#8217;t ever have to flip that switch but you should strive to get as close as possible.</p>
-
-<!--more-->
-
-
-<h1>Understanding the role of operations</h1>
-
-<p>Operations is an interesting word. Outside of the field of IT it means something completely different than everywhere else in the business world. <a href="http://en.wikipedia.org/wiki/Business_operations">According to Wikipedia</a>:</p>
-
-<blockquote><p>Business operations encompasses three fundamental management imperatives that collectively aim to maximize value harvested from business assets</p>
-
-<ul>
-<li><p>Generate recurring income</p></li>
-<li><p>Increase the value of the business assets</p></li>
-<li><p>Secure the income and value of the business</p></li>
-</ul>
-</blockquote>
-
-<p>IT operations traditionally does nothing in that regard. Instead IT operations has become about cock blocking and being greybeareded gatekeepers who always say &#8220;No&#8221; regardless of the question. We shunt the responsibility off to the development staff and then, in some sick game of &#8216;fuck you&#8217;, we do all we can to prevent the code from going live. This is unsustainable; counter-productive; and in a random twist of fate, self destructive.</p>
-
-<p>One thing I&#8217;ve always tried to get my operations and sysadmin peers to understand is that we are fundamentally a cost center. Unless we are in the business of managing systems for profit, we provide no direct benefit to the company. This is one of the reasons I&#8217;m so gung-ho on automation. <a href="https://twitter.com/botchagalupe">John Willis</a> really resonated with me in the first Devops Cafe podcast when he talked about the 80/20 split. Traditionally operations staff spends 80% of its time dealing with bullshit fire-fighting muck and 20% actually providing value to the business. The idea that we can flip that and become contributing members of our respective companies is amazing.</p>
-
-<p>Don&#8217;t worry. I&#8217;ll address development down below but I felt it was important to set my perspective down before going any further.</p>
-
-<h1>Technical Debt and Risk Management</h1>
-
-<p>Glancing back to my list of take-aways from the last post, I make a pretty bold (to some people) statement. When I say that deploy risk is not the deploy itself but everything up to that point, I&#8217;m talking about technical debt.</p>
-
-<p>Technical debt takes many forms and is the result of both concious, deliberate choices as well as unintended side-effects. Some examples of that are:</p>
-
-<ul>
-<li>Lack of or insufficient testing and associated</li>
-<li>Overreliance on time consuming manual processes</li>
-<li>Shortcuts to meet deadlines - both artifical and real</li>
-<li>Violation of the 10-minute maxim</li>
-<li>Technological choices</li>
-<li>Cultural choices</li>
-<li>Fiscal limitations</li>
-</ul>
-
-
-<p>All of these things can lead to technical debt - the accumulation of dead bodies in the room as a byproduct of how we work. At best, someone at least acknowledges they exist. At worst, we stock up on clothespins, pinch our nostrils shut and hope no one notices the stench. Let&#8217;s address a couple of foundational things before we get into the fun stuff.</p>
-
-<h2>Testing</h2>
-
-<p>Test coverage is one of the easiest ways to manage risk in software development. One of the first things to go in a pinch is testing. Even that assumes that testing was actually a priority at some point. I&#8217;m not going to harp on things like 100% code coverage. As I said previously, humans tend to overcompensate. Test coverage is also, however, one of the easiest places to get your head above water. If you don&#8217;t have a culture of committment to testing, it&#8217;s hard but not impossible to get started. You don&#8217;t have to shutdown development for a week.</p>
-
-<ol>
-<li>Start by having a commitment to write tests for any new code going forth.</li>
-<li>As bugs arise in untested code, make a test case for the bug a requirement to close the bug.</li>
-<li>Find a small victory in existing code. Create test coverage for low hanging fruit.</li>
-<li>Plan for a schedule to cover any remaining code</li>
-</ol>
-
-
-<p>The key here is baby steps. Small victories. Think Fezzik in &#8216;The Princess Bride&#8217; - <em>&#8220;I want you to feel like you&#8217;re winning&#8221;.</em></p>
-
-<p>Testing is one of the foundations you have to have to reach deploy nirvana. System administrators have a big responsiblity here. Running tests has to be painless, unobstrusive and performant. You should absolutely stand up something like Jenkins that actually runs your test suite on check-in. As that test suite grows, you&#8217;ll need to be able to provide the capacity to grow with it. That&#8217;s where the next point can be so important.</p>
-
-<h2>Manual processes</h2>
-
-<p>Just as testing is a foundation on the code side, operations has a commensurate responsibility to reduce the number of human hands involved with creating systems. We humans, despite the amazing potential that our brains provide, are generally stupid. We make mistakes. Repeatability is not something we&#8217;re good at. Some sort of automated and repeatable configuration management strategy needs to be adopted. As with testing, you can make some amazing progress in baby steps by introducing some sort of proper configuration management going forward. I don&#8217;t recommend you attempt to retrofit complex automation on top of existing systems beyond some basics. Otherwise you&#8217;ll be spending too much time trying to differentiate between &#8220;legacy&#8221; and &#8220;new&#8221; servers roles. If you are using some sort of virtualization or cloud provider like EC2, this is a no brainer. It&#8217;s obviously a bit harder when you&#8217;re using physical hardware but still doable.</p>
-
-<p>Have you ever played the little travel puzzle game where you have a grid of moving squares? The idea is the same. You need just ONE empty system that you can work with to automate. Pick your simplest server role such as an apache webserver. Using something like Puppet or Chef, write the &#8216;code&#8217; that will create that role. Don&#8217;t get bogged down in the fancy stuff the tools provide. Keep it simple at first. Once you think you&#8217;ve got it all worked out, blow the server away and apply that code from bootstrap. Red, green, refactor. Once you&#8217;re comfortable that you can reprovision that server from bare metal, move it into service. Make sure you have your own set of &#8216;test cases&#8217; that ensure the provisioned state is the correct one. This will become important later on.</p>
-
-<p>Take whatever server it&#8217;s replacing and do the same for the next role. When I came on board with my company I spent many useless cycles trying to retrofit an automation process on top of existing systems. In the end, I opted to take a few small victories (using Chef in this case):</p>
-
-<ol>
-<li>Create a base role that is non-destructive to existing configuration and systems. In my case, this was managing yum repos and user accounts.</li>
-<li>Pick the &#8216;simplest&#8217; component in our infrastructure and start creating a role for it.</li>
-<li>Spin up a new EC2 instance and test the role over and over until it works.</li>
-<li>Terminate the instance and apply the role on top with a fresh one.</li>
-<li>Replace the old instances providing that role with the new ones and move to the next role.</li>
-</ol>
-
-
-<p>Using this strategy, I was able to replace all of our legacy instances for the first and second tiers of our stack in a couple of months time. We are now at the point where, assuming Amazon plays nice with instance creation, we can have any role in those tiers recreated at a moment&#8217;s notice. Again, this will directly contribute to how we mitigate risk later on.</p>
-
-<h2>10 minute maxim</h2>
-
-<p>I came up with this from first principles so I&#8217;m sure there&#8217;s a better name for it. The idea is simply this:</p>
-
-<blockquote><p>Any problem that has to be solved in five minutes can be afforded 10 minutes to think about the solution.</p></blockquote>
-
-<p>System Administrators often pride ourselves on how cleverly and quickly we can solve a problem. It&#8217;s good for our egos. It&#8217;s not, however, good for our company. Take a little extra time and consider the longer term impact of what solution you&#8217;re about to do. Step away from the desk and move. Consult peers. Many times I&#8217;ve come to the conclusion that my first instinct was the right one. However more often than not, I&#8217;ve come across another solution that would create less technical debt for us to deal with later.</p>
-
-<p>A correlary to this is the decision to &#8216;fix it or kick it&#8217;. That is &#8216;Do we spend an unpredictable amount of time trying to solve some obscure issue or do we simply recreate the instance providing the service from our above configuration management&#8217;. If you&#8217;ve gone through the previous step, you have should have amazing code confidence in your infrastructure. This is very important to have with Amazon EC2 where you can have an instance perform worse overtime thanks to the wonders of oversubscription and noisy neighbors.</p>
-
-<p>Fuck that. Provision a new instance and run your smoke tests (I/O test for instance). If the smoke tests fail, throw it away and start a new one. It&#8217;s amazing the freedom of movement afforded by being able to describe your infrastructure as code.</p>
-
-<h1>Getting back to deploys</h1>
-
-<p>I would say that without the above, most of the stuff from here on out is pretty pointless. While you <strong>CAN</strong> do automated and non-offhour deploys without the above, you&#8217;re really setting yourself up for failure. Whether it&#8217;s a system change or new code, you need to be able to ensure that that some baseline criteria can be met. Now that we&#8217;ve got the foundation though, we can build on it and finally adopt some distinct strategies for releases.</p>
-
-<h1>Building on the foundation</h1>
-
-<p>The next areas you need to work on are a bit harder.</p>
-
-<h2>Metrics and monitoring</h2>
-
-<p>Shooting in the dark sucks. Without some sort of baseline metric, you authoritatively say whether or not a deploy was &#8216;good&#8217;. If it moves, graph it. If it moves, monitor it. You need to leverage systems like <a href="https://github.com/etsy/statsd">statsd</a> (available in non-node.js flavors as well) that can accept metrics easily from your application and make them availabile in the amazing <a href="http://graphite.wikidot.com/">graphite</a>.</p>
-
-<p>The key here is that getting those metrics be as frictionless as possible. To fully understand this, watch <a href="http://pivotallabs.com/talks/139-metrics-metrics-everywhere">this presentation from Coda Hale of Yammer</a>. Coda has also created a kick-ass metrics library for the JVM and others have duplicated his efforts in their respective languages.</p>
-
-<h2>Backwards compatibility</h2>
-
-<p>You need to adopt a culture of backwards compatibility between releases. This is not Microsoft levels we&#8217;re talking about. This affects interim releases. As soon as you have upgraded all the components, you clean up the cruft and move on. This is critical to getting to zero/near-zero downtime deploys.</p>
-
-<h2>Reduce interdependencies</h2>
-
-<p>I won&#8217;t go into the whole SOA buzzword bingo game here except to say that treating your internal systems like a third party vendor can have some benefits. You don&#8217;t need to isolate the teams but you need to stop with shit like RMI. Have an established and versioned interface between your components. If component A needs to make a REST call to component B, upgrades to the B API should be versioned. A needs version 1 of B&#8217;s api. Meanwhile new component C can use version 2 of the API.</p>
-
-<h2>Automation as a default</h2>
-
-<p>While this ties a lot into the testing and configuration management topics, the real goal here is that you adopt a posture of automation by default. The reason for this should be clear in <a href="http://www.startuplessonslearned.com/2009/07/how-to-conduct-five-whys-root-cause.html">Eric Ries&#8217; &#8220;Five Whys&#8221; post</a>:</p>
-
-<blockquote><p>Five Whys will often pierce the illusion of separate departments and discover the human problems that lurk beneath the surface of supposedly technical problems.</p></blockquote>
-
-<p>One of the best ways to eliminate human problems is to take the human out of the problem. Machines are very good at doing things repeatedly and doing them the same way every single time. Humans are not good at this. Let the machines do it.</p>
-
-<h1>Deploy Strategies</h1>
-
-<p>Here are some of the key strategies that I (and others) have found effective for making deploys a non issue.</p>
-
-<h2>Dark Launches</h2>
-
-<p>The idea here is that for any new code path you insert in the system, you actually exercise it before it goes live. Let&#8217;s face it, you can never REALLY simulate production traffic. The only way to truly test if code is performant or not is to get it out there. With a dark launch, you&#8217;re still making new database calls but using your handy dandy metrics culture above, you now know how performant it really is. When it gets to acceptable levels, make it visible to the user.</p>
-
-<h2>Feature flags</h2>
-
-<p>Feature flags are amazing and one of the neat tricks that people who perform frequent deploys leverage. The idea is that you make aspects of your application into a series of toggles. In the event that some feature is causing issues, you can simply disable it through some admin panel or API call. Not only does this let you degrade gracefully but it also provides for a way to A/B test new features. With a bit more thought put into the process, you can enable a new feature for a subset of users. People love to feel special. Being a part of something like a &#8220;beta&#8221; channel is an awesome way to build advocates of your system.</p>
-
-<h2>Smoke testing at startup</h2>
-
-<p>This is one that I really like. The idea is simply that your application has a basic set of &#8216;tests&#8217; it runs through at startup. If any of those tests fail, the code is rolled back.</p>
-
-<p>Now this is where someone will call me a hypocrite because I said you should and can never really roll back. You&#8217;re partially right. In my mind, however, it&#8217;s not the same thing. I consider code deployed once it&#8217;s taken production traffic. Up until that point, it&#8217;s just &#8216;pre-work&#8217; essentially. Let&#8217;s take a random API service in our stack. I&#8217;m assuming you have two API servers in this case.</p>
-
-<ul>
-<li>Take one out of service</li>
-<li>Deploy code</li>
-<li>Smoke tests run</li>
-<li>If smoke tests fail, stop new code and start old code</li>
-<li>If smoke tests pass, start sending production traffic to server</li>
-<li>If acceptable, push to other server</li>
-<li>profit!</li>
-</ul>
-
-
-<p>Now you might see a bit of gotcha there. I intentionally left out a step. This is a bit different than how shops like Wealthfront do it. They actually <strong>DO</strong> roll back if production monitoring fails. My preference is to use something similar to <a href="https://github.com/igrigorik/em-proxy">em-proxy</a> to do a sort of mini-dark launch before actually turning it over to end-users. You don&#8217;t have to actually use em-proxy. You could write your own or use something like RabbitMQ or other messaging system. This doesn&#8217;t always work depending on the service the component is providing but it does provide another level of &#8216;comfort&#8217;.</p>
-
-<p>Of course this only works if you maintain backwards compatibility.</p>
-
-<h2>Backwards Compatibility</h2>
-
-<p>This is probably the hardest of all to accomplish. You may be limited by your technology stack or even some poor decision made years ago. Backwards compatibility also applies to more than just your software stack. This is pretty much a critical component of managing database changes with zero downtime.</p>
-
-<h2>Code related</h2>
-
-<p>Your code needs to understand &#8216;versions&#8217; of what it needs. If you leverage some internal API, you need to maintain support for an older version of that API until all users are upgrade. Always be deprecating and NEVER EVER redefine what something means. Don&#8217;t change a property or setting that means &#8220;This is my database server hostname&#8221; to &#8220;This is my mail server hostname&#8221;. Instead create a new property, start using it and remove the old on in a future release. Don&#8217;t laugh, I&#8217;ve seen this done. As much as I have frustrations with Java, constructor overloading is a good example of backwards compatibility.</p>
-
-<h3>Database related</h3>
-
-<p>Specifically as it relates to databases, consider some of the following approaches:</p>
-
-<ul>
-<li>Never perform backwards incompatible schema changes.</li>
-<li>Don&#8217;t perform ALTERs on really large tables. Create a new table that updated systems use and copy on read to the new table. Migrate older records in the background.</li>
-<li>Consider isolating access to a given table via a service. Instead of giving all your applications access to the &#8216;users&#8217; table, create a users service that does that.</li>
-<li>Start exercising code paths to new tables early by leveraging dark launches</li>
-</ul>
-
-
-<p>Some of these techniques would make Codd spin in his grave.</p>
-
-<p>We&#8217;re undergoing a similar situation right now. We originally stored a large amount of &#8216;blob&#8217; data in Voldemort. This was a bit perplexing as we were already leveraging S3 for similar data. To migrate that data (several hundred gigs) we took the following approach:</p>
-
-<ul>
-<li>Deploy a minor release that writes and new data to both Voldemort and S3.</li>
-<li>Start a &#8216;copy&#8217; job in the background to migrate older data</li>
-<li>Continue to migrate data</li>
-<li>When the migration is finished, we&#8217;ll deploy a new release that uses S3 exclusively</li>
-<li>Profit (because we get to terminate a few m1.large EC2 instances)</li>
-</ul>
-
-
-<p>This worked really well in this scenario. These aren&#8217;t new techniques either. Essentially, we&#8217;re doing a variation of a two-phase commit.</p>
-
-<p>Now you might think that all this backwards compatibility creates cruft. It does. Again, this is something that requires a cultural shift. When things are no longer needed, you need to clean up the code. This prevents bloat and makes understanding it down the road so much easier.</p>
-
-<h1>Swinging like a boss</h1>
-
-<p>Here&#8217;s another real world example:</p>
-
-<p>Our code base originally used a home-rolled load balancing technique to communicate with one of our internal services. Additionally, all communication happened over RPC using Hessian. Eventually this became untenable and we decided to move to RabbitMQ and JSON. This was a pretty major change but at face value, we should have been able to manage with dual interfaces on the provider of the service. That didn&#8217;t happen.</p>
-
-<p>You see, to be able to use the RabbitMQ libraries, we had to upgrade our version of Spring. Again, not a big deal. However our version of Hessian was so old that the version of Hessian we would have to use with the new version of Spring was backwards incompatible. This is yak shaving at its finest, folks. So basically we had to upgrade 5 different components all at once just to get to where we wanted and NEEDED to be for the long term.</p>
-
-<p>Since I had already finished coding our chef cookbooks, we went down the path of duplicating our entire front-end stack. What made this even remotely possible was the fact that we were using configuration management in the first place. Here&#8217;s how it went down:</p>
-
-<ul>
-<li>Duplicate the various components in a new Chef environment called &#8216;prodB&#8217;</li>
-<li>Push new code to these new components</li>
-<li>Add the new components to the ELBs and internal load balancers for a very short 5-10 minute window. Sort of a mini-A/B test.</li>
-<li>Check the logs for anything that stood out. Validated the expected behavior of the new systems. Thsi also gave us a chance to &#8216;load-test&#8217; our rabbitmq setup. We actually did catch a few small bugs this way.</li>
-</ul>
-
-
-<p>Once we were sure that things looked good, we swung all the traffic to the new instances and pulled the old ones out. We never even bothered to upgrade the old instances. We just shut them down.</p>
-
-<p>Obviously this technique doesn&#8217;t work for everyone. If you&#8217;re using physical hardware, it&#8217;s much more costly and harder to pull off. Even internally, however, you can leverage virtualization to make these kinds of things possible.</p>
-
-<h2>Bitrot</h2>
-
-<p>What should be the real story in this is that bitrot happens. Don&#8217;t slack on keeping third-party libraries current. If a third-party library introduces a breaking change and it affects more than one part of your stack, you probably have a bit too tight of a coupling between resources.</p>
-
-<h1>Wrap up/Take away</h1>
-
-<p>This post came out longer than I had planned. I hope it&#8217;s provided you with some information and things to consider. Companies of all shapes, markets and sizes are doing continuous deployment, zero downtime deploys and all sorts of things that we never considered possible. Look at companies like Wealthfront, IMVU, Flickr and Etsy. Google around for phrases like &#8216;continuous deployment&#8217; and &#8216;continuous delivery&#8217;.</p>
-
-<p>I&#8217;m also painfully aware that even with these tricks, some folks simply cannot do them. There are many segments of industry that might not even allow for this. That doesn&#8217;t mean that some of these ideas can&#8217;t be implemented on a smaller scale.</p>
 ]]></content>
   </entry>
   
