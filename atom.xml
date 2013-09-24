@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2013-09-17T23:31:39-04:00</updated>
+  <updated>2013-09-23T23:34:45-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,156 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Stop fighting distros - part 2]]></title>
+    <link href="http://lusis.github.com/blog/2013/09/23/stop-fighting-distros-part-2/"/>
+    <updated>2013-09-23T23:27:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2013/09/23/stop-fighting-distros-part-2</id>
+    <content type="html"><![CDATA[<p>I&#8217;m a pretty harsh person. My wife and I have this discussion all the time about how things I say get interpreted. As the communicator, this responsibility lies squarely on my shoulders.</p>
+
+<p>So before I start, I don&#8217;t &#8220;hate&#8221; distributions or the packaging format they use or the people doing the work. To this even of you who toil to track countless security reports or maintain some software package in an upstream repository because of your love for that software, here&#8217;s to you.</p>
+
+<!-- more -->
+
+
+<h2>Packaging policies</h2>
+
+<p>In general I hate very few things. When I say I hate something usually hate is even too strong of a word.</p>
+
+<p>I <strong>really</strong> hate stupid policies. I hate stupid policies that are predicated on the shape of a reality that either no longer exists or never existed in the first place. I hate policies that never evolve to the reality of the world. I hate policies that throw pragmatism and common sense out the window. I also really hate ego-driven policies.</p>
+
+<p>What kinds of things fit that bill?</p>
+
+<ul>
+<li><em>most</em> corporate security policies</li>
+<li>Various parts of PEP8</li>
+<li>a oddly large amount of government regulation and legislation</li>
+<li>FHS</li>
+</ul>
+
+
+<p>And yes, distro packaging policies (mostly) fit that bill.</p>
+
+<p>I&#8217;ve said this a lot recently (and I stand by it):</p>
+
+<blockquote><p>Distribution packaging policies are not designed for people who package software</p></blockquote>
+
+
+<p>Packaging policies exist first and foremost for the benefit of the distribution. This isn&#8217;t a bad thing or a good thing - it&#8217;s just a thing.</p>
+
+<p>Let&#8217;s compare a few packaging policies from different distros. I spent most of my valuable time this evening between fighting a 3 year old who didn&#8217;t want to go to sleep reading these.</p>
+
+<ul>
+<li><a href="http://www.debian.org/doc/debian-policy/">Debian</a></li>
+<li><a href="https://fedoraproject.org/wiki/Packaging:Guidelines?rd=Packaging/Guidelines">Fedora</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/Arch_Packaging_Standards">Arch</a></li>
+<li><a href="https://devmanual.gentoo.org/general-concepts/index.html">Gentoo</a></li>
+</ul>
+
+
+<p>Ignoring for a minute the sheer verbosity of some of these guidelines (I think Arch wins at simplicity and pragmatism), they all share a few common key themes:</p>
+
+<ul>
+<li>Break shit up into multiple packages</li>
+<li>It needs to be able to be built from source</li>
+<li>put X here, Y here, Z here</li>
+<li>ONLY 1 VERSION IS ALLOWED</li>
+<li><em>These guidelines exist to make maintaining the distribution easier</em></li>
+</ul>
+
+
+<p>Note that of all the distributions Debian is quite possibly the most offensive at this. Fedora follows a close second.</p>
+
+<p>I want to address a few of these though I might have done so in the previous version of this post. I&#8217;m also going to skip the &#8220;build from source&#8221; point because I have no real problem with that on a general level.</p>
+
+<h3>Break shit into multiple packages</h3>
+
+<p>There are two arguments here that tend to crop up in support of this:</p>
+
+<ul>
+<li>security</li>
+<li>disk space</li>
+</ul>
+
+
+<p>Disk space concerns are entirely subjective. I&#8217;m not hurting for disk space and I haven&#8217;t been for quite some time. I&#8217;m anal about which packages I install, not because of disk space, but because I want to have to worry about as few security announcements as possible. Quite honestly this argument is the distro equivalent of PEP8&#8217;s column width. It is not my concern how many ISOs the distribution has to span across. I either install from a private mirror or netboot off the internet. Regardless I haven&#8217;t put an actual cd in a system in a VERY long time.</p>
+
+<p>But the one that gets me is the &#8220;security&#8221; argument. The basis for this is that you can supposedly immediately get the benefit of a fix to, say openssl, in all packages that link against openssl.</p>
+
+<p>This is bullshit.</p>
+
+<p>For that to REALLY be true, you have to turn up the white noise reality distortion field pretty high.</p>
+
+<p>Let&#8217;s take a vulnerability in a library that everything in the system links to like openssl. There have been <a href="http://www.openssl.org/news/vulnerabilities.html">three CVEs</a> against openssl this year (2 of which affect versions that most distributions use today).</p>
+
+<p>For a distribution to get a fix in place for openssl, they should ostensibly be testing EVERY SINGLE PACKAGE that links against openssl. In reality, you can get by with lesser testing of that fix assuming the ABI doesn&#8217;t change but that&#8217;s still a pretty big risk to take. I&#8217;m honestly not sure (and would love feedback) from distros about exactly what the test cycle is for these cases.</p>
+
+<p>But let&#8217;s assume they do test that. If the vulnerability was &#8220;responsibly disclosed&#8221; it&#8217;s possible they&#8217;ve had time to do that but if not, you have a case where every single package on your system that links against openssl could be vulnerable.</p>
+
+<p>So at most, what you have is a wash. I would actually argue that a package that brings its own deps is better off in this case.</p>
+
+<p>Let&#8217;s also not ignore the case that <strong>RedHat 5 STILL USES RUBY 1.8.4 WHICH DOES NOT GET ANY FIXES UPSTREAM WHATSOEVER.</strong> I don&#8217;t think ANY ruby 1.8 version is getting fixes anymore. You are ENTIRELY dependent on Redhat to not only backport fixes from different versions of Ruby but also make sure they don&#8217;t break any other Ruby packages the distro ships. In some cases, Redhat will actually have to figure out how to patch that version of Ruby.</p>
+
+<h3>File placement</h3>
+
+<p>The whole &#8220;put X here, Y here, Z here&#8221; is really about consistency more than anything. I don&#8217;t entirely disagree with it but it really is a matter of preference. I personally like my configs to live close to my application. I hate bouncing around the filesystem.</p>
+
+<h3>Version restrictions</h3>
+
+<p>This is where it gets ugly and when combined with the &#8220;use existing libraries&#8221; model that the whole policy is downright combative to people who write software.</p>
+
+<p>I&#8217;ve said previously that various language communities have coalesced around their own toolchains. One thing that&#8217;s pretty common, however, is that those communities allow for multiple concurrent versions of a given package. How they isolate and define which version to use is specific to the language but it exists.</p>
+
+<p>Shoehorning that into the vendor policy around versioning simply does not work.</p>
+
+<p>Let&#8217;s take a java application. I need version 42 of <code>commons-dingleberry</code>. The vendor has packaged version 39. If this was debian, they would tell me I need to make my application work with version 39. What is more likely the case is that my application simply won&#8217;t ever be included in upstream because I&#8217;m not about to spend my free time that I contribute to an opensource project trying to make my software work with a version of a library that may simply not have the functionality I need.</p>
+
+<p>This is really quite hilarious when you take something like Logstash which shades all the java deps it has in to its own jar. These packaging guidelines (and from what was communicated by someone attempting to get it into Fedora) requires someone to actually CHANGE Logstash such that the ElasticSearch version is its own package. Each version of Logstash is actually dependent on a specific version of ElasticSearch (due to the ability of Logstash to run ES embedded or as a non-data cluster member). Giving a user the &#8220;freedom&#8221; to switch ES versions actually creates a shitty experience for the user.</p>
+
+<h2>And that&#8217;s really the crux of it</h2>
+
+<p>Jordan has asked people repeatedly to NOT try and get Logstash into upstream repositories. Here&#8217;s why:</p>
+
+<blockquote class="twitter-tweet"><p><a href="https://twitter.com/lusis">@lusis</a> <a href="https://twitter.com/robynbergeron">@robynbergeron</a> my fear is having the next 10 years spent telling rhel users &quot;sorry, logstash 1.2 is X years old, please upgrade&quot;</p>&mdash; @jordansissel (@jordansissel) <a href="https://twitter.com/jordansissel/statuses/382251492775710720">September 23, 2013</a></blockquote>
+
+
+<script async src="http://lusis.github.com//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>Jordan makes a valid point. And it&#8217;s not just Logstash. The software that people are attempting to run today (yes even in the stodgiest of enterprises) changes too often to ever be valid as packaged in upstream. No software I have ever cared about running outside of the core OS was ever present in a distro&#8217;s upstream repository. Running CentOS or RHEL? EPEL is the FIRST thing I have to add to the system.</p>
+
+<h1>Remediation</h1>
+
+<p>Nothing kills the relevance of a distribution faster than how much effort someone has to go to for it to be usable. Why did Ubuntu start to &#8220;win&#8221;? I see two things:</p>
+
+<ul>
+<li>2 year LTS cycle</li>
+<li>The addition of PPAs</li>
+</ul>
+
+
+<p>Two years, while still an eternity, is frequent enough to be able to work in relevant changes in the industry. PPAs provide an outlet for someone to provide packages in a way that is largely well integrated into the distribution workflow. However even PPAs are not keeping up with the pace these days. I&#8217;m curious if an omnibus-style package would ever work in a PPA (assuming you would go to the effort of converting an omnibus project into a source deb.</p>
+
+<h1>Software authors share the responsibility</h1>
+
+<p>Using the vendor&#8217;s package format as an excuse not to provide packages doesn&#8217;t fly anymore. FPM has eliminated that. You don&#8217;t have to know a single goddamn thing about the RPM spec format or  deb control files.</p>
+
+<p>And beyond that, with omnibus, you don&#8217;t even need to worry about dependencies on the system. By default and omnibus project will build packages for every current LTS release of Ubuntu and RHEL/RHEL clones. There&#8217;s not even a need to create a proper apt or yum repo. With an omnibus package you don&#8217;t have any external dependencies.</p>
+
+<h1>What can distribution vendors do?</h1>
+
+<p>I&#8217;ve talked at length about this issue with a few folks but none so passionate about it as <a href="https://twitter.com/samkottler">Sam Kottler</a> and <a href="https://twitter.com/robynbergeron">Robyn Bergeron</a>. Robyn actively sought me out at PuppetConf a few years ago. I think we chatted for over an hour on distribution relevance.</p>
+
+<p>In general I think what would help most at this point is for distributions to provide an avenue for authors to provide packages that don&#8217;t meet strict guidelines. If Opscode wants to provide omnibus&#8217;d chef clients in /opt/chef without the user having to curlbash the package, that would awesome.</p>
+
+<p>There is the concern to the user but my crusade in technology has been to not treat the user like a 3 year old. Give users enough clear information about risk and let them make the decision to install a package. Communication goes a long way.</p>
+
+<h1>More to come</h1>
+
+<p>I&#8217;m going to have more to write about this topic. It&#8217;s a never-ending source of fuel really. Thanks for reading.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A Historical Compendium of Useless Shit]]></title>
@@ -2953,110 +3103,6 @@ Until then, use what you&#8217;ve got and be guard for early signs of problems l
 <p>Thanks again to Ilan for the invitation and for running such an amazing conference.</p>
 
 <p>Also, little known made-up fact: Lusis is Tagalog for &#8220;He who eats with both hands&#8221;&#8230;..</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[2011-in-review]]></title>
-    <link href="http://lusis.github.com/blog/2012/01/02/2011-in-review/"/>
-    <updated>2012-01-02T15:40:00-05:00</updated>
-    <id>http://lusis.github.com/blog/2012/01/02/2011-in-review</id>
-    <content type="html"><![CDATA[<p>The holidays are a busy time for me. I was hoping to get this written before the end of the year but it didn&#8217;t happen.</p>
-
-<!-- more -->
-
-
-<p>I can say, wihtout a doubt, that 2011 has been the most awesome year both professionally and personally in my life. And I have pretty much everyone else to thank for it.</p>
-
-<h1>Some special shoutouts</h1>
-
-<p>There are so many folks to thank for this year. I owe so many beers that I can&#8217;t keep count. I can&#8217;t possibly thank everyone but I want to throw a few special shoutouts to folks.</p>
-
-<h2>My wife</h2>
-
-<p>Why she puts up with my shit, I&#8217;ll never know. Needless to say, without her this year would have been radically different. She managed two toddlers by herself on almost every trip I took. She&#8217;s been nothing but encouraging and she also helps keep me grounded by reminding me what&#8217;s important.</p>
-
-<h2><a href="http://twitter.com/patrickdebois">Patrick DeBois</a></h2>
-
-<p>Thanks for giving me the opportunity to help with the DevOps Days events. Through the events I&#8217;ve met some of the most amazing people in the world. The DevOps community is a wonderful group of folks and I would never have met half of them if Patrick hadn&#8217;t given me the opportunity to participate.</p>
-
-<h2><a href="http://verticalacuity.com">Vertical Acuity</a></h2>
-
-<p>While I&#8217;m sad to be leaving friends behind, VA was amazing in letting me travel so much. Not only that but they trusted and valued my opinion on so many things. Whoever takes my place will be lucky to work with such an awesome group of folks.</p>
-
-<h2><a href="http://twitter.com/botchagalupe">John Willis</a></h2>
-
-<p>Not only for being a good friend but for giving me an opportunity to work with him at enStratus.</p>
-
-<h2><a href="http://twitter.com/puppetmasterd">Luke Kanies</a>, <a href="http://twitter.com/kartar">James Turnbull</a>, <a href="http://twitter.com/cruzfox">Jose Palafox</a> and the Puppet Labs crew</h2>
-
-<p>Puppet Labs gets double the thanks - for giving me the opportunity to talk about my project at PuppetConf and also for sponsoring me to travel to Goteborg and speak. The whole crew over there is amazing.</p>
-
-<h2><a href="http://twitter.com/damonedwards">Damon Edwards</a>, <a href="http://twitter.com/alexhonor">Alex Honor</a> and <a href="http://www.dtosolutions.com">DTO Solutions</a></h2>
-
-<p>I&#8217;m grateful to DTO for giving me the opportunity to attend Velocity and letting me be a booth babe. Damon and Alex both have been forces of awesome for the DevOps community.</p>
-
-<h2><a href="http://twitter.com/potus98">John Christian</a></h2>
-
-<p>John asked me early on to help with the Atlanta DevOps meetups and I&#8217;m glad he did. He stands alone in the corporate bullshit world of the financial services industry. He tought me a lot and I want to thank him for it.</p>
-
-<h2><a href="http://twitter.com/lnxchk">Mandi Walls</a></h2>
-
-<p>For being pretty much awesome by listening to my ranting, letting me bounce ideas off her. And for being my sister from another mother.</p>
-
-<h2><a href="http://twitter.com/schisamo">Seth Chisamore</a></h2>
-
-<p>For the various lunches, talks, introductions and meetup involvement. Local folks rock. Seth rocks.</p>
-
-<h2><a href="http://twitter.com/jordansissel">Jordan Sissel</a></h2>
-
-<p>For being awesome, down to earth and not an asshole. And for all the code. And for giving me the honor of contributing to SysAdvent.</p>
-
-<h2><a href="http://twitter.com/kelseyhightower">Kelsey Hightower</a></h2>
-
-<p>For helping me navigate my foray into the world of Python (technically that was a few years ago). Also for showing folks how to just get shit done.</p>
-
-<h2>Everyone else</h2>
-
-<p>I can&#8217;t possible fit everyone here&#8217;s an abbreviated list of folks, in no specific order, who have impacted me this year off the top of my head. If I leave you off, please don&#8217;t take offense. I&#8217;m shooting from the cuff here.</p>
-
-<p><a href="http://twitter.com/bradleyktaylor">Bradley Taylor</a>, <a href="http://twitter.com/wfarr">Will Farrington</a>, <a href="http://twitter.com/coreyhaines">Corey Haines</a>, <a href="http://twitter.com/dysinger">Tim Dysinger</a>, <a href="http://twitter.com/miller_joe">Joe Miller</a>, <a href="http://twitter.com/roidrage">Mathias Meyer</a>, <a href="http://twitter.com/vvuksan">Vladimir Vuksan</a>, <a href="http://twitter.com/adamhjk">Adam Jacob</a>, <a href="http://twitter.com/portertech">Sean Porter</a>, <a href="http://twitter.com/bascule">Tony Arcieri</a>, <a href="http://twitter.com/ripienaar">R.I. Pienaar</a>, <a href="http://twitter.com/adamfblahblah">Adam Fletcher</a>, <a href="http://twitter.com/anthonygoddard">Anthony Goddard</a>, <a href="http://twitter.com/williamsjoe">Joe Williams</a>, <a href="http://twitter.com/boorad">Brad Anderson</a>, Cat Muecke (alas, Cat does not tweet!), <a href="http://twitter.com/harlanbarnes">Harlan Barnes</a>, <a href="http://twitter.com/geemus">Wesley Beary</a>, <a href="http://twitter.com/mitchellh">Mitchell Hashimoto</a>, <a href="http://twitter.com/wayneeseguin">Wayne Seguin</a>, <a href="http://twitter.com/kallistec">Dan DeLeo</a>, <a href="http://twitter.com/jtimberman">Josh Timberman</a>, <a href="http://twitter.com/kantrn">Noah Kantrowitz</a>, <a href="http://twitter.com/littleidea">Andrew Clay Schafer</a>, <a href="http://twitter.com/markimbriaco">Mark Imbriaco</a>, <a href="http://twitter.com/lordcope">Stephen Nelson-Smith</a>, <a href="http://twitter.com/garethr">Gareth Rushgrove</a>, <a href="http://twitter.com/ianmeyer">Ian Meyer</a>, <a href="http://twitter.com/f3ew">Devdas Bhagat</a>, <a href="http://twitter.com/actionjack">Martin Jackson</a>, <a href="http://twitter.com/mleinart">Michael Leinartas</a>, <a href="http://twitter.com/KrisBuytaert">Kris Buytaert</a>, <a href="http://twitter.com/solarce">Brandon Burton</a>, <a href="http://twitter.com/altobey">Al Tobey</a>, <a href="http://twitter.com/matthew_jones">Matthew Jones</a>, <a href="http://twitter.com/builddoctor">Julian Simpson</a>, <a href="http://twitter.com/macros">Jason Cook</a>, <a href="http://twitter.com/jiboumans">Jos Boumans</a>, <a href="http://twitter.com/susanpotter">Susan Potter</a>, <a href="http://twitter.com/thommay">Thom May</a>, <a href="http://twitter.com/kit_plummer">Kit Plummer</a>, <a href="http://twitter.com/sascha_d">Sascha Bates</a>, <a href="http://twitter.com/unclebobmartin">Bob Martin</a>, <a href="http://twitter.com/bdha">Bryan Horstmann-Allen</a>, <a href="http://twitter.com/benjaminws">Benjamin W. Smith</a>, <a href="http://twitter.com/ches">Ches Martin</a>, <a href="http://twitter.com/obfuscurity">Jason Dixon</a>, <a href="http://twitter.com/philiph">Phil Hollenback</a>, <a href="http://twitter.com/rockpapergoat">Nate St. Germain</a>, <a href="http://twitter.com/ohlol">Scott Smith</a>, <a href="http://twitter.com/seancribbs">Sean Cribbs</a>, <a href="http://twitter.com/argv0">Andy Gross</a>, <a href="http://twitter.com/benr">Ben Rockwood</a>, <a href="http://twitter.com/jamesc_000">James Casey</a>, <a href="http://twitter.com/lhazlewood">Les Hazlewood</a>, <a href="http://twitter.com/aditzel">Allan Ditzel</a>, <a href="http://twitter.com/mariusducea">Marius Ducea</a>, <a href="http://twitter.com/noahcampbell">Noah Campbell</a>, <a href="http://twitter.com/timanglade">Tim Anglade</a>, <a href="http://twitter.com/atmos">Corey Donohoe</a>, <a href="http://twitter.com/standaloneSA">Matt Simmons</a>, <a href="http://twitter.com/ernestmueller">Ernest Mueller</a>, <a href="http://twitter.com/auxesis">Lindsay Holmwood</a>, <a href="http://twitter.com/redbluemagenta">Christian Paredes</a>, <a href="http://twitter.com/_masterzen_">Brice Figureau</a>, <a href="http://twitter.com/griggheo">Grig Gheorghiu</a>, <a href="http://twitter.com/dje">Darrin Eden</a>, <a href="http://twitter.com/kimchy">Shay Banon</a>, <a href="http://twitter.com/ramonvanalteren">Ramon Van Alteren</a> and so many others.</p>
-
-<h1>Software that changed my world</h1>
-
-<p>I also wanted to give a shoutout to a few projects that pretty much changed how I thought about the software world around me.</p>
-
-<h2><a href="http://elasticsearch.org">ElasticSearch</a></h2>
-
-<p>ElasticSearch has beeen, bar none, in my top two amazing things the past year. Having first heard about it via Logstash, when I started digging in it blew my mind. The one thing that amazed me most about ES was the Zen discovery. It&#8217;s like the first time you heard about consistent hashing. It&#8217;s one of those things that makes you say &#8220;how the fuck did I not think of this first?&#8221;. The other thing that I find awesome is that ES not only makes scaling up painless but scaling DOWN (which is the hard part) is just as easy. As a sysadmin, ElasticSearch has been the most pleasant bit of infrastructure I&#8217;ve ever had the pleasure of standing up.</p>
-
-<h2><a href="http://zeromq.org">0mq</a></h2>
-
-<p>The other thing that amazed me this year was 0mq. 0mq essentially makes the difficult and next to impossible things possible. I am not lying when I say that every project I have floating around in my head is either built around or has a perfect spot for 0mq. Along with ElasticSearch, it has fundamentally changed how I think about software, infrastructure and more.</p>
-
-<h2><a href="http://zookeeper.apache.org">Apache ZooKeeper</a></h2>
-
-<p>While I&#8217;m not a fan of ZooKeeper on several levels, It would be wrong to totally ignore it. For the longest time, ZK stood alone in what it provided. People are building amazing things with it and it inspired me to write Noah.</p>
-
-<h2><a href="http://logstash.net">Logstash</a></h2>
-
-<p>At first I was pretty dismissive of Logstash. Mainly because I didn&#8217;t have a real need. Then I started digging in and realized that Logstash is only tangentially about logs. Logstash is kind of what you always wanted a pipe to be. Arbitrary input, arbitrary filtering, arbitrary output. The use cases for logstash are so much greater when you stop thinking about logs and start thinking about moving data.</p>
-
-<h2><a href="http://erlang.org">Erlang</a>, <a href="http://www.erlang.org/doc/design_principles/users_guide.html">OTP</a> and <a href="http://basho.com">Riak</a></h2>
-
-<p>While my Erlang only extends to passable reading, via Riak, I found a desire to learn more about it. The biggest thing that stuck in my head and also changed the way I think is the Actor model. For the first time that I can remember, a concept made perfect sense to me. While learning Erlang in earnest is a goal for 2012, I think about how simple and understandable the Actor model was.</p>
-
-<h2><a href="http://celluloid.github.com">Celluloid</a></h2>
-
-<p>Following up on the Actor model, I have mad respect for Tony Arcieri. If you look back at his projects, they all follow a similar theme: improving the concurrency story on Ruby. He&#8217;s tenacious and passionate about something that most people would have (and if they&#8217;re arrogant dickfaces) laughed at by now. Celluloid brings some amazing functionality to Ruby inspired by Erlang and OTP. I find myself defaulting to it whenever I need to even think about concurrency in Ruby. Even outside of that, it encourages good behaviour with threads and reduces the chances you&#8217;ll fuck something up. The companion project, DCell, is something I&#8217;m itching to work with as well.</p>
-
-<h2><a href="http://codeascraft.etsy.com/2011/02/15/measure-anything-measure-everything/">Statsd</a> and <a href="http://graphite.wikidot.com/">Graphite</a></h2>
-
-<p>If this past year was about anything, it was about metrics. Lots and lots of metrics. Etsy pushed out statsd and brought metrics collection to the masses. Coda Hale gave an amazing talk on metrics and released the code to back it up. Shooting in the dark sucks. You need numbers. Collect ALL the metrics.</p>
-
-<h1>Final Thoughts</h1>
-
-<p>The world of open source and the community around devops is amazing. I learned from and met so many people in 2011. I&#8217;m hoping that 2012 is the year that I can give back to them in some small way. Thanks to everyone for making this past year amazing.</p>
 ]]></content>
   </entry>
   
