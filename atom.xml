@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2013-09-23T23:34:45-04:00</updated>
+  <updated>2014-04-14T00:09:48-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,106 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[omnibus-redux]]></title>
+    <link href="http://lusis.github.com/blog/2014/04/13/omnibus-redux/"/>
+    <updated>2014-04-13T23:01:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2014/04/13/omnibus-redux</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve been a pretty big proponent of omnibus. I still think it&#8217;s the right way to go but recent changes have removed the primary reason for recommending it</p>
+
+<!-- more -->
+
+
+<p>I did a lot of evangelism for <a href="https://github.com/opscode/omnibus-ruby">omnibus</a> last year. Presentations, blogposts, a sysadvent article. It is/was a great tool however it no longer fits the primary usecase.</p>
+
+<h1>Original workflow</h1>
+
+<p>Originally the biggest benefit to omnibus (outside of the core of what it did) was the Vagrantfile it generated. Because of this Vagrantfile, I could generate a project and publish the repo for anyone to use. That person didn&#8217;t have to have any ruby tooling installed. They just needed vagrant and two plugins (<code>vagrant-omnibus</code> and <code>vagrant-berkshelf</code>).</p>
+
+<p>They could check out the repository and just run <code>vagrant up</code> and the packages would be nice and neat dropped off in the <code>pkg</code> directory locally. I didn&#8217;t see this as a problem workflow because I didn&#8217;t listen to my own advise.</p>
+
+<p>This is from the original generated README of a fresh omnibus project:</p>
+
+<p><img src="http://s3itch.lusis.org/1wzxjV.png" alt="original README" /></p>
+
+<p>This was the part of the workflow I was bullish on. In fact we went whole hog internally with this. Anyone could contribute because they could test locally with only the exising tools that we already had installed.</p>
+
+<p>But that seems to have all changed with Omnibus version 3. Now omnibus requires a full ruby development environment just to do what it previously did with a <code>Vagrantfile</code> alone.
+The reason for this is that instead of Vagrant, now omnibus uses <a href="https://github.com/test-kitchen/test-kitchen">test-kitchen</a>. Additionally it seems to ALSO require <code>Berkshelf</code> locally now.</p>
+
+<p>This is where it gets really ugly.</p>
+
+<p>It doesn&#8217;t just require Berkshelf. It requires an UNRELEASED version of Berkshelf.</p>
+
+<h2>Sidebar on tooling</h2>
+
+<p>I wanted to take a minute to talk a little bit about Chef tooling.</p>
+
+<p>There is evidently a shift going on in the Chef community and I apparently haven&#8217;t been keeping up. The Chef community flocked to Berkshelf for reasons I don&#8217;t understand. It evidently solved a problem I didn&#8217;t have. You see I used chef-client and knife (with several plugins). I work with a lot of folks who are NOT ruby or chef people. For us, Chef is a means to an end. It&#8217;s a tool just like Maven or Artifactory. We use chef-solo as the installer for our platform, for instance. We are not ruby developers or users. All of our tooling is either in Python or Java and our application code base is in Java.</p>
+
+<p>Opscode (or rather Chef) has previously made a big push to make being a Chef user mean not being a ruby expert. There seems to have been not only a shift in that thinking but also in how the tools are to be used.</p>
+
+<p>A good example is chef-metal. This originally confused me because this was the chef model:</p>
+
+<ul>
+<li><code>knife</code> is for your workstation</li>
+<li><code>chef-client</code> is for your servers</li>
+</ul>
+
+
+<p>With <code>chef-metal</code> that changes a bit because the understanding is that where you might use <code>knife rackspace &lt;blah&gt;</code> you&#8217;ll now run <code>chef-client recipe[rackspace_servers]</code>.</p>
+
+<p>So back to berkshelf and other tools&#8230;</p>
+
+<p>Before these were optional. Slowly but surely they&#8217;re becoming NOT optional. The problem with this is as I described above. No longer is the workflow:</p>
+
+<ul>
+<li>install knife</li>
+<li>checkout our chef repo</li>
+<li>edit/upload cookbooks</li>
+</ul>
+
+
+<p>It&#8217;s now become a ruby developer workflow of somekind. I don&#8217;t have a cookbook directory. All of my cookbooks are somewhere in <code>~/.berkshelf</code> and I&#8217;m expected to have every cookbook be its own repo or something. I still don&#8217;t fully understand what&#8217;s going on here and frankly I don&#8217;t have the time. I have chef novices on my team and I don&#8217;t have any official documentation to point them at because this is something that exists outside of the official chef documentation.</p>
+
+<p>I&#8217;m not trying to slander ANY of these tools. I&#8217;m sure they&#8217;re all wonderful. <code>test-kitchen</code> looks great for being able to break away from tying the provisoner to vagrant but again that&#8217;s not the workflow that works for us (or frankly anyone who just wants to use chef). My argument is simply that if these things are going to be the defacto model then they should be rolled into Chef somehow and be documented on the official documentation.</p>
+
+<h1>So back to omnibus</h1>
+
+<p>So we have two issues here that make omnibus not a fit anymore:</p>
+
+<ul>
+<li>Requires a full blown ruby environment to <strong>BUILD</strong> a project whereas before it only required a full blown ruby environment to <strong>CREATE</strong> a project.</li>
+<li>the 3.x RELEASE of Omnibus had a dependency on an <strong>UNRELEASED</strong> artifact</li>
+</ul>
+
+
+<p>That second one is really painful to swallow. Quite frankly it&#8217;s just poor form to do that. You can argue about version numbers being meaningless or &#8220;it&#8217;s stable just still in beta&#8221; but when you&#8217;re asking someone to use and depend on your tools it&#8217;s just not right. If your dependencies aren&#8217;t released yet then you don&#8217;t get to release. Let&#8217;s also not forget that EVERY anicllary add-on in the Chef world seems to have its own dependency on Berkshelf now.</p>
+
+<h1>How did this all come to a head</h1>
+
+<p>When Heartbleed hit, I needed to rebuild our two big omnibus packages. Recently I had switched over to a new laptop and didn&#8217;t yet have anything checked out. This was fine because I had the omnibus projects checked out on my desktop. It was running a 1.4 release of vagrant and was where I did most of my builds before. So we generated new packages and were happy.</p>
+
+<p>We also have new team members on our ops team. I was using this as an opportunity to show them the omnibus packages and let them build them as well. So I tell them to check out the repos, make sure they have the plugins installed and run <code>vagrant up</code>. This didn&#8217;t work and it turns out somebody had vagrant 1.5 installed. No big deal I think. We&#8217;ll punt on that one and just make a note that we&#8217;ll need a new <code>vagrant-berkshelf</code> plugin when it&#8217;s released.</p>
+
+<p>But yesterday I went to work on a massive refactor of our omnibus packages since we&#8217;re cleaning up a bunch of extras and changing things around. I knew that omnibus 3 had several things to make the whole build process go faster. It also allowed me greater control in build determinism. So I upgrade and generate a new project to see what the new layout looks like and test the builds. When I realize there&#8217;s no Vagrantfile, I&#8217;m really confused. The readme says a Vagrantfile would be generated.</p>
+
+<p>That set off the things I tweeted and posted on the mailing list. In the end it came down to me evidently relying on something I was never supposed to rely on and being told I should learn to RTFM.</p>
+
+<h1>So where does that leave things?</h1>
+
+<p>Right now I have to take back everything I said about omnibus. It&#8217;s not that I don&#8217;t think it&#8217;s a great tool and I certainly give two shits about getting subtweeted. I still think it&#8217;s a great tool and I think the idea is the right one.</p>
+
+<p>However the main reason I recommended omnibus and bothered to integrate it is gone. It&#8217;s simply not the straightforward process it was and the removal of the vagrant build lab puts too much on the non-ruby-ecosystem user. This is where I didn&#8217;t listen to my own advice. I frequently warned people that omnibus exists first and foremost for the needs of Chef. We got lucky that it worked this long and it was an awesome ride.</p>
+
+<p>I&#8217;m still trying to figure out the best way to get BACK to the vagrant build-lab but it&#8217;s not working out so well. I&#8217;m attempting to rebuild my <a href="https://github.com/lusis/omnibus-omnibus-omnibus">omnibus-omnibus-omnibus</a> project to ship everything needed but now I&#8217;m back to stepping outside the community framework and making people who wanted to just create packages needing something extra I created.</p>
+
+<h1>One last thing</h1>
+
+<p>I&#8217;m not posting this expecting anyone to change anything in Omnibus and I&#8217;m not trying to be passive-aggressive. I&#8217;m not entitled to anything from anyone. This is more about providing something I can link to for users of the omnibus builds I&#8217;ve already published since they will no longer work out-of-the-box.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Stop fighting distros - part 2]]></title>
@@ -2986,123 +3086,6 @@ At a high level we&#8217;re going to do the following:</p>
 <h1>Additional Credits</h1>
 
 <p>I&#8217;d like to thank <a href="https://twitter.com/miller_joe">Joe Miller</a>, <a href="https://twitter.com/ches">Ches Martin</a> and <a href="https://twitter.com/agentdero">R. Tyler Croy</a> for reviewing this post and offering up corrections, tips and advice.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Scale10x Recap]]></title>
-    <link href="http://lusis.github.com/blog/2012/01/22/scale10x-recap/"/>
-    <updated>2012-01-22T07:02:00-05:00</updated>
-    <id>http://lusis.github.com/blog/2012/01/22/scale10x-recap</id>
-    <content type="html"><![CDATA[<p>This past week I had the awesome pleasure of participating in my first <a href="http://www.socallinuxexpo.org/">SoCal Linux Expo</a>. As I later discovered, this was the 10th installment of this awesome event (hence the 10x).</p>
-
-<!-- more -->
-
-
-<h1>The email and enStratus</h1>
-
-<p>I got an email from <a href="https://twitter.com/irabinovitch">Ilan Rabinovitch</a> just as things were going down with me headed to <a href="http://enstratus.com">enStratus</a>. Since the event was going to be right around the time I started, I pretty much put it out of my mind.
-Then I realized that <a href="https://twitter.com/botchagalupe">my boss</a> was going to be attending. I figured it wouldn&#8217;t hurt to ask and it was decided that I would shadow John on his trip to enStratus HQ for my mandatory cultural immersion (translation: does the fat redneck own a winter coat?) and on to SCaLE. While I didn&#8217;t make it to Minnesota (diverted to San Jose on business), I did still make it to the conference.</p>
-
-<p>I had an awesome time in San Francisco and San Jose. I got to meet a great bunch of folks and geek out hardcore.</p>
-
-<h1>Monitoring sucks</h1>
-
-<p>Ilan asked me if I would be willing to be on a panel about the whole <a href="https://github.com/monitoringsucks">#monitoringsucks</a> thing. We were able to score a great panel of folks:</p>
-
-<ul>
-<li>Simon Jakesch from Zenoss</li>
-<li>James Litton from PagerDuty</li>
-<li>Jody Mulkey from Shopzilla</li>
-</ul>
-
-
-<p>The event was awesome. I did some minor introductions, got the ball rolling with some questions and then we let the audience take it from there.
-The participation was AWESOME. We had great questions from the audience and the feedback I got AFTER the fact was mindblowing. One particular post-panel question is worth a blog post in its own right.</p>
-
-<p>One thing that really stood out was this: People just don&#8217;t know where to start. The landscape is pretty &#8220;cluttered&#8221;. <a href="https://twitter.com/cwebber">Chris Webber</a> brought up a very salient point that I sometimes forget; When we talk about &#8220;monitoring&#8221;, we&#8217;re really talking about multiple things - collection, alerting, visualization, trending and multitudes of other aspects.</p>
-
-<p>I got asked several times in the hallway - &#8220;What should I use?&#8221; or &#8220;What do you think about <foo>?&#8221;. My first response was always &#8220;What are you using now?&#8221;.</p>
-
-<p>I like to think I&#8217;m pretty pragmatic. I love the new shiny. I love pretty graphs. I&#8217;m a technologist. However, I know when to be realistic. My thought process goes something like this:</p>
-
-<h2>Do you have something in place now?</h2>
-
-<h3>Yes</h3>
-
-<p>Why are you looking to switch? Is it unreliable? Is it painful to configure? Basically, if it&#8217;s getting the job done and has relatively minor overhead there&#8217;s no reason to switch.
-The pain points for me with monitoring solutions usually come much later. It doesn&#8217;t scale or scaling it is difficult. It doesn&#8217;t provide the visibility I need. It&#8217;s unreliable (usually due to scaling problems).
-Until then, use what you&#8217;ve got and be guard for early signs of problems like check latency going up or missed notifications.</p>
-
-<p>If you have a configuration management solution in place, it probably has native support for configuring Nagios. When you add a new host to your environment, you only need to tell your CM tool to run on your monitoring server. If you&#8217;ve done any sort of logical grouping, you&#8217;ll have the right things monitored quickly.</p>
-
-<h3>No</h3>
-
-<p>If you don&#8217;t have ANYTHING in place, you need to cover two bases pretty quick:</p>
-
-<ul>
-<li>Outside-In Checks: is my site up and responding timely?</li>
-<li>Stupid stuff: Are my disks filling up? Is my database slave behind?</li>
-</ul>
-
-
-<p>For outside in checks, use something quick and easy like Pingdom. For the inside checks, don&#8217;t underestimate the power of a cron job. If you want something a bit more packaged, look at <a href="http://mmonit.com">monit</a>. It&#8217;s dead simple and can get you to a safe place.</p>
-
-<h2>A note on visibility</h2>
-
-<p>Monitoring tools are great but many times they fall down when you need to diagnose a problem ex post facto. If you went the simple route, you probably don&#8217;t have any real trending data. This is where many complaints start to come from folks. You end up monitoring the same thing twice - once for alerting systems like Nagios and another time for your visualization, trending and other engines. When you reach this point, start looking at things like Sensu or all-in-one solutions that, while cumbersome and imprecise use the same collected data - Zenoss, Zabbix, Icinga (originally a fork of Nagios).</p>
-
-<p>The event was recorded (both audio and video) but I have no timeframe on when it&#8217;s going to be available but I&#8217;ll let you know as soon as it&#8217;s up.</p>
-
-<h1>The rest of the conference</h1>
-
-<p>The rest of the conference was epic as well. Being that this was my first time, I didn&#8217;t know what to expect. The thing that most stood out was the number of children. This was probably the most family friendly conference I&#8217;ve ever been to. Encouraging stuff. Plenty of events and in fact an entire track dedicated to children.</p>
-
-<p>I didn&#8217;t get to attend as many talks as I wanted to. While the facility was really nice, the building is like a faraday cage. My phone spent what little battery life it had just trying to get a signal. I spent quite a bit of time running back to my room to charge up. <a href="https://twitter.com/cwebber">Chris Webber</a> totally got me hooked on portable chargers.</p>
-
-<h1>Juju talk</h1>
-
-<p><em>disclaimer: I&#8217;m fully aware that Juju is undergoing heavy active development and is a very young project</em></p>
-
-<p>One of the talks I attended was on <a href="http://juju.ubuntu.com">Juju</a>. I was probably a bit harsh on Juju when it was first announced. The original name was much better and the whole witch doctor thing just doesn&#8217;t sit well with me.</p>
-
-<p>I also hate the tag line - &#8220;DevOps distilled&#8221;. It&#8217;s marketing pure and simple. I have very little tolerance for things that bill themselves as a &#8220;devops tool&#8221; or &#8220;for devops&#8221;.</p>
-
-<p>But more than the name, something about Juju didn&#8217;t feel right. After the talk, something still doesn&#8217;t feel right. While I don&#8217;t like pooping all over someone else&#8217;s hard work so writing this part is tough.</p>
-
-<h2>Where does it fit?</h2>
-
-<p>Right now, I don&#8217;t think Juju even knows where it fits. It&#8217;s got some great ideas and on any other day, I&#8217;d be all over it. The problem is that Juju tries to do too much in some areas and not enough in others.</p>
-
-<p>Parts of Juju are EXACTLY what I see as my primary use case for Noah. The service orchestration is great. The ideas are pretty solid. Juju even uses ZooKeeper under the hood.</p>
-
-<h2>Services not servers</h2>
-
-<p>Everyone knows that I preach the mantra of &#8220;services matter. hosts don&#8217;t&#8221;</p>
-
-<p>The problem is that in an attempt to be the Nagios (unlimited flexibility) of configuration management, it can&#8217;t actually do enough in that area. Because it only concerns itself with services (and the configuration of them), it doesn&#8217;t do enough to manage the host. Just because the end state is &#8220;I&#8217;m serving a web page&#8221; doesn&#8217;t mean you should ignore the host its running on. Since Juju isn&#8217;t designed to deal with that (and actually LACKS any primitives to do it), you&#8217;re left with needing to manage a system in multiple places - once with your CM tool and then again with the charms.</p>
-
-<p>Someone said it best when he described Juju as &#8220;apt for services&#8221;. It&#8217;s quite evident that the same broken mentality that apt takes to managing packages is applied to Juju as well. Charms have upgrade and downgrade steps. They&#8217;re just as complicated too. Not only is there no standard (since charms can be written in any language) it&#8217;s actually detrimental. The reason for a common DSL or language like the ones exposed by CM tools is not some academic mental masturbation. It&#8217;s repeatability and efficiency. I can go into a puppet shop and look at a module and know what it does. I can look at most chef recipes (outside of ones that might use a custom LWRP) and know what&#8217;s going on.</p>
-
-<p>In the Juju world, a single charm could be written in one spot in Python and another spot in Bash. It pushes too much responsibility to the end user NOT to mess something up. I dare say that idempotence doesn&#8217;t even exist in Juju.</p>
-
-<h2>A fair shake</h2>
-
-<p>Again, I&#8217;m going to do some more playing around with Juju. I think it can meet a critical need for folks but I think they need to revisit what problem they&#8217;re trying to solve. I appreciate the work they&#8217;ve done and I&#8217;m totally excited that orchestration is getting the proper attention. The presenters were fantastic.</p>
-
-<h1>Other stuff</h1>
-
-<p>I attended a really good talk about the history of Openstack and where it&#8217;s going. It was great. As someone who is working with openstack professionally now (and had just dealt with some of its warts not 3 days before hand), I found it very valuable. Also congrats to the speaker, <a href="https://twitter.com/anotherjesse">Jesse Andrews</a> on the birth of his first child!</p>
-
-<p>I managed to make it to Brendan Gregg&#8217;s talk as well. If you ever have the opportunity to hear him speak, you should take it. While I&#8217;m not a SmartOS user, the talk was really not about that. I walked out with some amazing insight on how smart people troubleshoot performance problems. Very well done.</p>
-
-<h1>The hallway track</h1>
-
-<p>Of course the real value in any conference is the hallway track. The chance to interact with your peers. I met so many smart people (some twice because I suck at remembering faces at first - sorry!). Chatting with folks like C. Flores, Jason Cook, Sean O&#8217;Meara, Chris Webber, Dave Rawks, Matt Ray, Matt Silvey and so many others that I can&#8217;t keep straight in my head. Everyone was awesome and I hope that you were able to get as much out of me as I got out of you.</p>
-
-<p>Thanks again to Ilan for the invitation and for running such an amazing conference.</p>
-
-<p>Also, little known made-up fact: Lusis is Tagalog for &#8220;He who eats with both hands&#8221;&#8230;..</p>
 ]]></content>
   </entry>
   
