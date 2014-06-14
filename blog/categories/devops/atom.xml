@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: DevOps | blog dot lusis]]></title>
+  <title><![CDATA[Category: devops | blog dot lusis]]></title>
   <link href="http://lusis.github.com/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-04-14T00:16:46-04:00</updated>
+  <updated>2014-06-14T00:52:22-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -14,444 +14,519 @@
 
   
   <entry>
-    <title type="html"><![CDATA[2011-in-review]]></title>
-    <link href="http://lusis.github.com/blog/2012/01/02/2011-in-review/"/>
-    <updated>2012-01-02T15:40:00-05:00</updated>
-    <id>http://lusis.github.com/blog/2012/01/02/2011-in-review</id>
-    <content type="html"><![CDATA[<p>The holidays are a busy time for me. I was hoping to get this written before the end of the year but it didn't happen.</p>
+    <title type="html"><![CDATA[DevOps - The title match]]></title>
+    <link href="http://lusis.github.com/blog/2013/06/04/devops-the-title-match/"/>
+    <updated>2013-06-04T21:38:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2013/06/04/devops-the-title-match</id>
+    <content type="html"><![CDATA[<p>I've noticed an annoying trend recently. I was content to ignore it for a while but now it's getting almost stupid. That trend is the job title of "DevOps".</p>
 
 <!-- more -->
 
 
-<p>I can say, wihtout a doubt, that 2011 has been the most awesome year both professionally and personally in my life. And I have pretty much everyone else to thank for it.</p>
+<p>I came across an article tonight that confused the hell out of me. It was an interview. The outlet wasn't a technical one per se but it was a technical interview none the less.</p>
 
-<h1>Some special shoutouts</h1>
+<p>This part is what confused me (<em>highlights mine</em>):</p>
 
-<p>There are so many folks to thank for this year. I owe so many beers that I can't keep count. I can't possibly thank everyone but I want to throw a few special shoutouts to folks.</p>
+<p><blockquote><p>To do this requires a well-integrated platform that is full of capabilities for the <strong>developer</strong>; contemplates the needs of <strong>DevOps</strong>; provides command, control and visibility for <strong>operations</strong>; and is ....</p></blockquote></p>
 
-<h2>My wife</h2>
+<p>To quote an internet-famous person:</p>
 
-<p>Why she puts up with my shit, I'll never know. Needless to say, without her this year would have been radically different. She managed two toddlers by herself on almost every trip I took. She's been nothing but encouraging and she also helps keep me grounded by reminding me what's important.</p>
+<p><strong>WAT</strong></p>
 
-<h2><a href="http://twitter.com/patrickdebois">Patrick DeBois</a></h2>
+<h2>Stepping back</h2>
 
-<p>Thanks for giving me the opportunity to help with the DevOps Days events. Through the events I've met some of the most amazing people in the world. The DevOps community is a wonderful group of folks and I would never have met half of them if Patrick hadn't given me the opportunity to participate.</p>
+<p>I don't like the idea of <em>devops</em> as a job title in the first place. I don't like it as a role either. It makes no sense. You don't call someone an <em>agile</em> so why would you call them a <em>devop</em>?</p>
 
-<h2><a href="http://verticalacuity.com">Vertical Acuity</a></h2>
+<p>My problem lies in the fact that it implies that there's something wrong with being a sysadmin, operations person, developer or whatnot. Not only that but the idea behind devops is the elimination of silos, not the creation of new ones.</p>
 
-<p>While I'm sad to be leaving friends behind, VA was amazing in letting me travel so much. Not only that but they trusted and valued my opinion on so many things. Whoever takes my place will be lucky to work with such an awesome group of folks.</p>
+<p>I have, however, made a bit of peace with the fact that <em>devops</em> has become a replacement title of sorts for <em>sysadmin</em> or <em>developer</em>.</p>
 
-<h2><a href="http://twitter.com/botchagalupe">John Willis</a></h2>
+<p>I get the problem domain. Companies want to be able to qualify the types of people they want. The phrase <em>devops</em> carries a certain meaning with it. People are trying to leverage that. In other cases, it's become a codeword for "generalist" or "technologist". And, yes, even in some cases it's become a code word for "doing both development and ops work"</p>
 
-<p>Not only for being a good friend but for giving me an opportunity to work with him at enStratus.</p>
+<h2>What does devops mean though</h2>
 
-<h2><a href="http://twitter.com/puppetmasterd">Luke Kanies</a>, <a href="http://twitter.com/kartar">James Turnbull</a>, <a href="http://twitter.com/cruzfox">Jose Palafox</a> and the Puppet Labs crew</h2>
+<p>Here's the secret. I'll tell you EXACTLY what devops means.</p>
 
-<p>Puppet Labs gets double the thanks - for giving me the opportunity to talk about my project at PuppetConf and also for sponsoring me to travel to Goteborg and speak. The whole crew over there is amazing.</p>
+<p>Devops means giving a shit about your job enough to not pass the buck. Devops means giving a shit about your job enough to want to learn all the parts and not just your little world.</p>
 
-<h2><a href="http://twitter.com/damonedwards">Damon Edwards</a>, <a href="http://twitter.com/alexhonor">Alex Honor</a> and <a href="http://www.dtosolutions.com">DTO Solutions</a></h2>
+<p>Developers need to understand infrastructure. Operations people need to understand code. People need to fucking work with each other and not just occupy space next to each other.</p>
 
-<p>I'm grateful to DTO for giving me the opportunity to attend Velocity and letting me be a booth babe. Damon and Alex both have been forces of awesome for the DevOps community.</p>
+<p>I worked at a company several years ago. We created a dedicated devops team. The rationale was solid - the company had a monolithic idea of roles and titles. We also had a large group on both sides that were only interested in doing their little bit and going home. By creating this title/team, it was easier at a company level to justify them working on non-standard projects.</p>
 
-<h2><a href="http://twitter.com/potus98">John Christian</a></h2>
+<p>So a "devops" team was created. This was a small team of what essentially boiled down to "super sysadmins". We wrote puppet manifests, worked with the developers to automate build processes...shit like that.</p>
 
-<p>John asked me early on to help with the Atlanta DevOps meetups and I'm glad he did. He stands alone in the corporate bullshit world of the financial services industry. He tought me a lot and I want to thank him for it.</p>
+<p>What ended up happening was that the devops team was seen as elitist by the operations team, nosy and invasive by the developers and everyone just passed the blame on to them - "Devops did that. Not us"</p>
 
-<h2><a href="http://twitter.com/lnxchk">Mandi Walls</a></h2>
+<h2>So back to that quote</h2>
 
-<p>For being pretty much awesome by listening to my ranting, letting me bounce ideas off her. And for being my sister from another mother.</p>
+<p>Having said all that, what about the quote?</p>
 
-<h2><a href="http://twitter.com/schisamo">Seth Chisamore</a></h2>
+<p>This is indicative of the problem I described above. I think I've finally figured out the question I want to ask people who think this way:</p>
 
-<p>For the various lunches, talks, introductions and meetup involvement. Local folks rock. Seth rocks.</p>
+<p>If devops is a distinct role/title apart from development and operations, then what the fuck does a "devop" do?</p>
 
-<h2><a href="http://twitter.com/jordansissel">Jordan Sissel</a></h2>
+<p>Let's look at that quote again. It implies that:</p>
 
-<p>For being awesome, down to earth and not an asshole. And for all the code. And for giving me the honor of contributing to SysAdvent.</p>
+<ul>
+<li>"command, control and visibility" is something developers have no need for</li>
+<li>operations won't need the same capabilities as developers</li>
+<li>There's a third group that has an entirely different set of needs</li>
+</ul>
 
-<h2><a href="http://twitter.com/kelseyhightower">Kelsey Hightower</a></h2>
 
-<p>For helping me navigate my foray into the world of Python (technically that was a few years ago). Also for showing folks how to just get shit done.</p>
+<p>What is that third group? What possible aspect outside of development and operations of the IT needs of a company do those two groups not think affects them in some way and thus have a vested interest in being involved? <em>(Yes I'm aware companies have dbas, security and what not - those are shitty silos too)</em></p>
 
-<h2>Everyone else</h2>
+<p>This topic comes up all the time on various mailing lists and it never seems to really reach any sort of consensus. So I'm asking you. If a "devops" is something different than someone in operations or development, someone different than a sysadmin or developer....</p>
 
-<p>I can't possible fit everyone here's an abbreviated list of folks, in no specific order, who have impacted me this year off the top of my head. If I leave you off, please don't take offense. I'm shooting from the cuff here.</p>
+<p>What the fuck is it?</p>
 
-<p><a href="http://twitter.com/bradleyktaylor">Bradley Taylor</a>, <a href="http://twitter.com/wfarr">Will Farrington</a>, <a href="http://twitter.com/coreyhaines">Corey Haines</a>, <a href="http://twitter.com/dysinger">Tim Dysinger</a>, <a href="http://twitter.com/miller_joe">Joe Miller</a>, <a href="http://twitter.com/roidrage">Mathias Meyer</a>, <a href="http://twitter.com/vvuksan">Vladimir Vuksan</a>, <a href="http://twitter.com/adamhjk">Adam Jacob</a>, <a href="http://twitter.com/portertech">Sean Porter</a>, <a href="http://twitter.com/bascule">Tony Arcieri</a>, <a href="http://twitter.com/ripienaar">R.I. Pienaar</a>, <a href="http://twitter.com/adamfblahblah">Adam Fletcher</a>, <a href="http://twitter.com/anthonygoddard">Anthony Goddard</a>, <a href="http://twitter.com/williamsjoe">Joe Williams</a>, <a href="http://twitter.com/boorad">Brad Anderson</a>, Cat Muecke (alas, Cat does not tweet!), <a href="http://twitter.com/harlanbarnes">Harlan Barnes</a>, <a href="http://twitter.com/geemus">Wesley Beary</a>, <a href="http://twitter.com/mitchellh">Mitchell Hashimoto</a>, <a href="http://twitter.com/wayneeseguin">Wayne Seguin</a>, <a href="http://twitter.com/kallistec">Dan DeLeo</a>, <a href="http://twitter.com/jtimberman">Josh Timberman</a>, <a href="http://twitter.com/kantrn">Noah Kantrowitz</a>, <a href="http://twitter.com/littleidea">Andrew Clay Schafer</a>, <a href="http://twitter.com/markimbriaco">Mark Imbriaco</a>, <a href="http://twitter.com/lordcope">Stephen Nelson-Smith</a>, <a href="http://twitter.com/garethr">Gareth Rushgrove</a>, <a href="http://twitter.com/ianmeyer">Ian Meyer</a>, <a href="http://twitter.com/f3ew">Devdas Bhagat</a>, <a href="http://twitter.com/actionjack">Martin Jackson</a>, <a href="http://twitter.com/mleinart">Michael Leinartas</a>, <a href="http://twitter.com/KrisBuytaert">Kris Buytaert</a>, <a href="http://twitter.com/solarce">Brandon Burton</a>, <a href="http://twitter.com/altobey">Al Tobey</a>, <a href="http://twitter.com/matthew_jones">Matthew Jones</a>, <a href="http://twitter.com/builddoctor">Julian Simpson</a>, <a href="http://twitter.com/macros">Jason Cook</a>, <a href="http://twitter.com/jiboumans">Jos Boumans</a>, <a href="http://twitter.com/susanpotter">Susan Potter</a>, <a href="http://twitter.com/thommay">Thom May</a>, <a href="http://twitter.com/kit_plummer">Kit Plummer</a>, <a href="http://twitter.com/sascha_d">Sascha Bates</a>, <a href="http://twitter.com/unclebobmartin">Bob Martin</a>, <a href="http://twitter.com/bdha">Bryan Horstmann-Allen</a>, <a href="http://twitter.com/benjaminws">Benjamin W. Smith</a>, <a href="http://twitter.com/ches">Ches Martin</a>, <a href="http://twitter.com/obfuscurity">Jason Dixon</a>, <a href="http://twitter.com/philiph">Phil Hollenback</a>, <a href="http://twitter.com/rockpapergoat">Nate St. Germain</a>, <a href="http://twitter.com/ohlol">Scott Smith</a>, <a href="http://twitter.com/seancribbs">Sean Cribbs</a>, <a href="http://twitter.com/argv0">Andy Gross</a>, <a href="http://twitter.com/benr">Ben Rockwood</a>, <a href="http://twitter.com/jamesc_000">James Casey</a>, <a href="http://twitter.com/lhazlewood">Les Hazlewood</a>, <a href="http://twitter.com/aditzel">Allan Ditzel</a>, <a href="http://twitter.com/mariusducea">Marius Ducea</a>, <a href="http://twitter.com/noahcampbell">Noah Campbell</a>, <a href="http://twitter.com/timanglade">Tim Anglade</a>, <a href="http://twitter.com/atmos">Corey Donohoe</a>, <a href="http://twitter.com/standaloneSA">Matt Simmons</a>, <a href="http://twitter.com/ernestmueller">Ernest Mueller</a>, <a href="http://twitter.com/auxesis">Lindsay Holmwood</a>, <a href="http://twitter.com/redbluemagenta">Christian Paredes</a>, <a href="http://twitter.com/_masterzen_">Brice Figureau</a>, <a href="http://twitter.com/griggheo">Grig Gheorghiu</a>, <a href="http://twitter.com/dje">Darrin Eden</a>, <a href="http://twitter.com/kimchy">Shay Banon</a>, <a href="http://twitter.com/ramonvanalteren">Ramon Van Alteren</a> and so many others.</p>
+<h2>Disclaimer</h2>
 
-<h1>Software that changed my world</h1>
-
-<p>I also wanted to give a shoutout to a few projects that pretty much changed how I thought about the software world around me.</p>
-
-<h2><a href="http://elasticsearch.org">ElasticSearch</a></h2>
-
-<p>ElasticSearch has beeen, bar none, in my top two amazing things the past year. Having first heard about it via Logstash, when I started digging in it blew my mind. The one thing that amazed me most about ES was the Zen discovery. It's like the first time you heard about consistent hashing. It's one of those things that makes you say "how the fuck did I not think of this first?". The other thing that I find awesome is that ES not only makes scaling up painless but scaling DOWN (which is the hard part) is just as easy. As a sysadmin, ElasticSearch has been the most pleasant bit of infrastructure I've ever had the pleasure of standing up.</p>
-
-<h2><a href="http://zeromq.org">0mq</a></h2>
-
-<p>The other thing that amazed me this year was 0mq. 0mq essentially makes the difficult and next to impossible things possible. I am not lying when I say that every project I have floating around in my head is either built around or has a perfect spot for 0mq. Along with ElasticSearch, it has fundamentally changed how I think about software, infrastructure and more.</p>
-
-<h2><a href="http://zookeeper.apache.org">Apache ZooKeeper</a></h2>
-
-<p>While I'm not a fan of ZooKeeper on several levels, It would be wrong to totally ignore it. For the longest time, ZK stood alone in what it provided. People are building amazing things with it and it inspired me to write Noah.</p>
-
-<h2><a href="http://logstash.net">Logstash</a></h2>
-
-<p>At first I was pretty dismissive of Logstash. Mainly because I didn't have a real need. Then I started digging in and realized that Logstash is only tangentially about logs. Logstash is kind of what you always wanted a pipe to be. Arbitrary input, arbitrary filtering, arbitrary output. The use cases for logstash are so much greater when you stop thinking about logs and start thinking about moving data.</p>
-
-<h2><a href="http://erlang.org">Erlang</a>, <a href="http://www.erlang.org/doc/design_principles/users_guide.html">OTP</a> and <a href="http://basho.com">Riak</a></h2>
-
-<p>While my Erlang only extends to passable reading, via Riak, I found a desire to learn more about it. The biggest thing that stuck in my head and also changed the way I think is the Actor model. For the first time that I can remember, a concept made perfect sense to me. While learning Erlang in earnest is a goal for 2012, I think about how simple and understandable the Actor model was.</p>
-
-<h2><a href="http://celluloid.github.com">Celluloid</a></h2>
-
-<p>Following up on the Actor model, I have mad respect for Tony Arcieri. If you look back at his projects, they all follow a similar theme: improving the concurrency story on Ruby. He's tenacious and passionate about something that most people would have (and if they're arrogant dickfaces) laughed at by now. Celluloid brings some amazing functionality to Ruby inspired by Erlang and OTP. I find myself defaulting to it whenever I need to even think about concurrency in Ruby. Even outside of that, it encourages good behaviour with threads and reduces the chances you'll fuck something up. The companion project, DCell, is something I'm itching to work with as well.</p>
-
-<h2><a href="http://codeascraft.etsy.com/2011/02/15/measure-anything-measure-everything/">Statsd</a> and <a href="http://graphite.wikidot.com/">Graphite</a></h2>
-
-<p>If this past year was about anything, it was about metrics. Lots and lots of metrics. Etsy pushed out statsd and brought metrics collection to the masses. Coda Hale gave an amazing talk on metrics and released the code to back it up. Shooting in the dark sucks. You need numbers. Collect ALL the metrics.</p>
-
-<h1>Final Thoughts</h1>
-
-<p>The world of open source and the community around devops is amazing. I learned from and met so many people in 2011. I'm hoping that 2012 is the year that I can give back to them in some small way. Thanks to everyone for making this past year amazing.</p>
+<p>This post was writting on an airplane with an annoying passenger in front of me, quite a bit of rum in me and a lack of sleep. I'm guessing it really doesn't look any different than any other post though does it?</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Deploy ALL the Things]]></title>
-    <link href="http://lusis.github.com/blog/2011/10/18/deploy-all-the-things/"/>
-    <updated>2011-10-18T06:59:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2011/10/18/deploy-all-the-things</id>
-    <content type="html"><![CDATA[<p><em>This is part 2 in a post on deployment strategies. The previous post is located <a href="http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths/">here</a></em></p>
+    <title type="html"><![CDATA[It sucks to be right]]></title>
+    <link href="http://lusis.github.com/blog/2012/03/20/it-sucks-to-be-right/"/>
+    <updated>2012-03-20T09:00:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2012/03/20/it-sucks-to-be-right</id>
+    <content type="html"><![CDATA[<p>So it looks like Adrian Cockcroft finally spilled the beans on <a href="http://perfcap.blogspot.com/2012/03/ops-devops-and-noops-at-netflix.html">Netflix (no)Operations</a> and sadly it reads like I expected.</p>
 
-<p>My previous post covered some of the annoying excuses and complaints that people like to use when discussing deployments. The big take away should have been the following:</p>
+<!-- more -->
+
+
+<h1>Netflix still does operations</h1>
+
+<p>Regardless of what words Adrian uses, Netflix still does operations. <a href="http://twitter.com/allspaw">John Allspaw</a> summed it up pretty well in this tweet:</p>
+
+<p><img src="http://i.imgur.com/OW0kh.png" alt="Imgur" /></p>
+
+<p>and here are the things, he mentions:</p>
 
 <ul>
-<li>The risk associated with deploying new code is not in the deploy itself but everything you did up to that point.</li>
-<li>The way to make deploying new code less risky is to do it more often, not less.</li>
-<li>Create a culture and environment that enables and encourages small, frequent releases.</li>
-<li>Everything fails. Embrace failure.</li>
-<li>Make deploys trivial, automated and tolerant of failure.</li>
+<li>Metrics collection</li>
+<li>PaaS/IaaS evaluation/investigation</li>
+<li>Automation (auto-build, auto-recovery)</li>
+<li>Fault tolerance</li>
+<li>Availability</li>
+<li>Monitoring</li>
+<li>Performance</li>
+<li>Capex and Opex forecasting</li>
+<li>Outage response</li>
 </ul>
 
 
-<p>I want to make one thing perfectly clear. I've said this several times before. You can get 90% of the way to a fully automated environment, never go that last 10% and still be better off than you were before. I understand that people have regulations, requirements and other things that prevent a fully automated system. You don't ever have to flip that switch but you should strive to get as close as possible.</p>
+<h1>So what does Adrian get wrong?</h1>
 
-<!--more-->
+<p>These are just a few things that jumped out at me (and annoyed me)</p>
 
+<p><blockquote><p>However, there are teams at Netflix that do traditional Operations, and teams that do DevOps as well.</p></blockquote></p>
 
-<h1>Understanding the role of operations</h1>
+<p>Ops is ops is ops. No matter what you call it, Operations is operations.</p>
 
-<p>Operations is an interesting word. Outside of the field of IT it means something completely different than everywhere else in the business world. <a href="http://en.wikipedia.org/wiki/Business_operations">According to Wikipedia</a>:</p>
+<p><blockquote><p>Notice that we didn't use the typical DevOps tools Puppet or Chef to create builds at runtime</p></blockquote></p>
 
-<blockquote><p>Business operations encompasses three fundamental management imperatives that collectively aim to maximize value harvested from business assets</p>
+<p>There's no such thing as a "DevOps tool". People were using CFengine, Puppet and Chef long before DevOps was even a term. These are configuration management tools. In fact Adrian has even said they use Puppet in their legacy datacenter:</p>
 
-<ul>
-<li><p>Generate recurring income</p></li>
-<li><p>Increase the value of the business assets</p></li>
-<li><p>Secure the income and value of the business</p></li>
-</ul>
-</blockquote>
+<p><img src="http://i.imgur.com/RJIX1.png" alt="Imgur" /></p>
 
-<p>IT operations traditionally does nothing in that regard. Instead IT operations has become about cock blocking and being greybeareded gatekeepers who always say "No" regardless of the question. We shunt the responsibility off to the development staff and then, in some sick game of 'fuck you', we do all we can to prevent the code from going live. This is unsustainable; counter-productive; and in a random twist of fate, self destructive.</p>
+<p>yet he seems to make the distinction between the ops guys there and the "devops" guys (whatever those are).</p>
 
-<p>One thing I've always tried to get my operations and sysadmin peers to understand is that we are fundamentally a cost center. Unless we are in the business of managing systems for profit, we provide no direct benefit to the company. This is one of the reasons I'm so gung-ho on automation. <a href="https://twitter.com/botchagalupe">John Willis</a> really resonated with me in the first Devops Cafe podcast when he talked about the 80/20 split. Traditionally operations staff spends 80% of its time dealing with bullshit fire-fighting muck and 20% actually providing value to the business. The idea that we can flip that and become contributing members of our respective companies is amazing.</p>
+<p><blockquote><p>There is no ops organization involved in running our cloud...</p></blockquote></p>
 
-<p>Don't worry. I'll address development down below but I felt it was important to set my perspective down before going any further.</p>
+<p>Just because you outsourced it, doesn't mean it doesn't exist. Oh and it's not your cloud. It's Amazon's.</p>
 
-<h1>Technical Debt and Risk Management</h1>
+<h1>Reading between the lines</h1>
 
-<p>Glancing back to my list of take-aways from the last post, I make a pretty bold (to some people) statement. When I say that deploy risk is not the deploy itself but everything up to that point, I'm talking about technical debt.</p>
+<p>Actually this doesn't take much reading between the lines. It's out there in plain sight:</p>
 
-<p>Technical debt takes many forms and is the result of both concious, deliberate choices as well as unintended side-effects. Some examples of that are:</p>
+<p><blockquote><p>In reality we had the usual complaints about how long it took to get new capacity, the lack of consistency across supposedly identical systems, and failures in Oracle, in the SAN and the networks, that took the site down too often for too long.</p></blockquote></p>
 
-<ul>
-<li>Lack of or insufficient testing and associated</li>
-<li>Overreliance on time consuming manual processes</li>
-<li>Shortcuts to meet deadlines - both artifical and real</li>
-<li>Violation of the 10-minute maxim</li>
-<li>Technological choices</li>
-<li>Cultural choices</li>
-<li>Fiscal limitations</li>
-</ul>
+<p><blockquote><p>We tried bringing in new ops managers, and new engineers, but they were always overwhelmed by the fire fighting needed to keep the current systems running.</p></blockquote></p>
 
+<p><blockquote><p>This is largely because the people making decisions are development managers, who have been burned repeatedly by configuration bugs in systems that were supposed to be identical.</p></blockquote></p>
 
-<p>All of these things can lead to technical debt - the accumulation of dead bodies in the room as a byproduct of how we work. At best, someone at least acknowledges they exist. At worst, we stock up on clothespins, pinch our nostrils shut and hope no one notices the stench. Let's address a couple of foundational things before we get into the fun stuff.</p>
+<p><blockquote><p>The developers used to spend hours a week in meetings with Ops discussing what they needed, figuring out capacity forecasts and writing tickets to request changes for the datacenter.</p></blockquote></p>
 
-<h2>Testing</h2>
+<p><blockquote><p>There is no ops organization involved in running our cloud, no need for the developers to interact with ops people to get things done, and less time spent actually doing ops tasks than developers would spend explaining what needed to be done to someone else.</p></blockquote></p>
 
-<p>Test coverage is one of the easiest ways to manage risk in software development. One of the first things to go in a pinch is testing. Even that assumes that testing was actually a priority at some point. I'm not going to harp on things like 100% code coverage. As I said previously, humans tend to overcompensate. Test coverage is also, however, one of the easiest places to get your head above water. If you don't have a culture of committment to testing, it's hard but not impossible to get started. You don't have to shutdown development for a week.</p>
+<p>I'm glad to see this spelled out in such detail. This is what I've been telling people semi-privately for a while now. Because Netflix had such a terrible experience with its operations team, they went to the opposite extreme and disintermediated them.</p>
 
-<ol>
-<li>Start by having a commitment to write tests for any new code going forth.</li>
-<li>As bugs arise in untested code, make a test case for the bug a requirement to close the bug.</li>
-<li>Find a small victory in existing code. Create test coverage for low hanging fruit.</li>
-<li>Plan for a schedule to cover any remaining code</li>
-</ol>
+<p>Imagine you were scared as a kid by a clown. Now imagine you have kids of your own. You hate clowns. You had a bad experience with clowns. But it's your kid's birthday party so here you are making baloon animals, telling jokes and doing silly things to entertain the kids.</p>
 
+<p>Just because you aren't wearing makeup doesn't make you any less of a clown. You're doing clown shit. Through the eyes of the kids, you're a clown. Deal with it.</p>
 
-<p>The key here is baby steps. Small victories. Think Fezzik in 'The Princess Bride' - <em>"I want you to feel like you're winning".</em></p>
+<p>Netflix is still doing operations. What should be telling and frightening to operations teams everywhere is this:</p>
 
-<p>Testing is one of the foundations you have to have to reach deploy nirvana. System administrators have a big responsiblity here. Running tests has to be painless, unobstrusive and performant. You should absolutely stand up something like Jenkins that actually runs your test suite on check-in. As that test suite grows, you'll need to be able to provide the capacity to grow with it. That's where the next point can be so important.</p>
+<p>The Netflix response to poorly run operations that can't service the business is going to become the norm and not the exception. Evolve or die.</p>
 
-<h2>Manual processes</h2>
+<p>Please note that I don't lay all the blame on the Netflix operations team. I would love to hear the flipside of this story from someone who was there originally when the streaming initiative started. It would probably be full of stories we've heard before - no resources, misalignment of incentives and a whole host of others.</p>
 
-<p>Just as testing is a foundation on the code side, operations has a commensurate responsibility to reduce the number of human hands involved with creating systems. We humans, despite the amazing potential that our brains provide, are generally stupid. We make mistakes. Repeatability is not something we're good at. Some sort of automated and repeatable configuration management strategy needs to be adopted. As with testing, you can make some amazing progress in baby steps by introducing some sort of proper configuration management going forward. I don't recommend you attempt to retrofit complex automation on top of existing systems beyond some basics. Otherwise you'll be spending too much time trying to differentiate between "legacy" and "new" servers roles. If you are using some sort of virtualization or cloud provider like EC2, this is a no brainer. It's obviously a bit harder when you're using physical hardware but still doable.</p>
-
-<p>Have you ever played the little travel puzzle game where you have a grid of moving squares? The idea is the same. You need just ONE empty system that you can work with to automate. Pick your simplest server role such as an apache webserver. Using something like Puppet or Chef, write the 'code' that will create that role. Don't get bogged down in the fancy stuff the tools provide. Keep it simple at first. Once you think you've got it all worked out, blow the server away and apply that code from bootstrap. Red, green, refactor. Once you're comfortable that you can reprovision that server from bare metal, move it into service. Make sure you have your own set of 'test cases' that ensure the provisioned state is the correct one. This will become important later on.</p>
-
-<p>Take whatever server it's replacing and do the same for the next role. When I came on board with my company I spent many useless cycles trying to retrofit an automation process on top of existing systems. In the end, I opted to take a few small victories (using Chef in this case):</p>
-
-<ol>
-<li>Create a base role that is non-destructive to existing configuration and systems. In my case, this was managing yum repos and user accounts.</li>
-<li>Pick the 'simplest' component in our infrastructure and start creating a role for it.</li>
-<li>Spin up a new EC2 instance and test the role over and over until it works.</li>
-<li>Terminate the instance and apply the role on top with a fresh one.</li>
-<li>Replace the old instances providing that role with the new ones and move to the next role.</li>
-</ol>
-
-
-<p>Using this strategy, I was able to replace all of our legacy instances for the first and second tiers of our stack in a couple of months time. We are now at the point where, assuming Amazon plays nice with instance creation, we can have any role in those tiers recreated at a moment's notice. Again, this will directly contribute to how we mitigate risk later on.</p>
-
-<h2>10 minute maxim</h2>
-
-<p>I came up with this from first principles so I'm sure there's a better name for it. The idea is simply this:</p>
-
-<blockquote><p>Any problem that has to be solved in five minutes can be afforded 10 minutes to think about the solution.</p></blockquote>
-
-<p>System Administrators often pride ourselves on how cleverly and quickly we can solve a problem. It's good for our egos. It's not, however, good for our company. Take a little extra time and consider the longer term impact of what solution you're about to do. Step away from the desk and move. Consult peers. Many times I've come to the conclusion that my first instinct was the right one. However more often than not, I've come across another solution that would create less technical debt for us to deal with later.</p>
-
-<p>A correlary to this is the decision to 'fix it or kick it'. That is 'Do we spend an unpredictable amount of time trying to solve some obscure issue or do we simply recreate the instance providing the service from our above configuration management'. If you've gone through the previous step, you have should have amazing code confidence in your infrastructure. This is very important to have with Amazon EC2 where you can have an instance perform worse overtime thanks to the wonders of oversubscription and noisy neighbors.</p>
-
-<p>Fuck that. Provision a new instance and run your smoke tests (I/O test for instance). If the smoke tests fail, throw it away and start a new one. It's amazing the freedom of movement afforded by being able to describe your infrastructure as code.</p>
-
-<h1>Getting back to deploys</h1>
-
-<p>I would say that without the above, most of the stuff from here on out is pretty pointless. While you <strong>CAN</strong> do automated and non-offhour deploys without the above, you're really setting yourself up for failure. Whether it's a system change or new code, you need to be able to ensure that that some baseline criteria can be met. Now that we've got the foundation though, we can build on it and finally adopt some distinct strategies for releases.</p>
-
-<h1>Building on the foundation</h1>
-
-<p>The next areas you need to work on are a bit harder.</p>
-
-<h2>Metrics and monitoring</h2>
-
-<p>Shooting in the dark sucks. Without some sort of baseline metric, you authoritatively say whether or not a deploy was 'good'. If it moves, graph it. If it moves, monitor it. You need to leverage systems like <a href="https://github.com/etsy/statsd">statsd</a> (available in non-node.js flavors as well) that can accept metrics easily from your application and make them availabile in the amazing <a href="http://graphite.wikidot.com/">graphite</a>.</p>
-
-<p>The key here is that getting those metrics be as frictionless as possible. To fully understand this, watch <a href="http://pivotallabs.com/talks/139-metrics-metrics-everywhere">this presentation from Coda Hale of Yammer</a>. Coda has also created a kick-ass metrics library for the JVM and others have duplicated his efforts in their respective languages.</p>
-
-<h2>Backwards compatibility</h2>
-
-<p>You need to adopt a culture of backwards compatibility between releases. This is not Microsoft levels we're talking about. This affects interim releases. As soon as you have upgraded all the components, you clean up the cruft and move on. This is critical to getting to zero/near-zero downtime deploys.</p>
-
-<h2>Reduce interdependencies</h2>
-
-<p>I won't go into the whole SOA buzzword bingo game here except to say that treating your internal systems like a third party vendor can have some benefits. You don't need to isolate the teams but you need to stop with shit like RMI. Have an established and versioned interface between your components. If component A needs to make a REST call to component B, upgrades to the B API should be versioned. A needs version 1 of B's api. Meanwhile new component C can use version 2 of the API.</p>
-
-<h2>Automation as a default</h2>
-
-<p>While this ties a lot into the testing and configuration management topics, the real goal here is that you adopt a posture of automation by default. The reason for this should be clear in <a href="http://www.startuplessonslearned.com/2009/07/how-to-conduct-five-whys-root-cause.html">Eric Ries' "Five Whys" post</a>:</p>
-
-<blockquote><p>Five Whys will often pierce the illusion of separate departments and discover the human problems that lurk beneath the surface of supposedly technical problems.</p></blockquote>
-
-<p>One of the best ways to eliminate human problems is to take the human out of the problem. Machines are very good at doing things repeatedly and doing them the same way every single time. Humans are not good at this. Let the machines do it.</p>
-
-<h1>Deploy Strategies</h1>
-
-<p>Here are some of the key strategies that I (and others) have found effective for making deploys a non issue.</p>
-
-<h2>Dark Launches</h2>
-
-<p>The idea here is that for any new code path you insert in the system, you actually exercise it before it goes live. Let's face it, you can never REALLY simulate production traffic. The only way to truly test if code is performant or not is to get it out there. With a dark launch, you're still making new database calls but using your handy dandy metrics culture above, you now know how performant it really is. When it gets to acceptable levels, make it visible to the user.</p>
-
-<h2>Feature flags</h2>
-
-<p>Feature flags are amazing and one of the neat tricks that people who perform frequent deploys leverage. The idea is that you make aspects of your application into a series of toggles. In the event that some feature is causing issues, you can simply disable it through some admin panel or API call. Not only does this let you degrade gracefully but it also provides for a way to A/B test new features. With a bit more thought put into the process, you can enable a new feature for a subset of users. People love to feel special. Being a part of something like a "beta" channel is an awesome way to build advocates of your system.</p>
-
-<h2>Smoke testing at startup</h2>
-
-<p>This is one that I really like. The idea is simply that your application has a basic set of 'tests' it runs through at startup. If any of those tests fail, the code is rolled back.</p>
-
-<p>Now this is where someone will call me a hypocrite because I said you should and can never really roll back. You're partially right. In my mind, however, it's not the same thing. I consider code deployed once it's taken production traffic. Up until that point, it's just 'pre-work' essentially. Let's take a random API service in our stack. I'm assuming you have two API servers in this case.</p>
-
-<ul>
-<li>Take one out of service</li>
-<li>Deploy code</li>
-<li>Smoke tests run</li>
-<li>If smoke tests fail, stop new code and start old code</li>
-<li>If smoke tests pass, start sending production traffic to server</li>
-<li>If acceptable, push to other server</li>
-<li>profit!</li>
-</ul>
-
-
-<p>Now you might see a bit of gotcha there. I intentionally left out a step. This is a bit different than how shops like Wealthfront do it. They actually <strong>DO</strong> roll back if production monitoring fails. My preference is to use something similar to <a href="https://github.com/igrigorik/em-proxy">em-proxy</a> to do a sort of mini-dark launch before actually turning it over to end-users. You don't have to actually use em-proxy. You could write your own or use something like RabbitMQ or other messaging system. This doesn't always work depending on the service the component is providing but it does provide another level of 'comfort'.</p>
-
-<p>Of course this only works if you maintain backwards compatibility.</p>
-
-<h2>Backwards Compatibility</h2>
-
-<p>This is probably the hardest of all to accomplish. You may be limited by your technology stack or even some poor decision made years ago. Backwards compatibility also applies to more than just your software stack. This is pretty much a critical component of managing database changes with zero downtime.</p>
-
-<h2>Code related</h2>
-
-<p>Your code needs to understand 'versions' of what it needs. If you leverage some internal API, you need to maintain support for an older version of that API until all users are upgrade. Always be deprecating and NEVER EVER redefine what something means. Don't change a property or setting that means "This is my database server hostname" to "This is my mail server hostname". Instead create a new property, start using it and remove the old on in a future release. Don't laugh, I've seen this done. As much as I have frustrations with Java, constructor overloading is a good example of backwards compatibility.</p>
-
-<h3>Database related</h3>
-
-<p>Specifically as it relates to databases, consider some of the following approaches:</p>
-
-<ul>
-<li>Never perform backwards incompatible schema changes.</li>
-<li>Don't perform ALTERs on really large tables. Create a new table that updated systems use and copy on read to the new table. Migrate older records in the background.</li>
-<li>Consider isolating access to a given table via a service. Instead of giving all your applications access to the 'users' table, create a users service that does that.</li>
-<li>Start exercising code paths to new tables early by leveraging dark launches</li>
-</ul>
-
-
-<p>Some of these techniques would make Codd spin in his grave.</p>
-
-<p>We're undergoing a similar situation right now. We originally stored a large amount of 'blob' data in Voldemort. This was a bit perplexing as we were already leveraging S3 for similar data. To migrate that data (several hundred gigs) we took the following approach:</p>
-
-<ul>
-<li>Deploy a minor release that writes and new data to both Voldemort and S3.</li>
-<li>Start a 'copy' job in the background to migrate older data</li>
-<li>Continue to migrate data</li>
-<li>When the migration is finished, we'll deploy a new release that uses S3 exclusively</li>
-<li>Profit (because we get to terminate a few m1.large EC2 instances)</li>
-</ul>
-
-
-<p>This worked really well in this scenario. These aren't new techniques either. Essentially, we're doing a variation of a two-phase commit.</p>
-
-<p>Now you might think that all this backwards compatibility creates cruft. It does. Again, this is something that requires a cultural shift. When things are no longer needed, you need to clean up the code. This prevents bloat and makes understanding it down the road so much easier.</p>
-
-<h1>Swinging like a boss</h1>
-
-<p>Here's another real world example:</p>
-
-<p>Our code base originally used a home-rolled load balancing technique to communicate with one of our internal services. Additionally, all communication happened over RPC using Hessian. Eventually this became untenable and we decided to move to RabbitMQ and JSON. This was a pretty major change but at face value, we should have been able to manage with dual interfaces on the provider of the service. That didn't happen.</p>
-
-<p>You see, to be able to use the RabbitMQ libraries, we had to upgrade our version of Spring. Again, not a big deal. However our version of Hessian was so old that the version of Hessian we would have to use with the new version of Spring was backwards incompatible. This is yak shaving at its finest, folks. So basically we had to upgrade 5 different components all at once just to get to where we wanted and NEEDED to be for the long term.</p>
-
-<p>Since I had already finished coding our chef cookbooks, we went down the path of duplicating our entire front-end stack. What made this even remotely possible was the fact that we were using configuration management in the first place. Here's how it went down:</p>
-
-<ul>
-<li>Duplicate the various components in a new Chef environment called 'prodB'</li>
-<li>Push new code to these new components</li>
-<li>Add the new components to the ELBs and internal load balancers for a very short 5-10 minute window. Sort of a mini-A/B test.</li>
-<li>Check the logs for anything that stood out. Validated the expected behavior of the new systems. Thsi also gave us a chance to 'load-test' our rabbitmq setup. We actually did catch a few small bugs this way.</li>
-</ul>
-
-
-<p>Once we were sure that things looked good, we swung all the traffic to the new instances and pulled the old ones out. We never even bothered to upgrade the old instances. We just shut them down.</p>
-
-<p>Obviously this technique doesn't work for everyone. If you're using physical hardware, it's much more costly and harder to pull off. Even internally, however, you can leverage virtualization to make these kinds of things possible.</p>
-
-<h2>Bitrot</h2>
-
-<p>What should be the real story in this is that bitrot happens. Don't slack on keeping third-party libraries current. If a third-party library introduces a breaking change and it affects more than one part of your stack, you probably have a bit too tight of a coupling between resources.</p>
-
-<h1>Wrap up/Take away</h1>
-
-<p>This post came out longer than I had planned. I hope it's provided you with some information and things to consider. Companies of all shapes, markets and sizes are doing continuous deployment, zero downtime deploys and all sorts of things that we never considered possible. Look at companies like Wealthfront, IMVU, Flickr and Etsy. Google around for phrases like 'continuous deployment' and 'continuous delivery'.</p>
-
-<p>I'm also painfully aware that even with these tricks, some folks simply cannot do them. There are many segments of industry that might not even allow for this. That doesn't mean that some of these ideas can't be implemented on a smaller scale.</p>
+<p>Adrian, thank you for writing the blog post. I hope it serves as a warning to those who come. Hopefully someday you'll be able to see a clown again and not get scared ;)</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Rollbacks and other deployment myths]]></title>
-    <link href="http://lusis.github.com/blog/2011/10/18/rollbacks-and-other-deployment-myths/"/>
-    <updated>2011-10-18T00:35:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2011/10/18/rollbacks-and-other-deployment-myths</id>
-    <content type="html"><![CDATA[<p>I came across an interesting post today via HN. I'm surprised (only moderately) that I missed it the first time around since this is right up my alley:</p>
+    <title type="html"><![CDATA[Why you should stop fighting distro vendors]]></title>
+    <link href="http://lusis.github.com/blog/2012/03/16/why-you-should-stop-fighting-distro-vendors/"/>
+    <updated>2012-03-16T14:37:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2012/03/16/why-you-should-stop-fighting-distro-vendors</id>
+    <content type="html"><![CDATA[<p>Recently I saw a tweet from <a href="https://twitter.com/#!/kohsukekawa/status/180717301795008512">Kohsuke Kawaguchi</a> that really got me frustrated.</p>
 
-<p><a href="http://briancrescimanno.com/2011/09/29/why-are-you-still-deploying-overnight/">Why are you still deploying overnight?</a></p>
-
-<p>I thought this post was particularly apropos for several reasons. I just got back from DevOpsDays EU <strong>AND</strong> I'm currently in the process of refactoring our deploy process.</p>
-
-<p>I'm breaking this up into two parts since it's a big topic. The first one will cover the more "theoretical" aspects of the issue while the second will provide more concrete information.</p>
-
-<!--more-->
+<!-- more -->
 
 
-<h1>Myths, Lies and other bullshit</h1>
+<p>I've addressed this topic a bit before <a href="http://lusislog.blogspot.com/2010/09/distributions-and-dynamic-languages.html">here</a>. At the time it was addressing specifically dynamic languages. However the post that Kohsuke wrote (and the post that inspired it) have led me to a new line attitude.</p>
 
-<p>Before I go any further, we should probably clear up a few things.</p>
+<p><strong>Don't bother trying to get your packages into upstream vendor distros</strong></p>
 
-<p>Understand, first and foremost, that I'm no spring chicken in this business. I've worked in what we now call web operations and I've worked in traditional financial environments (multiple places). If it CAN go wrong, it has gone wrong for me. Shit, I've been the guy who dictated that we had to deploy after hours.</p>
+<h1>Wait. What? Let's step back a sec</h1>
 
-<p>Also, this is not a "tell you what to do" post.</p>
-
-<p>So what are some of the myths and other crap people like to pull out when having these discussions?</p>
+<p>Let me clarify something first. System packages are a good thing. The hassle has always been with BUILDING those packages. It was simply easier to build the software on the machine and install to <code>/usr/local/</code> than to try and express anything more than the most moderately simple application in RPM or DEB build scripts:</p>
 
 <ul>
-<li>Change == Risk</li>
-<li>Deploys are risky</li>
-<li>Rollbacks</li>
-<li>Nothing fails</li>
-<li>SLAs</li>
+<li>If what you are packaging has dependencies not shipped with the OS, now you've got to package those</li>
+<li>If your dependency conflicts with a vendor-shipped version, you're screwed.</li>
+<li>If your dependency is a language runtime, give up.</li>
+<li>If your dependency is a specific version of python, just go into another line of work.</li>
+<li>If it's a distro LTS release, just don't bother</li>
 </ul>
 
 
-<p>There's plenty more but these are some of the key ones that I hear.</p>
+<h1>Ahh but we can work around this!</h1>
 
-<h2>Change is change</h2>
+<p>Yes, you're right. We now have tools like <a href="https://github.com/jordansissel/fpm">fpm</a> that take the pain out of it! Maven has had plugins that generate rpms and debs for you for a while now. Things are looking up! Let's just use those tools.</p>
 
-<p>There is nothing inherent in change that makes it risky, dangerous or anything more than change. Change is neither good or bad. It's just change.</p>
+<p>So now you think, I'll just get these things submitted to Debian....</p>
 
-<p>The idea that change has a risk associated with it is entirely a human construct. We have this false assumption that if we don't change something then nothing can go wrong.
-At first blush that would make sense, right? If it ain't broke, don't fix it.</p>
+<p><strong>KABLOCK</strong></p>
 
-<p>Why do we think this? It's mainly because we're captives to our own fears. We changed something once, somewhere, and everything went tango uniform. The first reaction after a bad experience is never to do whatever caused that bad experience again. This makes sense in quite a few cases. Touch fire, get burned. Don't touch fire, don't get burned!</p>
+<p>I could rant a bit about Debian's packaging policy but it's addressed in the posts above. So maybe the Fedora people are more flexible?</p>
 
-<p>However this pain response tends to bleed over into areas. We deployed code one time that took the site down. We changed something and bad things happened. Engage overcompensation - We should never change anything.</p>
+<p><img src="http://i.imgur.com/px5ug.png" alt="Imgur" /></p>
 
-<h2>Deploys are not risky</h2>
+<p><strong>WAT</strong></p>
 
-<p>As with change, a deploy (a change in and of itself) is not inherently risky. Is there a risk associated with a deploy? Yes but understand that the risk associated with pushing out new code is the culmination of everything you've done up to that point.</p>
+<p>So here we have the two major distros that won't even consider your package unless you give the end-user the "freedom" to make your application unusable. Essentially you are told if you want your package to be included in upstream then you have to make sure they can swap out <code>libfunkytown.so.23</code> with <code>libfunkytown.so.1</code>.</p>
 
-<p>I can't even begin to count the number of ways that a deploy or release has gone wrong for me. Configuration settings were missed. Code didn't run properly. The wrong code was deployed. You name it, I've probably seen it.</p>
+<p>But maybe your application doesn't work on that version. So maybe you think, I'll just vendor ALL the things and shove it into <code>/opt</code> or <code>/usr/local</code>? Yeah that doesn't fly either (for various reasons).</p>
 
-<p>The correct response to this is <strong>NOT</strong> to stop doing deploys, do them off-hours or do them less often. Again with the overcompensation.</p>
+<p>The point is that you'll probably never be able to get your package included upstream because you'll never be able to jump through the hoops to do it.</p>
 
-<p>The correct way to handle deployment problems is to do MORE deploys. Practice. Paraphrasing myself here from an HN comment:</p>
+<h1>So stop trying</h1>
 
-<blockquote><p>Make deploys trivial, automated and tolerant to failure because everything fails.</p></blockquote>
+<p>I know, I know. It would be awesome if you could tell users to just <code>yum install kickass</code> or <code>apt-get install kickass</code> but it's not worth it for several reasons as enumerated above.</p>
 
-<p>"Release early, release often" isn't just about time to market. The way to reduce risk is not to add more risky behavior (introducing more vectors for shit to go wrong). The way to reduce the risk associated with deploys is to break them into smaller chunks.</p>
+<p>Distributions are not your friend. One could argue that its not thier job to be your friend. I would even agree with that argument. The distros have (or at least SHOULD have) an allegience to their user base. My argument is that position is directly opposed to your needs as a software provider.</p>
 
-<p>You need to stop thinking like Subversion and start thinking like Git.</p>
+<h2>Things you should not do</h2>
 
-<p>One of the reasons people don't feel comfortable performing deploys during the day is because deploys are such a big deal. You've got to make deploys a non-issue.</p>
+<ul>
+<li>Waste your time trying to ensure that your software works on some busted as old version of libfunkytown that won't get upgrade for 7 years.</li>
+<li>Waste your time breaking your application into 436 interdependent subpackages just to please upstream</li>
+<li>Ignore the prexisting dependency management ecosystem of your language of choice (especially if it works)</li>
+</ul>
 
-<h2>Rollbacks are a myth</h2>
 
-<p>Yes, it's true. You can never roll back. You can't go back in time. You can fake it but understand that it's typically more risky to rollback than rolling forward. Always be rolling forward.</p>
+<h2>Things you should do</h2>
 
-<p>The difficulty in rolling forward is that it requires a shift in how you think. You need to create a culture and environment that enables, encourages and allows for small and frequent changes.</p>
+<ul>
+<li>Use your language's preexisting dependency management system to collect all your dependencies</li>
+<li>Rebar, bundle, virtualenv, mavenize, fatjar whatever ALL the dependencies</li>
+<li>Use FPM or some homegrown script to create a monolithic rpm or deb of your codebase that installs to <code>/opt/appname</code></li>
+<li>Make these packages available to your users on your download site</li>
+<li>Alternately, create a repo and repo config file they can use to stay up to date</li>
+</ul>
 
-<h2>Everything fails. Embrace failure.</h2>
 
-<p>It amazes me that in this day and age people seem to think you can prevent failure. Not only can you not prevent it, you should embrace it. Learn to accept that failure will happen.  Often spending your effort decreasing MTTR (mean time to recovery) as opposed to increasing MTBF (mean time between failures) is a much better investment. Failure is not a question of 'if' but a question of 'when'.</p>
+<p>You will be happy. Your users will be happy. The distros can go lick themselves. We have reached something of a crossroads. As I argued in the previous post, the concept of a distribution is becoming somewhat irrelevant. Distros are more concerned about politics and making statements and broken concepts like software that doesn't need upgrading for 7 years (or even 2 years) than providing a framework and ecosystem that encourages developers to target software at it.</p>
 
-<p>Systems should be designed to be tolerant of failure. This is not easy, it's not always cheap and it can be quite painful at first. Failure sucks. Especially as systems administrators, we tend to personalize a failure in our systems as a personal failure.</p>
+<p>If someone takes up the noble cause of trying to get your software included upstream, I would go so far as to make it plainly clear on whatever communication you have that you simply cannot support an unofficial repackaging of your software. Be polite. These are still your potential userbase. Simply state that those were not created by you and that the official packages are here.</p>
 
-<p>The best way to deal with failure is to make failure a non-issue. If it's going to happen and you can't prevent it, why stress over trying to prevent it? This absolutely doesn't mean that you should do some level of due dilligence. I'm not saying that you should give up. What I'm saying is that you should design a robust system that handles failures gracefully and returns you to service as quickly as possible. It's called fault TOLERANCE for a reason.</p>
+<h1>A case in point</h1>
 
-<h2>SLAs are not about servers</h2>
+<p>What I'm suggesting you do is not unheard of and honestly is the most tenable long term path for your users. Look at projects like Vagrant, Chef and Puppet among others. All of these tools are "owning their availability" the right way and are arguably providing better end user experiences than getting included in upstream could provide. In fact the experience of official packaging is above and beyond trying to do it yourself. As it should be.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Graphs in operations]]></title>
+    <link href="http://lusis.github.com/blog/2012/03/06/graphs-in-operations/"/>
+    <updated>2012-03-06T23:59:00-05:00</updated>
+    <id>http://lusis.github.com/blog/2012/03/06/graphs-in-operations</id>
+    <content type="html"><![CDATA[<p>So anyone who knows me knows I spend an inordinate amount of time bitching about Maven. I don't know if it's the type of companies I end up working for or what but I always seem to find myself ass-deep in Maven.</p>
 
-<p>SLAs are in general fairly silly things. Before you get all twisted and ranty, let me clarify. SLAs have value but the majority of that value is to the provider of the SLA and not the person on the other end. SLAs are a lot like backup policies.</p>
+<!-- more -->
 
-<p>Look at it this way. I'm giving you an SLA for four nines of availability. That allows me to take around 50 minutes of downtime a year. Of course you assume that means 50 minutes spread over a year. What you fail to realize is that I can take all 50 minutes at once and still meet my SLA. Taking 50 minutes at one time is much more impacting than taking ten 5-minute outages. What's worse is I can take that downtime not only in one chunk but I can take it at the worst possible time for you.</p>
 
-<p>The other side of SLAs is that we tend to equate them with servers as opposed to services. The SLA is a <em>Service Level Agreement</em>. Not a <em>Server Level Agreement</em>. Services are what matters, not servers.</p>
+<p><em>please note that I'm drifiting into deeply unfamiliar territory for me. Someone once told me the best way to learn about something is to write about it. Keep that in mind when making comments?</em></p>
 
-<p>When you start to equate an SLA with a specific server, you've already lost.</p>
+<p>One of the more interesting parts of maven is the dependency graph and concepts like transitive and (god forbid) circular dependencies. These problems aren't exlcusive to java, mind you. See bundler for Ruby.</p>
 
-<h1>Wrap up and part 2</h1>
+<h2>A bit on graphs</h2>
 
-<p>As I said, this topic is too big to fit in one post. The next post will go into specifics about strategies and techniques that will hopefully give you ideas on how to make deploys less painful.</p>
+<p>Graph is a fairly overloaded term. In the context of this discussion I'm talking about graph theory (insofar as I can grok it). Specifically I want to talk about it in the context of IT operations.</p>
+
+<p>Graphs are nothing "new". Programmers have binary trees. Network geeks have OSPF. Puppet and Git are fans of the DAG (directed acyclic graph). These are all rooted in the same place no? You have nodes and edges. It's math all the way down. Unfortunately I suck at math.</p>
+
+<p>If the topic interests you at all, wikipedia has a good couple of articles worth reading. Seeing as I'm far from a domain expert, I can't vouch for the quality:</p>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Graph_theory">Graph Theory</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Graph_(mathematics">Graph (mathematics)</a>)</li>
+<li><a href="http://en.wikipedia.org/wiki/Glossary_of_graph_theory">Glossary of graph theory</a></li>
+</ul>
+
+
+<h1>How can graphs apply to IT operations</h1>
+
+<p>I've said for a while now that I feel like there's something fuzzy on the horizon that I can't make quite make out and it involves orchestration and graphs. I'm still not clear on how to express it but I'll try.</p>
+
+<p>Anyone who has ever used Puppet or Git has dabbled in graphs even if they don't know it. However my interest in graphs in operations relates to the infrastructure as a whole. James Turnbull expressed it very well last year in Mt. View when discussion orchestration. Obviously this is a topic near and dear to my heart.</p>
+
+<p>Right now much of orchestration is in the embryonic stages. We define relationships manually. We register watches on znodes. We define hard links between components in a stack. X depends on Y depends on Z. We're not really being smart about it. If someone disagrees, I would LOVE to see a tool addressing the space.</p>
+
+<p>Justin Sheehy did an awesome high level presentation on distributed systems, databases and the like at Velocity last year. While the talk was good, one thing that stuck out with me was his usage of the Riak logo:</p>
+
+<p><img src="https://assets.github.com/img/b4d183fe3181209da593ed5c6bf0f4c805ab2a62/687474703a2f2f6769746875622d696d616765732e73332e616d617a6f6e6177732e636f6d2f626c6f672f323031302f7269616b2d6c6f676f2e706e67" alt="Riak Logo" /></p>
+
+<p>During the presentation he would zoom out of the logo and replace it with the same logo. It expressed the idea of moving up the stack. Macro versus micro. I have the same feeling about where orchestration is going.</p>
+
+<h2>Express yourself</h2>
+
+<p>Currently we do a great job (and have the tools) to express relationships and dependencies at the node level:</p>
+
+<ul>
+<li>webapp needs container</li>
+<li>container needs java</li>
+<li>container needs system user</li>
+</ul>
+
+
+<p>Going a level higher, we even have some limited ability to express relationships between nodes:</p>
+
+<ul>
+<li>Load balancer needs app servers</li>
+<li>App server needs database</li>
+</ul>
+
+
+<p>We're not quite as good at this part yet but people have workarounds. I use Noah for this. enStratus also handles this very well.</p>
+
+<p>But we're still defining those relationships manually.</p>
+
+<p>When we get to this next level up, things get REALLY fuzzy. As people start to (re)discover SOA, we now have stacks that have dependencies on other stacks. Currently we use tools like Zookeeper to broker that relationship. But we still have to explcitly manage it.</p>
+
+<p>The level of coupling here isn't the problem. You can mitigate failure in one stack as it relates to another stack. Fail fast and fall back to sane/safe defaults. Read any article about how Netflix architects to get an idea.</p>
+
+<h1>What's missing?</h1>
+
+<p>What I feel like we're missing is a way to express those relationships and then trigger on them all the way up and down the chain as needed. We're starting to get into graph territory here.</p>
+
+<p>We must we be able to express and act on changes at the micro level (<em>I changed a config, I must restart nginx</em>) and even at the intranode level (<em>something changed in my app tier, need to tell my load balancer</em>) but now we need a way handle it at that macro level. Not only do we need a way to handle it but we must also be able to calculate what is impacted by that change.</p>
+
+<ul>
+<li>If I have this internode change, does it affect the intranode relationship?</li>
+<li>If I have an intranode change, does it affect the intrastack relationship?</li>
+</ul>
+
+
+<p>It seems to me that a graph of SOME kind is the best way to express this. I just can't quite make it out. Does current graph technology even handle that subgraph relationship? Excuse the pun but where do we draw the line? Are there multiple lines?</p>
+
+<p>Maybe this isn't an issue. Maybe through resilience engineering we simply keep that "intrastack" dependency as loose as possible so that we don't have this problem?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Load balancing Logstash with Redis]]></title>
+    <link href="http://lusis.github.com/blog/2012/01/31/load-balancing-logstash-with-redis/"/>
+    <updated>2012-01-31T23:24:00-05:00</updated>
+    <id>http://lusis.github.com/blog/2012/01/31/load-balancing-logstash-with-redis</id>
+    <content type="html"><![CDATA[<p>After yesterday's post about load balancing logstash with AMQP and RabbitMQ, I got to thinking that it might be useful to show a smilar pattern with other inputs and outputs.
+To me this, is the crux of what makes Logstash so awesome. Someone asked me to describe Logstash in one sentence. The best I could come up with was:</p>
+
+<p><blockquote><p>Logstash is a unix pipe on steroids</p></blockquote></p>
+
+<p>I hope this post helps you understand what I meant by that</p>
+
+<!-- more -->
+
+
+<h1>Revisiting our requirements and pattern</h1>
+
+<p>If you recall from the post <a href="http://goo.gl/vWyCH">yesterday</a>, we had the following 'requirements':</p>
+
+<ul>
+<li>No lost messages in transit/due to inputs or outputs.</li>
+<li>Shipper only configuration on the source</li>
+<li>Worker based filtering model</li>
+<li>No duplicate messages due to transit mediums (i.e. fanout is inappropriate as all indexers would see the same message)</li>
+</ul>
+
+
+<h2>EDIT</h2>
+
+<p>Originally our list stated the requirements as <em>No lost messages</em> and <em>No duplicate messages</em>. I've amended those with a slight modification to closer reflect the original intent. Please see <a href="http://blog.lusis.org/blog/2012/01/31/load-balancing-logstash-with-amqp/#comment-426175086">comment from Jelle Smet here</a> for details. Thanks Jelle!</p>
+
+<p>Our design looked something like this:</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png"><img src="/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png" alt="gliffy-overview.png" /></a></p>
+
+<p>One of the reasons that post was so long was that AMQP is a complicated beast. There was quite a bit of dense frontloading I had to do to cover AMQP before we got to the meat.
+We're going to take that same example, and swap out RabbitMQ for something a bit simpler and achieve the same results.</p>
+
+<h1>Quick background on Redis</h1>
+
+<p><a href="http://redis.io">Redis</a> is commonly lumped in with a group of data storage technologies called NoSQL. Its name is short for "REmoteDIctionaryServer". It typically falls into the "key/value" family of NoSQL.
+Several things set Redis apart from most key/value systems however:</p>
+
+<ul>
+<li>"data types" as values</li>
+<li>native operations on those data types</li>
+<li>atomic operations</li>
+<li>built-in PUB/SUB subsystem</li>
+<li>No external dependencies</li>
+</ul>
+
+
+<h2>Data types</h2>
+
+<p>I'm not going to go into too much detail about the data types except to list them and highlight the one we'll be leveraging. You can read more about them <a href="http://redis.io/topics/data-types">here</a></p>
+
+<ul>
+<li>Strings</li>
+<li>Lists*</li>
+<li>Sets</li>
+<li>Hashes</li>
+<li>Sorted Sets</li>
+</ul>
+
+
+<h3>How Logstash uses Redis</h3>
+
+<p>Looking back at our AMQP example, we note three distinct exchange types. These are mapped to the following functionality in Redis (and Logstash <code>data_type</code> config for reference):</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-redis/mapping-table.png"><img src="/images/posts/load-balancing-logstash-with-redis/mapping-table.png" alt="mapping-table.png" /></a></p>
+
+<p>This is a somewhat over simplified list. In the case of a message producer, mimicing <code>direct</code> exchanges is done by writing to a Redis <code>list</code> while consumption of that is done via the Redis command <code>BLPOP</code><a href="http://redis.io/commands/blpop">*</a>. However mimicing the <code>fanout</code> and <code>topic</code> functionality is done strictly with the commands <code>PUBLISH</code><a href="http://redis.io/commands/publish">*</a>, <code>SUBSCRIBE</code><a href="http://redis.io/commands/subscribe">*</a> and <code>PSUBSCRIBE</code><a href="http://redis.io/commands/psubscribe">*</a>. It's worth reading each of those for a better understanding.</p>
+
+<p>Oddly enough, the use of Redis as a messaging bus is something of a side effect. Redis supported lists that are auto-sorted by insert order. The <code>POP</code> command variants allowed single transaction get and remove of the data. It just fit the use case.</p>
+
+<h1>The configs</h1>
+
+<p>As with our previous example, we're going to show the configs needed on each side and explain them a little bit.</p>
+
+<h2>Client-side/Producer</h2>
+
+<p><code>
+input { stdin { type =&gt; "producer"} }
+output {
+redis {
+ host =&gt; 'localhost'
+ data_type =&gt; 'list'
+ key =&gt; 'logstash:redis'
+}
+}
+</code></p>
+
+<h3>data_type</h3>
+
+<p>This is where we tell Logstash how to send the data to Redis. In the case, again, we're storing it in a list data type.</p>
+
+<h3>key</h3>
+
+<p>Unfortunately, key means different things (though with the same effect) depending on the <code>data_type</code> being used. In the case of a <code>list</code> this maps cleanly to the understanding of a <code>key</code> in a key/value system. It's common in Redis to namespace keys with a <code>:</code> though it's entirely unneccesary.</p>
+
+<p>As an aside, when using <code>key</code> on <code>channel</code> data type, this behaves like the routing key in AMQP parlance with the exception of being able to use any separator you like (in other words, you can namespace with <code>.</code>,<code>:</code>,<code>::</code> whatever).</p>
+
+<h2>Indexer-side/Consumer</h2>
+
+<p><code>
+input {
+redis {
+  host =&gt; 'localhost'
+  data_type =&gt; 'list'
+  key =&gt; 'logstash:redis'
+  type =&gt; 'redis-input'
+}
+}
+output {stdout {debug =&gt; true} }
+</code></p>
+
+<h3>data_type</h3>
+
+<p>This needs to match up with the value from the output plugin. Again, in this example <code>list</code>.</p>
+
+<h3>key</h3>
+
+<p>In the case of a <code>list</code> this needs to map EXACTLY to the output plugin. Following on to our previous aside, for <code>data_type</code> values of <code>channel</code> input, the key must match exactly while <code>pattern_channel</code> can support wildcards. Redis PSUBSCRIBE wildcards actually much simpler than AMQP ones. You can use <code>*</code> at any point in the key name.</p>
+
+<h1>Starting it all up</h1>
+
+<p>We're going to simplify our original tests a little bit in the interest of brevity. Showing 2 producers and 2 consumers gives us the same benefit as showing four of each. Since we don't have the benefit of a pretty management interface, we're going to use the redis server debug information and the <code>redis-cli</code> application to allow us to see certain management information.</p>
+
+<h2>redis-server</h2>
+
+<p>Start the server with the command <code>redis-server</code> I'm running this from homebrew but you literally build Redis on any machine that has <code>make</code> and a compiler. That's all you need. You can even run it straight from the source directory:</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-redis/redis-server.png"><img src="/images/posts/load-balancing-logstash-with-redis/redis-server.png" alt="redis-server.png" /></a></p>
+
+<p>You'll notice that the redis server is periodically dumping some stats - number of connected clients and the amount of memory in use.</p>
+
+<h2>Starting the logstash agents</h2>
+
+<p>We're going to start two producers (redis output) and two consumers (redis input):</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-redis/agents.png"><img src="/images/posts/load-balancing-logstash-with-redis/agents.png" alt="agents.png" /></a></p>
+
+<p>Back in our redis-server window, you should now see two connected clients in the periodic status messages. Why not four? Because the producers don't have a persistent connection to Redis. Only the consumers do (via BLPOP):</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-redis/two-clients.png"><img src="/images/posts/load-balancing-logstash-with-redis/two-clients.png" alt="two-clients.png" /></a></p>
+
+<h1>Testing message flow</h1>
+
+<p>As with our previous post, we're going to alternate messages between the two producers. In the first producer, we'll type <code>window 1</code> and in the second <code>window 2</code>. You'll see the consumers pick up the messages:</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-redis/delivery.png"><img src="/images/posts/load-balancing-logstash-with-redis/delivery.png" alt="delivery.png" /></a></p>
+
+<p>If you look over in the redis-server window, you'll also see that our client count went up to four. If we were to leave these clients alone, eventually it would drop back down to two.</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-redis/new-connections.png"><img src="/images/posts/load-balancing-logstash-with-redis/new-connections.png" alt="new-connections.png" /></a></p>
+
+<p>Feel free to run the tests a few times and get a feel for message flow.</p>
+
+<h2>Offline consumers</h2>
+
+<p>This is all well and good but as with the previous example, we want to test how this configuration handles the case of consumers going offline. Shut down the two indexer configs and let's verify. To do this, we're going to also open up a new window and run the <code>redis-cli</code> app. Technically, you don't even need that. You can telnet to the redis port and just run these commands yourself. We're going to use the <code>LLEN</code> command to get the size of our "backlog".</p>
+
+<p>In the producer windows, type a few messages. Alternate between producers for maximum effect. Then go over to the <code>redis-cli</code> window and type <code>LLEN logstash:redis</code>. You should see something like the following (obviously varied by how many messages you sent):</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-redis/llen.png"><img src="/images/posts/load-balancing-logstash-with-redis/llen.png" alt="llen.png" /></a></p>
+
+<p>You'll also notice in the redis server window that the amount of memory in use went up slightly.</p>
+
+<p>Now let's start our consumers back up and ensure they drain (and in insert order):</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-redis/drain.png"><img src="/images/posts/load-balancing-logstash-with-redis/drain.png" alt="drain.png" /></a></p>
+
+<p>Looks good to me!</p>
+
+<h1>Persistence</h1>
+
+<p>You might have noticed I didn't address disk-based persistence at all. This was intentional. Redis is primarily a memory-based store. However it does have support for a few different ways of persisting to disk - RDB and AOF. I'm not going to go into too much detail on those. The Redis documentation does a good job of explaining the pros and cons of each. You can read that <a href="http://redis.io/topics/persistence">here</a>.</p>
+
+<h1>Wrap up</h1>
+
+<p>One thing that's important to note is that Redis is pretty damn fast. The limitation for Redis is essentially memory. However if speed isn't your primary concern, there's an interesting alpha project called <a href="http://inaka.github.com/edis">edis</a> worth investigating. It is a port of Redis to Erlang. Its primary goal is better persistence for Redis. For this post I also tested Logstash against edis and I'm happy to say it works:</p>
+
+<p><a href="/images/posts/load-balancing-logstash-with-redis/edis.png"><img src="/images/posts/load-balancing-logstash-with-redis/edis.png" alt="edis.png" /></a></p>
+
+<p>I hope to do further testing with it in the future in a multinode setup.</p>
+
+<h2>Part three</h2>
+
+<p>I'm also working on a part three in this "series". The last configuration I'd like to show is doing this same setup but using <a href="http://zeromq.org">0mq</a> as the bus. This is going to be especially challenging since our 0mq support is curretly 'alpha'-ish quality. Beyond that, I plan on doing a similar series using pub/sub patterns. If you're enjoying these posts, please comment and let me know!</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-04-14T00:16:46-04:00</updated>
+  <updated>2014-06-14T00:52:22-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,138 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[There's no konami code for operations]]></title>
+    <link href="http://lusis.github.com/blog/2014/06/13/no-konami-for-operations/"/>
+    <updated>2014-06-13T23:45:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2014/06/13/no-konami-for-operations</id>
+    <content type="html"><![CDATA[<p>up up down down left right left right b a select start</p>
+
+<!-- more -->
+
+
+<p>I went on a bit of a rip today about all sorts of technology. I figured I should at least clarify some of it in long form.</p>
+
+<h2>Vmotion/live migration technologies</h2>
+
+<p>Vmotion is a scam. I have frequently said that only trivial workloads are safe for vmotion. Here&#8217;s the reasoning:</p>
+
+<ul>
+<li>live migration realistically requires the workload on the vm being migrated to be quiesced.</li>
+<li>any workload that can be quiesced with no impact is most likely a trivial workload</li>
+<li>trivial workloads don&#8217;t NEED the benefit of live migration</li>
+<li>to that end, you&#8217;re basically paying a lot of money to allow a system to copy its files from one node to another</li>
+</ul>
+
+
+<p>Let&#8217;s also not forget that live migration claims to have accomplished a lot of things such as time travel. You may also know live motion technology by its other names like:</p>
+
+<ul>
+<li>Dude where&#8217;s my clock?</li>
+<li>I paused your workload for you but you didn&#8217;t notic&#8230;hey why did I just get a network partition in my cluster?</li>
+</ul>
+
+
+<p>But hey it demos really well when you can keep watching that streaming video while your vm is moved from host to another.</p>
+
+<h2>Autoscaling</h2>
+
+<p>Autoscaling is a myth. My reasoning behind this has similarities with vmotion/live migration.
+Again we have a set of things we need to clarify:</p>
+
+<ul>
+<li>horizontal vs vertical autoscaling</li>
+<li>triviality of the workload being autoscaled</li>
+<li>workload support for autoscaling</li>
+<li>scale up vs scale down</li>
+</ul>
+
+
+<p>I am not concerns with trivial workloads. Trivial workloads are&#8230;well&#8230;trivial. The largely cached static marketing website takes no effort whatsoever to scale. Oh look I just brought up a new server with the same static content! Instant capacity!</p>
+
+<p>Let&#8217;s take a standard architecture here:</p>
+
+<ul>
+<li>caching (memcache)</li>
+<li>frontend</li>
+<li>load balancer</li>
+<li>database (this applies to traditional RDBMS as well as NoSQL)</li>
+</ul>
+
+
+<p>When I &#8220;autoscale&#8221; my caching layer, I now have to concern myself with the following things:</p>
+
+<ul>
+<li>hashing algos</li>
+<li>cache miss increase</li>
+</ul>
+
+
+<p>So sure, feel free to autoscale that group of memcache servers but your performance just went to through the floor. Now you&#8217;ve had a downstream affect on your database as you&#8217;re having to go to origin due to cache misses. Oh and by the way not all servers talking to the caching tier saw the same topology so now you&#8217;ve got possibly incorrect data you&#8217;re serving from the cache</p>
+
+<p>When I autoscale my frontend, I&#8217;ve now add <code>n</code> number of connections to the database. How&#8217;s that network looking? Oh wait did you just autoscale to the point of starving the database of resources? Have you possible shot yourself in the foot because now the stuff that was working before is getting rejected because of connection counts?</p>
+
+<p>Autoscaling load balancers is also a problem as you now have the issue of topology mismatch of your backends as well as dealing with session injection that was PREVIOUSLY handled by only one LB.</p>
+
+<p>Finally let&#8217;s get to autoscaling our database. Vertical or horizontal, relational or &#8220;NoSQL&#8221; it doesn&#8217;t matter. If you vertically scale your DB, do you have to restart the process with larger memory allocations? What about rebalancing of data when you scale horizontally?</p>
+
+<p>And we&#8217;ve not even gotten to if your application is actually ABLE to be autoscaled (are you entirely stateless? 12 factor friendly?).</p>
+
+<p>Combining these things along with unmentioned downstream impacts and transitive dependencies, means that in most cases when you need to autoscale you won&#8217;t be able to respond to the workload for some time. It&#8217;s possible that AFTER that time has passed, the workload may be gone.</p>
+
+<p>And let&#8217;s not even talk about trying to unwind all that madness via scale down.</p>
+
+<h1>private PaaS</h1>
+
+<p>This is almost the most egregious of them all. It ranks right up there with &#8220;private cloud&#8221; in the bullshit-o-meter department. Resources are not infinite.
+I have a bit of a guidepost I use when thinking about &#8220;new&#8221; functionality in applications.</p>
+
+<ul>
+<li>what functionality am I adding?</li>
+<li>is it my core competency</li>
+<li>what does the landscape of existing ecosystem look like for that functionality</li>
+<li>how successful is that landscape for that functionality</li>
+</ul>
+
+
+<p>In most cases, the landscape is either saturated with business whose core focus and expertise is on that concept/functionality. In worst cases the majority of the businesses in that space are failing. Think long and hard about if you have the expertise to do this thing.</p>
+
+<p>PaaS and IaaS are in the same boat. I&#8217;m a bit more harsh on the IaaS front as I truly believe that if an operations team had been able to deliver on the promise of virtualization but couldn&#8217;t (for any reason) then sticking ANOTHER layer on top isn&#8217;t going to magically make it work. The platform still has real hardware under the covers that has the same limitations it had before - bandwidth capcity, io, patching of hypervisors. This stuff doesn&#8217;t just disappear. In many cases you can actually hit a wall VERY early on for capacity issues.</p>
+
+<p><a href="http://www.slideshare.net/TimMackey/hypervisor-31754727">This slide deck about Cloudstack Hypervisor choices</a> is an amazing read for understanding limitations. Some of these are actually imposed by the hypervisor:</p>
+
+<ul>
+<li>Max VLANs</li>
+<li>Max Storage</li>
+<li>Max vms per hypervisor</li>
+<li>Max hypervisors per pool</li>
+</ul>
+
+
+<p>There&#8217;s no cheat code for this shit, folks. Very few PaaS and IaaS products tackle operational issues at all. Time to first success is important but not if it comes at the expense of cost to operate over time. Yes, I can sudocurlbash your product on to my system but that&#8217;s trivial. How do I deal with:</p>
+
+<ul>
+<li>Backups</li>
+<li>Affinity/Anti-affinity issues</li>
+<li>Upgrades</li>
+<li>Supportability</li>
+</ul>
+
+
+<p>IaaS actualy isn&#8217;t as bad as a PaaS in some of those but they both have issues. PaaS is mainly worse because you have adopt into an ecosystem and philosophy (not that 12 factor isn&#8217;t entire good but it&#8217;s a start) if you want to have any real success.</p>
+
+<p>You will <em>NOT</em> forklift a workload into one of these models and be successful in the long term. In the short term you will simply have given someone else a lot of your money.</p>
+
+<p>I drove a forklift for two years. I know forklifts.</p>
+
+<h1>End rant</h1>
+
+<p>I&#8217;m not saying that people can&#8217;t be successful at these things. Clearly they are to some degree. But that&#8217;s only the public face. How much shit did they have to wade through to make this work? Where are the bits of baling wire, duct tape and a healthy belief in a higher power that keep it from just failling over the edge of the abyss?</p>
+
+<p>Anyway that&#8217;s just a short list of things from a very tired and worn out person with less hair than he started the day with. I know I shouldn&#8217;t get mad about this stuff but it&#8217;s hard when the people trying to smokescreen you ARE you in a sense (professionally speaking). Frankly I&#8217;m just tired of people thinking that the operational aspects of this stuff are irrelevant because somebody promised them &#8220;autoscaling selfhealing magical rainbow-colored unicorn piss in a bottle&#8221; where they didn&#8217;t have to interact with operations folks ever again.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[omnibus-redux]]></title>
@@ -2714,378 +2846,6 @@ The same goes for filtering. The assumption is that your filters will be correct
 <p><a href="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png"><img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png" alt="gliffy-overview.png" /></a></p>
 
 <p><em>This post will eventually make its way into the <a href="http://cookbook.logstash.net">Logstash Cookbook Site</a>.</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Lowtech monitoring with Jenkins]]></title>
-    <link href="http://lusis.github.com/blog/2012/01/23/lowtech-monitoring-with-jenkins/"/>
-    <updated>2012-01-23T00:07:00-05:00</updated>
-    <id>http://lusis.github.com/blog/2012/01/23/lowtech-monitoring-with-jenkins</id>
-    <content type="html"><![CDATA[<p>I mentioned briefly in my previous post that I got quite a few people coming up to me after the panel and asking me for advice on monitoring.</p>
-
-<!-- more -->
-
-
-<p>I tweeted about this scenario not long after it happened but here&#8217;s the gist:</p>
-
-<blockquote><p>I just need something simple to check on the status of a few jobs and run some SQL statements. I&#8217;m a DBA and I can&#8217;t get any help from my ops team.</p></blockquote>
-
-
-<p>The person who asked this was very friendly and I could sense the frustration in her voice. It frustrates me to no end to hear stories of my tribe being this way to customers.</p>
-
-<p>I thought for a minute because I really wanted to help and the best thing I could think of was Jenkins. Yes, Jenkins.</p>
-
-<h1>Reasoning</h1>
-
-<p>Let&#8217;s look for a minute at what we need from a simple health check system:</p>
-
-<ul>
-<li>Performing some task on a given schedule</li>
-<li>Ability to run a given command</li>
-<li>Reporting on the output of the given command (success/failure)</li>
-</ul>
-
-
-<p>Now you might think to your self &#8220;Self, this sure does sound a lot like cron&#8221;. You&#8217;d be right. And that&#8217;s EXACTLY what took me down the Jenkins path. There have been numerous posts about people replacing individual cron jobs with a centralized model based on Jenkins. This makes perfect sense and is something of a holy grail. I clearly remember researching and evaluating batch scheduling products many years ago to essentially do just this. If only Jenkins had been around then.</p>
-
-<h2>Small disclaimer</h2>
-
-<p>While Jenkins is a great low friction way to accomplish this task, it may or may not be scalable in the long run. While Jenkins jobs are defined as XML files and can be managed via an API, it&#8217;s still a bit cumbersome to automate.</p>
-
-<h1>Getting started</h1>
-
-<p>First thing to do is grab the <a href="http://mirrors.jenkins-ci.org/war/latest/jenkins.war">latest Jenkins war</a>. The nice thing about Jenkins is that it ships in such an easy to use format - a self-contained executable war. You can start it very simply with:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>java -jar jenkins.war</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You should probably click around to get comfortable with the interface. It&#8217;s pretty difficult to screw something up but if you do, just shutdown jenkins, <code>rm -rf ~/.jenkins</code> and start it back up.</p>
-
-<p>Since this post is geared primarily at someone who probably isn&#8217;t familiar with Jenkins, I&#8217;m going to go over a few quick basics and key areas we&#8217;ll be working with:</p>
-
-<h2>Menus</h2>
-
-<p>The menu is the section on the left handside. It will change based on your location in the application. If you don&#8217;t always see something you&#8217;re expecting, you can use the breadcrumb navigation to work your way back. Alternately, you can click on the Jenkins logo to get to the main page.</p>
-
-<h3>Main menu</h3>
-
-<p>This is the menu you see from the top-level of the Jenkins interface</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/menu.png" alt="Main interface" /></p>
-
-<h3>Job menu</h3>
-
-<p>This is the menu you see when you are viewing the main page of a job</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/job-menu.png" alt="Job Menu" /></p>
-
-<p>Note the &#8220;Build History&#8221; section at the bottom. This is a list of all builds that have been performed for this job. You can click on a given build to see details about it.</p>
-
-<h3>Build menu</h3>
-
-<p>This menu is visible when you select a specific build from the &#8220;Build History&#8221; menu of a Job page</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/build-menu.png" alt="Build Menu" /></p>
-
-<p>Notice the &#8220;Console Output&#8221; menu option. This will show you the log of what Jenkins did during a build. If you ever have problems with a build, you should come here and look at what happened.</p>
-
-<h3>Auto Refresh</h3>
-
-<p>In the interest of eliminating any confusion, we&#8217;re going to enable &#8220;Auto Refresh&#8221; from the link on the top right:</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/enable-auto-refresh.png" alt="Enable Auto Refresh" /></p>
-
-<h2>Configuration</h2>
-
-<p>For the purposes of this exercise, we won&#8217;t do too much configuration. We&#8217;re going to take the perspective of the person above. We&#8217;ll make few assumptions though in the interest of expidiency:</p>
-
-<ul>
-<li>The user has no passphrase on the SSH key. While this is probably not true, it makes this demo easier.</li>
-<li>The DB test will be executed locally.</li>
-<li>The local environment is some unix-y/linux-y one. The environment for this post was OS X communicating with Linux VMs</li>
-</ul>
-
-
-<p>The key to success here is something called a &#8220;free-style software project&#8221;. This is essentially a blank canvas with very few requirements. I&#8217;m aware that the &#8220;Monitor an external job&#8221; type has been recently added but the steps were a bit too invasive for this particular case.</p>
-
-<h1>Our test case</h1>
-
-<p>I don&#8217;t obviously have the specifics of what the user wanted checked so I&#8217;m going to extrapolate from her original statement:</p>
-
-<ul>
-<li>Run a SQL statement to see if some record is found</li>
-<li>Check for a running process</li>
-<li>Check a log file for some given string</li>
-</ul>
-
-
-<h2>The test database</h2>
-
-<p>The test database will be MySQL running on a Linux VM. Getting this going is an exercise for the reader, however here is the DDL and test data we&#8217;re using:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="c1">--- This is just a sample, folks. Yes I know it&#39;s insecure.</span>
-</span><span class='line'><span class="k">create</span> <span class="k">database</span> <span class="n">foo_db</span><span class="p">;</span>
-</span><span class='line'><span class="n">use</span> <span class="n">foo_db</span><span class="p">;</span>
-</span><span class='line'><span class="k">create</span> <span class="k">table</span> <span class="n">jobs</span> <span class="p">(</span> <span class="n">id</span> <span class="nb">int</span> <span class="k">not</span> <span class="k">null</span> <span class="n">auto_increment</span> <span class="k">primary</span> <span class="k">key</span><span class="p">,</span> <span class="n">name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">depth</span> <span class="nb">int</span><span class="p">);</span>
-</span><span class='line'><span class="k">insert</span> <span class="k">into</span> <span class="n">jobs</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span> <span class="k">values</span> <span class="p">(</span><span class="ss">&quot;job_a&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
-</span><span class='line'><span class="k">insert</span> <span class="k">into</span> <span class="n">jobs</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span> <span class="k">values</span> <span class="p">(</span><span class="ss">&quot;job_b&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span><span class='line'><span class="k">insert</span> <span class="k">into</span> <span class="n">jobs</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span> <span class="k">values</span> <span class="p">(</span><span class="ss">&quot;job_c&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
-</span><span class='line'><span class="k">grant</span> <span class="k">select</span> <span class="k">on</span> <span class="n">jobs</span> <span class="k">to</span> <span class="s1">&#39;jenkins&#39;</span><span class="o">@</span><span class="s1">&#39;%&#39;</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">&#39;password&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="n">flush</span> <span class="k">privileges</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>First Job</h2>
-
-<p>So we&#8217;ll create a new freestyle job called &#8220;Check FooDB Backlog&#8221;. Click on &#8220;New Job&#8221; from the main menu.</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/create-db-job.png" alt="Create Job" /></p>
-
-<p>Once you&#8217;ve created the job, the screen gets a bit more hectic. We&#8217;re only going to concern ourselves with a few key areas:</p>
-
-<ul>
-<li><p>Build Triggers <img class="right" src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/build-triggers.png"></p></li>
-<li><p>Build Steps <img class="right" src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/build-step.png"></p></li>
-<li><p>I&#8217;ll frequently refer to the <code>?</code> icon. <img class="right" src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/help-icon.png"></p></li>
-</ul>
-
-
-<h3>Scheduling</h3>
-
-<p>Under build triggers, we want to use the &#8220;Build Periodically&#8221; option. The syntax is akin to cron and there are some additional macros for known intervals. As with any Jenkins option, you can click on the <code>?</code> icon to the right of the option for inline help.</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/build-triggers.png" alt="Build Triggers" /></p>
-
-<p>So we&#8217;re going to set up our health check to run every 15 minutes:
-<img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/build-periodically.png" alt="Build Periodically" /></p>
-
-<h3>Defining the Build Step</h3>
-
-<p>Through Jenkins plugins, you can get an insane amount of additional build steps. However, the shipped experience has the stuff we need for now. We&#8217;re going to be using the &#8220;Execute Shell&#8221; option. If you are running Jenkins on Windows, you&#8217;ll want to use the &#8220;Execute Windows Batch command&#8221; instead. You will, of course, need to modify the commands appropriately yourself.</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/build-step.png" alt="Build Step Options" /></p>
-
-<p>Here&#8217;s the body of our build step:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">#!/</span><span class="n">bin</span><span class="o">/</span><span class="n">bash</span> <span class="o">-</span><span class="n">l</span>
-</span><span class='line'><span class="k">CHECK</span><span class="o">=`</span><span class="n">mysql</span> <span class="o">-</span><span class="n">u</span> <span class="n">jenkins</span> <span class="o">-</span><span class="n">ppassword</span> <span class="o">-</span><span class="n">h</span> <span class="mi">192</span><span class="p">.</span><span class="mi">168</span><span class="p">.</span><span class="mi">56</span><span class="p">.</span><span class="mi">101</span> <span class="o">-</span><span class="n">BNe</span> <span class="s1">&#39;SELECT COUNT(*) FROM foo_db.jobs WHERE depth &gt;= 100&#39;</span><span class="o">`</span>
-</span><span class='line'><span class="n">exit</span> <span class="err">${</span><span class="k">CHECK</span><span class="err">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/db-build-step.png" alt="DB Build Step" /></p>
-
-<h3>Running the job</h3>
-
-<p>Once you click save, you can click &#8220;Build Now&#8221; on the job menu to give it a test. It should fail:</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/db-failed.png" alt="Failed build" /></p>
-
-<p>Let&#8217;s modify the job so we can see what success looks like. Click on the &#8220;Configure&#8221; link in the build menu and modify your build step. Set the threshold in the query to <code>101</code>. The build should now be blue:</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/db-good.png" alt="Good build" /></p>
-
-<p>This all works very well if you just want to manually inspect the status however let&#8217;s take it a step further. Click on the &#8220;Configure&#8221; link from the Job menu. Notice at the bottom of the following screen, there&#8217;s a section called &#8220;Post-build Actions&#8221;. The very last option is &#8220;E-mail Notification&#8221;. You can click the <code>?</code> to see the default behaviour. Check the box and add your email address:</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/email-notification.png" alt="Email Notification" /></p>
-
-<h3>Getting Notified</h3>
-
-<p>Sadly, this isn&#8217;t enough to enable email notifications. You&#8217;ll need to tell Jenkins an SMTP server it can use. Go back to the main menu and click &#8220;Manage Jenkins&#8221;.</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/manage-jenkins.png" alt="Manage Jenkins" /></p>
-
-<p>From here, we&#8217;re going to click &#8220;Configure System&#8221;</p>
-
-<p>Another busy screen! The settings in this section can get you in trouble if you aren&#8217;t careful. The most common problem is people attempting to enable security and inadvertently locking themselves out.
-We&#8217;re not worried about that for now. Scroll to the bottom and configure your SMTP server. The settings shown are for gmail and you&#8217;ll need to click the &#8220;Advanced&#8221; button to enable additional settings.</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/email-settings.png" alt="Configure Email Servers" /></p>
-
-<p>You can select the last checkbox to test that your settings work.</p>
-
-<p>Once that&#8217;s done, click save. Now we&#8217;re going to rerun the job (Go back to the main menu then click your job from the list to see the &#8220;Build Now&#8221; option in the job menu.
-You most likely won&#8217;t get an email because the job is passing. Let&#8217;s configure our job again and set the threshold back to 100. Save the job and click &#8220;Build Now&#8221; again from the job menu.</p>
-
-<p>You should get an email that looks something like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">Subject</span><span class="p">:</span> <span class="n">Build</span> <span class="n">failed</span> <span class="k">in</span> <span class="n">Jenkins</span><span class="p">:</span> <span class="k">Check</span> <span class="n">FooDB</span> <span class="n">backlog</span>
-</span><span class='line'><span class="n">See</span> <span class="o">&lt;</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span><span class="o">/</span><span class="n">job</span><span class="o">/</span><span class="k">Check</span><span class="o">%</span><span class="mi">20</span><span class="n">FooDB</span><span class="o">%</span><span class="mi">20</span><span class="n">backlog</span><span class="o">/</span><span class="mi">8</span><span class="o">/&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">------------------------------------------</span>
-</span><span class='line'><span class="n">Started</span> <span class="k">by</span> <span class="k">user</span> <span class="n">anonymous</span>
-</span><span class='line'><span class="n">Building</span> <span class="k">in</span> <span class="n">workspace</span> <span class="o">&lt;</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span><span class="o">/</span><span class="n">job</span><span class="o">/</span><span class="k">Check</span><span class="o">%</span><span class="mi">20</span><span class="n">FooDB</span><span class="o">%</span><span class="mi">20</span><span class="n">backlog</span><span class="o">/</span><span class="n">ws</span><span class="o">/&gt;</span>
-</span><span class='line'><span class="p">[</span><span class="n">workspace</span><span class="p">]</span> <span class="err">$</span> <span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">bash</span> <span class="o">-</span><span class="n">l</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">folders</span><span class="o">/</span><span class="n">d6</span><span class="o">/</span><span class="n">h7dxb_zj49s8xlj91zd3z6fr0000gn</span><span class="o">/</span><span class="n">T</span><span class="o">/</span><span class="n">hudson1906255485094144268</span><span class="p">.</span><span class="n">sh</span>
-</span><span class='line'><span class="n">Build</span> <span class="n">step</span> <span class="s1">&#39;Execute shell&#39;</span> <span class="n">marked</span> <span class="n">build</span> <span class="k">as</span> <span class="n">failure</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There&#8217;s not much information in there since our job is swallowing the mysql output and using it as the exit code. You can spice the output however you like it by adding <code>echo</code> statements to the build step. Any output from the job will be included in the email. If you change the thresholds back to a value that you know will pass, you&#8217;ll get at least one email when the build recovers. Unless the build starts failing again, you won&#8217;t get any emails.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">Subject</span><span class="p">:</span> <span class="n">Jenkins</span> <span class="n">build</span> <span class="k">is</span> <span class="n">back</span> <span class="k">to</span> <span class="n">normal</span> <span class="p">:</span> <span class="k">Check</span> <span class="n">FooDB</span> <span class="n">backlog</span>
-</span><span class='line'><span class="n">See</span> <span class="o">&lt;</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">localhost</span><span class="p">:</span><span class="mi">8080</span><span class="o">/</span><span class="n">job</span><span class="o">/</span><span class="k">Check</span><span class="o">%</span><span class="mi">20</span><span class="n">FooDB</span><span class="o">%</span><span class="mi">20</span><span class="n">backlog</span><span class="o">/</span><span class="mi">9</span><span class="o">/&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Second Job</h2>
-
-<p>So now we&#8217;ve got something handling our DB test. We also needed to check to see if some process was running. Let&#8217;s do a simple one to see if MySQL is running. Let&#8217;s call it &#8220;Check MySQL Running&#8221;. Follow the steps for creating a free-style job but this time we&#8217;re going to create our build step like so:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/bin/bash -l</span>
-</span><span class='line'>ssh 192.168.56.101 <span class="s1">&#39;ps -ef&#39;</span> | grep mysqld
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Again, we&#8217;re going to assume that SSH keys are setup with no password. We&#8217;re keeping it simple. Just as in the case of the other job, we should get a blue build status.</p>
-
-<h2>Third Job</h2>
-
-<p>The third job is the most complex in that we&#8217;re going to need to install a plugin for maximum effect. This will have you jumping around a bit but hopefully you&#8217;re a bit more comfortable navigating by now.
-At a high level we&#8217;re going to do the following:</p>
-
-<ul>
-<li>Install a new Jenkins plugin</li>
-<li>Create a new job</li>
-<li>Take note of a new build option</li>
-<li>Configure the plugin globally</li>
-<li>Enable the plugin in our job</li>
-</ul>
-
-
-<h3>Installing a Plugin</h3>
-
-<p>We&#8217;re going to go back to &#8220;Manage Jenkins&#8221; (accessible from the main menu) but now we&#8217;re going to select &#8220;Manage Plugins&#8221;.</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/plugin-main.png" alt="Plugin Page" /></p>
-
-<p>Once on the plugin screen, click the &#8220;Available&#8221; tab. This part can be overwhelming. It&#8217;s especially confusing since plugins will be listed twice if they fall into multiple categories. However, you only need to mark it once.</p>
-
-<p>The plugin we want is called the &#8220;Log Parser Plugin&#8221;. If you can&#8217;t easily find it, use your browser&#8217;s &#8220;find on page&#8221; (CTRL-F, APPLE-F) to find it.</p>
-
-<p>Check the box and click &#8220;Install without Restart&#8221;. You should see a screen similar to this:</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/plugin-install.png" alt="Plugin Install" /></p>
-
-<h3>Back to the job</h3>
-
-<p>Now let&#8217;s create our final job. Following the same steps as above, create a new job called &#8220;Check DHCP Errors&#8221;. Again, reaching for a contrived case, I&#8217;m going to check my VM&#8217;s syslog to see if it had any errors related to DHCP.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/bin/bash -l</span>
-</span><span class='line'>ssh 192.168.56.101 <span class="s1">&#39;tail -n 5 /var/log/syslog&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now we could have done this with a grep statement just like above. However I wanted to show installing plugins and the &#8220;Log Parser Plugin&#8221; actually offers some more flexible options, understands more than just pass or fail and can match multiple items without building overly complex flow into your shell step.</p>
-
-<p>You&#8217;ll notice at the bottom we now have an ADDITIONAL option in our &#8220;Post-build Actions&#8221; - <code>Console output (build log) parsing</code>:</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/post-build-log-parser.png" alt="New Option" /></p>
-
-<p>Whenever you install a plugin, where it&#8217;s used depends on what it does. In this case, we&#8217;re doing post processing of the job run log. We can add a third state via this plugin as opposed to just &#8220;Pass&#8221; or &#8220;Fail&#8221; - &#8220;Unstable&#8221;. Before we can enable it, however, we need to give it some parsing rules.</p>
-
-<p>For now leave the option unchecked and click &#8220;Save&#8221;</p>
-
-<h3>Configuring the new plugin</h3>
-
-<p>Go back to the &#8220;Manage Jenkins&#8221; screen (where you set the Email settings). At the bottom, you should now have an option for <code>Console Output Parsing</code>:</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/console-output-parsing.png" alt="Console Output Parsing Configuration" /></p>
-
-<p>Again, anything you configure in this section is GLOBAL. Luckily you can define various rule sets for parsing and apply them individualy to jobs. This plugin is a bit complex so you&#8217;ll probably want to look at the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin">documentation</a>.</p>
-
-<p>We&#8217;re going to create a very basic rules file in <code>/tmp</code> on our LOCAL machine (where Jenkins is running) called <code>jenkins-dhclient-rules</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>warn /^.*dhclient: can<span class="err">&#39;</span>t create .*: No such file or directory<span class="nv">$/</span>
-</span><span class='line'>info /^.*dhclient: bound to .*<span class="nv">$/</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is telling the log parser that the following line is a &#8220;warning&#8221;:</p>
-
-<p><code>Jan 23 01:49:52 ubuntu dhclient: can't create /var/lib/dhcp3/dhclient.eth1.leases: No such file or directory</code></p>
-
-<p>and that</p>
-
-<p><code>Jan 23 01:49:52 ubuntu dhclient: bound to 192.168.56.101 -- renewal in 1367 seconds.</code></p>
-
-<p>is informational. These distinctions are handy for the plugin&#8217;s colorized output support.</p>
-
-<p>Now that we&#8217;ve created that file, under the plugin settings we want to name it and give it the location to the file:</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/console-parsing-plugin.png" alt="Configured Parsing Rules" /></p>
-
-<h3>Back to our job</h3>
-
-<p>Finally!</p>
-
-<p>Let&#8217;s go back to our new job (Check DHCP Errors) and modify it. We want to enable the parsing plugin in the post-build steps. We&#8217;re going to check &#8220;Mark build Unstable&#8221; for warnings and select our rule. Now save the job. The reason we&#8217;re going for warning is that this error is not fatal. Our system still gets an IP address. What we want to do is draw attention to it.</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/console-parsing-plugin-enabled.png" alt="Post Build Parsing" /></p>
-
-<p>Now if you run the job, you&#8217;ll get a yellow ball indicating that the job is unstable. If we were to change the first line of our rule to error and check the appropriate box, the job would have been marked a failure. Something additional this plugin provides is the &#8220;parsed console output&#8221;. If you click on the job detail and select &#8220;Parse Console Output&#8221; from the job menu, you&#8217;ll actually get a nicer way to see exactly what was wrong:</p>
-
-<p><img src="http://lusis.github.com/images/posts/lowtech-monitoring-with-jenkins/parsed-output.png" alt="Parsed Console Output" /></p>
-
-<p>Again, this is a totally contrived example. Obviously we would fail long before the parsing had the host been down.</p>
-
-<h1>Tying it all together</h1>
-
-<p>All of these individual jobs are neat but there&#8217;s an obvious dependency there. We need to be able to SSH to the host, we need mysql to be running and then we want to query it. We don&#8217;t want multiple emails for each failure. We only want the actual failed job to alert us. Let&#8217;s chain these jobs together to match that flow.</p>
-
-<ul>
-<li>Under the &#8220;MySQL Running&#8221; and &#8220;FooDB&#8221; jobs, disable the cron schedule. We only want it on the &#8220;DHCP&#8221; job.</li>
-<li>Under the DHCP job, we&#8217;re going to select the Post-build step of &#8220;Build other projects&#8221;</li>
-<li>Check &#8220;Trigger even if build is unstable&#8221; since we know it&#8217;s going to be unstable.</li>
-<li>In the text area, we want to add our &#8220;Check MySQL Running&#8221; job</li>
-<li>Under the &#8220;Check MySQL Running&#8221; job, we want to select &#8220;Trigger only if build succeeds&#8221; and set our text area to the &#8220;Check FooDB Backlog&#8221; job.</li>
-</ul>
-
-
-<p>Now if you run the top-level job (Check DHCP Errors), all of the jobs will run. If any fail, the run will stop there and alert you! Since this is now scheduled, every 15 minutes this entire workflow will be checked.</p>
-
-<h1>Additional plugins and tips</h1>
-
-<p>Jenkins has a boatload of plugins. It&#8217;s worth investigating them to see if they make some given task (like output parsing) easier. Some provide additional notification paths like jabber or irc. Others provide additional build step types in specific languages like Groovy or Powershell. You can also do things like create a &#8220;Parameterized Build&#8221;. This is especially handy for thresholds. There&#8217;s also a very handy SSH plugin that let&#8217;s you define hosts globally and keys per host. This helps clean up your build steps too.</p>
-
-<p>One plugin that was recommended is the &#8220;Email-ext&#8221; plugin. This allows you to REALLY spice up and configure your email notifications.</p>
-
-<p>There&#8217;s a plugin for checking a web site for some criteria and plugins for starting virtual machines. There are also plugins for creating a radiator view so you can get a nice big dashboard for just checking the state of jobs at a glance.</p>
-
-<p>The key to remember is that Jenkins is an unopinionated build tool. This flexiblity lends itself to doing off-the-wall stuff (like being a monitoring system or a cron replacement). The trick is translating the concepts and terminology of building software to something that fits your use case.</p>
-
-<h1>Additional Credits</h1>
-
-<p>I&#8217;d like to thank <a href="https://twitter.com/miller_joe">Joe Miller</a>, <a href="https://twitter.com/ches">Ches Martin</a> and <a href="https://twitter.com/agentdero">R. Tyler Croy</a> for reviewing this post and offering up corrections, tips and advice.</p>
 ]]></content>
   </entry>
   

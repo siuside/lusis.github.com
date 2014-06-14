@@ -143,17 +143,245 @@
         <lastmod>2014-04-14T00:16:38-04:00</lastmod>
     </url>
     <url>
+        <loc>http://lusis.github.com/blog/2014/06/13/no-konami-for-operations/</loc>
+        <lastmod>2014-06-14T00:48:17-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://lusis.github.com/blog/archives/</loc>
-        <lastmod>2014-04-14T00:16:38-04:00</lastmod>
+        <lastmod>2014-06-14T00:48:17-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/projects/</loc>
+        <lastmod>2012-05-24T03:22:52-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2011-05-18-on-noah-part-3.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2011-06-05-why-monitoring-sucks.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2010-03-05-finally-getting-to-dig-into-puppet.html
+            http://lusis.github.com/archives/blogger/2009-04-22-idea-for-hosting-wow-addons.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2011-02-25-thank-you.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2008-06-30-best-graphjam-ever.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-02-24-increasing-frustration-with-managing.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-10-22-potato-candy-family-recipe.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2009-05-12-annoying-sign-in-roswell.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-12-02-automating-ebs-snapshot-validation-with.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-06-21-status-of-riak-support-in-padrino.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2009-09-10-party-that-cried-wolf.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2011-05-17-on-noah-part-2.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2008-04-04-cfgdir.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2008-04-03-bob-barr.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2008-04-03-grand-opening.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-10-21-pycon-devops-piggy-back.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2011-03-08-ad-hoc-configuration-coordination-and.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2009-09-12-new-desktop-layout.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-07-13-no-operations-team-left-behind-where.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-12-15-chef-and-encrypted-data-bags.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2009-09-02-checkrdp-request.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2009-03-12-redoing-my-office.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2010-01-27-apple-predictions.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-11-09-fix-it-or-kick-it-and-ten-minute-maxim.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2010-05-26-aggressive-lvm.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2010-01-10-ugly-queries.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-03-29-devops-operations-to-developers.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-10-28-designed-for-developers-why-people-keep.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2009-03-28-tales-from-job-search.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2010-11-08-transitions.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2011-04-05-it-does-not-follow-and-wheatons-law.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-12-02-automating-ebs-snapshot-validation-with_02.html
         </loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
         <loc>http://lusis.github.com/archives/blogger/2009-06-12-updates-to-mhs.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2009-06-08-tinis-for-tatas.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2011-01-14-follow-up-to-no-operations-team-left.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2011-05-16-on-noah-part-1.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2009-03-25-mission-accomplished.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2009-02-25-most-annoying-snippet-from-speech-last.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2009-06-03-adobe-air-apps-and-linux-tweetdeck.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2011-07-21-monitoring-sucks-watch-your-language.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2009-06-02-fun-with-foundry-load-balancing-mysql.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2008-04-09-sold-on-unit-testing.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-11-02-using-hudson-and-rvm-for-ruby-unit.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2010-02-12-time-to-retire-beast.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2009-04-01-lifehacker-would-be-ashamed-of-me-right.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2009-09-15-i-am-seriously-having-too-much-fun-with.html
+        </loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
@@ -164,8 +392,22 @@
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2010-10-21-pycon-devops-piggy-back.html
+            http://lusis.github.com/archives/blogger/2010-06-10-parsing-nagios-objects-in-ruby-redux.html
         </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2010-07-08-locked-down.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2009-06-03-new-nagios-exchange-online.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2010-06-22-opposite-of-devops.html</loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
@@ -174,7 +416,47 @@
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2009-05-12-annoying-sign-in-roswell.html
+            http://lusis.github.com/archives/blogger/2009-01-28-favorite-picture-thus-far.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2011-01-05-chef-and-encrypted-data-bags-revisted.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2009-11-20-exchange-web-services-via-ruby.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2009-08-27-nagios-downtime-scheduler-in-ruby.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2009-08-28-i-has-sad.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2011-04-22-who-owns-my-availability.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-03-23-ummmthank-you-google-voice.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-09-22-hiring-for-devops-primer.html
         </loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
@@ -186,44 +468,106 @@
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2011-01-14-follow-up-to-no-operations-team-left.html
+            http://lusis.github.com/archives/blogger/2008-11-13-libertarianism-and-science-fiction.html
         </loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-03-28-tales-from-job-search.html</loc>
+        <loc>http://lusis.github.com/archives/blogger/2011-05-20-on-noah-part-4.html</loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2010-02-24-increasing-frustration-with-managing.html
+            http://lusis.github.com/archives/blogger/2009-01-15-project-found-among-other-things.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2008-04-04-interesting-log-entry.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2009-06-25-nagios-and-websphere.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2010-04-07-well-i-touched-one.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-09-12-notes-on-vogeler-and-devops.html
         </loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2011-04-05-it-does-not-follow-and-wheatons-law.html
+            http://lusis.github.com/archives/blogger/2009-03-31-jonathan-coulton-rip-off-artist.html
         </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-09-02-checkrdp-request.html</loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2011-01-05-chef-and-encrypted-data-bags-revisted.html
+            http://lusis.github.com/archives/blogger/2009-08-27-free-nagios-plugins-act-now.html
         </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-03-12-redoing-my-office.html</loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2011-04-15-sinatra-noah-and-cloudfoundry-dirty.html
+            http://lusis.github.com/archives/blogger/2010-10-12-latest-vogeler-update-mongodb-protobufs.html
         </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2009-03-11-back-on-market.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2010-03-05-finally-getting-to-dig-into-puppet.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2008-04-14-amazon-adds-persistent-storage.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2010-03-23-code-on-github.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2009-05-14-annoyances-with-opennms.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2009-05-11-incinga-musings.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2008-10-09-best-quote-ever.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2010-04-01-ipad-confusion.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://lusis.github.com/archives/blogger/2009-03-19-unfathomable-job-descriptions.html
+        </loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2008-04-03-nagios-and-ruby.html</loc>
+        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/archives/blogger/2011-07-12-fight.html</loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
@@ -238,84 +582,8 @@
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2010-03-23-ummmthank-you-google-voice.html
+            http://lusis.github.com/archives/blogger/2010-07-21-five-open-source-projects-i-wish-i.html
         </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-03-25-mission-accomplished.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2010-02-12-time-to-retire-beast.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-10-12-latest-vogeler-update-mongodb-protobufs.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-03-31-jonathan-coulton-rip-off-artist.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-02-25-most-annoying-snippet-from-speech-last.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2008-10-09-best-quote-ever.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-12-15-chef-and-encrypted-data-bags.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-03-29-devops-and-nosql-bad-naming-leads-to.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-06-08-tinis-for-tatas.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2010-04-01-ipad-confusion.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-04-01-lifehacker-would-be-ashamed-of-me-right.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2010-10-06-plan.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2011-02-25-thank-you.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2011-07-12-fight.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-05-11-incinga-musings.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-09-10-party-that-cried-wolf.html</loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
@@ -325,71 +593,7 @@
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
-        <loc>http://lusis.github.com/archives/blogger/2011-05-20-on-noah-part-4.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-03-09-usability-and-performance-testing-in.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-01-28-favorite-picture-thus-far.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-09-12-new-desktop-layout.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-06-25-nagios-and-websphere.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-03-29-devops-developers-to-operations.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-11-02-using-hudson-and-rvm-for-ruby-unit.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2008-04-03-bob-barr.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-08-27-nagios-downtime-scheduler-in-ruby.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-09-12-notes-on-vogeler-and-devops.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-10-28-designed-for-developers-why-people-keep.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2010-04-07-well-i-touched-one.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-04-22-idea-for-hosting-wow-addons.html
-        </loc>
+        <loc>http://lusis.github.com/archives/blogger/2009-01-13-looking-for-project.html</loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
@@ -400,202 +604,24 @@
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2009-03-19-unfathomable-job-descriptions.html
+            http://lusis.github.com/archives/blogger/2009-03-11-how-high-is-too-high-level.html
         </loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-08-28-i-has-sad.html</loc>
+        <loc>http://lusis.github.com/archives/blogger/2010-10-06-plan.html</loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2010-10-22-potato-candy-family-recipe.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-01-15-project-found-among-other-things.html
+            http://lusis.github.com/archives/blogger/2010-03-29-devops-and-nosql-bad-naming-leads-to.html
         </loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2010-03-29-devops-operations-to-developers.html
+            http://lusis.github.com/archives/blogger/2011-04-15-sinatra-noah-and-cloudfoundry-dirty.html
         </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-06-02-fun-with-foundry-load-balancing-mysql.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2010-11-08-transitions.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2011-06-05-why-monitoring-sucks.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-09-22-hiring-for-devops-primer.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-11-20-exchange-web-services-via-ruby.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-01-13-looking-for-project.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-07-13-no-operations-team-left-behind-where.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-11-09-fix-it-or-kick-it-and-ten-minute-maxim.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2008-06-30-best-graphjam-ever.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2011-05-16-on-noah-part-1.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-08-27-free-nagios-plugins-act-now.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-06-21-status-of-riak-support-in-padrino.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2008-04-14-amazon-adds-persistent-storage.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2010-01-27-apple-predictions.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-12-02-automating-ebs-snapshot-validation-with_02.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2011-04-22-who-owns-my-availability.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-06-03-adobe-air-apps-and-linux-tweetdeck.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-06-10-parsing-nagios-objects-in-ruby-redux.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2010-03-23-code-on-github.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2009-03-11-back-on-market.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2011-05-18-on-noah-part-3.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2008-04-09-sold-on-unit-testing.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-09-12-follow-up-to-vogeler-post.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-09-15-i-am-seriously-having-too-much-fun-with.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2010-12-02-automating-ebs-snapshot-validation-with.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2010-05-26-aggressive-lvm.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2011-03-08-ad-hoc-configuration-coordination-and.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2011-05-17-on-noah-part-2.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2008-04-04-cfgdir.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2008-11-13-libertarianism-and-science-fiction.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2010-01-10-ugly-queries.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2009-06-03-new-nagios-exchange-online.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2008-04-04-interesting-log-entry.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2010-07-08-locked-down.html</loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
@@ -606,46 +632,24 @@
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2009-05-14-annoyances-with-opennms.html
-        </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2008-04-03-grand-opening.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://lusis.github.com/archives/blogger/2011-07-21-monitoring-sucks-watch-your-language.html
+            http://lusis.github.com/archives/blogger/2010-03-29-devops-developers-to-operations.html
         </loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2009-03-11-how-high-is-too-high-level.html
+            http://lusis.github.com/archives/blogger/2010-03-09-usability-and-performance-testing-in.html
         </loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2010-06-22-opposite-of-devops.html</loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
     </url>
     <url>
         <loc>
-            http://lusis.github.com/archives/blogger/2010-07-21-five-open-source-projects-i-wish-i.html
+            http://lusis.github.com/archives/blogger/2010-09-12-follow-up-to-vogeler-post.html
         </loc>
         <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/archives/blogger/2008-04-03-nagios-and-ruby.html</loc>
-        <lastmod>2012-05-24T03:22:51-04:00</lastmod>
-    </url>
-    <url>
-        <loc>http://lusis.github.com/projects/</loc>
-        <lastmod>2012-05-24T03:22:52-04:00</lastmod>
     </url>
     <url>
         <loc>http://lusis.github.com/</loc>
-        <lastmod>2014-04-14T00:16:38-04:00</lastmod>
+        <lastmod>2014-06-14T00:48:17-04:00</lastmod>
     </url>
 </urlset>
