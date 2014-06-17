@@ -9,7 +9,7 @@
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="Since I just tweeted about this and I know people would want an explaination, I figured I&#8217;d short circuit 140 character hell and explain why ...">
+  <meta name="description" content="This post is something that&#8217;s been brewing for a while. While it may sound targeted in tone, it&#8217;s more general than that. Let&#8217;s j...">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,47 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/09/what-production-means/">What Production Means</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-07-09T21:31:00-04:00" pubdate  data-updated="true" >Jul 9<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/07/09/what-production-means/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This post is something that&#8217;s been brewing for a while. While it may sound targeted in tone, it&#8217;s more general than that. Let&#8217;s just call it an open letter to family, friends and coworkers around the world.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/07/09/what-production-means/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -457,62 +498,6 @@ To me this, is the crux of what makes Logstash so awesome. Someone asked me to d
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load Balancing Logstash With AMQP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-  
-
-
-
-<time datetime="2012-01-31T01:12:00-05:00" pubdate  data-updated="true" >Jan 31<span>st</span>, 2012</time>
-        
-         | <a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>AMQP in Logstash is one of the most complicated parts of the workflow. I&#8217;ve taken it on myself, as the person with the most AMQP experience (both RabbitMQ and Qpid) to try and explain as much as need for logstash users.</p>
-
-<p><a href="https://twitter.com/patrickdebois">Patrick DeBois</a> hit me up with a common logstash design pattern that I felt warranted a full detailed post.</p>
-
-<p><em>Warning: This is an image heavy post. Terminal screenshots are linked to larger versions</em></p>
-
-<h2>Requirements</h2>
-
-<ul>
-<li>No lost messages in transit/due to inputs or outputs.</li>
-<li>Shipper-only configuration on the source</li>
-<li>Worker-based filtering model</li>
-<li>No duplicate messages due to transit mediums (i.e. fanout is inappropriate as all indexers would see the same message)</li>
-<li>External ElasticSearch cluster as final destination</li>
-</ul>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -534,6 +519,10 @@ To me this, is the crux of what makes Logstash so awesome. Someone asked me to d
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/06/14/paas-for-realists/">PaaS for Realists</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/06/13/no-konami-for-operations/">There&#8217;s no konami code for operations</a>
       </li>
     
@@ -547,10 +536,6 @@ To me this, is the crux of what makes Logstash so awesome. Someone asked me to d
     
       <li class="post">
         <a href="/blog/2013/09/17/a-historical-compendium-of-useless-shit/">A Historical Compendium of Useless Shit</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/11/go-for-system-administrators/">Go for System Administrators</a>
       </li>
     
   </ul>

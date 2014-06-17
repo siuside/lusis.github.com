@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-06-14T00:52:22-04:00</updated>
+  <updated>2014-06-17T00:54:43-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,178 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[PaaS for Realists]]></title>
+    <link href="http://lusis.github.com/blog/2014/06/14/paas-for-realists/"/>
+    <updated>2014-06-14T23:12:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2014/06/14/paas-for-realists</id>
+    <content type="html"><![CDATA[<p>I realize I was pretty down on PaaS the past couple of days. Lest I send the wrong message, I figure a clarification is in order</p>
+
+<!-- more -->
+
+
+<p>Before we start, we should define some things. It&#8217;s always important to be on the same page:</p>
+
+<ul>
+<li>PaaS: Platform as a Service (no distinction between public or private). When talking about public, it&#8217;s usually Heroku.</li>
+<li>Private PaaS: A PaaS run &#8220;in-house&#8221;. I&#8217;m using &#8220;in-house&#8221; loosely here. You could be running this on top of AWS for all I care. You&#8217;re running it yourself. There are a lot of players in this space but the biggest name is CloudFoundry. There&#8217;s also OpenShift and then the plethora of docker-based ones like Deis and Flynn.</li>
+<li>Affinity: Definable placement policies for where applications run. I use this liberally to refer to both affinity and anti-affinity. Basically &#8220;I want this to run next to this&#8221; vs. &#8220;I don&#8217;t want this to run next to this&#8221;</li>
+<li>Production: Business critical functions that warrant &#8220;waking someone up at 2AM&#8221;</li>
+<li>container: linux containers. Nothing else.</li>
+<li>docker: a specific container packaging format and ecosystem</li>
+</ul>
+
+
+<p>I also want to be clear that I <em>ONLY</em> care about production workloads. The reason I defined production the way I did is because only the end user can define the business criticality of a service or system function. If you consider an idle bench of engineers unable to work because your build farm is down a bad thing, then your build farm is &#8220;production&#8221;.</p>
+
+<p>I also want to point out that I inherently belive that a Private PaaS is probably a really good thing for your business. My argument is largely that most enterprises are not ready for it and are not willing to live with the shift it will require.</p>
+
+<h1>Benefits of a PaaS</h1>
+
+<p>Let&#8217;s go with the good news first. A PaaS (and more importantly a private PaaS) has a lot of benefits.</p>
+
+<ul>
+<li>It can simplify deployment models.</li>
+<li>It can unify the workflow of development and production deployments.</li>
+<li>It can codify a framework by which you develop your applications</li>
+<li>Generally speaking, you also get a more consistent operational surface for your applications</li>
+<li>Can create a culture and framework for self-service</li>
+</ul>
+
+
+<h2>Simplified deployment and unified workflow</h2>
+
+<p>Most private PaaS solutions tend to follow the Heroku model of a PaaS. In the Heroku model, You follow a normal development workflow using your VCS as a model for deployment:</p>
+
+<ul>
+<li>Develop code</li>
+<li>Test code</li>
+<li>Push code to Heroku remote for testing</li>
+</ul>
+
+
+<p>That&#8217;s the sum of the deployment. Your deployment to production is no different.</p>
+
+<h2>Codified framework</h2>
+
+<p>With Heroku, the &#8220;moving bits&#8221; of your stack are hidden from you. You don&#8217;t stand up a database in the traditional sense. You tell Heroku to wire up the database to your application as an add-on. Heroku exposes this add-on to your stack via environment variables. You reference those environment variables in your application code instead of hard-coded settings in property or yaml files. Both CloudFoundry and OpenShift follow the same model:</p>
+
+<ul>
+<li>Create a service</li>
+<li>Bind the service</li>
+<li>Update the application to use the service</li>
+</ul>
+
+
+<p>This is really awesome from a development perspective. You simply define the building blocks of your application, tell the platform to expose them to your application and off you go.</p>
+
+<h2>Operational Surface</h2>
+
+<p>From an operations perspective, a private PaaS can create a consistent operational surface area. You spend less time worrying about individual operating systems. Your &#8220;host&#8221; nodes are largely a uniform target. Most of the private PaaS products ship with most common services prebuilt and ready to wire up to applications.</p>
+
+<p>I would even argue that a private PaaS even simplifies the security model a bit as the concept of users are less relevant and much of the PaaS tooling is, by nature, provides proxy access to the things the developers need. Both of the dominant private PaaS solutions leverage kernel cgroups for resource management. Cloudfoundry uses LXC for isolation while OpenShift uses SELinux and MCS currently. I believe, however, that OpenShift is migrating to LXC as well.</p>
+
+<h2>Self-service culture</h2>
+
+<p>Once your private PaaS is up and running, your development team is unleashed to deploy whatever and whenever they want. They aren&#8217;t waiting around for a full-fledged OS to be provisioned that needs further configuration just to be servicable. Developers are free to experiment with arbitrary components (provided they exist in the PaaS service catalog).</p>
+
+<h1>Rainbows and Unicorn Piss</h1>
+
+<p>However not everything is rosy and bright in the land of the private PaaS. There are downsides as well - some cultural and some technical</p>
+
+<h2>Application Readiness</h2>
+
+<p>Unless your private PaaS is a bespoke solution, you WILL have to change your application model. You cannot simply forklift an application into a PaaS. Your application must be designed not only to work in a PaaS environment but also to work in a specific PaaS.</p>
+
+<p>Most traditional &#8220;enterprise&#8221; applications are not ready for a PaaS solution. Many will have to be significantly rewritten. The most common model for this is the <a href="http://12factor.net/">12 Factor Application</a>.</p>
+
+<p>I should state up front that I disagree with quite a few bits of the 12 Factor model. It&#8217;s important to remember that, imho, the 12 Factor model was designed as a business strategy for Heroku. The steps follow exactly what makes an app work best on Heroku, not what is best for an application.</p>
+
+<p>Regardless, as the private PaaS solutions are largely modeled on Heroku you might was state that 12 Factor is the way you&#8217;ll need to design your application.</p>
+
+<h2>Magical autoscaling</h2>
+
+<p>As I said in my previous post, this really doesn&#8217;t exist. Your application has to be DESIGNED to scale this way. As Adrian Cockcroft pointed out in the comments to my previous post Netflix &#8220;overallocated&#8221; on the dependency side up front to minimize the need and impact of things like rebalancing data and load balancer scaling. It&#8217;s also worth noting that Netflix did NOT use a PaaS (though arguably the model for how they used AWS was PaaS-ish).</p>
+
+<p>Most &#8220;enterprise&#8221; applications I&#8217;ve dealt with never scaled cleanly. They needed things like sticky sessions and made assumptions about data access paths. Quite frankly they also were not designed for this level of deployment volatility. I would go even further and say that if you have a release cycle measured in months, don&#8217;t bother.</p>
+
+<h2>Magical Autorecover</h2>
+
+<p>Just like autoscaling, this is also not what you think it is. Unless your application maintains exactly ZERO state, then you will never see this benefit. Do you write files to critical files to disk in your application? Yep those are gone when you &#8220;magically autorecover&#8221;. The autorecovery that was promised you? It redeploys your application. Your state is lost and no you don&#8217;t have NFS or shared storage or anything to fall back to. Get used to shoving your blobs in your database. Oh but what if your database fails?</p>
+
+<p>This is where it gets interesting. I&#8217;m still sussing out the recovery models for the two primary players in this space but most likely you will LOSE that data and have to restore from a backup. I&#8217;m sure someone will call me on this and I&#8217;m willing to listen but I do know for a fact that the autofailover model of things like your MySQL instance depend on migratable or shared storage (at least from my reading of the docs).</p>
+
+<p>This all of course leads me to the next part</p>
+
+<h1>Technical Requirements</h1>
+
+<p>I alluded to this earlier but there are technical requirements that most companies are simply not ready for.</p>
+
+<h2>Distributed Systems</h2>
+
+<p>All applications are inherently distributed systems even if you don&#8217;t want to admit it. However a PaaS is more so than most shops are ready for. Let&#8217;s run down the components for the current version of <a href="http://docs.cloudfoundry.org/concepts/architecture/">CloudFoundry</a>. I count 11 distinct components. If we move over to <a href="http://openshift.github.io/documentation/oo_system_architecture_guide.html">OpenShift</a> I count 4 components.</p>
+
+<p>Both of these applications use a service router, a message bus, a data store and <code>n</code> number of actual nodes running the deployed applications. In both cases, the documentation for these components requires you to already know how to scale and maintain these components. There are any number of places where these stacks can fall apart and break and you will need to be an expert in all of them.</p>
+
+<p>Also one of the more hilarious bits I&#8217;ve found is the situation with DNS. I can&#8217;t count the number of shops where DNS changes where things like wildcard DNS were verboten. Good luck with the PaaS dyndns model!</p>
+
+<h2>Operational Immaturity</h2>
+
+<p>To be clear while I feel that most organizations aren&#8217;t ready for the operational challenges of maintaining a PaaS, the job is made harder by the PaaS software. In both cases, the operational maturity of the products themselves simply isn&#8217;t there.</p>
+
+<p>Look at the &#8220;operators&#8221; documentation <a href="http://docs.gopivotal.com/pivotalcf/concepts/high-availability.html">here</a> for CloudFoundry HA. I can sum it up for you pretty easily:</p>
+
+<blockquote><p>GL;HF</p></blockquote>
+
+
+<p>Basically they punt everything over to you as if to say &#8220;Fuck if we know. Use that thing you sysadmin types use to make shit redundant.</p>
+
+<p>And lest you think OpenShift is any better, OpenShift uses MongoDB with this nice bit of information:</p>
+
+<blockquote><p>&#8220;All persistent state is kept in a fast and reliable MongoDB cluster.&#8221;</p></blockquote>
+
+
+<p>What I&#8217;m about to say I stand behind 100%. Any company that tells you that MongoDB is &#8220;reliable&#8221; is basically saying:</p>
+
+<ul>
+<li>We have no idea what we&#8217;re talking about</li>
+<li>We know f-all about operations</li>
+<li>We hate you</li>
+</ul>
+
+
+<p>Any tool that uses MongoDB as its persistent datastore is a tool that is not worth even getting started with. You can call me out on this. You can tell me I have an irrational dislike of MongoDB. I don&#8217;t care. Having wasted too much time fighting MongoDB in even the most trivial of production scenarios I refuse to ever run it again. My life is too short and my time too valuable.</p>
+
+<p>Additionally I&#8217;ve found next to zero documentation on how a seasoned professional (say a MySQL expert) is expected to tune the provisioned MySQL services. The best I can gather is that you are largely stuck with what the PaaS software ships in its service catalog. In the case of OpenShift you&#8217;re generally stuck with whatever ships with RHEL.</p>
+
+<p>Another sign of operational immaturity I noticed in OpenShift is that for pushing a new catalog item you actually have to RESTART a service before it&#8217;s available.</p>
+
+<h2>Disaster Recovery</h2>
+
+<p>After going over all the documentation for both tools and even throwing out some questions on twitter, disaster recovery in both tools basically boils down to another round of &#8220;good luck; have fun&#8221;.</p>
+
+<p>Let&#8217;s assume your PaaS installation is a roaring success. You&#8217;ve got every developer in your org pushing random applications out to production. Self-service is the way of life. We&#8217;ve got databases flying all over the place.</p>
+
+<p>How do you back them all up? Well this is a PaaS, Bob. It&#8217;s all about self-service. The developers should be backing them up.</p>
+
+<p>WAT.</p>
+
+<p>Again based on the research I&#8217;ve done (which isn&#8217;t 1000% exhaustive to be fair), I found zero documentation about how the administrator of the PaaS would back up all the data locked away in that PaaS from a unified central place. If your solution is to tell me that Susan&#8217;s laptop is where the backups of our production database lives, I&#8217;m going to laugh at you.</p>
+
+<h2>Affinity</h2>
+
+<p>Affinity issues make the DR scenario even MORE scary. I have no way of saying &#8220;don&#8217;t run the MySQL database on the same node as my application&#8221;. This makes the risk surface area even more large. Combine that with the fact that a single host could be running multiple business critical applications. I realize that these tools have algos that are supposed to handle this for you but I&#8217;ve not seen any sort of policy enforcement mechanism for that in the documentation.</p>
+
+<h1>So what&#8217;s the answer?</h1>
+
+<p>I don&#8217;t think ANY of the current private PaaS solutions are a fit right now. OpenShift is, imho, built on unsound ground. CloudFoundry in its current Ruby form is a mess of moving parts. In fairness CloudFoundry is going through a rewrite with some firm leadership behind it that I have quite a bit of faith in when it comes to operational concerns.</p>
+
+<p>Additionally both tools are embracing containers and docker packaging to increase security but none of the tools offer, as far as I can tell, anything resembling a hybrid model. I don&#8217;t trust docker storage containers yet personally.</p>
+
+<p>And I want to be clear. I&#8217;m not trying to be a BOFH here with all my talk of &#8220;placement policy&#8221; and &#8220;disaster recovery&#8221;. I fully embrace the idea of a private PaaS. I simply don&#8217;t embrace it in any of the current ecosystem. Even a modicum of due diligence should rule them both out until they address what are basic business sanity checks. These platforms require real operations to run and maintain. If you&#8217;re still throwing things over the wall to your operations team to deploy into your PaaS then you really haven&#8217;t gained anything. Unless your engineering organization is willing to step up to the shared responsibility inherent in a PaaS, then you definitely aren&#8217;t ready. Until then, your time and money is better spent optimizing and standardzing your development workflow and operational tooling to build your own psuedo-PaaS.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[There's no konami code for operations]]></title>
@@ -2527,325 +2699,6 @@ Several things set Redis apart from most key/value systems however:</p>
 <h2>Part three</h2>
 
 <p>I&#8217;m also working on a part three in this &#8220;series&#8221;. The last configuration I&#8217;d like to show is doing this same setup but using <a href="http://zeromq.org">0mq</a> as the bus. This is going to be especially challenging since our 0mq support is curretly &#8216;alpha&#8217;-ish quality. Beyond that, I plan on doing a similar series using pub/sub patterns. If you&#8217;re enjoying these posts, please comment and let me know!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Load balancing Logstash with AMQP]]></title>
-    <link href="http://lusis.github.com/blog/2012/01/31/load-balancing-logstash-with-amqp/"/>
-    <updated>2012-01-31T01:12:00-05:00</updated>
-    <id>http://lusis.github.com/blog/2012/01/31/load-balancing-logstash-with-amqp</id>
-    <content type="html"><![CDATA[<p>AMQP in Logstash is one of the most complicated parts of the workflow. I&#8217;ve taken it on myself, as the person with the most AMQP experience (both RabbitMQ and Qpid) to try and explain as much as need for logstash users.</p>
-
-<p><a href="https://twitter.com/patrickdebois">Patrick DeBois</a> hit me up with a common logstash design pattern that I felt warranted a full detailed post.</p>
-
-<p><em>Warning: This is an image heavy post. Terminal screenshots are linked to larger versions</em></p>
-
-<h2>Requirements</h2>
-
-<ul>
-<li>No lost messages in transit/due to inputs or outputs.</li>
-<li>Shipper-only configuration on the source</li>
-<li>Worker-based filtering model</li>
-<li>No duplicate messages due to transit mediums (i.e. fanout is inappropriate as all indexers would see the same message)</li>
-<li>External ElasticSearch cluster as final destination</li>
-</ul>
-
-
-<!-- more -->
-
-
-<h2>EDIT</h2>
-
-<p>Originally our list stated the requirements as <em>No lost messages</em> and <em>No duplicate messages</em>. I&#8217;ve amended those with a slight modification to closer reflect the original intent. Please see <a href="http://blog.lusis.org/blog/2012/01/31/load-balancing-logstash-with-amqp/#comment-426175086">comment from Jelle Smet here</a> for details. Thanks Jelle!</p>
-
-<h2>Notes</h2>
-
-<p>We&#8217;re going to leave the details of filtering and client-side input up to the imagination.
-For this use case we&#8217;ll simply use <code>stdin</code> as our starting point. You can modify this as you see fit.
-The same goes for filtering. The assumption is that your filters will be correct and not be the source of any messages NOT making it into ElasticSearch.</p>
-
-<p>Each configuration will be explained so don&#8217;t stress over it at first glance. We&#8217;re also going to explicitly set some options for the sake of easier comprehension.</p>
-
-<h1>Client-side agent config</h1>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  input {
-</span><span class='line'>    stdin { debug =&gt; true type =&gt; "host-agent-input" }
-</span><span class='line'>  }
-</span><span class='line'>  output {
-</span><span class='line'>    amqp {
-</span><span class='line'>      name =&gt; "logstash-exchange"
-</span><span class='line'>      exchange_type =&gt; "direct"
-</span><span class='line'>      host =&gt; "rabbitmq-server"
-</span><span class='line'>      key =&gt; "logstash-routing-key"
-</span><span class='line'>      durable =&gt; true
-</span><span class='line'>      persistent =&gt; true
-</span><span class='line'>    }
-</span><span class='line'>  }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Config Explained</h2>
-
-<p>The amqp output:</p>
-
-<h3>name</h3>
-
-<p>This is the name that will be provided to RabbitMQ for the exchange. By default, the Bunny driver will auto-generate a name. This won&#8217;t work in this usecase because the consumers will need a known name. Remember exchanges are for producers. Queues are for consumers. When we wire up the indexer side, we&#8217;ll need to know the name of the exchange to perform the binding.</p>
-
-<h3>exchange_type</h3>
-
-<p>For this particular design, we want to use a direct exchange. It&#8217;s the only way we can guarantee that only one copy of a log message will be processed.</p>
-
-<h3>key</h3>
-
-<p>We&#8217;re going to explicitly set the routing key as direct exchanges do not support wildcard routing key bindings. Again, we&#8217;ll need this on the consumer side to ensure we get the right messages.</p>
-
-<h3>durable</h3>
-
-<p>This setting controls if the exchange should survive RabbitMQ restarts or not.</p>
-
-<h3>persistent</h3>
-
-<p>This is for the messages. Should they be persisted to disk or not?</p>
-
-<p>Note that for a fully &#8220;no lost messages scenario&#8221; to work in RabbitMQ, you have to jump through some hoops. This is explain more below.</p>
-
-<h2>Running the agent</h2>
-
-<p>This same configuration should be used on ALL host agents where logs are being read. You can have variation in the inputs. You can have additional outputs however the amqp output stanza above will ensure that all messages will be sent to RabbitMQ.</p>
-
-<h1>Indexer agent config</h1>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>input {
-</span><span class='line'>  amqp {
-</span><span class='line'>    host =&gt; "rabbitmq-server"
-</span><span class='line'>    name =&gt; "indexer-queue"
-</span><span class='line'>    exchange =&gt; "logstash-exchange"
-</span><span class='line'>    key =&gt; "logstash-routing-key"
-</span><span class='line'>    exclusive =&gt; false
-</span><span class='line'>    durable =&gt; true
-</span><span class='line'>    auto_delete =&gt; false
-</span><span class='line'>    type =&gt; "logstash-indexer-input"
-</span><span class='line'>  }
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>filter {
-</span><span class='line'>  # your filters here
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>output {
-</span><span class='line'>  elasticsearch {
-</span><span class='line'>    # your elasticsearch settings here
-</span><span class='line'>  }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Config explained</h2>
-
-<p>The amqp input:</p>
-
-<h3>name</h3>
-
-<p>This is the name that will be provided to RabbitMQ for the queue. Again, as with exchange, we need a known name. The reason for this is that all of our indexers are going to share a common queue. This will make sense in a moment.</p>
-
-<h3>exchange</h3>
-
-<p>This should match exactly with the name of the exchange that was created before in the host-side config.</p>
-
-<h3>key</h3>
-
-<p>This should, again, match the routing key provided in the host-side configuration exactly. <code>direct</code> exchanges do NOT support wildcard routing keys. By providing a routing key, you are creating a <code>binding</code> in RabbitMQ terms. This <code>binding</code> says &#8220;I want all messages sent to the <code>logstash-exchange</code> with a routing key of <code>logstash-routing-key</code> to be sent to the queue named <code>indexer-queue</code>.</p>
-
-<h3>exclusive</h3>
-
-<p>As with the exchange in the host-side config, we&#8217;re going to have multiple workers using this queue. This is another AMQP detail. When you bind a queue to an exchange, a <code>channel</code> is created for the messages to flow across. A single queue can have multiple channels. This is how our worker pool is going to operate.</p>
-
-<p><strong>You do not want a different queue name for each worker despite how weird that sounds</strong></p>
-
-<p>If you give each worker its own queue, then you <strong>WILL</strong> get duplicate messages. It&#8217;s counterintuitive, I know. Just trust me. The way to ensure that multiple consumers don&#8217;t see the same message is to use mutliple channels on the same queue.</p>
-
-<h3>durable</h3>
-
-<p>Same as the exchange declarition, this ensures that the queue will stick around if the broker (the RabbitMQ server) restarts.</p>
-
-<h3>auto_delete</h3>
-
-<p>This is the setting most people miss when trying to ensure no lost messages. By default, RabbitMQ will throw away even durable queues once the last user of the queue disconnects.</p>
-
-<h3>type</h3>
-
-<p>This is the standard logstash requirement for inputs. They must have a <code>type</code> defined. Arbitrary string.</p>
-
-<h1>Sidebar on RabbitMQ message reliability</h1>
-
-<p>Simply put, RabbitMQ makes you jump through hoops to ensure that no message is lost. There&#8217;s a trifecta of settings that you have to have for it to work:</p>
-
-<ul>
-<li>Your exchange must be durable with persistent messages</li>
-<li>Your queue must be durable</li>
-<li>Auto-delete must not be disabled</li>
-</ul>
-
-
-<p><strong>EVEN IF YOU DO ALL THESE THINGS, YOU CAN STILL LOSE MESSAGES!</strong></p>
-
-<h2>Order matters</h2>
-
-<p>I know &#8230; you&#8217;re thinking &#8220;What the F&#8212;?&#8221;. There is still a scenario where you can lose messages. It has to do with how you start things up.</p>
-
-<ul>
-<li>If you start the exchange side but never start the queue side, messages are dropped on the floor</li>
-<li>You can&#8217;t start the queue side without first starting the exchange side</li>
-</ul>
-
-
-<p>While RabbitMQ let&#8217;s you predeclare exchanges and queues from the command-line, it normally only creates things when someone asks for it. Since exchanges know nothing about the consumption side of the messages (the queues), creating an exchange with all the right settings does NOT create the queue and thus no binding is ever created.</p>
-
-<p>Conversely, you can&#8217;t declare a totally durable queue when there is no exchange in place to bind against.</p>
-
-<p>Follow these rules and you&#8217;ll be okay. You only need to do it once:</p>
-
-<ul>
-<li>Start a producer (the host-side logstash agent)</li>
-<li>Ensure via <code>rabbitmqctl</code> or the management web interface that the exchange exists</li>
-<li>Start one of the consumers (the indexer config)</li>
-</ul>
-
-
-<p>Once the indexer agent has started, you will be good to go. You can shutdown the indexers and messages will start piling up. You can shut everything down - rabbitmq (with backlogged messages), the indexer agent and the host-side agent. When you start RabbitMQ, the queues, exchanges and messages will all still be there. If you start an indexer agent, it will drain the outstanding messages.</p>
-
-<p>However, if you screw the configuration up you&#8217;ll have to delete the exchange and the queue via <code>rabbitmqctl</code> or the management web interface and start over.</p>
-
-<h1>How it looks visually</h1>
-
-<p>There are two plugins you should install with RabbitMQ:</p>
-
-<ul>
-<li>rabbitmq_management</li>
-<li>rabbitmq_management_visualizer</li>
-</ul>
-
-
-<p>The first will provide a web interface (and HTTP API!) listening on port 55672 of your RabbitMQ server. It provides a really easy way to see messages backlogged, declared exchanges/queue and pretty much everything else. Seeing as it also provides a very nice REST api to everything inside the RabbitMQ server, you&#8217;ll want it anyway if for nothing but monitoring hooks.</p>
-
-<p>The visualizer is an ad-hoc addon that helps you see the flows through the system. It&#8217;s not as pretty as the management web interface proper but it gets the job done.</p>
-
-<h1>Starting it all up</h1>
-
-<p>Now we can start things up</p>
-
-<h2>Producers</h2>
-
-<p>We&#8217;re going to start up our four client side agents. These will create the exchange (or alternately connect to the existing one). If you look at the management interface, you&#8217;ll see four channels established:</p>
-
-<p>Management view:
-<img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/amqp-four-channels.png" alt="amqp-four-channels.png" /></p>
-
-<p>Visualizer view:
-<img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/amqp-four-producers.png" alt="amqp-four-producers.png" /></p>
-
-<p>Remember that until we connect with a consumer configuration (the indexer) messages sent to these exchanges WILL be lost.</p>
-
-<h2>Consumers</h2>
-
-<p>Now we start our indexer configurations - all four of them</p>
-
-<p>Now if we take a peek around the management interface and the visualizer, we start to see some cool stuff.</p>
-
-<p>In the managment interface, you&#8217;ll see eight total channels - four for the queue and four for the exchange</p>
-
-<p><img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/amqp-eight-channels.png" alt="amqp-eight-channels.png" /></p>
-
-<p>If you click on &#8220;Queues&#8221; at the top and then on the entry for our <code>indexer-queue</code>, you&#8217;ll see more details:</p>
-
-<p><img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/amqp-indexer-queue-details.png" alt="amqp-indexer-queue-details.png" /></p>
-
-<p>But the real visual is in the visualizer tab. Click on it and then click on the <code>indexer-queue</code> on the far right</p>
-
-<p><img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/amqp-visualizer-detail.png" alt="amqp-visualizer-detail.png" /></p>
-
-<p>You can see the lines showing the flow of messages.</p>
-
-<p>One thing to make note of about RabbitMQ load balancing. Messages are load balanced across CONSUMERS not QUEUES. There&#8217;s a subtle distinction there from RabbitMQ&#8217;s semantic point of view.</p>
-
-<h2>Testing the message flow</h2>
-
-<p>Over in your terminal window, let&#8217;s send some test messages. For this test, again, I&#8217;m using <code>stdin</code> for my origination and <code>stdout</code> to mimic the ElasticSearch destination.</p>
-
-<p>In my first input window, I&#8217;m going just type 1 through 4 with a newline after each. This should result in each consumer getting a message round-robin style:</p>
-
-<p><a href="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/load-balance-test-1.png"><img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/load-balance-test-1.png" alt="load-balance-test-1.png" /></a></p>
-
-<p>Now I&#8217;m going to cycle through the input windows and send a single message from each:</p>
-
-<p><a href="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/load-balance-test-4.png"><img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/load-balance-test-4.png" alt="load-balance-test-4.png" /></a></p>
-
-<p>You can see that messages 4-7 were sent round-robin style.</p>
-
-<h2>Testing persistence</h2>
-
-<p>All of this is for naught if we lose messages because our workers are offline. Let&#8217;s shutdown all of our workers and send a bunch of messages from each input window:</p>
-
-<p><a href="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/workers-offline-terminal.png"><img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/workers-offline-terminal.png" alt="workers-offline-terminal.png" /></a></p>
-
-<p>We sent two lines of text per window. This amounts to eight log messages that should be queued up for us. Let&#8217;s check the management interface:</p>
-
-<p><img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/eight-messages-waiting.png" alt="eight-messages-waiting.png" /></p>
-
-<p>Now if we stop rabbitmq entirely and restart it, those messages should still be there (along with the queue and exchanges we created).</p>
-
-<p>Once you&#8217;ve verified that, start one of the workers back up. When it comes fully online, it should drain all of the messages from the exchange:</p>
-
-<p><a href="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/drained-messages.png"><img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/drained-messages.png" alt="drained-messages.png" /></a></p>
-
-<p>Yep, there they went. The last two messages you get should be the ones from window 4. This is another basic functionality of message queue software in general. Messages should be delivered in the order in which they were recieved.</p>
-
-<h1>One last diagram</h1>
-
-<p>Here&#8217;s a flowchart I created with Gliffy to show what the high-level overview of our setup would look like. Hope it helps and feel free to hit me up on freenode irc in the <code>#logstash</code> channel or on <a href="https://twitter.com/lusis">twitter</a>.</p>
-
-<p><a href="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png"><img src="http://lusis.github.com/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png" alt="gliffy-overview.png" /></a></p>
-
-<p><em>This post will eventually make its way into the <a href="http://cookbook.logstash.net">Logstash Cookbook Site</a>.</em></p>
 ]]></content>
   </entry>
   
