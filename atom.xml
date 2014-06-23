@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-06-23T02:06:42-04:00</updated>
+  <updated>2014-06-23T16:13:10-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -171,6 +171,11 @@
     <content type="html"><![CDATA[<p>I realize I was pretty down on PaaS the past couple of days. Lest I send the wrong message, I figure a clarification is in order</p>
 
 <!-- more -->
+
+
+
+
+<div class="docs-note">I&#8217;ve posted an update to this blog post with clarifications from folks <a href="http://blog.lusis.org/blog/2014/06/22/feedback-on-paas-realism/">here</a>. You should read it after this one</div>
 
 
 <p>Before we start, we should define some things. It&#8217;s always important to be on the same page:</p>
