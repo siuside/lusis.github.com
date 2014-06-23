@@ -151,8 +151,16 @@
         <lastmod>2014-06-17T01:52:46-04:00</lastmod>
     </url>
     <url>
+        <loc>http://lusis.github.com/blog/2014/06/17/autoscaling-your-way-to-disaster/</loc>
+        <lastmod>2014-06-18T16:23:59-04:00</lastmod>
+    </url>
+    <url>
+        <loc>http://lusis.github.com/blog/2014/06/22/feedback-on-paas-realism/</loc>
+        <lastmod>2014-06-23T00:21:24-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://lusis.github.com/blog/archives/</loc>
-        <lastmod>2014-06-17T01:52:46-04:00</lastmod>
+        <lastmod>2014-06-23T00:21:24-04:00</lastmod>
     </url>
     <url>
         <loc>http://lusis.github.com/projects/</loc>
@@ -654,6 +662,6 @@
     </url>
     <url>
         <loc>http://lusis.github.com/</loc>
-        <lastmod>2014-06-17T01:52:46-04:00</lastmod>
+        <lastmod>2014-06-23T00:21:24-04:00</lastmod>
     </url>
 </urlset>
