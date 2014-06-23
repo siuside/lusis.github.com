@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-06-23T00:23:05-04:00</updated>
+  <updated>2014-06-23T01:49:03-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -148,7 +148,7 @@
 
 <p>Now in fairness (and I love Mark to death and respect him immensely) that&#8217;s a bit of arrogant way to word it. EVERY environment, regardless of size, should deal with foundational issues such as deployment and runtime before adding another layer of complexity. Another point to keep in mind is that Mark has his background with Heroku. That&#8217;s not a positive or a negative it&#8217;s just a very important data point. Mark knows how to run a PaaS. He&#8217;s run arguably the largest public PaaS out there and dealt with all of its failure points.</p>
 
-<p>Also no one has yet to address my concerns about the centralized management of the PaaS itself or the data <em>IN</em> that PaaS. This is something that Heroku is actually a very POOR model for as Heroku does not concern itself with those things (nor does it need to). While Heroku does <a href="https://devcenter.heroku.com/articles/heroku-postgres-ha">offer and document how an individual might handle an HA or DR scenario</a> note that Heroku doesn&#8217;t centrally backup every single database hosted on its platform. Also worth noting that Heroku&#8217;s own offering is PGSQL and that the addon providers are responsible that comparible service. When you are running your own PaaS you are not only Heroku but also that addon provider.</p>
+<p>Also no one has yet to address my concerns about the centralized management of the PaaS itself or the data <em>IN</em> that PaaS. This is something that Heroku is actually a very POOR model for as Heroku does not concern itself with those things (nor does it need to). While Heroku does <a href="https://devcenter.heroku.com/articles/heroku-postgres-ha">offer and document how an individual might handle an HA or DR scenario</a> <del>note that Heroku doesn&#8217;t centrally backup every single database hosted on its platform.</del> <em>(It was pointed out to me that I misread the Heroku docs. All PGSQL dbs are backed up but there ARE limits related to the db that vary by tier)</em>. Also worth noting that Heroku&#8217;s own offering is PGSQL and that the addon providers are responsible that comparible service. When you are running your own PaaS you are not only Heroku but also that addon provider.</p>
 
 <p>So to go back to the quote from Luke:</p>
 
