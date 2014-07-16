@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Increasing frustration with managing Ruby on RHEL/CentOS - blog dot lusis</title>
+  <title>berks - blog dot lusis</title>
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="I am getting INCREASINGLY frustrated having to manage installations of Ruby on RHEL and its derivatives. It&#8217;s to the point where I&#8217;m re...">
+  <meta name="description" content="Note this post has comments disabled. This is a first for me but if someone wants to ask me anything else, there are multiple personal ways to cont...">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lusis.github.com/archives/blogger/2010-02-24-increasing-frustration-with-managing.html">
+  <link rel="canonical" href="http://lusis.github.com/blog/2014/07/15/berks/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -79,7 +79,7 @@
   
   <header>
     
-      <h1 class="entry-title">Increasing Frustration With Managing Ruby on RHEL/CentOS</h1>
+      <h1 class="entry-title">Berks</h1>
     
     
       <p class="meta">
@@ -89,18 +89,50 @@
 
 
 
+  
 
 
 
-        
-         | <a href="#disqus_thread">Comments</a>
+<time datetime="2014-07-15T22:26:00-04:00" pubdate  data-updated="true" >Jul 15<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content">I am getting INCREASINGLY frustrated having to manage installations of Ruby on RHEL and its derivatives. It&#8217;s to the point where I&#8217;m ready to shoot myself.<div><br /></div><div>A bit of background:</div><div>RHEL5 and its offspring (referred from here on out as RHEL5) ship with a really dated version of Ruby (1.8.5). Yes there are various patches are backported but in the end, it&#8217;s old. NOTHING works with it. No modern Gems work with it (for all intents and purposes). God forbid you try to run a modern Rails-based application on it.</div><div><br /></div><div>The MAIN reason is one that plagues not only Ruby but Perl, PHP and Python on the same platform:</div><div><br /></div><div>language-specific packaging repositories</div><div><br /></div><div>With Perl, you have CPAN. With PHP, you have PECL/PEAR. With Python you have Eggs. All of these are somewhat antithetical to the OS package management system. Taking it even further, it&#8217;s the same problem with Debian offshoots as well.</div><div><br /></div><div>This isn&#8217;t a problem for most end-users. They have the luxury of installing stuff wily-nilly. If it breaks, you just reinstall. However for those of tasked with maintaining systems in production environments, this is simply unacceptable. There is a requirement to keep systems in a consistent state. Software must be tested and work its way through the system before it gets to production. </div><div><br /></div><div>OS updates are the same way. You don&#8217;t simply have a cronjob that does a &#8216;apt-get upgrade&#8217; or &#8216;yum -y update&#8217;. Any smart company manages those packages using an internal repository. Packages aren&#8217;t graduated to the production repository until they&#8217;ve been tested and verified not to break the system. A system MUST be maintainable. At one company, we actually managed our OWN application code via RPM. We had 3 repositories (dev, qa, production) and each class of server pointed to those repositories. As we built new RPMs, they were copied into each repository as needed for testing.</div><div><br /></div><div>Now many people are probably thinking how convoluted that sounds but personally, I have no desire to have the financial future of my company at the hands of one broken upstream package. How would you feel if your banking site went offline because of the same issue? One broken upgrade can put someone out of a job. </div><div><br /></div><div>So what happens if you say &#8220;screw it&#8221; and just use CPAN or rubygems or PECL outside of the system package management? Now what happens when you upgrade from something like PHP 5.2 to PHP 5.3? Now you have to rebuild any native extensions you have installed. Oh but look, the ImageMagick native extension requires that&#8217;s compatible with version X of your interpreter also requires a new version of ImageMagick. But that version happens to be a major release instead of a point release. Let&#8217;s hope nothing critical to the system requires a specific version of ImageMagick. </div><div><br /></div><div>The specifics of the previous are somwhat hypothetical but everyone has run into the situation.</div><div><br /></div><div>It&#8217;s a difficult beast to tame. The closest I&#8217;ve come to having this process be somewhat simply is CPAN2RPM. However nothing that clean exists for Ruby. The best you can hope for is something like RVM (which in and of itself is pretty brilliant). </div><div><br /></div><div>I still don&#8217;t know the best way to manage Ruby on CentOS right now. There are countless repositories out there that are trying to do the same thing.</div><div><br /></div><div>One thing we did at RBX which I&#8217;ve been doing currently is the concept of a &#8220;current&#8221; symlink. It&#8217;s a bit convoluted but it works out for now and is pretty much the way that RVM works. Having this wrapped in a wrapper RPM keeps it managed via native package management but it&#8217;s far from ideal.</div><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-6363326313581822991?l=lusislog.blogspot.com' alt='' /></div>
+<div class="entry-content"><p>Note this post has comments disabled. This is a first for me but if someone wants to ask me anything else, there are multiple personal ways to contact me.</p>
+
+<!-- more -->
+
+
+<p>Recently I posted a message to the <code>chef-users</code> mailing list. It was a hard post for me to write because I was attempting to be as tactful as possible about the issue. While I think it was the right move and some good came out of it, I now feel like I have to defend myself for some reason.</p>
+
+<p>My concern over Berkshelf came from one single place, what is the implication to Chef (the tool) itself where everything in the ecosystem adopts Berkshelf for dependency solving.</p>
+
+<p>Why do I care? Because EVERY SINGLE EXPERIENCE I&#8217;ve had with Berkshelf has been crappy. I&#8217;m never quiet about crappy software. Ask anyone I work with. I&#8217;m just as matter of fact about it in our own software as well as software I&#8217;ve had to use.</p>
+
+<p>Understand that my frustration with Berkshelf came out of using it with omnibus early on and the resultant breakage from either vagrant-berkshelf or omnibus. Every attempt I&#8217;ve made to use Berkshelf internally has ended badly including restoring my local checkout from an internal repo.</p>
+
+<p>You can ask anyone on our operations team but I have said if our team decides we want to use Berkshelf then we&#8217;ll use it. Multiple attempts have been tried and everyone has come away with a bad experience.</p>
+
+<p>Why is that? Why is something as simple as a dependency solver so painful? Julian Dunn said it best:</p>
+
+<blockquote><p>We grabbed Berkshelf, the first thing that was convenient & met the need. But we also got a lot of things that are kind of superfluous to the goal. The &#8220;Berkshelf Way&#8221;, &#8220;Environment Cookbooks&#8221;, and friends all have little to do with that, and will not be used by most people</p></blockquote>
+
+
+<p>I hope this makes my concerns about where Berkshelf itself is going in Chef much more clear. No one is arguing that depsolving isn&#8217;t a problem. The issue is that along with that comes a set of entirely unrelated things. If the entire Chef ecosystem is moving to Berkshelf (the depsolver) plus Berkshelf (the everything else) then, yes, that lessens the value of the ecosystem to me. I stand by my statement that Berkshelf is impossible to avoid these days because it <em>IS</em> integrated into every part of the ecosystem regardless if it&#8217;s actually a requirement of chef itself.</p>
+
+<p>Understand I am not paid to work on Chef, Chef ecosystem tools or anything else. I am paid to keep our applications and servers running. To do this, we leverage tools like Artifactory Pro, Chef, Jenkins, Rundeck, Omnibus, Vagrant, Nginx and countless others. If any of those tools start causing an impediment to our ability to ship then we have an obligation to revisit if that tool is the right fit. Maybe we&#8217;ve outgrown it. Maybe the tool (or its ecosystem) has taken a different approach. In the end it doesn&#8217;t matter. If the tool isn&#8217;t working, we either have to deal with finding a replacement or fight it until we can find (or create) a replacement. Every tool choice we make has implications on everything from availability to business agility to how often people get woken up at night.</p>
+
+<p>I&#8217;m truly sorry if people took these criticisms personally. I realize the discussion got heated and others were a bit more stern in the criticism they used. I never asked anyone to &#8220;come to my defense&#8221;. I also have never pushed my view on anyone else and told them they shouldn&#8217;t use Berkshelf. I&#8217;ve been blunt about my experiences and pain points but never said either &#8220;You shouldn&#8217;t use Berkshelf or I don&#8217;t think you should use Berkshelf&#8221;.</p>
+
+<p>The people working on these tools are nice people (at least the ones I&#8217;ve met in person). I realize how hard it is to separate the opinion of something you&#8217;ve created or maintain from yourself. Your effort in maintaining opensource software is truly appreciated.</p>
+
+<p>The last thing I want to say in my defense is this. If you think that any of this over the past few days is somehow my fault or that I started all this, that&#8217;s simply wrong. I addressed this in the mailing list post. If you want to be mad at ME that&#8217;s fine but consider this. You don&#8217;t always get negative feedback from your users or your customers. At best you get a small chance to salvage the relationship from a public complaint but more often that not, people just go away mad.</p>
+
+<p>The problem is that this carries over in to discussions you never hear about. Joe asks Sally her opinion on X and Sally recounts her personal experience. This shapes Joe&#8217;s perception of X.</p>
+
+<p>If anyone would like to contact me about this, I will be glad to talk about it as time permits but I&#8217;m this is last I plan on talking about it in public.</p>
 </div>
 
 
@@ -117,23 +149,19 @@
 
 
 
+  
 
 
 
+<time datetime="2014-07-15T22:26:00-04:00" pubdate  data-updated="true" >Jul 15<span>th</span>, 2014</time>
       
-
-<span class="categories">
-  
-    Liquid error: undefined method `sort!' for nil:NilClass
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/archives/blogger/2010-02-24-increasing-frustration-with-managing.html" data-via="lusis" data-counturl="http://lusis.github.com/archives/blogger/2010-02-24-increasing-frustration-with-managing.html" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2014/07/15/berks/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2014/07/15/berks/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -145,6 +173,8 @@
 
     
     <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2014/06/22/feedback-on-paas-realism/" title="Previous Post: Feedback on 'PaaS Realism' Post">&laquo; Feedback on 'PaaS Realism' Post</a>
       
       
     </p>
@@ -249,20 +279,6 @@
 
 </footer>
   
-
-<script type="text/javascript">
-    
-      var disqus_shortname = 'lusisgithubblog';
-      
-        
-        var disqus_script = 'count.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
 
 
 <div id="fb-root"></div>

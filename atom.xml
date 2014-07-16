@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-06-23T16:13:10-04:00</updated>
+  <updated>2014-07-15T23:13:15-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[berks]]></title>
+    <link href="http://lusis.github.com/blog/2014/07/15/berks/"/>
+    <updated>2014-07-15T22:26:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2014/07/15/berks</id>
+    <content type="html"><![CDATA[<p>Note this post has comments disabled. This is a first for me but if someone wants to ask me anything else, there are multiple personal ways to contact me.</p>
+
+<!-- more -->
+
+
+<p>Recently I posted a message to the <code>chef-users</code> mailing list. It was a hard post for me to write because I was attempting to be as tactful as possible about the issue. While I think it was the right move and some good came out of it, I now feel like I have to defend myself for some reason.</p>
+
+<p>My concern over Berkshelf came from one single place, what is the implication to Chef (the tool) itself where everything in the ecosystem adopts Berkshelf for dependency solving.</p>
+
+<p>Why do I care? Because EVERY SINGLE EXPERIENCE I&#8217;ve had with Berkshelf has been crappy. I&#8217;m never quiet about crappy software. Ask anyone I work with. I&#8217;m just as matter of fact about it in our own software as well as software I&#8217;ve had to use.</p>
+
+<p>Understand that my frustration with Berkshelf came out of using it with omnibus early on and the resultant breakage from either vagrant-berkshelf or omnibus. Every attempt I&#8217;ve made to use Berkshelf internally has ended badly including restoring my local checkout from an internal repo.</p>
+
+<p>You can ask anyone on our operations team but I have said if our team decides we want to use Berkshelf then we&#8217;ll use it. Multiple attempts have been tried and everyone has come away with a bad experience.</p>
+
+<p>Why is that? Why is something as simple as a dependency solver so painful? Julian Dunn said it best:</p>
+
+<blockquote><p>We grabbed Berkshelf, the first thing that was convenient & met the need. But we also got a lot of things that are kind of superfluous to the goal. The &#8220;Berkshelf Way&#8221;, &#8220;Environment Cookbooks&#8221;, and friends all have little to do with that, and will not be used by most people</p></blockquote>
+
+
+<p>I hope this makes my concerns about where Berkshelf itself is going in Chef much more clear. No one is arguing that depsolving isn&#8217;t a problem. The issue is that along with that comes a set of entirely unrelated things. If the entire Chef ecosystem is moving to Berkshelf (the depsolver) plus Berkshelf (the everything else) then, yes, that lessens the value of the ecosystem to me. I stand by my statement that Berkshelf is impossible to avoid these days because it <em>IS</em> integrated into every part of the ecosystem regardless if it&#8217;s actually a requirement of chef itself.</p>
+
+<p>Understand I am not paid to work on Chef, Chef ecosystem tools or anything else. I am paid to keep our applications and servers running. To do this, we leverage tools like Artifactory Pro, Chef, Jenkins, Rundeck, Omnibus, Vagrant, Nginx and countless others. If any of those tools start causing an impediment to our ability to ship then we have an obligation to revisit if that tool is the right fit. Maybe we&#8217;ve outgrown it. Maybe the tool (or its ecosystem) has taken a different approach. In the end it doesn&#8217;t matter. If the tool isn&#8217;t working, we either have to deal with finding a replacement or fight it until we can find (or create) a replacement. Every tool choice we make has implications on everything from availability to business agility to how often people get woken up at night.</p>
+
+<p>I&#8217;m truly sorry if people took these criticisms personally. I realize the discussion got heated and others were a bit more stern in the criticism they used. I never asked anyone to &#8220;come to my defense&#8221;. I also have never pushed my view on anyone else and told them they shouldn&#8217;t use Berkshelf. I&#8217;ve been blunt about my experiences and pain points but never said either &#8220;You shouldn&#8217;t use Berkshelf or I don&#8217;t think you should use Berkshelf&#8221;.</p>
+
+<p>The people working on these tools are nice people (at least the ones I&#8217;ve met in person). I realize how hard it is to separate the opinion of something you&#8217;ve created or maintain from yourself. Your effort in maintaining opensource software is truly appreciated.</p>
+
+<p>The last thing I want to say in my defense is this. If you think that any of this over the past few days is somehow my fault or that I started all this, that&#8217;s simply wrong. I addressed this in the mailing list post. If you want to be mad at ME that&#8217;s fine but consider this. You don&#8217;t always get negative feedback from your users or your customers. At best you get a small chance to salvage the relationship from a public complaint but more often that not, people just go away mad.</p>
+
+<p>The problem is that this carries over in to discussions you never hear about. Joe asks Sally her opinion on X and Sally recounts her personal experience. This shapes Joe&#8217;s perception of X.</p>
+
+<p>If anyone would like to contact me about this, I will be glad to talk about it as time permits but I&#8217;m this is last I plan on talking about it in public.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Feedback on 'PaaS Realism' Post]]></title>
@@ -2508,144 +2549,6 @@ I&#8217;ve worked in several different companies over the last 17 years. In some
 <h1>Wrap up</h1>
 
 <p>All the ZeroMQ support is currently tagged experimental (hence the warnings you saw in my screenshots). It also exists in the form described only in master. If this interests you at all, please build from master and run some tests of your own. We would love the feedback and any bugs or tips you can provide are always valuable.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ZeroMQ and Logstash - Part 1]]></title>
-    <link href="http://lusis.github.com/blog/2012/02/06/zeromq-and-logstash-part-1/"/>
-    <updated>2012-02-06T01:07:00-05:00</updated>
-    <id>http://lusis.github.com/blog/2012/02/06/zeromq-and-logstash-part-1</id>
-    <content type="html"><![CDATA[<p>Every once in a while, a software project comes along that makes you rethink how you&#8217;ve done things up until that point. I&#8217;ve often said that ElasticSearch was the first of those projects for me. The other is ZeroMQ.</p>
-
-<!-- more -->
-
-
-<h1>Edit and update</h1>
-
-<p>Evidently my testing missed a pretty critical usecase - pubsub. It doesn&#8217;t work right now. Due to the way we&#8217;re doing sockopts works for setting topics. However we don&#8217;t have a commensurate setting on the PUB side. I&#8217;ve created <a href="https://logstash.jira.com/browse/LOGSTASH-399">LOGSTASH-399</a> and <a href="https://logstash.jira.com/browse/LOGSTASH-400">LOGSTASH-400</a> to deal with these issues. I am so sorry about that however it doesn&#8217;t change the overall tone and content of this message as <code>pair</code> and <code>pushpull</code> still work.</p>
-
-<h1>A little history</h1>
-
-<p>In January of this year, <a href="https://twitter.com/jordansissel">Jordan</a> merged the first iteration of ZeroMQ support for Logstash. Several people had been asking for it and I had it on my plate to do as well. Funny side note, the pull request for the ZeroMQ plugin was my inspiration for adding <a href="http://logstash.net/docs/1.1.0/plugin-status">plugin_status</a> to Logstash.</p>
-
-<p>The reason for wanting to mark it experimental is that there was concern over the best approach to using ZeroMQ with Logstash. Did we create a single context per agent? Did we do a context per thread? How well would the multiple layers of indirection work (jvm + ruby + ffi)?</p>
-
-<p><a href="https://twitter.com/_masterzen_">Brice&#8217;s</a> original pull request only hadnled one part of the total ZeroMQ package (PUBSUB) but it was an awesome start. We actually had two other pull requests around the same time but his was first.</p>
-
-<p>A week or so ago, I started a series of posts around doing load balanced filter pipelines with Logstash. The first was <a href="http://goo.gl/vWyCH">AMQP</a> and then <a href="http://goo.gl/6W8Lv">Redis</a>. The next logical step was ZeroMQ (and something of a &#8220;Oh..and one more thing..&#8221; post). Sadly, the current version of the plugin was not amenable to doing the same flow. Since it only supported PUBSUB, I needed to do some work on the plugin to get the other socket types supported. I made this my weekend project.</p>
-
-<h1>Something different</h1>
-
-<p>One thing that ZeroMQ does amazingly well is make something complex very easy. It exposes common communication patterns over socket types and makes it easy to use them. It really is just plug and play communication.</p>
-
-<p>However it also makes some really powerful flows available to you if you dig deep enough. Look at this example from the <a href="http://zguide.zeromq.org">zguide</a></p>
-
-<p><img src="https://github.com/imatix/zguide/raw/master/images/fig14.png" alt="complex-flow" /></p>
-
-<p>Mind you the code for that is pretty simple (<a href="http://zguide.zeromq.org/rb:taskwork2">ruby example</a>) but we need to enable that level of flexibility and power behind the Logstash config language. We also wanted to avoid the confusion that we faced with the AMQP plugin around exchange vs. queue.</p>
-
-<p>Jordan came up with the idea of removing the socket type confusion and just exposing the patterns. And that&#8217;s what we&#8217;ve done.</p>
-
-<h1>Configuration</h1>
-
-<p>In the configuration language, Logstash exposes the ZeroMQ socket type pairs in the using the same syntax on both inputs and outputs. We call these a &#8220;topology&#8221;. In fact, out of the box, Logstash ZeroMQ support will work out of the box with two agents on the same machine:</p>
-
-<h2>Output</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>input {
-</span><span class='line'>  stdin { type =&gt; "stdin-input" }
-</span><span class='line'>}
-</span><span class='line'>output {
-</span><span class='line'>  zeromq { topology =&gt; "pushpull" }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Input</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>input {
-</span><span class='line'>  zeromq { topology =&gt; "pushpull" type =&gt; "zeromq-input" }
-</span><span class='line'>}
-</span><span class='line'>output {
-</span><span class='line'>  stdout { debug =&gt; true }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Opinionated</h2>
-
-<p>Because any side of a socket type in ZeroMQ can be the connecting or binding side (the underlying message flow is disconnected from how the connection is established), Logstash follows the recommendation of the zguide. The more &#8220;stable&#8221; parts of your infrastructure should be the side that binds/listens while they ephemeral side should be the one that initiates connections.</p>
-
-<p>Following this, we have some sane defaults around the plugins:</p>
-
-<ul>
-<li>Logstash inputs will, by default, be the <code>bind</code> side and bind to all interfaces on port 2120</li>
-<li>Logstash outputs will, by default, be the <code>connect</code> side</li>
-<li>Logstash inputs will be the consumer side of a flow</li>
-<li>Logstash outputs will be the producing side of a flow</li>
-</ul>
-
-
-<p>The last two are obviously pretty &#8220;duh&#8221; but worth mentioning. Right now Logstash exposes three socket types that make sense for Logstash:</p>
-
-<ul>
-<li>PUSHPULL (Output is PUSH. Input is PULL)</li>
-<li>PUBSUB (Output is PUB. Input is SUB)</li>
-<li>PAIR</li>
-</ul>
-
-
-<p>It&#8217;s worth reading up on ALL <a href="http://api.zeromq.org/2-1:zmq-socket">the socket types in ZeroMQ</a>.</p>
-
-<p>By default, because of how ZeroMQ will most commonly be slotted into your pipeline, it sets the default message format to the Logstash native <em>json_event</em>.</p>
-
-<p>You can still get to the low-level tuning of the sockets via the <code>sockopts</code> configuration setting. This is a Logstash config hash. For example, if you wanted to tune the high water mark of a socket (<code>ZMQ_HWM</code>), you would do so with this option:</p>
-
-<p><code>zeromq { topology =&gt; "pushpull" sockopts =&gt; ["ZMQ::HWM", 20] }</code></p>
-
-<p>These options are passed directly to the <code>ffi-rzmq</code> library we use (hence the syntax on the option name). If a new option is added in a later release, it&#8217;s already available that way.</p>
-
-<h1>Usage of each topology</h1>
-
-<p>While I have a few more blog posts in the hopper around ZeroMQ (and various patterns with Logstash), I&#8217;ll briefly cover where each type might fit.</p>
-
-<h2>PUBSUB</h2>
-
-<p>This is exactly what it sounds like. Each output (PUB) broadcasts to all connected inputs (SUB).</p>
-
-<h2>PUSHPULL</h2>
-
-<p>This most closely mimics the examples in my previous posts on AMQP and Redis. Each output (PUSH) load-balances across all connected inputs (PULL).</p>
-
-<h2>PAIR</h2>
-
-<p>This is essentially a one-to-one streaming socket. While messages CAN flow both directions, Logstash does not support (nor need) that. Outputs stream events to the input.</p>
-
-<p>ZeroMQ has other topologies (like REQREP - request response and ROUTER/DEALER) but they don&#8217;t really make sense for Logstash right now. For the type of messaging that Logstash does between peers, PAIR is a much better fit. We have plans to expose these in a future release.</p>
-
-<h1>Future</h1>
-
-<p>As I said, I&#8217;ve got quite a few ideas for posts around this plugin. It opens up so many avenues for users and makes doing complex pipelines much easier. Here&#8217;s a sample of some things you&#8217;ll be able to do:</p>
-
-<ul>
-<li>Writing your own &#8220;broker&#8221; to sit between edges and indexers in whatever language works best (8 lines of Ruby)</li>
-<li>Log directly from your application (e.g. log4j ZMQ appender) to logstash with minimal fuss</li>
-<li>Tune ZeroMQ sockopts for durability</li>
-</ul>
-
-
-<p>Current ZeroMQ support only exists in master right now. However building from source is very easy. Simply clone the repo and type <code>make</code>. You don&#8217;t even need to have Ruby installed. This will leave your very own jar file in the <code>build</code> directory.</p>
 ]]></content>
   </entry>
   
