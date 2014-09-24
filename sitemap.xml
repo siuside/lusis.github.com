@@ -159,8 +159,12 @@
         <lastmod>2014-07-15T23:11:56-04:00</lastmod>
     </url>
     <url>
+        <loc>http://lusis.github.com/blog/2014/09/23/end-of-linux/</loc>
+        <lastmod>2014-09-24T01:41:55-04:00</lastmod>
+    </url>
+    <url>
         <loc>http://lusis.github.com/blog/archives/</loc>
-        <lastmod>2014-07-15T23:11:56-04:00</lastmod>
+        <lastmod>2014-09-24T01:41:55-04:00</lastmod>
     </url>
     <url>
         <loc>http://lusis.github.com/projects/</loc>
@@ -662,6 +666,6 @@
     </url>
     <url>
         <loc>http://lusis.github.com/</loc>
-        <lastmod>2014-07-15T23:11:56-04:00</lastmod>
+        <lastmod>2014-09-24T01:41:55-04:00</lastmod>
     </url>
 </urlset>
