@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-09-24T01:42:36-04:00</updated>
+  <updated>2014-10-20T00:49:47-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,153 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Software Empathy]]></title>
+    <link href="http://lusis.github.com/blog/2014/10/19/software-empathy/"/>
+    <updated>2014-10-19T22:44:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2014/10/19/software-empathy</id>
+    <content type="html"><![CDATA[<p>Over the past several months, I&#8217;ve written a lot of blog posts that were critical of various software. If it wasn&#8217;t clear from these (sometimes) incoherent ramblings, there was a common thread that bound them all together</p>
+
+<!-- more -->
+
+
+<h2>Why do we write software?</h2>
+
+<p>I write software every now and then. When I do, if possible, I put it up on github for folks to consume. I&#8217;ve talked about this before. For me, being able to write code and somehow that code helps someone blows my mind.
+I haven&#8217;t always been able to write code (or at least I always told myself I couldn&#8217;t). I&#8217;ve never been paid for that task. It&#8217;s not the career path I chose all those years ago. I like operations. I like managing systems. Most of the code I write is for that purpose in some roundabout way.
+Other people write code because they&#8217;re paid to write code. Sometimes it gets released as open source. Sometimes it doesn&#8217;t. There are no value judgements in that. It&#8217;s just a thing that is.</p>
+
+<p>Why do we create anything at all? Ego, altruism, enlightened self-interest - all are justifications given at some point.</p>
+
+<p>Regardless, when it comes to software, we create something that doesn&#8217;t just exist but exists to be consumed - either personally or professionally - and in something of an interesting twist this thing we create is consumed repeatedly even if we never realized it would be.</p>
+
+<h2>On users</h2>
+
+<p>When you release software, regardless of the motivation, you always have a user. That user can just be you (the creator), it can be customers, it can be a minority community or, if you&#8217;re really lucky, it can be &#8220;pretty much everybody&#8221;.</p>
+
+<p>The best (or worst) part of it is that once it&#8217;s out there, you have no control over who that user is. Sure you can gate the userbase (think: customers or internal projects) but if you release something as &#8220;open source&#8221;, you&#8217;ve just given up any control over who uses that software.</p>
+
+<p>Yes, you have users and now you have to act accordingly</p>
+
+<h2>Software as an expression of empathy</h2>
+
+<p>We&#8217;ve all heard of Conway&#8217;s Law:</p>
+
+<blockquote><p>organizations which design systems &#8230; are constrained to produce designs which are copies of the communication structures of these organizations</p></blockquote>
+
+
+<p>In that same vein I would argue that the software people create and its lifecycle - how they support it, how it behaves, how it interacts with other software - is a reflection of the empathy of the creator(s) for the user.</p>
+
+<p>I want to use a couple of examples here. Of course these are only a few and they so obviously support my theory that I must be right&#8230;..</p>
+
+<p>Seriously though.</p>
+
+<h3>Logstash</h3>
+
+<p>Logstash is one of those projects that &#8220;everyone uses&#8221;. Of course not everyone uses it but really, EVERYONE uses it. Logstash has a motto:</p>
+
+<blockquote><p>Remember: if a new user has a bad time, it&#8217;s a bug in logstash.</p></blockquote>
+
+
+<p>If any of you have had the wonderful privilege of knowing Jordan in person, you would understand that this is a DIRECT reflection of him as a person. He has empathy for the users of his software. These days, Jordan is paid to work on logstash and there&#8217;s a commercial drive to it but this quote has been there well before that.</p>
+
+<p>I&#8217;m going to come back to this quote in a few.</p>
+
+<h3>Systemd/PulseAudio</h3>
+
+<p>These are a few project from Lennart Poettering. Systemd itself has its own &#8220;cabal&#8221; (self-titled). I&#8217;m not going to get into why I dislike systemd again except to say, I address the empathy issue there as well. Note that I&#8217;m not calling out Lennart specifically here, though there is history in bug reports and mailing lists from not just him but others in the &#8220;cabal&#8221;.</p>
+
+<p>In contrast to logstash, bugs in PulseAudio or problems with systemd are never the fault of the creator but always the user or the user&#8217;s hardware or the user&#8217;s inability to move on. I was even told that I just wanted people to &#8220;get off my lawn&#8221; because I questioned systemd.</p>
+
+<p>The point is, PulseAudio and systemd as projects have a distinct LACK of empathy from either the original authors or the proponents of it.</p>
+
+<h3>Linux kernel</h3>
+
+<blockquote><p>Mauro, SHUT THE FUCK UP!</p></blockquote>
+
+
+<p>Looking at this you might say &#8220;Wow Torvalds is a dick. He has no empathy&#8221;. And if you took his handling of kernel issues and maintainers as is, you&#8217;d probably be right. In fact, while I&#8217;ve never met the guy, let&#8217;s just say &#8220;Sure he&#8217;s a dick&#8221;.</p>
+
+<p>However further down in that same post he says this:</p>
+
+<blockquote><p>WE DO NOT BREAK USERSPACE!</p></blockquote>
+
+
+<p>In an interesting crossover, you can even read his interactions with Kay Sievers (one of the core developers of systemd) that is a reflection of the same quote:</p>
+
+<blockquote><p>Key, I’m f\*cking tired of the fact that you don’t fix problems in the code *you* write, so that the kernel then has to work around the problems you cause.<br/>&#8230;..<br/>But I’m not willing to merge something where the maintainer is known to not care about bugs and regressions and then forces people in other projects to fix their project. Because I am *not* willing to take patches from people who don’t clean up after their problems, and don’t admit that it’s their problem to fix.</p></blockquote>
+
+
+<h1>How is empathy formed?</h1>
+
+<p>Since we&#8217;ve not yet defined empathy yet, let&#8217;s do that:</p>
+
+<p><a href="https://www.google.com/search?client=ubuntu&amp;channel=fs&amp;q=empathy&amp;ie=utf-8&amp;oe=utf-8">the ability to understand and share the feelings of another</a></p>
+
+<p>Google helpfully tells us that the root of the word is from two Greek words:</p>
+
+<ul>
+<li>em: &#8220;in&#8221;</li>
+<li>pathos: &#8220;feeling&#8221;</li>
+</ul>
+
+
+<p>Pathos is another interesting word. As technical people, we like to think that we&#8217;re rational actors and that, by extension, all software and technical issues have a simple rational explaination. This plays to one interpretation of pathos (compared to logos) when we talk about our software.</p>
+
+<p>Obviously if the software doesn&#8217;t work for the user, there&#8217;s a reason. Logos for engineers is almost the equivalent of &#8220;works for me&#8221; and if I can just explain that to the user, they&#8217;ll understand. There&#8217;s no room for emotion here, just logic.</p>
+
+<h2>Empathy as it applies to software</h2>
+
+<p>When we go back to the previous examples, we ask &#8220;who is the target of the empathy if empathy exists at all?</p>
+
+<p>In the case of Logstash, the target is clearly the user. If the user has a bad time, it&#8217;s not the user&#8217;s fault it&#8217;s logstash&#8217;s fault.</p>
+
+<p>In the case of Systemd and PulseAudio, I would say that if there is any empathy at all, it&#8217;s for the people that have to support the software and not the people that have to use it (yes, I said &#8220;have to&#8221;).</p>
+
+<p>In the case of the Linux kernel, however coarse, the empathy is for the user but ALSO for the creators and supporters of the software. Just not for one specific creator in this case. You don&#8217;t break the user experience. You also don&#8217;t put the people who have to maintain your code in a bind by breaking things.</p>
+
+<h2>The user is not always right</h2>
+
+<p>I said this once on twitter and I want to say it again:</p>
+
+<p><em><em>You don&#8217;t have to accept that the user is always right but you have to accept that there is a user.</em></em></p>
+
+<p>I want to go back to what the Logstash &#8220;motto&#8221; is. Logstash never says &#8220;the user is always right&#8221;. If you talk to Jordan about this, the expanded version of that statement works more like this:</p>
+
+<p>&#8220;If a user has a &#8220;bad time&#8221;, then Logstash is at fault. It may be a legitimate bug. Maybe logstash isn&#8217;t the right tool for the job in this case or maybe Logstash simply can&#8217;t do what the user wants. Regardless, that&#8217;s not the user&#8217;s fault. It&#8217;s the fault of the Logstash documentation or the fault of the community in its interactions with the user.&#8221;</p>
+
+<p>Software has an interesting facet. It&#8217;s not uncommon in other areas of &#8220;creation&#8221; but it&#8217;s interesting none the less. I want to use my rants on PaaS software as an example.</p>
+
+<p>The most obvious target of PaaS software is the developer who will use the software. There&#8217;s nothing wrong with this. When we create, we have a target in mind. The goal of PaaS itself is to make the developer experience as simple and awesome as possible.</p>
+
+<p>This works great for Heroku and hosted options because the provider of the software doesn&#8217;t have to worry about anyone other than the developers.</p>
+
+<p>But when you create a PaaS product that has to run onpremises, you now have ANOTHER userbase that you never thought about - the people who have to OPERATE the software to provide it to the original target market. You don&#8217;t get to punt on that. You have to address it. You can&#8217;t hide the ugly bits from the people who have to operate it.</p>
+
+<p>We&#8217;re currently dealing with this with our OWN product now. We are investing considerable resources in not just the user experience in the traditional sense but also the user experience of the users who have to operate the software.</p>
+
+<h2>Focusing on ALL the users (including the ones who didn&#8217;t choose to be users)</h2>
+
+<p>Writing software is hard but it&#8217;s even harder to maintain software. You simply cannot be a software maintainer and not have empathy for the people who use your software. If you don&#8217;t clearly manage expectations about the scope of your software, then the fault for a user using it incorrectly pretty much falls on your shoulders. This can be as simple as saying in the README:</p>
+
+<p><em>&#8220;This software has been tested under X, Y and Z scenarios. It was created to do foo and it was created to do foo under these circumstances. I&#8217;m unable to test the software on bar (or &#8216;I have no interest in testing on bar as it&#8217;s not intended to run on bar&#8217;). I&#8217;m willing to accept patches to run this software on bar but this is a personal project and the primary focus is doing baz&#8221;</em></p>
+
+<p>A little communication goes a long way to managing expectations. I throw random crap up on github all the time but I always try to create a README that states things very clearly as to what state the code is in. I&#8217;m also always willing to turn something over to someone else to maintain rather than have the user have a bad time.</p>
+
+<p>For the record I suck at this. When people email me about problems with something I wrote, I feel terrible and I feel REALLY terrible when I simply don&#8217;t have the time to even reply to the email.</p>
+
+<p>And really that&#8217;s the crux of software empathy. We must not only have empathy for the target user or even the unexpected user. We must also go beyond the experience we want them to have with the software but also the scope of the problems they have.</p>
+
+<p>When people open support tickets for OSS, ask a question on IRC or on a mailing list they may be in a very bad situation. They could be experiencing downtime, loss of data or any number of problems. They are stressed, possibly losing money and may even be just coming to grips with a really bad decision in using your software made by someone who doesn&#8217;t even work for/with them anymore. At this point they just need to stop the bleeding. Again, you can be firm and simply say &#8220;I&#8217;m sorry that you&#8217;re in this position but unfortunately there&#8217;s not much we can do&#8221; but that goes a long way to helping them move on to the next phase of troubleshooting.</p>
+
+<h1>Empathy has a place in software</h1>
+
+<p>Empathy is hard enough outside of software. Human beings are messy. We retreat to our machines where things are (largely) logical. If the there&#8217;s a problem, either it&#8217;s a logic problem or a bug. It&#8217;s all solvable. The end-user is clearly defined on a card on a kanban board and we just have to do some user studies.</p>
+
+<p>Human problems don&#8217;t always have clear solutions and we can&#8217;t always predict how our software will be used. We just need to accept that and act accordingly when it does happen.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The End of Linux]]></title>
@@ -2360,94 +2507,6 @@ I&#8217;ve worked in several different companies over the last 17 years. In some
 <h1>A case in point</h1>
 
 <p>What I&#8217;m suggesting you do is not unheard of and honestly is the most tenable long term path for your users. Look at projects like Vagrant, Chef and Puppet among others. All of these tools are &#8220;owning their availability&#8221; the right way and are arguably providing better end user experiences than getting included in upstream could provide. In fact the experience of official packaging is above and beyond trying to do it yourself. As it should be.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Graphs in operations]]></title>
-    <link href="http://lusis.github.com/blog/2012/03/06/graphs-in-operations/"/>
-    <updated>2012-03-06T23:59:00-05:00</updated>
-    <id>http://lusis.github.com/blog/2012/03/06/graphs-in-operations</id>
-    <content type="html"><![CDATA[<p>So anyone who knows me knows I spend an inordinate amount of time bitching about Maven. I don&#8217;t know if it&#8217;s the type of companies I end up working for or what but I always seem to find myself ass-deep in Maven.</p>
-
-<!-- more -->
-
-
-<p><em>please note that I&#8217;m drifiting into deeply unfamiliar territory for me. Someone once told me the best way to learn about something is to write about it. Keep that in mind when making comments?</em></p>
-
-<p>One of the more interesting parts of maven is the dependency graph and concepts like transitive and (god forbid) circular dependencies. These problems aren&#8217;t exlcusive to java, mind you. See bundler for Ruby.</p>
-
-<h2>A bit on graphs</h2>
-
-<p>Graph is a fairly overloaded term. In the context of this discussion I&#8217;m talking about graph theory (insofar as I can grok it). Specifically I want to talk about it in the context of IT operations.</p>
-
-<p>Graphs are nothing &#8220;new&#8221;. Programmers have binary trees. Network geeks have OSPF. Puppet and Git are fans of the DAG (directed acyclic graph). These are all rooted in the same place no? You have nodes and edges. It&#8217;s math all the way down. Unfortunately I suck at math.</p>
-
-<p>If the topic interests you at all, wikipedia has a good couple of articles worth reading. Seeing as I&#8217;m far from a domain expert, I can&#8217;t vouch for the quality:</p>
-
-<ul>
-<li><a href="http://en.wikipedia.org/wiki/Graph_theory">Graph Theory</a></li>
-<li><a href="http://en.wikipedia.org/wiki/Graph_(mathematics">Graph (mathematics)</a>)</li>
-<li><a href="http://en.wikipedia.org/wiki/Glossary_of_graph_theory">Glossary of graph theory</a></li>
-</ul>
-
-
-<h1>How can graphs apply to IT operations</h1>
-
-<p>I&#8217;ve said for a while now that I feel like there&#8217;s something fuzzy on the horizon that I can&#8217;t make quite make out and it involves orchestration and graphs. I&#8217;m still not clear on how to express it but I&#8217;ll try.</p>
-
-<p>Anyone who has ever used Puppet or Git has dabbled in graphs even if they don&#8217;t know it. However my interest in graphs in operations relates to the infrastructure as a whole. James Turnbull expressed it very well last year in Mt. View when discussion orchestration. Obviously this is a topic near and dear to my heart.</p>
-
-<p>Right now much of orchestration is in the embryonic stages. We define relationships manually. We register watches on znodes. We define hard links between components in a stack. X depends on Y depends on Z. We&#8217;re not really being smart about it. If someone disagrees, I would LOVE to see a tool addressing the space.</p>
-
-<p>Justin Sheehy did an awesome high level presentation on distributed systems, databases and the like at Velocity last year. While the talk was good, one thing that stuck out with me was his usage of the Riak logo:</p>
-
-<p><img src="https://assets.github.com/img/b4d183fe3181209da593ed5c6bf0f4c805ab2a62/687474703a2f2f6769746875622d696d616765732e73332e616d617a6f6e6177732e636f6d2f626c6f672f323031302f7269616b2d6c6f676f2e706e67" alt="Riak Logo" /></p>
-
-<p>During the presentation he would zoom out of the logo and replace it with the same logo. It expressed the idea of moving up the stack. Macro versus micro. I have the same feeling about where orchestration is going.</p>
-
-<h2>Express yourself</h2>
-
-<p>Currently we do a great job (and have the tools) to express relationships and dependencies at the node level:</p>
-
-<ul>
-<li>webapp needs container</li>
-<li>container needs java</li>
-<li>container needs system user</li>
-</ul>
-
-
-<p>Going a level higher, we even have some limited ability to express relationships between nodes:</p>
-
-<ul>
-<li>Load balancer needs app servers</li>
-<li>App server needs database</li>
-</ul>
-
-
-<p>We&#8217;re not quite as good at this part yet but people have workarounds. I use Noah for this. enStratus also handles this very well.</p>
-
-<p>But we&#8217;re still defining those relationships manually.</p>
-
-<p>When we get to this next level up, things get REALLY fuzzy. As people start to (re)discover SOA, we now have stacks that have dependencies on other stacks. Currently we use tools like Zookeeper to broker that relationship. But we still have to explcitly manage it.</p>
-
-<p>The level of coupling here isn&#8217;t the problem. You can mitigate failure in one stack as it relates to another stack. Fail fast and fall back to sane/safe defaults. Read any article about how Netflix architects to get an idea.</p>
-
-<h1>What&#8217;s missing?</h1>
-
-<p>What I feel like we&#8217;re missing is a way to express those relationships and then trigger on them all the way up and down the chain as needed. We&#8217;re starting to get into graph territory here.</p>
-
-<p>We must we be able to express and act on changes at the micro level (<em>I changed a config, I must restart nginx</em>) and even at the intranode level (<em>something changed in my app tier, need to tell my load balancer</em>) but now we need a way handle it at that macro level. Not only do we need a way to handle it but we must also be able to calculate what is impacted by that change.</p>
-
-<ul>
-<li>If I have this internode change, does it affect the intranode relationship?</li>
-<li>If I have an intranode change, does it affect the intrastack relationship?</li>
-</ul>
-
-
-<p>It seems to me that a graph of SOME kind is the best way to express this. I just can&#8217;t quite make it out. Does current graph technology even handle that subgraph relationship? Excuse the pun but where do we draw the line? Are there multiple lines?</p>
-
-<p>Maybe this isn&#8217;t an issue. Maybe through resilience engineering we simply keep that &#8220;intrastack&#8221; dependency as loose as possible so that we don&#8217;t have this problem?</p>
 ]]></content>
   </entry>
   
