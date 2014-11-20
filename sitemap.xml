@@ -167,8 +167,12 @@
         <lastmod>2014-10-20T00:49:35-04:00</lastmod>
     </url>
     <url>
+        <loc>http://lusis.github.com/blog/2014/11/20/systemd-redux/</loc>
+        <lastmod>2014-11-20T01:15:06-05:00</lastmod>
+    </url>
+    <url>
         <loc>http://lusis.github.com/blog/archives/</loc>
-        <lastmod>2014-10-20T00:49:35-04:00</lastmod>
+        <lastmod>2014-11-20T01:15:06-05:00</lastmod>
     </url>
     <url>
         <loc>http://lusis.github.com/projects/</loc>
@@ -670,6 +674,6 @@
     </url>
     <url>
         <loc>http://lusis.github.com/</loc>
-        <lastmod>2014-10-20T00:49:35-04:00</lastmod>
+        <lastmod>2014-11-20T01:15:06-05:00</lastmod>
     </url>
 </urlset>

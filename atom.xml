@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-10-20T00:49:47-04:00</updated>
+  <updated>2014-11-20T01:17:22-05:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,58 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[systemd-redux]]></title>
+    <link href="http://lusis.github.com/blog/2014/11/20/systemd-redux/"/>
+    <updated>2014-11-20T00:21:00-05:00</updated>
+    <id>http://lusis.github.com/blog/2014/11/20/systemd-redux</id>
+    <content type="html"><![CDATA[<p>I figured it was about time for a followup on my systemd post. I&#8217;ve been meaning to do it for a while but time hasn&#8217;t allowed.</p>
+
+<!-- more -->
+
+
+<h1>The end of Linux</h1>
+
+<p>Some people wrongly characterized this as some sort of hyperbole. It was not. Systemd <em>IS</em> changing what we know as Linux today.
+It remains to be seen if this is a good or bad thing but Linux is becoming something different than it was.</p>
+
+<h2>Linux is in for a rough few years</h2>
+
+<p>I do honestly believe this will end up being the start of a rocky period for Linux.</p>
+
+<ul>
+<li>Lennart has already said that the expectation is that SystemD and the kernel will be upgraded in lockstep</li>
+<li>SystemD is consuming more and more of what is currently userspace</li>
+<li>SystemD is reinventing existing software stacks from scratch. See the recent systemd-resolvd cache poisoning issue and the journald transaction issues.</li>
+</ul>
+
+
+<p>Additionally, while not Systemd specific but legitimately all inter-related, kdbus is coming and its already got its <a href="https://lkml.org/lkml/2014/10/29/854">fair share of issues in the first implementation</a> including breaking userspace.</p>
+
+<p>We also have distros like SLES adopting btrfs as the default filesystem.</p>
+
+<p>All of these things combined mean that Linux is pushing the bleeding edge of a lot of unbaked technologies. Time will tell if this turns people off or not. I expect that enterprise shops will probably freeze systems at RHEL6 for a good while to come (and not just the standard &#8220;we&#8217;re enterprise and we don&#8217;t like to upgrade&#8221; time period).</p>
+
+<h2>Systemd isn&#8217;t going away</h2>
+
+<p>Systemd is here to stay. The only way you will have a system without it is to roll your own. I don&#8217;t expect many distros to chose to back out. My best hope is that they&#8217;ll all freeze at the current version. Maybe a few things will get backported here and there for security fixes.</p>
+
+<h2>SystemD components are <em>NOT</em> optional</h2>
+
+<p>I know everyone likes to tout this but, no, the various systemd components while not pid 1 are realistically not optional. Kdbus, single parent hierarchy for namespaces (systemd is taking this one of course), udev changes - the kernel and distros are changing and coallescing around whatever systemd ships. Most distros will probably use systemd-networkd for instance. Look at what happened with Debian just today. The (albeit way late to the game) recommendation to support alternate init systems was rejected. I encourage you STRONGLY to read the systemd-devel mailing list for the kinds of issues you&#8217;ll possibly have to deal with.</p>
+
+<h1>Options</h1>
+
+<p>To be clear if you&#8217;re going to stick with Linux, you will have to deal with systemd. It&#8217;s up to you to decide if that&#8217;s something you&#8217;re comfortable with. Systemd is bringing some good things but, like other discussions I&#8217;ve been involved with, you&#8217;re going to be stuck with all the other stuff that comes along with it whether you like it or not.</p>
+
+<p>It&#8217;s worth noting that FreeBSD just got a nice donation from the WhatsApp folks. It also ships with ZFS as part of the kernel and has a jails which is a much more baked technology and implementation than LXC. While you can&#8217;t use docker now with jails, my understanding is that there is work being done to support NON-LXC operating system level virtualization (such as jails and solaris zones).</p>
+
+<p>Speaking of zones and Solaris, if that&#8217;s an option for you it&#8217;s probably the best of breed stack right now. Rich mature OS-level virtualization. SmartOS brings along KVM support for when you HAVE to run Linux but backed by Solaris tech under the hood. There&#8217;s also OmniOS as a variant as well.</p>
+
+<p>If you absolutely MUST run Linux, my recommendation is to minimize the interaction with the base distro as much as possible. CoreOS (when it&#8217;s finally baked and production ready) can bring you an LXC based ecosystem. If they were to ever add actual virt support (i.e. KVM), then you could mix and match as needed. If you&#8217;re working for a startup or a more flexible organization, you can go down this path. If you&#8217;re working for a more traditional enterprise, your options are pretty limited. At least you&#8217;ll have the RedHat support contract.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Software Empathy]]></title>
@@ -2424,89 +2476,6 @@ I&#8217;ve worked in several different companies over the last 17 years. In some
 <p>Please note that I don&#8217;t lay all the blame on the Netflix operations team. I would love to hear the flipside of this story from someone who was there originally when the streaming initiative started. It would probably be full of stories we&#8217;ve heard before - no resources, misalignment of incentives and a whole host of others.</p>
 
 <p>Adrian, thank you for writing the blog post. I hope it serves as a warning to those who come. Hopefully someday you&#8217;ll be able to see a clown again and not get scared ;)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why you should stop fighting distro vendors]]></title>
-    <link href="http://lusis.github.com/blog/2012/03/16/why-you-should-stop-fighting-distro-vendors/"/>
-    <updated>2012-03-16T14:37:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2012/03/16/why-you-should-stop-fighting-distro-vendors</id>
-    <content type="html"><![CDATA[<p>Recently I saw a tweet from <a href="https://twitter.com/#!/kohsukekawa/status/180717301795008512">Kohsuke Kawaguchi</a> that really got me frustrated.</p>
-
-<!-- more -->
-
-
-<p>I&#8217;ve addressed this topic a bit before <a href="http://lusislog.blogspot.com/2010/09/distributions-and-dynamic-languages.html">here</a>. At the time it was addressing specifically dynamic languages. However the post that Kohsuke wrote (and the post that inspired it) have led me to a new line attitude.</p>
-
-<p><strong>Don&#8217;t bother trying to get your packages into upstream vendor distros</strong></p>
-
-<h1>Wait. What? Let&#8217;s step back a sec</h1>
-
-<p>Let me clarify something first. System packages are a good thing. The hassle has always been with BUILDING those packages. It was simply easier to build the software on the machine and install to <code>/usr/local/</code> than to try and express anything more than the most moderately simple application in RPM or DEB build scripts:</p>
-
-<ul>
-<li>If what you are packaging has dependencies not shipped with the OS, now you&#8217;ve got to package those</li>
-<li>If your dependency conflicts with a vendor-shipped version, you&#8217;re screwed.</li>
-<li>If your dependency is a language runtime, give up.</li>
-<li>If your dependency is a specific version of python, just go into another line of work.</li>
-<li>If it&#8217;s a distro LTS release, just don&#8217;t bother</li>
-</ul>
-
-
-<h1>Ahh but we can work around this!</h1>
-
-<p>Yes, you&#8217;re right. We now have tools like <a href="https://github.com/jordansissel/fpm">fpm</a> that take the pain out of it! Maven has had plugins that generate rpms and debs for you for a while now. Things are looking up! Let&#8217;s just use those tools.</p>
-
-<p>So now you think, I&#8217;ll just get these things submitted to Debian&#8230;.</p>
-
-<p><strong>KABLOCK</strong></p>
-
-<p>I could rant a bit about Debian&#8217;s packaging policy but it&#8217;s addressed in the posts above. So maybe the Fedora people are more flexible?</p>
-
-<p><img src="http://i.imgur.com/px5ug.png" alt="Imgur" /></p>
-
-<p><strong>WAT</strong></p>
-
-<p>So here we have the two major distros that won&#8217;t even consider your package unless you give the end-user the &#8220;freedom&#8221; to make your application unusable. Essentially you are told if you want your package to be included in upstream then you have to make sure they can swap out <code>libfunkytown.so.23</code> with <code>libfunkytown.so.1</code>.</p>
-
-<p>But maybe your application doesn&#8217;t work on that version. So maybe you think, I&#8217;ll just vendor ALL the things and shove it into <code>/opt</code> or <code>/usr/local</code>? Yeah that doesn&#8217;t fly either (for various reasons).</p>
-
-<p>The point is that you&#8217;ll probably never be able to get your package included upstream because you&#8217;ll never be able to jump through the hoops to do it.</p>
-
-<h1>So stop trying</h1>
-
-<p>I know, I know. It would be awesome if you could tell users to just <code>yum install kickass</code> or <code>apt-get install kickass</code> but it&#8217;s not worth it for several reasons as enumerated above.</p>
-
-<p>Distributions are not your friend. One could argue that its not thier job to be your friend. I would even agree with that argument. The distros have (or at least SHOULD have) an allegience to their user base. My argument is that position is directly opposed to your needs as a software provider.</p>
-
-<h2>Things you should not do</h2>
-
-<ul>
-<li>Waste your time trying to ensure that your software works on some busted as old version of libfunkytown that won&#8217;t get upgrade for 7 years.</li>
-<li>Waste your time breaking your application into 436 interdependent subpackages just to please upstream</li>
-<li>Ignore the prexisting dependency management ecosystem of your language of choice (especially if it works)</li>
-</ul>
-
-
-<h2>Things you should do</h2>
-
-<ul>
-<li>Use your language&#8217;s preexisting dependency management system to collect all your dependencies</li>
-<li>Rebar, bundle, virtualenv, mavenize, fatjar whatever ALL the dependencies</li>
-<li>Use FPM or some homegrown script to create a monolithic rpm or deb of your codebase that installs to <code>/opt/appname</code></li>
-<li>Make these packages available to your users on your download site</li>
-<li>Alternately, create a repo and repo config file they can use to stay up to date</li>
-</ul>
-
-
-<p>You will be happy. Your users will be happy. The distros can go lick themselves. We have reached something of a crossroads. As I argued in the previous post, the concept of a distribution is becoming somewhat irrelevant. Distros are more concerned about politics and making statements and broken concepts like software that doesn&#8217;t need upgrading for 7 years (or even 2 years) than providing a framework and ecosystem that encourages developers to target software at it.</p>
-
-<p>If someone takes up the noble cause of trying to get your software included upstream, I would go so far as to make it plainly clear on whatever communication you have that you simply cannot support an unofficial repackaging of your software. Be polite. These are still your potential userbase. Simply state that those were not created by you and that the official packages are here.</p>
-
-<h1>A case in point</h1>
-
-<p>What I&#8217;m suggesting you do is not unheard of and honestly is the most tenable long term path for your users. Look at projects like Vagrant, Chef and Puppet among others. All of these tools are &#8220;owning their availability&#8221; the right way and are arguably providing better end user experiences than getting included in upstream could provide. In fact the experience of official packaging is above and beyond trying to do it yourself. As it should be.</p>
 ]]></content>
   </entry>
   
