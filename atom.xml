@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-11-20T01:17:22-05:00</updated>
+  <updated>2014-11-21T12:00:43-05:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,69 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[A few things]]></title>
+    <link href="http://lusis.github.com/blog/2014/11/21/a-few-things/"/>
+    <updated>2014-11-21T11:20:00-05:00</updated>
+    <id>http://lusis.github.com/blog/2014/11/21/a-few-things</id>
+    <content type="html"><![CDATA[<p>I can&#8217;t believe I have to even write this</p>
+
+<!-- more -->
+
+
+<p>but it seems that comprehension is hard and sadly I made the mistake of reading comments when someone posted my systemd redux article on HN.</p>
+
+<h2>CoreOS</h2>
+
+<p>Yes I know CoreOS uses systemd. It seems that ONE comment got taken entirely out of context. If you take it WITH the context of the whole post:</p>
+
+<ul>
+<li>If you must use Linux</li>
+<li>And we&#8217;ve agreed that systemd is here to stay in Linux</li>
+<li>Use a Linux &#8220;distro&#8221; where you don&#8217;t care that it&#8217;s running systemd</li>
+</ul>
+
+
+<p>CoreOS is not a traditional general purpose Linux. CoreOS is a firmware for running containers. A bespoke platform for explicitly running containers. You don&#8217;t manage CoreOS like a traditional distro. You don&#8217;t use CoreOS like a traditional distro.</p>
+
+<p>And yes I said CoreOS wasn&#8217;t production ready yet. But it will get there. One of the people I respect most in this industry (and used to work with), Kelsey Hightower , works for CoreOS and has an operations background. If anyone can help address the needs of production usage of a platform, it&#8217;s Kelsey.</p>
+
+<h2>SystemD/SysV</h2>
+
+<p>As a project, I dislike SystemD. In the specific, there&#8217;s a shitload of things SystemD gets right. I like unit files. I like running everything contained. I love the security features going in to restrict visibility to processes.</p>
+
+<p>I dislike the SCOPE and I dislike the stuff that extends beyond the init replacement. I dislike the reinvention of things and in the process of bringing in bugs that have been solved for a while.</p>
+
+<p>I also dislike the lockstep systemd/kernel upgrade that&#8217;s coming.</p>
+
+<h2>Gnome requiring systemd</h2>
+
+<p>You&#8217;re right, gnome doesn&#8217;t explicitly require systemd. It requires something that&#8217;s only provided by systemd currently.</p>
+
+<h2>I&#8217;m not afraid of change</h2>
+
+<p>I think anyone who&#8217;s familiar with me and this blog knows that to not be the case. As Chris Webber said earlier, there&#8217;s a difference between bleeding edge and leading edge.</p>
+
+<h2>Solaris/OmniOS/SmartOS</h2>
+
+<p>I&#8217;m perfectly aware of the differences between these things. I guess forgetting to add the word &#8220;derivative&#8221; after the word &#8220;Solaris&#8221; makes me a total idiot.</p>
+
+<h2>I don&#8217;t &#8220;hate&#8221; Poettering or think he&#8217;s &#8220;evil&#8221;</h2>
+
+<p>Really? This is software we&#8217;re talking about. Just&#8230;wow</p>
+
+<h2>FreeBSD</h2>
+
+<p>No jails are not a 100% replacement for LXC. It is, however, a more mature technology for isolation.</p>
+
+<h2>You&#8217;re right, I&#8217;m not a developer</h2>
+
+<p><a href="https://github.com/lusis">I&#8217;ve never written a line of code in my life.</a></p>
+
+<p>There&#8217;s probably a whole bunch of other aspersions cast my way in the comments on HN and frankly I can&#8217;t be bothered to read them. I&#8217;m actually busy managing a production SaaS and writing code in two different languages at the moment.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[systemd-redux]]></title>
@@ -2379,103 +2442,6 @@ I&#8217;ve worked in several different companies over the last 17 years. In some
 <h1>Wrap up</h1>
 
 <p>As I said, the original discussion was around configuration drift. I realize I went off on a tangent about security but that was intended as an example. I do believe that folks are working on this idea of &#8220;active assertion of state&#8221; as Tim puts it. I just wanted to brain dump my take on it. I don&#8217;t know that it can be solved with even the most flexible of CM tools. I do feel like it&#8217;s going to have to be a new generation of tool that takes these ideas into account and includes them in a ground-up design.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[It sucks to be right]]></title>
-    <link href="http://lusis.github.com/blog/2012/03/20/it-sucks-to-be-right/"/>
-    <updated>2012-03-20T09:00:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2012/03/20/it-sucks-to-be-right</id>
-    <content type="html"><![CDATA[<p>So it looks like Adrian Cockcroft finally spilled the beans on <a href="http://perfcap.blogspot.com/2012/03/ops-devops-and-noops-at-netflix.html">Netflix (no)Operations</a> and sadly it reads like I expected.</p>
-
-<!-- more -->
-
-
-<h1>Netflix still does operations</h1>
-
-<p>Regardless of what words Adrian uses, Netflix still does operations. <a href="http://twitter.com/allspaw">John Allspaw</a> summed it up pretty well in this tweet:</p>
-
-<p><img src="http://i.imgur.com/OW0kh.png" alt="Imgur" /></p>
-
-<p>and here are the things, he mentions:</p>
-
-<ul>
-<li>Metrics collection</li>
-<li>PaaS/IaaS evaluation/investigation</li>
-<li>Automation (auto-build, auto-recovery)</li>
-<li>Fault tolerance</li>
-<li>Availability</li>
-<li>Monitoring</li>
-<li>Performance</li>
-<li>Capex and Opex forecasting</li>
-<li>Outage response</li>
-</ul>
-
-
-<h1>So what does Adrian get wrong?</h1>
-
-<p>These are just a few things that jumped out at me (and annoyed me)</p>
-
-<blockquote><p>However, there are teams at Netflix that do traditional Operations, and teams that do DevOps as well.</p></blockquote>
-
-
-<p>Ops is ops is ops. No matter what you call it, Operations is operations.</p>
-
-<blockquote><p>Notice that we didn&#8217;t use the typical DevOps tools Puppet or Chef to create builds at runtime</p></blockquote>
-
-
-<p>There&#8217;s no such thing as a &#8220;DevOps tool&#8221;. People were using CFengine, Puppet and Chef long before DevOps was even a term. These are configuration management tools. In fact Adrian has even said they use Puppet in their legacy datacenter:</p>
-
-<p><img src="http://i.imgur.com/RJIX1.png" alt="Imgur" /></p>
-
-<p>yet he seems to make the distinction between the ops guys there and the &#8220;devops&#8221; guys (whatever those are).</p>
-
-<blockquote><p>There is no ops organization involved in running our cloud&#8230;</p></blockquote>
-
-
-<p>Just because you outsourced it, doesn&#8217;t mean it doesn&#8217;t exist. Oh and it&#8217;s not your cloud. It&#8217;s Amazon&#8217;s.</p>
-
-<h1>Reading between the lines</h1>
-
-<p>Actually this doesn&#8217;t take much reading between the lines. It&#8217;s out there in plain sight:</p>
-
-<blockquote><p>In reality we had the usual complaints about how long it took to get new capacity, the lack of consistency across supposedly identical systems, and failures in Oracle, in the SAN and the networks, that took the site down too often for too long.</p></blockquote>
-
-
-
-
-<blockquote><p>We tried bringing in new ops managers, and new engineers, but they were always overwhelmed by the fire fighting needed to keep the current systems running.</p></blockquote>
-
-
-
-
-<blockquote><p>This is largely because the people making decisions are development managers, who have been burned repeatedly by configuration bugs in systems that were supposed to be identical.</p></blockquote>
-
-
-
-
-<blockquote><p>The developers used to spend hours a week in meetings with Ops discussing what they needed, figuring out capacity forecasts and writing tickets to request changes for the datacenter.</p></blockquote>
-
-
-
-
-<blockquote><p>There is no ops organization involved in running our cloud, no need for the developers to interact with ops people to get things done, and less time spent actually doing ops tasks than developers would spend explaining what needed to be done to someone else.</p></blockquote>
-
-
-<p>I&#8217;m glad to see this spelled out in such detail. This is what I&#8217;ve been telling people semi-privately for a while now. Because Netflix had such a terrible experience with its operations team, they went to the opposite extreme and disintermediated them.</p>
-
-<p>Imagine you were scared as a kid by a clown. Now imagine you have kids of your own. You hate clowns. You had a bad experience with clowns. But it&#8217;s your kid&#8217;s birthday party so here you are making baloon animals, telling jokes and doing silly things to entertain the kids.</p>
-
-<p>Just because you aren&#8217;t wearing makeup doesn&#8217;t make you any less of a clown. You&#8217;re doing clown shit. Through the eyes of the kids, you&#8217;re a clown. Deal with it.</p>
-
-<p>Netflix is still doing operations. What should be telling and frightening to operations teams everywhere is this:</p>
-
-<p>The Netflix response to poorly run operations that can&#8217;t service the business is going to become the norm and not the exception. Evolve or die.</p>
-
-<p>Please note that I don&#8217;t lay all the blame on the Netflix operations team. I would love to hear the flipside of this story from someone who was there originally when the streaming initiative started. It would probably be full of stories we&#8217;ve heard before - no resources, misalignment of incentives and a whole host of others.</p>
-
-<p>Adrian, thank you for writing the blog post. I hope it serves as a warning to those who come. Hopefully someday you&#8217;ll be able to see a clown again and not get scared ;)</p>
 ]]></content>
   </entry>
   

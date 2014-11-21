@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Exchange Web Services via Ruby - blog dot lusis</title>
+  <title>A few things - blog dot lusis</title>
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="I realized as I went to post an update on this that I don&#8217;t think I ever posted an actual blog entry about it.While I was on contract at HSWI...">
+  <meta name="description" content="I can&#8217;t believe I have to even write thisbut it seems that comprehension is hard and sadly I made the mistake of reading comments when someon...">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lusis.github.com/archives/blogger/2009-11-20-exchange-web-services-via-ruby.html">
+  <link rel="canonical" href="http://lusis.github.com/blog/2014/11/21/a-few-things/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -79,7 +79,7 @@
   
   <header>
     
-      <h1 class="entry-title">Exchange Web Services via Ruby</h1>
+      <h1 class="entry-title">A Few Things</h1>
     
     
       <p class="meta">
@@ -89,9 +89,11 @@
 
 
 
+  
 
 
 
+<time datetime="2014-11-21T11:20:00-05:00" pubdate  data-updated="true" >Nov 21<span>st</span>, 2014</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -100,7 +102,61 @@
   </header>
 
 
-<div class="entry-content">I realized as I went to post an update on this that I don&#8217;t think I ever posted an actual blog entry about it.<br /><br />While I was on contract at HSWI, the email was hosted on Exchange. The development team was all on Mac workstations but the front-side was all on Windows. Since I was running Linux full-time, Exchange access wasn&#8217;t a big deal. I ran Mutt and used LDAP/IMAPS/SSMTP. Digging around the Mail.app on the OS X side however, I realized that the client side was using Exchange Web Services for much of the functionality.<br /><br />Wanting to do some poking around with Ruby and SOAP, I figured it would be a fun exercise to talk to the Exchange server with Ruby. I also had an itch to scratch thinking I could use it as an address book source for Mutt. I got it working in a day or so after dealing with some broken functionality in either the WSDL from the Exchange side or how SOAP4R tried to translate it.<br /><br />You can find the code <a href="http://dev.lusis.org/code/ruby-ews/">here.</a><br /><br />Anyway, I&#8217;m no longer with HSWI but over at the <a href="http://www.ajc.com">AJC</a>, we&#8217;re also using Exchange in a much greater capacity. Anyway, so I whipped out the &#8220;old&#8221; code and was depressed to find out it didn&#8217;t work.<br /><br />Every attempt gave me a 401 error. It made no sense since I could access OWA, ActiveSync with my DROID (awww yeah) and even access the EWS wsdls on the server.<br /><br />As I started to poke around online, I started to realize that in some of the more complex configurations, the Exchange server is hidden behind an ISA server or something. I don&#8217;t do the Microsoft world much anymore and I have no real access to the environment.<br /><br />What I noticed though, was that the internal IP is different than the external one. That gave me an idea to make sure and test the code externally from home while NOT being on the VPN.<br /><br />It worked!<br /><br />As I poked around with THAT information, I remembered an interesting thing that happened the one time I logged. on to a Windows machine at the office. If I fired up I.E. and went to the OWA url, I was logged in directly.<br /><br />What I&#8217;m guessing is that the Exchange server has a different set of criteria for authenticating internally than externally. I&#8217;m not up to date on current Exchange and AD implementations so I have no idea what the configuration is that&#8217;s preventing me from using EWS but still allowing me to use OWA from Firefox under Linux and OS X.<br /><br />If any MS guys out there have any idea what&#8217;s causing this, I&#8217;d be interested to know so I can either work around it or document it appropriately.<br /><br />I have a *FEELING* that it&#8217;s somehow related to NTLM but I don&#8217;t know how to force my EWS call to bypass it just yet.<div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-3707388144405833350?l=lusislog.blogspot.com' alt='' /></div>
+<div class="entry-content"><p>I can&#8217;t believe I have to even write this</p>
+
+<!-- more -->
+
+
+<p>but it seems that comprehension is hard and sadly I made the mistake of reading comments when someone posted my systemd redux article on HN.</p>
+
+<h2>CoreOS</h2>
+
+<p>Yes I know CoreOS uses systemd. It seems that ONE comment got taken entirely out of context. If you take it WITH the context of the whole post:</p>
+
+<ul>
+<li>If you must use Linux</li>
+<li>And we&#8217;ve agreed that systemd is here to stay in Linux</li>
+<li>Use a Linux &#8220;distro&#8221; where you don&#8217;t care that it&#8217;s running systemd</li>
+</ul>
+
+
+<p>CoreOS is not a traditional general purpose Linux. CoreOS is a firmware for running containers. A bespoke platform for explicitly running containers. You don&#8217;t manage CoreOS like a traditional distro. You don&#8217;t use CoreOS like a traditional distro.</p>
+
+<p>And yes I said CoreOS wasn&#8217;t production ready yet. But it will get there. One of the people I respect most in this industry (and used to work with), Kelsey Hightower , works for CoreOS and has an operations background. If anyone can help address the needs of production usage of a platform, it&#8217;s Kelsey.</p>
+
+<h2>SystemD/SysV</h2>
+
+<p>As a project, I dislike SystemD. In the specific, there&#8217;s a shitload of things SystemD gets right. I like unit files. I like running everything contained. I love the security features going in to restrict visibility to processes.</p>
+
+<p>I dislike the SCOPE and I dislike the stuff that extends beyond the init replacement. I dislike the reinvention of things and in the process of bringing in bugs that have been solved for a while.</p>
+
+<p>I also dislike the lockstep systemd/kernel upgrade that&#8217;s coming.</p>
+
+<h2>Gnome requiring systemd</h2>
+
+<p>You&#8217;re right, gnome doesn&#8217;t explicitly require systemd. It requires something that&#8217;s only provided by systemd currently.</p>
+
+<h2>I&#8217;m not afraid of change</h2>
+
+<p>I think anyone who&#8217;s familiar with me and this blog knows that to not be the case. As Chris Webber said earlier, there&#8217;s a difference between bleeding edge and leading edge.</p>
+
+<h2>Solaris/OmniOS/SmartOS</h2>
+
+<p>I&#8217;m perfectly aware of the differences between these things. I guess forgetting to add the word &#8220;derivative&#8221; after the word &#8220;Solaris&#8221; makes me a total idiot.</p>
+
+<h2>I don&#8217;t &#8220;hate&#8221; Poettering or think he&#8217;s &#8220;evil&#8221;</h2>
+
+<p>Really? This is software we&#8217;re talking about. Just&#8230;wow</p>
+
+<h2>FreeBSD</h2>
+
+<p>No jails are not a 100% replacement for LXC. It is, however, a more mature technology for isolation.</p>
+
+<h2>You&#8217;re right, I&#8217;m not a developer</h2>
+
+<p><a href="https://github.com/lusis">I&#8217;ve never written a line of code in my life.</a></p>
+
+<p>There&#8217;s probably a whole bunch of other aspersions cast my way in the comments on HN and frankly I can&#8217;t be bothered to read them. I&#8217;m actually busy managing a production SaaS and writing code in two different languages at the moment.</p>
 </div>
 
 
@@ -117,23 +173,19 @@
 
 
 
+  
 
 
 
+<time datetime="2014-11-21T11:20:00-05:00" pubdate  data-updated="true" >Nov 21<span>st</span>, 2014</time>
       
-
-<span class="categories">
-  
-    Liquid error: undefined method `sort!' for nil:NilClass
-  
-</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/archives/blogger/2009-11-20-exchange-web-services-via-ruby.html" data-via="lusis" data-counturl="http://lusis.github.com/archives/blogger/2009-11-20-exchange-web-services-via-ruby.html" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2014/11/21/a-few-things/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2014/11/21/a-few-things/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -145,11 +197,19 @@
 
     
     <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2014/11/20/systemd-redux/" title="Previous Post: systemd-redux">&laquo; systemd-redux</a>
       
       
     </p>
   </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -255,7 +315,10 @@
       var disqus_shortname = 'lusisgithubblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lusis.github.com/blog/2014/11/21/a-few-things/';
+        var disqus_url = 'http://lusis.github.com/blog/2014/11/21/a-few-things/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
