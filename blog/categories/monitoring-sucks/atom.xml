@@ -4,7 +4,7 @@
   <title><![CDATA[Category: monitoring sucks | blog dot lusis]]></title>
   <link href="http://lusis.github.com/blog/categories/monitoring-sucks/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-11-21T12:00:43-05:00</updated>
+  <updated>2015-10-12T00:54:55-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -272,12 +272,12 @@ you can make the next one.</p>
     <link href="http://lusis.github.com/blog/2011/06/05/why-monitoring-sucks/"/>
     <updated>2011-06-05T19:30:00-04:00</updated>
     <id>http://lusis.github.com/blog/2011/06/05/why-monitoring-sucks</id>
-    <content type="html"><![CDATA[<p><em>(and what we're doing about it)</em></p>
+    <content type="html"><![CDATA[<p><em>(and what we&rsquo;re doing about it)</em></p>
 
-<p>About two weeks ago someone made a tweet. At this point, I don't
-remember who said it but the gist was that "monitoring sucks". I
+<p>About two weeks ago someone made a tweet. At this point, I don&rsquo;t
+remember who said it but the gist was that &ldquo;monitoring sucks&rdquo;. I
 happened to be knee-deep in frustrating bullshit around that topic and
-was currently evaluating the same effing tools I'd evaluated at every
+was currently evaluating the same effing tools I&rsquo;d evaluated at every
 other company over the past 10 years or so. So I did what seems to be
 S.O.P for me these days. I started something.</p>
 
@@ -286,15 +286,15 @@ S.O.P for me these days. I started something.</p>
 
 <h1>But does monitoring REALLY suck?</h1>
 
-<p>Heck no! Monitoring is AWESOME. Metrics are AWESOME. I love it. Here's
-what I don't love: - Having my hands tied with the model of host and
-service bindings. - Having to set up "fake" hosts just to group
+<p>Heck no! Monitoring is AWESOME. Metrics are AWESOME. I love it. Here&rsquo;s
+what I don&rsquo;t love: - Having my hands tied with the model of host and
+service bindings. - Having to set up &ldquo;fake&rdquo; hosts just to group
 arbitrary metrics together - Having to either collect metrics twice -
 once for alerting and another for trending - Only being able to see my
 metrics in 5 minute intervals - Having to chose between shitty interface
 but great monitoring or shitty monitoring but great interface - Dealing
 with a monitoring system that thinks <strong>IT</strong> is the system of truth for
-my environment - Perl (I kid...sort of) - Not actually having any real
+my environment - Perl (I kid&hellip;sort of) - Not actually having any real
 choices</p>
 
 <p>Yes, yes I know:</p>
@@ -302,45 +302,45 @@ choices</p>
 <blockquote><p>You can just combine Nagios + collectd + graphite + cacti +
 pnp4nagios and you have everything you need!</p></blockquote>
 
-<p>Seriously? Kiss my ass. I'm a huge fan of the Unix pipeline philosophy
-but, christ, have you ever heard the phrase "antipattern"?</p>
+<p>Seriously? Kiss my ass. I&rsquo;m a huge fan of the Unix pipeline philosophy
+but, christ, have you ever heard the phrase &ldquo;antipattern&rdquo;?</p>
 
 <h1>So what the hell are you going to do about it?</h1>
 
-<p>I'm going to let smart people be smart and do smart things.</p>
+<p>I&rsquo;m going to let smart people be smart and do smart things.</p>
 
 <p>Step one was getting everyone who had similar complaints together on
 IRC. That went pretty damn well. Step two was creating a github repo.
-Seriously. Step two should ALWAYS be "create a github repo". Step three?
+Seriously. Step two should ALWAYS be &ldquo;create a github repo&rdquo;. Step three?
 Hell if I know.</p>
 
-<p>Here's what I do know. There are plenty of frustrated system
-administrators, developers, engineers, "devops" and everything under the
-sun who don't want much. All they really want is for shit to work. When
+<p>Here&rsquo;s what I do know. There are plenty of frustrated system
+administrators, developers, engineers, &ldquo;devops&rdquo; and everything under the
+sun who don&rsquo;t want much. All they really want is for shit to work. When
 shit breaks, they want to be notified. They want pretty graphs. They
 want to see business metrics along side operational ones. They want to
 have a 52-inch monitor in the office that everyone can look at and say:</p>
 
-<blockquote><p>See that red dot? That's bad. Here's what was going on when we got
-that red dot. Let's fix that shit and go get beers</p></blockquote>
+<blockquote><p>See that red dot? That&rsquo;s bad. Here&rsquo;s what was going on when we got
+that red dot. Let&rsquo;s fix that shit and go get beers</p></blockquote>
 
-<h1>About the "repo"</h1>
+<h1>About the &ldquo;repo&rdquo;</h1>
 
-<p>So the plan I have in place for the repository is this. We don't really
+<p>So the plan I have in place for the repository is this. We don&rsquo;t really
 need code. What we need is an easy way for people to contribute ideas.
-The plan I have in place for this is partially underway. There's now a
+The plan I have in place for this is partially underway. There&rsquo;s now a
 <em>monitoringsucks</em> organization on Github. Pretty much anyone who is
 willing to contribute can get added to the team. The idea is that, as
 smart people think of smart shit, we can create new repository under
 some unifying idea and put blog posts, submodules, reviews,
 ideas..whatever into that repository so people have an easy place to go
-get information. I'd like to assign someone per repository to be the
-owner. We're all busy but this is something we're all highly interested
+get information. I&rsquo;d like to assign someone per repository to be the
+owner. We&rsquo;re all busy but this is something we&rsquo;re all highly interested
 in. If we spread the work out and allow easy contribution, then we can
 get some real content up there.</p>
 
 <p>I also want to keep the repos as light and cacheable as possible. The
-organization is under the github "free" plan right now and I'd like to
+organization is under the github &ldquo;free&rdquo; plan right now and I&rsquo;d like to
 keep it that way.</p>
 
 <h2>Blog Posts Repo</h2>
@@ -350,49 +350,49 @@ posts people come across. Think of it as hyper-local delicious in a
 DVCS.</p>
 
 <p>Currently, by virtue of the first commit, Michael Conigliaro is the
-"owner". You can follow him on twitter and github as @mconigliaro</p>
+&ldquo;owner&rdquo;. You can follow him on twitter and github as @mconigliaro</p>
 
 <h2>IRC Logs Repo</h2>
 
-<p>This repo is a log of any "scheduled" irc sessions. Personally, I don't
+<p>This repo is a log of any &ldquo;scheduled&rdquo; irc sessions. Personally, I don&rsquo;t
 think we need a distinct #monitoringsucks channel but people want to
 keep it around. The logs in this repo are not full logs. Just those from
-when someone says "Hey smart people. Let's think of smart shit at this
-date/time" on twitter.</p>
+when someone says &ldquo;Hey smart people. Let&rsquo;s think of smart shit at this
+date/time&rdquo; on twitter.</p>
 
 <p>Currently <strong>I</strong> appear to be the owner of this repo. I would love for
 someone who can actually make the logs look good to take this over.</p>
 
 <h2>Tools Repo</h2>
 
-<p>This repo is really more of a "curation" repo. The plan is that each
+<p>This repo is really more of a &ldquo;curation&rdquo; repo. The plan is that each
 directory is the name of some tool with two things it in:</p>
 
 <ul>
 <li>A README.md as a review of the tool</li>
-<li>A submodule link to the tool's repo (where appropriate)</li>
+<li>A submodule link to the tool&rsquo;s repo (where appropriate)</li>
 </ul>
 
 
-<p>Again, I think I'm running point on this one. Please note that the
+<p>Again, I think I&rsquo;m running point on this one. Please note that the
 submodule links APPEAR to have some sort of UI issue on github. Every
-submodule appears to point to Dan DeLeo's 'critical' project.</p>
+submodule appears to point to Dan DeLeo&rsquo;s &lsquo;critical&rsquo; project.</p>
 
 <h2>Metrics Catalog Repo</h2>
 
 <p>This is our latest member and it already has an official manager! Jason
 Dixon (@obfuscurity on github/twitter - jdixon on irc) suggested it so
-he get's to run it ;) The idea here is that this will serves as a set of
+he get&rsquo;s to run it ;) The idea here is that this will serves as a set of
 best practices around what metrics you might want to collect and why.
-I'm leaving the organization up to Jason but I suggested a
+I&rsquo;m leaving the organization up to Jason but I suggested a
 per-app/service/protocol directory.</p>
 
 <h1>Wrap Up</h1>
 
-<p>So that's where we are. Where it goes, I have no idea. I just want to
+<p>So that&rsquo;s where we are. Where it goes, I have no idea. I just want to
 help where ever I can. If you have any ideas, hit me up on
 twitter/irc/github/email and let me know. It might help to know that if
-you suggest something, you'll probably be made the person reponsible for
+you suggest something, you&rsquo;ll probably be made the person reponsible for
 it ;)</p>
 
 <p><strong>Update!</strong></p>

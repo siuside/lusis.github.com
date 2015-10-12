@@ -9,7 +9,7 @@
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="This is the third part in a series on Noah. Part 1 and Part 2 are available as wellIn Part 1 and 2 of this series I covered background on Zookeeper...">
+  <meta name="description" content="This is the third part in a series on Noah. Part 1 and Part 2 are available as well In Part 1 and 2 of this series I covered background on Zookeeper &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,10 +21,11 @@
   <link rel="canonical" href="http://lusis.github.com/blog/2011/05/18/on-noah-part-3/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
 <link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
@@ -58,12 +59,14 @@
   <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
   
 </ul>
+  
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input type="hidden" name="sitesearch" value="lusis.github.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
+  
 <ul role=main-navigation>
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
@@ -88,14 +91,10 @@
 
 
 
-
-  
-
-
-
-<time datetime="2011-05-18T18:14:00-04:00" pubdate  data-updated="true" >May 18<span>th</span>, 2011</time>
+<time class='entry-date' datetime='2011-05-18T18:14:00-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>6:14 pm</span></time>
         
-         | <a href="#disqus_thread">Comments</a>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://lusis.github.com">Comments</a>
         
       </p>
     
@@ -111,7 +110,7 @@ it.</p>
 
 <h1>A little back story</h1>
 
-<p>I&#8217;ve told a few people this but my original intention was to use Noah as
+<p>I&rsquo;ve told a few people this but my original intention was to use Noah as
 a way to learn Erlang. However this did not work out. I needed to get a
 proof of concept out much quicker than the ramp up time it would take to
 <a href="http://learnyousomeerlang.com/">learn me some Erlang</a>. I had this
@@ -121,29 +120,29 @@ ball of Zookeeper clonage.</p>
 <!--more-->
 
 
-<p>I am not a developer by trade. I don&#8217;t have any formal education in
+<p>I am not a developer by trade. I don&rsquo;t have any formal education in
 computer science (or anything for that matter). The reason I mention
 this is to say that programming is hard work for me. This has two side
 effects:</p>
 
 <ul>
 <li>It takes me considerably longer than a working developer to code
-what&#8217;s in my head</li>
+what&rsquo;s in my head</li>
 <li>I can only really learn a new language when I have an itch to
 scratch. A real world problem to model.</li>
 </ul>
 
 
-<p>So in the interest of time, I fell back to a language I&#8217;m most
+<p>So in the interest of time, I fell back to a language I&rsquo;m most
 comfortable with right now, Ruby.</p>
 
 <h1>Sinatra and Ruby</h1>
 
-<p>Noah isn&#8217;t so much a web application as it is this &#8216;api thing&#8217;. There&#8217;s
-no proper front end and honestly, you guys don&#8217;t want to see what my
+<p>Noah isn&rsquo;t so much a web application as it is this &lsquo;api thing&rsquo;. There&rsquo;s
+no proper front end and honestly, you guys don&rsquo;t want to see what my
 design deficient mind would create. I like to joke that in the world of
-MVC, I stick to the M and C. Sure, APIs have views but not in the &#8220;click
-the pretty button sense&#8221;.</p>
+MVC, I stick to the M and C. Sure, APIs have views but not in the &ldquo;click
+the pretty button sense&rdquo;.</p>
 
 <p>I had been doing quite a bit of glue code at the office using
 <a href="http://www.sinatrarb.com">Sinatra</a> (and EventMachine) so I went with
@@ -161,10 +160,10 @@ application called <a href="https://github.com/lusis/vogeler">Vogeler</a>. That
 application had a lot of moving parts - CouchDB for storage and RabbitMQ
 for messaging.</p>
 
-<p>I knew from dealing with CouchDB on CentOS5 that I wasn&#8217;t going to use
+<p>I knew from dealing with CouchDB on CentOS5 that I wasn&rsquo;t going to use
 THAT again. Much of it would have been overkill for Noah anyway. I
 realized I really needed nothing more than a key/value store. That
-really left me with either Riak or Redis. I love Riak but it wasn&#8217;t the
+really left me with either Riak or Redis. I love Riak but it wasn&rsquo;t the
 right fit in this case. I needed something with a smaller dependency
 footprint. Mind you Riak is VERY easy to install but managing Erlang
 applications is still a bit edgy for some folks. I needed something
@@ -185,7 +184,7 @@ ops folks understand very well at this point.</p>
 
 <h1>EventMachine</h1>
 
-<p>When you think asynchronous in the Ruby world, there&#8217;s really only one
+<p>When you think asynchronous in the Ruby world, there&rsquo;s really only one
 tool that comes to mind, EventMachine. Noah is designed for asynchronous
 networks and is itself asynchronous in its design. The callback agent
 itself uses EventMachine to process watches. As I said previously, this
@@ -196,8 +195,8 @@ we only support HTTP by default).</p>
 <h1>Ohm</h1>
 
 <p>Finally I slapped <a href="http://ohm.keyvalue.org">Ohm</a> on top as the
-abstraction layer for Redis access. Ohm, if you haven&#8217;t used it, is
-simply one of if not the best Ruby library for working with Redis. It&#8217;s
+abstraction layer for Redis access. Ohm, if you haven&rsquo;t used it, is
+simply one of if not the best Ruby library for working with Redis. It&rsquo;s
 easily extensible, very transparent and frankly, it just gets the hell
 out of your way. A good example of this is converting some result to a
 hash. By default, Ohm only returns the id of the record. Nothing more.
@@ -230,9 +229,9 @@ messages to Redis with the Noah namespace as the channel.</p>
 
 <h1>Distribution vectors</h1>
 
-<p>I&#8217;ve used this phrase with a few people. Essentially, I want as many
-people as possible to be able to use the Noah server component. I&#8217;ve
-kept the Ruby dependencies to a minimum and I&#8217;ve made sure that every
+<p>I&rsquo;ve used this phrase with a few people. Essentially, I want as many
+people as possible to be able to use the Noah server component. I&rsquo;ve
+kept the Ruby dependencies to a minimum and I&rsquo;ve made sure that every
 single one works on MRI 1.8.7 up to 1.9.2 as well as JRuby. I already
 distribute the most current release as a war that can be deployed to a
 container or run standalone. I want the lowest barrier to entry to get
@@ -242,24 +241,24 @@ get deploy instructions written for Noah. So far you can run it on
 Heroku (using the various hosted Redis providers), CloudFoundry and
 dotcloud.</p>
 
-<p>I&#8217;m a bit more lax on the callback daemon. Because it can be written in
+<p>I&rsquo;m a bit more lax on the callback daemon. Because it can be written in
 any language that can talk to the Redis pubsub system and because it has
-&#8220;stricter&#8221; performance needs, I&#8217;m willing to make the requirements for
-the &#8220;official&#8221; daemon more stringent. It currently ONLY works on MRI
+&ldquo;stricter&rdquo; performance needs, I&rsquo;m willing to make the requirements for
+the &ldquo;official&rdquo; daemon more stringent. It currently ONLY works on MRI
 (mainly due to the em-hiredis requirement).</p>
 
 <h2>Doing things differently</h2>
 
-<p>Some people have asked me why I didn&#8217;t use technology A or technology B.
-I think I addressed that mostly above but I&#8217;ll tackle a couple of key
+<p>Some people have asked me why I didn&rsquo;t use technology A or technology B.
+I think I addressed that mostly above but I&rsquo;ll tackle a couple of key
 ones.</p>
 
 <p>ZeroMQ</p>
 
-<p>The main reason for not using 0mq was that I wasn&#8217;t really aware of it.
-Were I to start over and still be using Ruby, I&#8217;d probably give it a
+<p>The main reason for not using 0mq was that I wasn&rsquo;t really aware of it.
+Were I to start over and still be using Ruby, I&rsquo;d probably give it a
 good strong look. The would still be the question of the storage
-component though. There&#8217;s still a possible place for it that I&#8217;ll
+component though. There&rsquo;s still a possible place for it that I&rsquo;ll
 address in part four.</p>
 
 <p>NATS</p>
@@ -271,20 +270,20 @@ in part four.</p>
 
 <p>MongoDB</p>
 
-<p>You have got to be kidding me, right? I don&#8217;t trust my data (or anyone
-else&#8217;s for that matter) to a product that doesn&#8217;t understand what
-durability means when we&#8217;re talking about databases.</p>
+<p>You have got to be kidding me, right? I don&rsquo;t trust my data (or anyone
+else&rsquo;s for that matter) to a product that doesn&rsquo;t understand what
+durability means when we&rsquo;re talking about databases.</p>
 
 <p>Insert favorite data store here</p>
 
 <p>As I said, Redis was the best way to get multiple required functionality
 into a single product. Why does a data storage engine have a pubsub
-messaging subsystem built in? I don&#8217;t know off the top of my head but
-I&#8217;ll take it.</p>
+messaging subsystem built in? I don&rsquo;t know off the top of my head but
+I&rsquo;ll take it.</p>
 
 <h2>Wrap up - Part 3</h2>
 
-<p>So again, because I evidently like recaps, here&#8217;s the take away:</p>
+<p>So again, because I evidently like recaps, here&rsquo;s the take away:</p>
 
 <ul>
 <li>The key components in Noah are Redis and Sinatra</li>
@@ -297,13 +296,13 @@ distribution vectors as possible</li>
 <li>Stricter requirements exist for non-server components because of
 flexibility in alternates</li>
 <li>I really should learn me some erlang</li>
-<li>I&#8217;m not a fan of MongoDB</li>
+<li>I&rsquo;m not a fan of MongoDB</li>
 </ul>
 
 
-<p>If you haven&#8217;t guessed, I&#8217;m doing one part a night in this series.
-Tomorrow is part four which will cover the future plans for Noah. I&#8217;m
-also planning on a bonus part five to cover things that didn&#8217;t really
+<p>If you haven&rsquo;t guessed, I&rsquo;m doing one part a night in this series.
+Tomorrow is part four which will cover the future plans for Noah. I&rsquo;m
+also planning on a bonus part five to cover things that didn&rsquo;t really
 fit into the first four.</p>
 </div>
 
@@ -320,12 +319,7 @@ fit into the first four.</p>
 
 
 
-
-  
-
-
-
-<time datetime="2011-05-18T18:14:00-04:00" pubdate  data-updated="true" >May 18<span>th</span>, 2011</time>
+<time class='entry-date' datetime='2011-05-18T18:14:00-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>6:14 pm</span></time>
       
 
 <span class="categories">
@@ -339,23 +333,19 @@ fit into the first four.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2011/05/18/on-noah-part-3/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2011/05/18/on-noah-part-3/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2011/05/18/on-noah-part-3/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2011/05/18/on-noah-part-3/" >Tweet</a>
   
   
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
 </div>
 
     
     <p class="meta">
-       
+      
         <a class="basic-alignment left" href="/blog/2011/05/17/on-noah-part-2/" title="Previous Post: On Noah - Part 2">&laquo; On Noah - Part 2</a>
       
-       
-        <a class="basic-alignment right" href="/blog/2011/05/19/on-noah-part-4/" title="next Post: On Noah - Part 4">On Noah - Part 4 &raquo;</a>
+      
+        <a class="basic-alignment right" href="/blog/2011/05/19/on-noah-part-4/" title="Next Post: On Noah - Part 4">On Noah - Part 4 &raquo;</a>
       
     </p>
   </footer>
@@ -380,11 +370,15 @@ fit into the first four.</p>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
+        <a href="/blog/2015/10/12/current-status/">Current Status</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/11/20/systemd-redux/">systemd-redux</a>
+        <a href="/blog/2014/11/21/a-few-things/">A Few Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/20/systemd-redux/">Systemd-redux</a>
       </li>
     
       <li class="post">
@@ -395,23 +389,19 @@ fit into the first four.</p>
         <a href="/blog/2014/09/23/end-of-linux/">The End of Linux</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/07/15/berks/">berks</a>
-      </li>
-    
   </ul>
 </section>
 
 <section>
-  <h1>Github Repos</h1>
+  <h1>GitHub Repos</h1>
   <ul id="gh_repos">
     <li class="loading">Status updating...</li>
   </ul>
   
-  <a href="https://github.com/lusis">@lusis</a> on Github
+  <a href="https://github.com/lusis">@lusis</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -459,7 +449,7 @@ fit into the first four.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - John E. Vincent -
+  Copyright &copy; 2015 - John E. Vincent -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -467,7 +457,6 @@ fit into the first four.</p>
   
 
 <script type="text/javascript">
-    
       var disqus_shortname = 'lusisgithubblog';
       
         
@@ -478,29 +467,14 @@ fit into the first four.</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
 
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
 
 
 
@@ -509,7 +483,7 @@ fit into the first four.</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

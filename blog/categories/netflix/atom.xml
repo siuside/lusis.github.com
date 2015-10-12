@@ -4,7 +4,7 @@
   <title><![CDATA[Category: netflix | blog dot lusis]]></title>
   <link href="http://lusis.github.com/blog/categories/netflix/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-11-21T12:00:43-05:00</updated>
+  <updated>2015-10-12T00:54:55-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -52,21 +52,21 @@
 
 <p>Ops is ops is ops. No matter what you call it, Operations is operations.</p>
 
-<p><blockquote><p>Notice that we didn't use the typical DevOps tools Puppet or Chef to create builds at runtime</p></blockquote></p>
+<p><blockquote><p>Notice that we didn&rsquo;t use the typical DevOps tools Puppet or Chef to create builds at runtime</p></blockquote></p>
 
-<p>There's no such thing as a "DevOps tool". People were using CFengine, Puppet and Chef long before DevOps was even a term. These are configuration management tools. In fact Adrian has even said they use Puppet in their legacy datacenter:</p>
+<p>There&rsquo;s no such thing as a &ldquo;DevOps tool&rdquo;. People were using CFengine, Puppet and Chef long before DevOps was even a term. These are configuration management tools. In fact Adrian has even said they use Puppet in their legacy datacenter:</p>
 
 <p><img src="http://i.imgur.com/RJIX1.png" alt="Imgur" /></p>
 
-<p>yet he seems to make the distinction between the ops guys there and the "devops" guys (whatever those are).</p>
+<p>yet he seems to make the distinction between the ops guys there and the &ldquo;devops&rdquo; guys (whatever those are).</p>
 
-<p><blockquote><p>There is no ops organization involved in running our cloud...</p></blockquote></p>
+<p><blockquote><p>There is no ops organization involved in running our cloud&hellip;</p></blockquote></p>
 
-<p>Just because you outsourced it, doesn't mean it doesn't exist. Oh and it's not your cloud. It's Amazon's.</p>
+<p>Just because you outsourced it, doesn&rsquo;t mean it doesn&rsquo;t exist. Oh and it&rsquo;s not your cloud. It&rsquo;s Amazon&rsquo;s.</p>
 
 <h1>Reading between the lines</h1>
 
-<p>Actually this doesn't take much reading between the lines. It's out there in plain sight:</p>
+<p>Actually this doesn&rsquo;t take much reading between the lines. It&rsquo;s out there in plain sight:</p>
 
 <p><blockquote><p>In reality we had the usual complaints about how long it took to get new capacity, the lack of consistency across supposedly identical systems, and failures in Oracle, in the SAN and the networks, that took the site down too often for too long.</p></blockquote></p>
 
@@ -78,19 +78,19 @@
 
 <p><blockquote><p>There is no ops organization involved in running our cloud, no need for the developers to interact with ops people to get things done, and less time spent actually doing ops tasks than developers would spend explaining what needed to be done to someone else.</p></blockquote></p>
 
-<p>I'm glad to see this spelled out in such detail. This is what I've been telling people semi-privately for a while now. Because Netflix had such a terrible experience with its operations team, they went to the opposite extreme and disintermediated them.</p>
+<p>I&rsquo;m glad to see this spelled out in such detail. This is what I&rsquo;ve been telling people semi-privately for a while now. Because Netflix had such a terrible experience with its operations team, they went to the opposite extreme and disintermediated them.</p>
 
-<p>Imagine you were scared as a kid by a clown. Now imagine you have kids of your own. You hate clowns. You had a bad experience with clowns. But it's your kid's birthday party so here you are making baloon animals, telling jokes and doing silly things to entertain the kids.</p>
+<p>Imagine you were scared as a kid by a clown. Now imagine you have kids of your own. You hate clowns. You had a bad experience with clowns. But it&rsquo;s your kid&rsquo;s birthday party so here you are making baloon animals, telling jokes and doing silly things to entertain the kids.</p>
 
-<p>Just because you aren't wearing makeup doesn't make you any less of a clown. You're doing clown shit. Through the eyes of the kids, you're a clown. Deal with it.</p>
+<p>Just because you aren&rsquo;t wearing makeup doesn&rsquo;t make you any less of a clown. You&rsquo;re doing clown shit. Through the eyes of the kids, you&rsquo;re a clown. Deal with it.</p>
 
 <p>Netflix is still doing operations. What should be telling and frightening to operations teams everywhere is this:</p>
 
-<p>The Netflix response to poorly run operations that can't service the business is going to become the norm and not the exception. Evolve or die.</p>
+<p>The Netflix response to poorly run operations that can&rsquo;t service the business is going to become the norm and not the exception. Evolve or die.</p>
 
-<p>Please note that I don't lay all the blame on the Netflix operations team. I would love to hear the flipside of this story from someone who was there originally when the streaming initiative started. It would probably be full of stories we've heard before - no resources, misalignment of incentives and a whole host of others.</p>
+<p>Please note that I don&rsquo;t lay all the blame on the Netflix operations team. I would love to hear the flipside of this story from someone who was there originally when the streaming initiative started. It would probably be full of stories we&rsquo;ve heard before - no resources, misalignment of incentives and a whole host of others.</p>
 
-<p>Adrian, thank you for writing the blog post. I hope it serves as a warning to those who come. Hopefully someday you'll be able to see a clown again and not get scared ;)</p>
+<p>Adrian, thank you for writing the blog post. I hope it serves as a warning to those who come. Hopefully someday you&rsquo;ll be able to see a clown again and not get scared ;)</p>
 ]]></content>
   </entry>
   

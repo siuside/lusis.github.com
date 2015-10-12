@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: 0MQ | blog dot lusis]]></title>
+  <title><![CDATA[Category: 0mq | blog dot lusis]]></title>
   <link href="http://lusis.github.com/blog/categories/0mq/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2014-11-21T12:00:43-05:00</updated>
+  <updated>2015-10-12T00:54:55-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -18,7 +18,7 @@
     <link href="http://lusis.github.com/blog/2012/01/02/2011-in-review/"/>
     <updated>2012-01-02T15:40:00-05:00</updated>
     <id>http://lusis.github.com/blog/2012/01/02/2011-in-review</id>
-    <content type="html"><![CDATA[<p>The holidays are a busy time for me. I was hoping to get this written before the end of the year but it didn't happen.</p>
+    <content type="html"><![CDATA[<p>The holidays are a busy time for me. I was hoping to get this written before the end of the year but it didn&rsquo;t happen.</p>
 
 <!-- more -->
 
@@ -27,19 +27,19 @@
 
 <h1>Some special shoutouts</h1>
 
-<p>There are so many folks to thank for this year. I owe so many beers that I can't keep count. I can't possibly thank everyone but I want to throw a few special shoutouts to folks.</p>
+<p>There are so many folks to thank for this year. I owe so many beers that I can&rsquo;t keep count. I can&rsquo;t possibly thank everyone but I want to throw a few special shoutouts to folks.</p>
 
 <h2>My wife</h2>
 
-<p>Why she puts up with my shit, I'll never know. Needless to say, without her this year would have been radically different. She managed two toddlers by herself on almost every trip I took. She's been nothing but encouraging and she also helps keep me grounded by reminding me what's important.</p>
+<p>Why she puts up with my shit, I&rsquo;ll never know. Needless to say, without her this year would have been radically different. She managed two toddlers by herself on almost every trip I took. She&rsquo;s been nothing but encouraging and she also helps keep me grounded by reminding me what&rsquo;s important.</p>
 
 <h2><a href="http://twitter.com/patrickdebois">Patrick DeBois</a></h2>
 
-<p>Thanks for giving me the opportunity to help with the DevOps Days events. Through the events I've met some of the most amazing people in the world. The DevOps community is a wonderful group of folks and I would never have met half of them if Patrick hadn't given me the opportunity to participate.</p>
+<p>Thanks for giving me the opportunity to help with the DevOps Days events. Through the events I&rsquo;ve met some of the most amazing people in the world. The DevOps community is a wonderful group of folks and I would never have met half of them if Patrick hadn&rsquo;t given me the opportunity to participate.</p>
 
 <h2><a href="http://verticalacuity.com">Vertical Acuity</a></h2>
 
-<p>While I'm sad to be leaving friends behind, VA was amazing in letting me travel so much. Not only that but they trusted and valued my opinion on so many things. Whoever takes my place will be lucky to work with such an awesome group of folks.</p>
+<p>While I&rsquo;m sad to be leaving friends behind, VA was amazing in letting me travel so much. Not only that but they trusted and valued my opinion on so many things. Whoever takes my place will be lucky to work with such an awesome group of folks.</p>
 
 <h2><a href="http://twitter.com/botchagalupe">John Willis</a></h2>
 
@@ -51,11 +51,11 @@
 
 <h2><a href="http://twitter.com/damonedwards">Damon Edwards</a>, <a href="http://twitter.com/alexhonor">Alex Honor</a> and <a href="http://www.dtosolutions.com">DTO Solutions</a></h2>
 
-<p>I'm grateful to DTO for giving me the opportunity to attend Velocity and letting me be a booth babe. Damon and Alex both have been forces of awesome for the DevOps community.</p>
+<p>I&rsquo;m grateful to DTO for giving me the opportunity to attend Velocity and letting me be a booth babe. Damon and Alex both have been forces of awesome for the DevOps community.</p>
 
 <h2><a href="http://twitter.com/potus98">John Christian</a></h2>
 
-<p>John asked me early on to help with the Atlanta DevOps meetups and I'm glad he did. He stands alone in the corporate bullshit world of the financial services industry. He tought me a lot and I want to thank him for it.</p>
+<p>John asked me early on to help with the Atlanta DevOps meetups and I&rsquo;m glad he did. He stands alone in the corporate bullshit world of the financial services industry. He tought me a lot and I want to thank him for it.</p>
 
 <h2><a href="http://twitter.com/lnxchk">Mandi Walls</a></h2>
 
@@ -75,7 +75,7 @@
 
 <h2>Everyone else</h2>
 
-<p>I can't possible fit everyone here's an abbreviated list of folks, in no specific order, who have impacted me this year off the top of my head. If I leave you off, please don't take offense. I'm shooting from the cuff here.</p>
+<p>I can&rsquo;t possible fit everyone here&rsquo;s an abbreviated list of folks, in no specific order, who have impacted me this year off the top of my head. If I leave you off, please don&rsquo;t take offense. I&rsquo;m shooting from the cuff here.</p>
 
 <p><a href="http://twitter.com/bradleyktaylor">Bradley Taylor</a>, <a href="http://twitter.com/wfarr">Will Farrington</a>, <a href="http://twitter.com/coreyhaines">Corey Haines</a>, <a href="http://twitter.com/dysinger">Tim Dysinger</a>, <a href="http://twitter.com/miller_joe">Joe Miller</a>, <a href="http://twitter.com/roidrage">Mathias Meyer</a>, <a href="http://twitter.com/vvuksan">Vladimir Vuksan</a>, <a href="http://twitter.com/adamhjk">Adam Jacob</a>, <a href="http://twitter.com/portertech">Sean Porter</a>, <a href="http://twitter.com/bascule">Tony Arcieri</a>, <a href="http://twitter.com/ripienaar">R.I. Pienaar</a>, <a href="http://twitter.com/adamfblahblah">Adam Fletcher</a>, <a href="http://twitter.com/anthonygoddard">Anthony Goddard</a>, <a href="http://twitter.com/williamsjoe">Joe Williams</a>, <a href="http://twitter.com/boorad">Brad Anderson</a>, Cat Muecke (alas, Cat does not tweet!), <a href="http://twitter.com/harlanbarnes">Harlan Barnes</a>, <a href="http://twitter.com/geemus">Wesley Beary</a>, <a href="http://twitter.com/mitchellh">Mitchell Hashimoto</a>, <a href="http://twitter.com/wayneeseguin">Wayne Seguin</a>, <a href="http://twitter.com/kallistec">Dan DeLeo</a>, <a href="http://twitter.com/jtimberman">Josh Timberman</a>, <a href="http://twitter.com/kantrn">Noah Kantrowitz</a>, <a href="http://twitter.com/littleidea">Andrew Clay Schafer</a>, <a href="http://twitter.com/markimbriaco">Mark Imbriaco</a>, <a href="http://twitter.com/lordcope">Stephen Nelson-Smith</a>, <a href="http://twitter.com/garethr">Gareth Rushgrove</a>, <a href="http://twitter.com/ianmeyer">Ian Meyer</a>, <a href="http://twitter.com/f3ew">Devdas Bhagat</a>, <a href="http://twitter.com/actionjack">Martin Jackson</a>, <a href="http://twitter.com/mleinart">Michael Leinartas</a>, <a href="http://twitter.com/KrisBuytaert">Kris Buytaert</a>, <a href="http://twitter.com/solarce">Brandon Burton</a>, <a href="http://twitter.com/altobey">Al Tobey</a>, <a href="http://twitter.com/matthew_jones">Matthew Jones</a>, <a href="http://twitter.com/builddoctor">Julian Simpson</a>, <a href="http://twitter.com/macros">Jason Cook</a>, <a href="http://twitter.com/jiboumans">Jos Boumans</a>, <a href="http://twitter.com/susanpotter">Susan Potter</a>, <a href="http://twitter.com/thommay">Thom May</a>, <a href="http://twitter.com/kit_plummer">Kit Plummer</a>, <a href="http://twitter.com/sascha_d">Sascha Bates</a>, <a href="http://twitter.com/unclebobmartin">Bob Martin</a>, <a href="http://twitter.com/bdha">Bryan Horstmann-Allen</a>, <a href="http://twitter.com/benjaminws">Benjamin W. Smith</a>, <a href="http://twitter.com/ches">Ches Martin</a>, <a href="http://twitter.com/obfuscurity">Jason Dixon</a>, <a href="http://twitter.com/philiph">Phil Hollenback</a>, <a href="http://twitter.com/rockpapergoat">Nate St. Germain</a>, <a href="http://twitter.com/ohlol">Scott Smith</a>, <a href="http://twitter.com/seancribbs">Sean Cribbs</a>, <a href="http://twitter.com/argv0">Andy Gross</a>, <a href="http://twitter.com/benr">Ben Rockwood</a>, <a href="http://twitter.com/jamesc_000">James Casey</a>, <a href="http://twitter.com/lhazlewood">Les Hazlewood</a>, <a href="http://twitter.com/aditzel">Allan Ditzel</a>, <a href="http://twitter.com/mariusducea">Marius Ducea</a>, <a href="http://twitter.com/noahcampbell">Noah Campbell</a>, <a href="http://twitter.com/timanglade">Tim Anglade</a>, <a href="http://twitter.com/atmos">Corey Donohoe</a>, <a href="http://twitter.com/standaloneSA">Matt Simmons</a>, <a href="http://twitter.com/ernestmueller">Ernest Mueller</a>, <a href="http://twitter.com/auxesis">Lindsay Holmwood</a>, <a href="http://twitter.com/redbluemagenta">Christian Paredes</a>, <a href="http://twitter.com/_masterzen_">Brice Figureau</a>, <a href="http://twitter.com/griggheo">Grig Gheorghiu</a>, <a href="http://twitter.com/dje">Darrin Eden</a>, <a href="http://twitter.com/kimchy">Shay Banon</a>, <a href="http://twitter.com/ramonvanalteren">Ramon Van Alteren</a> and so many others.</p>
 
@@ -85,7 +85,7 @@
 
 <h2><a href="http://elasticsearch.org">ElasticSearch</a></h2>
 
-<p>ElasticSearch has beeen, bar none, in my top two amazing things the past year. Having first heard about it via Logstash, when I started digging in it blew my mind. The one thing that amazed me most about ES was the Zen discovery. It's like the first time you heard about consistent hashing. It's one of those things that makes you say "how the fuck did I not think of this first?". The other thing that I find awesome is that ES not only makes scaling up painless but scaling DOWN (which is the hard part) is just as easy. As a sysadmin, ElasticSearch has been the most pleasant bit of infrastructure I've ever had the pleasure of standing up.</p>
+<p>ElasticSearch has beeen, bar none, in my top two amazing things the past year. Having first heard about it via Logstash, when I started digging in it blew my mind. The one thing that amazed me most about ES was the Zen discovery. It&rsquo;s like the first time you heard about consistent hashing. It&rsquo;s one of those things that makes you say &ldquo;how the fuck did I not think of this first?&rdquo;. The other thing that I find awesome is that ES not only makes scaling up painless but scaling DOWN (which is the hard part) is just as easy. As a sysadmin, ElasticSearch has been the most pleasant bit of infrastructure I&rsquo;ve ever had the pleasure of standing up.</p>
 
 <h2><a href="http://zeromq.org">0mq</a></h2>
 
@@ -93,11 +93,11 @@
 
 <h2><a href="http://zookeeper.apache.org">Apache ZooKeeper</a></h2>
 
-<p>While I'm not a fan of ZooKeeper on several levels, It would be wrong to totally ignore it. For the longest time, ZK stood alone in what it provided. People are building amazing things with it and it inspired me to write Noah.</p>
+<p>While I&rsquo;m not a fan of ZooKeeper on several levels, It would be wrong to totally ignore it. For the longest time, ZK stood alone in what it provided. People are building amazing things with it and it inspired me to write Noah.</p>
 
 <h2><a href="http://logstash.net">Logstash</a></h2>
 
-<p>At first I was pretty dismissive of Logstash. Mainly because I didn't have a real need. Then I started digging in and realized that Logstash is only tangentially about logs. Logstash is kind of what you always wanted a pipe to be. Arbitrary input, arbitrary filtering, arbitrary output. The use cases for logstash are so much greater when you stop thinking about logs and start thinking about moving data.</p>
+<p>At first I was pretty dismissive of Logstash. Mainly because I didn&rsquo;t have a real need. Then I started digging in and realized that Logstash is only tangentially about logs. Logstash is kind of what you always wanted a pipe to be. Arbitrary input, arbitrary filtering, arbitrary output. The use cases for logstash are so much greater when you stop thinking about logs and start thinking about moving data.</p>
 
 <h2><a href="http://erlang.org">Erlang</a>, <a href="http://www.erlang.org/doc/design_principles/users_guide.html">OTP</a> and <a href="http://basho.com">Riak</a></h2>
 
@@ -105,7 +105,7 @@
 
 <h2><a href="http://celluloid.github.com">Celluloid</a></h2>
 
-<p>Following up on the Actor model, I have mad respect for Tony Arcieri. If you look back at his projects, they all follow a similar theme: improving the concurrency story on Ruby. He's tenacious and passionate about something that most people would have (and if they're arrogant dickfaces) laughed at by now. Celluloid brings some amazing functionality to Ruby inspired by Erlang and OTP. I find myself defaulting to it whenever I need to even think about concurrency in Ruby. Even outside of that, it encourages good behaviour with threads and reduces the chances you'll fuck something up. The companion project, DCell, is something I'm itching to work with as well.</p>
+<p>Following up on the Actor model, I have mad respect for Tony Arcieri. If you look back at his projects, they all follow a similar theme: improving the concurrency story on Ruby. He&rsquo;s tenacious and passionate about something that most people would have (and if they&rsquo;re arrogant dickfaces) laughed at by now. Celluloid brings some amazing functionality to Ruby inspired by Erlang and OTP. I find myself defaulting to it whenever I need to even think about concurrency in Ruby. Even outside of that, it encourages good behaviour with threads and reduces the chances you&rsquo;ll fuck something up. The companion project, DCell, is something I&rsquo;m itching to work with as well.</p>
 
 <h2><a href="http://codeascraft.etsy.com/2011/02/15/measure-anything-measure-everything/">Statsd</a> and <a href="http://graphite.wikidot.com/">Graphite</a></h2>
 
@@ -113,7 +113,7 @@
 
 <h1>Final Thoughts</h1>
 
-<p>The world of open source and the community around devops is amazing. I learned from and met so many people in 2011. I'm hoping that 2012 is the year that I can give back to them in some small way. Thanks to everyone for making this past year amazing.</p>
+<p>The world of open source and the community around devops is amazing. I learned from and met so many people in 2011. I&rsquo;m hoping that 2012 is the year that I can give back to them in some small way. Thanks to everyone for making this past year amazing.</p>
 ]]></content>
   </entry>
   
@@ -127,14 +127,14 @@
 <!-- more -->
 
 
-<p>I'm a fairly <em>active</em> Twitter user.</p>
+<p>I&rsquo;m a fairly <em>active</em> Twitter user.</p>
 
-<p>Patrick has joked that it's as if I have Twitter wired directly to my brain. It's not far from the truth.
+<p>Patrick has joked that it&rsquo;s as if I have Twitter wired directly to my brain. It&rsquo;s not far from the truth.
 I like to engage people and normally Twitter is great medium for engaging folks. Unfortunately, the message size limit makes Twitter an imperfect medium for involved discussions.</p>
 
 <p>I know better but sometimes I forget.</p>
 
-<p>Anyway, last friday I realized near the end of the day that I had pretty much gone off the rails. If I wasn't bitching about Maven and Java, I was involved in random discussions about the SaltStack project. Combine that with normal inane bullshit and I somehow managed to pull off a 60+ tweets. It took a comment by <code>roidrage</code> on IRC to point out that I really needed to calm down.</p>
+<p>Anyway, last friday I realized near the end of the day that I had pretty much gone off the rails. If I wasn&rsquo;t bitching about Maven and Java, I was involved in random discussions about the SaltStack project. Combine that with normal inane bullshit and I somehow managed to pull off a 60+ tweets. It took a comment by <code>roidrage</code> on IRC to point out that I really needed to calm down.</p>
 
 <p>With that, I declared communication blackout for the weekend. I decided to go to happy hour and spend the weekend just having fun with the family. It was awesome. So sorry for the sheer number of people I managed to piss off on Friday.</p>
 
@@ -144,36 +144,36 @@ I like to engage people and normally Twitter is great medium for engaging folks.
 
 <p>So I went trolling. On Github.</p>
 
-<p>I was just poking around Github, when I saw in my feed that some commits were done to the <a href="https://github.com/imatix/zguide">user's guide for ZeroMQ</a>. Because I have a serious geek woody for ZeroMQ, I got wrapped up reading the guide and looking at some of the more advanced examples. I've got some ideas I want to implement in Ark and Noah that involved 0mq so I figured it would be time well spent.</p>
+<p>I was just poking around Github, when I saw in my feed that some commits were done to the <a href="https://github.com/imatix/zguide">user&rsquo;s guide for ZeroMQ</a>. Because I have a serious geek woody for ZeroMQ, I got wrapped up reading the guide and looking at some of the more advanced examples. I&rsquo;ve got some ideas I want to implement in Ark and Noah that involved 0mq so I figured it would be time well spent.</p>
 
-<p>Now if anyone has bothered to read the <a href="http://zguide.zeromq.org/">zguide</a>, you'll know that one of the BEST parts is the code samples. Seriously. They have examples for all of the architectures in almost every language. I don't know a single goddamn person who knows <a href="http://en.wikipedia.org/wiki/HaXe">Haxe</a>, but there are examples in the guide for Haxe. You can see an example of what I'm talking about <a href="http://zguide.zeromq.org/page:all#Divide-and-Conquer">here</a>.</p>
+<p>Now if anyone has bothered to read the <a href="http://zguide.zeromq.org/">zguide</a>, you&rsquo;ll know that one of the BEST parts is the code samples. Seriously. They have examples for all of the architectures in almost every language. I don&rsquo;t know a single goddamn person who knows <a href="http://en.wikipedia.org/wiki/HaXe">Haxe</a>, but there are examples in the guide for Haxe. You can see an example of what I&rsquo;m talking about <a href="http://zguide.zeromq.org/page:all#Divide-and-Conquer">here</a>.</p>
 
-<p>Notice at the bottom the list of examples for languages. If you mouse over the last entry, many times you'll get multiples highlighted. This means that chunk of highlighted languages doesn't have any examples written.</p>
+<p>Notice at the bottom the list of examples for languages. If you mouse over the last entry, many times you&rsquo;ll get multiples highlighted. This means that chunk of highlighted languages doesn&rsquo;t have any examples written.</p>
 
-<p>I noticed that quite a few of the advanced ones didn't have Ruby versions. I started back at the beginning of the guide until I found the first one that didn't have a Ruby example - the <code>interrupt</code> example.</p>
+<p>I noticed that quite a few of the advanced ones didn&rsquo;t have Ruby versions. I started back at the beginning of the guide until I found the first one that didn&rsquo;t have a Ruby example - the <code>interrupt</code> example.</p>
 
 <h1>Challenge Accepted</h1>
 
-<p>So here I am - resolved not to work on any of my own projects and knowing that I didn't have time to get involved with something TOO heavy. I decided to fork the guide and start adding missing Ruby examples.</p>
+<p>So here I am - resolved not to work on any of my own projects and knowing that I didn&rsquo;t have time to get involved with something TOO heavy. I decided to fork the guide and start adding missing Ruby examples.</p>
 
-<p>Now I only got two example done the entire weekend. This mainly revolved around how limited my time was but also around getting REALLY comfortable with <a href="https://github.com/chuckremes/ffi-rzmq">ffi-rzmq</a>. I wanted to make sure that the examples I wrote had the write mix of idiomatic Ruby and yet explicit enough for someone who didn't know the specifics of <code>ffi-rzmq</code>.</p>
+<p>Now I only got two example done the entire weekend. This mainly revolved around how limited my time was but also around getting REALLY comfortable with <a href="https://github.com/chuckremes/ffi-rzmq">ffi-rzmq</a>. I wanted to make sure that the examples I wrote had the write mix of idiomatic Ruby and yet explicit enough for someone who didn&rsquo;t know the specifics of <code>ffi-rzmq</code>.</p>
 
 <p>One that I really struggled with was this one:</p>
 
 <p><a href="https://github.com/imatix/zguide/commit/4c231d1023819152813fad09a45458bd33cb02a9">https://github.com/imatix/zguide/commit/4c231d1023819152813fad09a45458bd33cb02a9
 </a></p>
 
-<p>If you get familiar with the zguide, you'll see a lot of references to <code>zhelpers</code>. It's really just a bunch of boilerplate code that helps keep the actual examples to a nice consumable chunk size. There was not a <code>zhelpers</code> for the Ruby examples. I looked at the others to get an idea of what kinds of things were in there. In relation to the <code>identity</code> examples, there was a dump helper that just dumped the contents of a message. If you look at the <a href="https://github.com/imatix/zguide/blob/master/examples/Python/zhelpers.py">Python</a> and <a href="https://github.com/imatix/zguide/blob/master/examples/C/zhelpers.h">C</a> examples for <code>dump</code>, you'll see how they pull the identity of the message out. An interesting comparision, is how the <a href="https://github.com/imatix/zguide/blob/master/examples/Scala/utils.scala">Scala</a> version of <code>dump</code> works.</p>
+<p>If you get familiar with the zguide, you&rsquo;ll see a lot of references to <code>zhelpers</code>. It&rsquo;s really just a bunch of boilerplate code that helps keep the actual examples to a nice consumable chunk size. There was not a <code>zhelpers</code> for the Ruby examples. I looked at the others to get an idea of what kinds of things were in there. In relation to the <code>identity</code> examples, there was a dump helper that just dumped the contents of a message. If you look at the <a href="https://github.com/imatix/zguide/blob/master/examples/Python/zhelpers.py">Python</a> and <a href="https://github.com/imatix/zguide/blob/master/examples/C/zhelpers.h">C</a> examples for <code>dump</code>, you&rsquo;ll see how they pull the identity of the message out. An interesting comparision, is how the <a href="https://github.com/imatix/zguide/blob/master/examples/Scala/utils.scala">Scala</a> version of <code>dump</code> works.</p>
 
-<p>Instead of focusing on duplicating the strategy employed by the C and Python versions, I went with something that fit how <code>ffi-rzmq</code> works a bit more. I realized that the point was not the content of the helpers so much as the end result, showing that 0mq would generate an identity for a message if one wasn't explcitly provided.</p>
+<p>Instead of focusing on duplicating the strategy employed by the C and Python versions, I went with something that fit how <code>ffi-rzmq</code> works a bit more. I realized that the point was not the content of the helpers so much as the end result, showing that 0mq would generate an identity for a message if one wasn&rsquo;t explcitly provided.</p>
 
-<p>I'm quite sure that at some point, ZMQ::Message objects will get an attribute accessor to simply return the identity. Right now the code base is under a bit of a refactor.</p>
+<p>I&rsquo;m quite sure that at some point, ZMQ::Message objects will get an attribute accessor to simply return the identity. Right now the code base is under a bit of a refactor.</p>
 
 <h1>Call to Action</h1>
 
-<p>I really want to encourage others to do something like this. No pressure. Just troll Github. Look at some projects that are interesting. Look at the open issues. Fork, fix a bug or two and make some pull requests. After that, go on your merry way. No obligations. At worst, you've spent some time sharpening your skills. At best, however, you've made a lasting contribution.</p>
+<p>I really want to encourage others to do something like this. No pressure. Just troll Github. Look at some projects that are interesting. Look at the open issues. Fork, fix a bug or two and make some pull requests. After that, go on your merry way. No obligations. At worst, you&rsquo;ve spent some time sharpening your skills. At best, however, you&rsquo;ve made a lasting contribution.</p>
 
-<p>And shit, it doesn't even have to be a code contribution. If you can grok the project well enough, add some wiki pages.</p>
+<p>And shit, it doesn&rsquo;t even have to be a code contribution. If you can grok the project well enough, add some wiki pages.</p>
 
 <p>I dunno. Github just has this amazingly easy flow for contribution. Do unto others and all that.</p>
 ]]></content>

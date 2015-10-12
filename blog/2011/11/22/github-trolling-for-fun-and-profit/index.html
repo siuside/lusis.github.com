@@ -9,7 +9,7 @@
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="Last Friday was a pretty crappy day.I&#8217;m a fairly active Twitter user.Patrick has joked that it&#8217;s as if I have Twitter wired directly to...">
+  <meta name="description" content="Last Friday was a pretty crappy day. I&rsquo;m a fairly active Twitter user. Patrick has joked that it&rsquo;s as if I have Twitter wired directly to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,10 +21,11 @@
   <link rel="canonical" href="http://lusis.github.com/blog/2011/11/22/github-trolling-for-fun-and-profit/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
 <link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
@@ -58,12 +59,14 @@
   <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
   
 </ul>
+  
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input type="hidden" name="sitesearch" value="lusis.github.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
+  
 <ul role=main-navigation>
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
@@ -88,14 +91,10 @@
 
 
 
-
-  
-
-
-
-<time datetime="2011-11-22T21:43:00-05:00" pubdate  data-updated="true" >Nov 22<span>nd</span>, 2011</time>
+<time class='entry-date' datetime='2011-11-22T21:43:00-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2011</span></span> <span class='time'>9:43 pm</span></time>
         
-         | <a href="#disqus_thread">Comments</a>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://lusis.github.com">Comments</a>
         
       </p>
     
@@ -107,14 +106,14 @@
 <!-- more -->
 
 
-<p>I&#8217;m a fairly <em>active</em> Twitter user.</p>
+<p>I&rsquo;m a fairly <em>active</em> Twitter user.</p>
 
-<p>Patrick has joked that it&#8217;s as if I have Twitter wired directly to my brain. It&#8217;s not far from the truth.
+<p>Patrick has joked that it&rsquo;s as if I have Twitter wired directly to my brain. It&rsquo;s not far from the truth.
 I like to engage people and normally Twitter is great medium for engaging folks. Unfortunately, the message size limit makes Twitter an imperfect medium for involved discussions.</p>
 
 <p>I know better but sometimes I forget.</p>
 
-<p>Anyway, last friday I realized near the end of the day that I had pretty much gone off the rails. If I wasn&#8217;t bitching about Maven and Java, I was involved in random discussions about the SaltStack project. Combine that with normal inane bullshit and I somehow managed to pull off a 60+ tweets. It took a comment by <code>roidrage</code> on IRC to point out that I really needed to calm down.</p>
+<p>Anyway, last friday I realized near the end of the day that I had pretty much gone off the rails. If I wasn&rsquo;t bitching about Maven and Java, I was involved in random discussions about the SaltStack project. Combine that with normal inane bullshit and I somehow managed to pull off a 60+ tweets. It took a comment by <code>roidrage</code> on IRC to point out that I really needed to calm down.</p>
 
 <p>With that, I declared communication blackout for the weekend. I decided to go to happy hour and spend the weekend just having fun with the family. It was awesome. So sorry for the sheer number of people I managed to piss off on Friday.</p>
 
@@ -124,36 +123,36 @@ I like to engage people and normally Twitter is great medium for engaging folks.
 
 <p>So I went trolling. On Github.</p>
 
-<p>I was just poking around Github, when I saw in my feed that some commits were done to the <a href="https://github.com/imatix/zguide">user&#8217;s guide for ZeroMQ</a>. Because I have a serious geek woody for ZeroMQ, I got wrapped up reading the guide and looking at some of the more advanced examples. I&#8217;ve got some ideas I want to implement in Ark and Noah that involved 0mq so I figured it would be time well spent.</p>
+<p>I was just poking around Github, when I saw in my feed that some commits were done to the <a href="https://github.com/imatix/zguide">user&rsquo;s guide for ZeroMQ</a>. Because I have a serious geek woody for ZeroMQ, I got wrapped up reading the guide and looking at some of the more advanced examples. I&rsquo;ve got some ideas I want to implement in Ark and Noah that involved 0mq so I figured it would be time well spent.</p>
 
-<p>Now if anyone has bothered to read the <a href="http://zguide.zeromq.org/">zguide</a>, you&#8217;ll know that one of the BEST parts is the code samples. Seriously. They have examples for all of the architectures in almost every language. I don&#8217;t know a single goddamn person who knows <a href="http://en.wikipedia.org/wiki/HaXe">Haxe</a>, but there are examples in the guide for Haxe. You can see an example of what I&#8217;m talking about <a href="http://zguide.zeromq.org/page:all#Divide-and-Conquer">here</a>.</p>
+<p>Now if anyone has bothered to read the <a href="http://zguide.zeromq.org/">zguide</a>, you&rsquo;ll know that one of the BEST parts is the code samples. Seriously. They have examples for all of the architectures in almost every language. I don&rsquo;t know a single goddamn person who knows <a href="http://en.wikipedia.org/wiki/HaXe">Haxe</a>, but there are examples in the guide for Haxe. You can see an example of what I&rsquo;m talking about <a href="http://zguide.zeromq.org/page:all#Divide-and-Conquer">here</a>.</p>
 
-<p>Notice at the bottom the list of examples for languages. If you mouse over the last entry, many times you&#8217;ll get multiples highlighted. This means that chunk of highlighted languages doesn&#8217;t have any examples written.</p>
+<p>Notice at the bottom the list of examples for languages. If you mouse over the last entry, many times you&rsquo;ll get multiples highlighted. This means that chunk of highlighted languages doesn&rsquo;t have any examples written.</p>
 
-<p>I noticed that quite a few of the advanced ones didn&#8217;t have Ruby versions. I started back at the beginning of the guide until I found the first one that didn&#8217;t have a Ruby example - the <code>interrupt</code> example.</p>
+<p>I noticed that quite a few of the advanced ones didn&rsquo;t have Ruby versions. I started back at the beginning of the guide until I found the first one that didn&rsquo;t have a Ruby example - the <code>interrupt</code> example.</p>
 
 <h1>Challenge Accepted</h1>
 
-<p>So here I am - resolved not to work on any of my own projects and knowing that I didn&#8217;t have time to get involved with something TOO heavy. I decided to fork the guide and start adding missing Ruby examples.</p>
+<p>So here I am - resolved not to work on any of my own projects and knowing that I didn&rsquo;t have time to get involved with something TOO heavy. I decided to fork the guide and start adding missing Ruby examples.</p>
 
-<p>Now I only got two example done the entire weekend. This mainly revolved around how limited my time was but also around getting REALLY comfortable with <a href="https://github.com/chuckremes/ffi-rzmq">ffi-rzmq</a>. I wanted to make sure that the examples I wrote had the write mix of idiomatic Ruby and yet explicit enough for someone who didn&#8217;t know the specifics of <code>ffi-rzmq</code>.</p>
+<p>Now I only got two example done the entire weekend. This mainly revolved around how limited my time was but also around getting REALLY comfortable with <a href="https://github.com/chuckremes/ffi-rzmq">ffi-rzmq</a>. I wanted to make sure that the examples I wrote had the write mix of idiomatic Ruby and yet explicit enough for someone who didn&rsquo;t know the specifics of <code>ffi-rzmq</code>.</p>
 
 <p>One that I really struggled with was this one:</p>
 
 <p><a href="https://github.com/imatix/zguide/commit/4c231d1023819152813fad09a45458bd33cb02a9">https://github.com/imatix/zguide/commit/4c231d1023819152813fad09a45458bd33cb02a9
 </a></p>
 
-<p>If you get familiar with the zguide, you&#8217;ll see a lot of references to <code>zhelpers</code>. It&#8217;s really just a bunch of boilerplate code that helps keep the actual examples to a nice consumable chunk size. There was not a <code>zhelpers</code> for the Ruby examples. I looked at the others to get an idea of what kinds of things were in there. In relation to the <code>identity</code> examples, there was a dump helper that just dumped the contents of a message. If you look at the <a href="https://github.com/imatix/zguide/blob/master/examples/Python/zhelpers.py">Python</a> and <a href="https://github.com/imatix/zguide/blob/master/examples/C/zhelpers.h">C</a> examples for <code>dump</code>, you&#8217;ll see how they pull the identity of the message out. An interesting comparision, is how the <a href="https://github.com/imatix/zguide/blob/master/examples/Scala/utils.scala">Scala</a> version of <code>dump</code> works.</p>
+<p>If you get familiar with the zguide, you&rsquo;ll see a lot of references to <code>zhelpers</code>. It&rsquo;s really just a bunch of boilerplate code that helps keep the actual examples to a nice consumable chunk size. There was not a <code>zhelpers</code> for the Ruby examples. I looked at the others to get an idea of what kinds of things were in there. In relation to the <code>identity</code> examples, there was a dump helper that just dumped the contents of a message. If you look at the <a href="https://github.com/imatix/zguide/blob/master/examples/Python/zhelpers.py">Python</a> and <a href="https://github.com/imatix/zguide/blob/master/examples/C/zhelpers.h">C</a> examples for <code>dump</code>, you&rsquo;ll see how they pull the identity of the message out. An interesting comparision, is how the <a href="https://github.com/imatix/zguide/blob/master/examples/Scala/utils.scala">Scala</a> version of <code>dump</code> works.</p>
 
-<p>Instead of focusing on duplicating the strategy employed by the C and Python versions, I went with something that fit how <code>ffi-rzmq</code> works a bit more. I realized that the point was not the content of the helpers so much as the end result, showing that 0mq would generate an identity for a message if one wasn&#8217;t explcitly provided.</p>
+<p>Instead of focusing on duplicating the strategy employed by the C and Python versions, I went with something that fit how <code>ffi-rzmq</code> works a bit more. I realized that the point was not the content of the helpers so much as the end result, showing that 0mq would generate an identity for a message if one wasn&rsquo;t explcitly provided.</p>
 
-<p>I&#8217;m quite sure that at some point, ZMQ::Message objects will get an attribute accessor to simply return the identity. Right now the code base is under a bit of a refactor.</p>
+<p>I&rsquo;m quite sure that at some point, ZMQ::Message objects will get an attribute accessor to simply return the identity. Right now the code base is under a bit of a refactor.</p>
 
 <h1>Call to Action</h1>
 
-<p>I really want to encourage others to do something like this. No pressure. Just troll Github. Look at some projects that are interesting. Look at the open issues. Fork, fix a bug or two and make some pull requests. After that, go on your merry way. No obligations. At worst, you&#8217;ve spent some time sharpening your skills. At best, however, you&#8217;ve made a lasting contribution.</p>
+<p>I really want to encourage others to do something like this. No pressure. Just troll Github. Look at some projects that are interesting. Look at the open issues. Fork, fix a bug or two and make some pull requests. After that, go on your merry way. No obligations. At worst, you&rsquo;ve spent some time sharpening your skills. At best, however, you&rsquo;ve made a lasting contribution.</p>
 
-<p>And shit, it doesn&#8217;t even have to be a code contribution. If you can grok the project well enough, add some wiki pages.</p>
+<p>And shit, it doesn&rsquo;t even have to be a code contribution. If you can grok the project well enough, add some wiki pages.</p>
 
 <p>I dunno. Github just has this amazingly easy flow for contribution. Do unto others and all that.</p>
 </div>
@@ -171,17 +170,12 @@ I like to engage people and normally Twitter is great medium for engaging folks.
 
 
 
-
-  
-
-
-
-<time datetime="2011-11-22T21:43:00-05:00" pubdate  data-updated="true" >Nov 22<span>nd</span>, 2011</time>
+<time class='entry-date' datetime='2011-11-22T21:43:00-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2011</span></span> <span class='time'>9:43 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/0mq/'>0MQ</a>, <a class='category' href='/blog/categories/github/'>Github</a>, <a class='category' href='/blog/categories/open-source/'>Open Source</a>
+    <a class='category' href='/blog/categories/0mq/'>0mq</a>, <a class='category' href='/blog/categories/github/'>github</a>, <a class='category' href='/blog/categories/open-source/'>open source</a>
   
 </span>
 
@@ -190,23 +184,19 @@ I like to engage people and normally Twitter is great medium for engaging folks.
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2011/11/22/github-trolling-for-fun-and-profit/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2011/11/22/github-trolling-for-fun-and-profit/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2011/11/22/github-trolling-for-fun-and-profit/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2011/11/22/github-trolling-for-fun-and-profit/" >Tweet</a>
   
   
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
 </div>
 
     
     <p class="meta">
-       
+      
         <a class="basic-alignment left" href="/blog/2011/10/18/deploy-all-the-things/" title="Previous Post: Deploy ALL the Things">&laquo; Deploy ALL the Things</a>
       
-       
-        <a class="basic-alignment right" href="/blog/2012/01/02/2011-in-review/" title="next Post: 2011-in-review">2011-in-review &raquo;</a>
+      
+        <a class="basic-alignment right" href="/blog/2012/01/02/2011-in-review/" title="Next Post: 2011-in-review">2011-in-review &raquo;</a>
       
     </p>
   </footer>
@@ -231,11 +221,15 @@ I like to engage people and normally Twitter is great medium for engaging folks.
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
+        <a href="/blog/2015/10/12/current-status/">Current Status</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/11/20/systemd-redux/">systemd-redux</a>
+        <a href="/blog/2014/11/21/a-few-things/">A Few Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/20/systemd-redux/">Systemd-redux</a>
       </li>
     
       <li class="post">
@@ -246,23 +240,19 @@ I like to engage people and normally Twitter is great medium for engaging folks.
         <a href="/blog/2014/09/23/end-of-linux/">The End of Linux</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/07/15/berks/">berks</a>
-      </li>
-    
   </ul>
 </section>
 
 <section>
-  <h1>Github Repos</h1>
+  <h1>GitHub Repos</h1>
   <ul id="gh_repos">
     <li class="loading">Status updating...</li>
   </ul>
   
-  <a href="https://github.com/lusis">@lusis</a> on Github
+  <a href="https://github.com/lusis">@lusis</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -310,7 +300,7 @@ I like to engage people and normally Twitter is great medium for engaging folks.
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - John E. Vincent -
+  Copyright &copy; 2015 - John E. Vincent -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -318,7 +308,6 @@ I like to engage people and normally Twitter is great medium for engaging folks.
   
 
 <script type="text/javascript">
-    
       var disqus_shortname = 'lusisgithubblog';
       
         
@@ -329,29 +318,14 @@ I like to engage people and normally Twitter is great medium for engaging folks.
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
 
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
 
 
 
@@ -360,7 +334,7 @@ I like to engage people and normally Twitter is great medium for engaging folks.
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

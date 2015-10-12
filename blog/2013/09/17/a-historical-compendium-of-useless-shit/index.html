@@ -9,7 +9,7 @@
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="Yes it started on Twitter and ended up here. Circle of life and all thatFair warning: I&#8217;m not doing ANY research for this post. Normally I do...">
+  <meta name="description" content="Yes it started on Twitter and ended up here. Circle of life and all that Fair warning: I&rsquo;m not doing ANY research for this post. Normally I do &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,10 +21,11 @@
   <link rel="canonical" href="http://lusis.github.com/blog/2013/09/17/a-historical-compendium-of-useless-shit/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
 <link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
@@ -58,12 +59,14 @@
   <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
   
 </ul>
+  
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input type="hidden" name="sitesearch" value="lusis.github.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
+  
 <ul role=main-navigation>
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
@@ -88,14 +91,10 @@
 
 
 
-
-  
-
-
-
-<time datetime="2013-09-17T22:20:00-04:00" pubdate  data-updated="true" >Sep 17<span>th</span>, 2013</time>
+<time class='entry-date' datetime='2013-09-17T22:20:00-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:20 pm</span></time>
         
-         | <a href="#disqus_thread">Comments</a>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://lusis.github.com">Comments</a>
         
       </p>
     
@@ -107,18 +106,18 @@
 <!-- more -->
 
 
-<p><em>Fair warning: I&#8217;m not doing ANY research for this post. Normally I do but I&#8217;m doing this off-the-cuff so to speak.
+<p><em>Fair warning: I&rsquo;m not doing ANY research for this post. Normally I do but I&rsquo;m doing this off-the-cuff so to speak.
 If I fuck up some specific thing, please feel free to correct. This is basically a personal perspective/history
-And it&#8217;s probably full of typos so there&#8217;s that</em></p>
+And it&rsquo;s probably full of typos so there&rsquo;s that</em></p>
 
-<p>So a discussion on twitter started because I brought up Mesos, Docker and OSv. I commented that none of these things were &#8220;new&#8221; technology really.</p>
+<p>So a discussion on twitter started because I brought up Mesos, Docker and OSv. I commented that none of these things were &ldquo;new&rdquo; technology really.</p>
 
-<p>To be clear, it is a scientifically provable fact (for some values of &#8216;scientifically provable fact&#8217;) that when containers are brought up FreeBSD jails and Solaris Zones will work its way into the conversation. This is actually perfectly legitimate as the fit the same &#8220;model&#8221; as containers - lightweight &#8216;virtualization&#8217;. And whenever virtualization is brought up, someone will bring up IBM and LPARs. Again, perfectly legit.</p>
+<p>To be clear, it is a scientifically provable fact (for some values of &lsquo;scientifically provable fact&rsquo;) that when containers are brought up FreeBSD jails and Solaris Zones will work its way into the conversation. This is actually perfectly legitimate as the fit the same &ldquo;model&rdquo; as containers - lightweight &lsquo;virtualization&rsquo;. And whenever virtualization is brought up, someone will bring up IBM and LPARs. Again, perfectly legit.</p>
 
-<p>In rough order of quick wikipedia&#8217;ing and personal memory, it goes something like this:</p>
+<p>In rough order of quick wikipedia'ing and personal memory, it goes something like this:</p>
 
 <ul>
-<li>IBM virt (z, i and later p - can&#8217;t recall if RS6k AIX did LPARS)</li>
+<li>IBM virt (z, i and later p - can&rsquo;t recall if RS6k AIX did LPARS)</li>
 <li>FreeBSD jails (wikipedia says first in 4.0 so around 2000?)</li>
 <li>Solaris Zones (again the big interbrain says 2004)</li>
 <li>Xen (2003)</li>
@@ -129,25 +128,25 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
 </ul>
 
 
-<p>Also slot QEMU and KVM in here somewhere. These are all forms of &#8216;virtualization&#8217;. I&#8217;m sure there are some pedants are drafting comments now but let&#8217;s call it what everyone who isn&#8217;t a pedant calls it - virtualization (this little bit is important). Each one is better or worse for different reasons.</p>
+<p>Also slot QEMU and KVM in here somewhere. These are all forms of &lsquo;virtualization&rsquo;. I&rsquo;m sure there are some pedants are drafting comments now but let&rsquo;s call it what everyone who isn&rsquo;t a pedant calls it - virtualization (this little bit is important). Each one is better or worse for different reasons.</p>
 
-<p>All I&#8217;m trying to say is that everyone has a claim at some point in the stack. I&#8217;ve always argued that really IBM is the progenitor of this whole space but I&#8217;m sure someone will point out something I missed.</p>
+<p>All I&rsquo;m trying to say is that everyone has a claim at some point in the stack. I&rsquo;ve always argued that really IBM is the progenitor of this whole space but I&rsquo;m sure someone will point out something I missed.</p>
 
 <h1>So about <code>*</code>BSD</h1>
 
-<p>The point was made that everyone seems to forget about FreeBSD jails. I don&#8217;t think that&#8217;s the case at all. Here&#8217;s my little take on why FreeBSD didn&#8217;t &#8220;take off&#8221; (and the same applies to others as well). I&#8217;m probably wrong but whatever. Not like that&#8217;s a first.</p>
+<p>The point was made that everyone seems to forget about FreeBSD jails. I don&rsquo;t think that&rsquo;s the case at all. Here&rsquo;s my little take on why FreeBSD didn&rsquo;t &ldquo;take off&rdquo; (and the same applies to others as well). I&rsquo;m probably wrong but whatever. Not like that&rsquo;s a first.</p>
 
-<p>Everyone involved in this twitter convo has been in the industry a while. We remember when Linux wasn&#8217;t the defacto operating system you would use. AIX, Solaris, HPUX - THOSE were the things REAL businesses used.</p>
+<p>Everyone involved in this twitter convo has been in the industry a while. We remember when Linux wasn&rsquo;t the defacto operating system you would use. AIX, Solaris, HPUX - THOSE were the things REAL businesses used.</p>
 
-<p>So why is Linux suddenly the defacto choice and why did technically superior solutions fall by the wayside? As I said, that wasn&#8217;t always the case. We used to actually have to HIDE the fact that the print server wasn&#8217;t running WindowsNT. Linux and FreeBSD were what we used at home. The others were what we used at work. I got my start with the whole Linux world around 95 with Slackware just as Yggdrasil was going away.</p>
+<p>So why is Linux suddenly the defacto choice and why did technically superior solutions fall by the wayside? As I said, that wasn&rsquo;t always the case. We used to actually have to HIDE the fact that the print server wasn&rsquo;t running WindowsNT. Linux and FreeBSD were what we used at home. The others were what we used at work. I got my start with the whole Linux world around 95 with Slackware just as Yggdrasil was going away.</p>
 
-<p>Anyway here are a few things I think that &#8220;hurt&#8221; FreeBSD a bit:</p>
+<p>Anyway here are a few things I think that &ldquo;hurt&rdquo; FreeBSD a bit:</p>
 
 <h2>Licensing</h2>
 
-<p>Licensing wars were almost as prolific as editor wars in on Slashdot. Regardless of your position on WHICH license is more &#8216;liberal&#8217;, this had an impact on the success. IIRC, the original BSD license was incompatible with the GPL. This meant there was little cross-pollination between the communities.</p>
+<p>Licensing wars were almost as prolific as editor wars in on Slashdot. Regardless of your position on WHICH license is more &lsquo;liberal&rsquo;, this had an impact on the success. IIRC, the original BSD license was incompatible with the GPL. This meant there was little cross-pollination between the communities.</p>
 
-<p>Regardless, what you ended up seeing was more &#8220;corporate&#8221; adoption of BSD into closed hardware products (firewalls, load balancers) and that never made it back into the community because it didn&#8217;t have to.</p>
+<p>Regardless, what you ended up seeing was more &ldquo;corporate&rdquo; adoption of BSD into closed hardware products (firewalls, load balancers) and that never made it back into the community because it didn&rsquo;t have to.</p>
 
 <p>On the Linux side, however, the GPL sort of promoted a community because of the forced pollination.</p>
 
@@ -158,7 +157,7 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
 <ul>
 <li>FreeBSD was your server OS</li>
 <li>NetBSD was for weird-ass random hardware</li>
-<li>OpenBSD was for your firewalls (&#8216;cause Theo is mad crazy about security yo)</li>
+<li>OpenBSD was for your firewalls (&lsquo;cause Theo is mad crazy about security yo)</li>
 </ul>
 
 
@@ -168,15 +167,15 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
 
 <h2>Desktop</h2>
 
-<p>As I said above, FreeBSD was never really positioned as being for desktops among the commoners. Meanwhile Linux distributions were catering to that crowd. The thing is Linux was acceptable as a server OS as well. So if we were running Linux at home on our desktops, there was very little cognative disconnect to running it on our servers. Just don&#8217;t install X and it&#8217;s a server, right?</p>
+<p>As I said above, FreeBSD was never really positioned as being for desktops among the commoners. Meanwhile Linux distributions were catering to that crowd. The thing is Linux was acceptable as a server OS as well. So if we were running Linux at home on our desktops, there was very little cognative disconnect to running it on our servers. Just don&rsquo;t install X and it&rsquo;s a server, right?</p>
 
 <p>FWIW this is one of the things that I think helped Microsoft as well - knowledge portability.</p>
 
 <h2>IBM</h2>
 
-<p>Quite honestly, IBM was probably the biggest thing to help Linux get that final push. Yes we&#8217;d been running Linux at home, on our personal web servers and in small corners of the office but now here&#8217;s a name our bosses trust saying that Linux is a thing. That bald little boy talking about sharing shit and all that. Holy fuck! We made it. Then the COTS started coming. I remember getting that copy of Oracle 6 (or was it 7?) at Atlanta Linux Expo. Holy shit, Oracle runs on Linux!</p>
+<p>Quite honestly, IBM was probably the biggest thing to help Linux get that final push. Yes we&rsquo;d been running Linux at home, on our personal web servers and in small corners of the office but now here&rsquo;s a name our bosses trust saying that Linux is a thing. That bald little boy talking about sharing shit and all that. Holy fuck! We made it. Then the COTS started coming. I remember getting that copy of Oracle 6 (or was it 7?) at Atlanta Linux Expo. Holy shit, Oracle runs on Linux!</p>
 
-<p>So this IBM thing is a pretty big hurdle for a BSD to overcome. Marketing took over. Nobody cared that ufs was superior to ext2 or which is better ipfilter (then pf) vs. ipchains. IBM is backing Linux to the tune of 1 Billion dollars. Who gives a fuck about which license is more &#8220;free&#8221;?</p>
+<p>So this IBM thing is a pretty big hurdle for a BSD to overcome. Marketing took over. Nobody cared that ufs was superior to ext2 or which is better ipfilter (then pf) vs. ipchains. IBM is backing Linux to the tune of 1 Billion dollars. Who gives a fuck about which license is more &ldquo;free&rdquo;?</p>
 
 <p>Oh and IBM is doing it again though arguably it means fuckall at this point since Linux is, again, the defacto standard.</p>
 
@@ -184,7 +183,7 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
 
 <p>Mind you this is mostly personal opinion/perspective. Is FreeBSD technically superior? Probably. Did it do certain things first and better? Yep (though as I brought up someone else did it before FreeBSD in some cases).</p>
 
-<p>Let&#8217;s face it, even as Linux fans you have to admit that Linux has been adopting shit from everyone else for a while and arguably as a shittier implementation. Don&#8217;t get me wrong, I love Linux and I owe it a lot. This is one reason I try and give back as much as I can. I wasn&#8217;t able to before.</p>
+<p>Let&rsquo;s face it, even as Linux fans you have to admit that Linux has been adopting shit from everyone else for a while and arguably as a shittier implementation. Don&rsquo;t get me wrong, I love Linux and I owe it a lot. This is one reason I try and give back as much as I can. I wasn&rsquo;t able to before.</p>
 
 <p>I think FreeBSD has a chance for a comeback at this point (some of these have been going on for a while):</p>
 
@@ -197,13 +196,13 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
 </ul>
 
 
-<h1>Some things I find &#8216;funny&#8217;</h1>
+<h1>Some things I find &lsquo;funny&rsquo;</h1>
 
 <ul>
 <li>For all the bitching we used to do about GPL vs BSD license, everybody I know these days is going with Apache over either of them</li>
-<li>After all this fucking time, &#8220;Linux on the desktop&#8221; is still a joke (and I&#8217;ve run Linux on my desktop for the past 15 years)</li>
-<li>Linux volume management STILL sucks compared to like&#8230;.everywhere else</li>
-<li>People hated the BSD source-based model and yet Gentoo was a thing&#8230;</li>
+<li>After all this fucking time, &ldquo;Linux on the desktop&rdquo; is still a joke (and I&rsquo;ve run Linux on my desktop for the past 15 years)</li>
+<li>Linux volume management STILL sucks compared to like&hellip;.everywhere else</li>
+<li>People hated the BSD source-based model and yet Gentoo was a thing&hellip;</li>
 </ul>
 
 </div>
@@ -221,12 +220,7 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
 
 
 
-
-  
-
-
-
-<time datetime="2013-09-17T22:20:00-04:00" pubdate  data-updated="true" >Sep 17<span>th</span>, 2013</time>
+<time class='entry-date' datetime='2013-09-17T22:20:00-04:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:20 pm</span></time>
       
 
 
@@ -234,23 +228,19 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2013/09/17/a-historical-compendium-of-useless-shit/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2013/09/17/a-historical-compendium-of-useless-shit/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2013/09/17/a-historical-compendium-of-useless-shit/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2013/09/17/a-historical-compendium-of-useless-shit/" >Tweet</a>
   
   
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
 </div>
 
     
     <p class="meta">
-       
+      
         <a class="basic-alignment left" href="/blog/2013/08/11/go-for-system-administrators/" title="Previous Post: Go for System Administrators">&laquo; Go for System Administrators</a>
       
-       
-        <a class="basic-alignment right" href="/blog/2013/09/23/stop-fighting-distros-part-2/" title="next Post: Stop fighting distros - part 2">Stop fighting distros - part 2 &raquo;</a>
+      
+        <a class="basic-alignment right" href="/blog/2013/09/23/stop-fighting-distros-part-2/" title="Next Post: Stop fighting distros - part 2">Stop fighting distros - part 2 &raquo;</a>
       
     </p>
   </footer>
@@ -275,11 +265,15 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
+        <a href="/blog/2015/10/12/current-status/">Current Status</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/11/20/systemd-redux/">systemd-redux</a>
+        <a href="/blog/2014/11/21/a-few-things/">A Few Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/20/systemd-redux/">Systemd-redux</a>
       </li>
     
       <li class="post">
@@ -290,23 +284,19 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
         <a href="/blog/2014/09/23/end-of-linux/">The End of Linux</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/07/15/berks/">berks</a>
-      </li>
-    
   </ul>
 </section>
 
 <section>
-  <h1>Github Repos</h1>
+  <h1>GitHub Repos</h1>
   <ul id="gh_repos">
     <li class="loading">Status updating...</li>
   </ul>
   
-  <a href="https://github.com/lusis">@lusis</a> on Github
+  <a href="https://github.com/lusis">@lusis</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -354,7 +344,7 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - John E. Vincent -
+  Copyright &copy; 2015 - John E. Vincent -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -362,7 +352,6 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
   
 
 <script type="text/javascript">
-    
       var disqus_shortname = 'lusisgithubblog';
       
         
@@ -373,29 +362,14 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
 
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
 
 
 
@@ -404,7 +378,7 @@ And it&#8217;s probably full of typos so there&#8217;s that</em></p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

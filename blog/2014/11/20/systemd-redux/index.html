@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>systemd-redux - blog dot lusis</title>
+  <title>Systemd-redux - blog dot lusis</title>
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="I figured it was about time for a followup on my systemd post. I&#8217;ve been meaning to do it for a while but time hasn&#8217;t allowed.The end o...">
+  <meta name="description" content="I figured it was about time for a followup on my systemd post. I&rsquo;ve been meaning to do it for a while but time hasn&rsquo;t allowed. The end of &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,10 +21,11 @@
   <link rel="canonical" href="http://lusis.github.com/blog/2014/11/20/systemd-redux/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
 <link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
@@ -58,12 +59,14 @@
   <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
   
 </ul>
+  
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input type="hidden" name="sitesearch" value="lusis.github.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
+  
 <ul role=main-navigation>
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
@@ -88,21 +91,17 @@
 
 
 
-
-  
-
-
-
-<time datetime="2014-11-20T00:21:00-05:00" pubdate  data-updated="true" >Nov 20<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-11-20T00:21:00-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:21 am</span></time>
         
-         | <a href="#disqus_thread">Comments</a>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://lusis.github.com">Comments</a>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I figured it was about time for a followup on my systemd post. I&#8217;ve been meaning to do it for a while but time hasn&#8217;t allowed.</p>
+<div class="entry-content"><p>I figured it was about time for a followup on my systemd post. I&rsquo;ve been meaning to do it for a while but time hasn&rsquo;t allowed.</p>
 
 <!-- more -->
 
@@ -127,25 +126,25 @@ It remains to be seen if this is a good or bad thing but Linux is becoming somet
 
 <p>We also have distros like SLES adopting btrfs as the default filesystem.</p>
 
-<p>All of these things combined mean that Linux is pushing the bleeding edge of a lot of unbaked technologies. Time will tell if this turns people off or not. I expect that enterprise shops will probably freeze systems at RHEL6 for a good while to come (and not just the standard &#8220;we&#8217;re enterprise and we don&#8217;t like to upgrade&#8221; time period).</p>
+<p>All of these things combined mean that Linux is pushing the bleeding edge of a lot of unbaked technologies. Time will tell if this turns people off or not. I expect that enterprise shops will probably freeze systems at RHEL6 for a good while to come (and not just the standard &ldquo;we&rsquo;re enterprise and we don&rsquo;t like to upgrade&rdquo; time period).</p>
 
-<h2>Systemd isn&#8217;t going away</h2>
+<h2>Systemd isn&rsquo;t going away</h2>
 
-<p>Systemd is here to stay. The only way you will have a system without it is to roll your own. I don&#8217;t expect many distros to chose to back out. My best hope is that they&#8217;ll all freeze at the current version. Maybe a few things will get backported here and there for security fixes.</p>
+<p>Systemd is here to stay. The only way you will have a system without it is to roll your own. I don&rsquo;t expect many distros to chose to back out. My best hope is that they&rsquo;ll all freeze at the current version. Maybe a few things will get backported here and there for security fixes.</p>
 
 <h2>SystemD components are <em>NOT</em> optional</h2>
 
-<p>I know everyone likes to tout this but, no, the various systemd components while not pid 1 are realistically not optional. Kdbus, single parent hierarchy for namespaces (systemd is taking this one of course), udev changes - the kernel and distros are changing and coallescing around whatever systemd ships. Most distros will probably use systemd-networkd for instance. Look at what happened with Debian just today. The (albeit way late to the game) recommendation to support alternate init systems was rejected. I encourage you STRONGLY to read the systemd-devel mailing list for the kinds of issues you&#8217;ll possibly have to deal with.</p>
+<p>I know everyone likes to tout this but, no, the various systemd components while not pid 1 are realistically not optional. Kdbus, single parent hierarchy for namespaces (systemd is taking this one of course), udev changes - the kernel and distros are changing and coallescing around whatever systemd ships. Most distros will probably use systemd-networkd for instance. Look at what happened with Debian just today. The (albeit way late to the game) recommendation to support alternate init systems was rejected. I encourage you STRONGLY to read the systemd-devel mailing list for the kinds of issues you&rsquo;ll possibly have to deal with.</p>
 
 <h1>Options</h1>
 
-<p>To be clear if you&#8217;re going to stick with Linux, you will have to deal with systemd. It&#8217;s up to you to decide if that&#8217;s something you&#8217;re comfortable with. Systemd is bringing some good things but, like other discussions I&#8217;ve been involved with, you&#8217;re going to be stuck with all the other stuff that comes along with it whether you like it or not.</p>
+<p>To be clear if you&rsquo;re going to stick with Linux, you will have to deal with systemd. It&rsquo;s up to you to decide if that&rsquo;s something you&rsquo;re comfortable with. Systemd is bringing some good things but, like other discussions I&rsquo;ve been involved with, you&rsquo;re going to be stuck with all the other stuff that comes along with it whether you like it or not.</p>
 
-<p>It&#8217;s worth noting that FreeBSD just got a nice donation from the WhatsApp folks. It also ships with ZFS as part of the kernel and has a jails which is a much more baked technology and implementation than LXC. While you can&#8217;t use docker now with jails, my understanding is that there is work being done to support NON-LXC operating system level virtualization (such as jails and solaris zones).</p>
+<p>It&rsquo;s worth noting that FreeBSD just got a nice donation from the WhatsApp folks. It also ships with ZFS as part of the kernel and has a jails which is a much more baked technology and implementation than LXC. While you can&rsquo;t use docker now with jails, my understanding is that there is work being done to support NON-LXC operating system level virtualization (such as jails and solaris zones).</p>
 
-<p>Speaking of zones and Solaris, if that&#8217;s an option for you it&#8217;s probably the best of breed stack right now. Rich mature OS-level virtualization. SmartOS brings along KVM support for when you HAVE to run Linux but backed by Solaris tech under the hood. There&#8217;s also OmniOS as a variant as well.</p>
+<p>Speaking of zones and Solaris, if that&rsquo;s an option for you it&rsquo;s probably the best of breed stack right now. Rich mature OS-level virtualization. SmartOS brings along KVM support for when you HAVE to run Linux but backed by Solaris tech under the hood. There&rsquo;s also OmniOS as a variant as well.</p>
 
-<p>If you absolutely MUST run Linux, my recommendation is to minimize the interaction with the base distro as much as possible. CoreOS (when it&#8217;s finally baked and production ready) can bring you an LXC based ecosystem. If they were to ever add actual virt support (i.e. KVM), then you could mix and match as needed. If you&#8217;re working for a startup or a more flexible organization, you can go down this path. If you&#8217;re working for a more traditional enterprise, your options are pretty limited. At least you&#8217;ll have the RedHat support contract.</p>
+<p>If you absolutely MUST run Linux, my recommendation is to minimize the interaction with the base distro as much as possible. CoreOS (when it&rsquo;s finally baked and production ready) can bring you an LXC based ecosystem. If they were to ever add actual virt support (i.e. KVM), then you could mix and match as needed. If you&rsquo;re working for a startup or a more flexible organization, you can go down this path. If you&rsquo;re working for a more traditional enterprise, your options are pretty limited. At least you&rsquo;ll have the RedHat support contract.</p>
 </div>
 
 
@@ -161,12 +160,7 @@ It remains to be seen if this is a good or bad thing but Linux is becoming somet
 
 
 
-
-  
-
-
-
-<time datetime="2014-11-20T00:21:00-05:00" pubdate  data-updated="true" >Nov 20<span>th</span>, 2014</time>
+<time class='entry-date' datetime='2014-11-20T00:21:00-05:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:21 am</span></time>
       
 
 
@@ -174,23 +168,19 @@ It remains to be seen if this is a good or bad thing but Linux is becoming somet
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2014/11/20/systemd-redux/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2014/11/20/systemd-redux/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2014/11/20/systemd-redux/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2014/11/20/systemd-redux/" >Tweet</a>
   
   
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
 </div>
 
     
     <p class="meta">
-       
+      
         <a class="basic-alignment left" href="/blog/2014/10/19/software-empathy/" title="Previous Post: Software Empathy">&laquo; Software Empathy</a>
       
-       
-        <a class="basic-alignment right" href="/blog/2014/11/21/a-few-things/" title="next Post: A few things">A few things &raquo;</a>
+      
+        <a class="basic-alignment right" href="/blog/2014/11/21/a-few-things/" title="Next Post: A few things">A few things &raquo;</a>
       
     </p>
   </footer>
@@ -215,11 +205,15 @@ It remains to be seen if this is a good or bad thing but Linux is becoming somet
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
+        <a href="/blog/2015/10/12/current-status/">Current Status</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/11/20/systemd-redux/">systemd-redux</a>
+        <a href="/blog/2014/11/21/a-few-things/">A Few Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/20/systemd-redux/">Systemd-redux</a>
       </li>
     
       <li class="post">
@@ -230,23 +224,19 @@ It remains to be seen if this is a good or bad thing but Linux is becoming somet
         <a href="/blog/2014/09/23/end-of-linux/">The End of Linux</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/07/15/berks/">berks</a>
-      </li>
-    
   </ul>
 </section>
 
 <section>
-  <h1>Github Repos</h1>
+  <h1>GitHub Repos</h1>
   <ul id="gh_repos">
     <li class="loading">Status updating...</li>
   </ul>
   
-  <a href="https://github.com/lusis">@lusis</a> on Github
+  <a href="https://github.com/lusis">@lusis</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -294,7 +284,7 @@ It remains to be seen if this is a good or bad thing but Linux is becoming somet
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - John E. Vincent -
+  Copyright &copy; 2015 - John E. Vincent -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -302,7 +292,6 @@ It remains to be seen if this is a good or bad thing but Linux is becoming somet
   
 
 <script type="text/javascript">
-    
       var disqus_shortname = 'lusisgithubblog';
       
         
@@ -313,29 +302,14 @@ It remains to be seen if this is a good or bad thing but Linux is becoming somet
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
 
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
 
 
 
@@ -344,7 +318,7 @@ It remains to be seen if this is a good or bad thing but Linux is becoming somet
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

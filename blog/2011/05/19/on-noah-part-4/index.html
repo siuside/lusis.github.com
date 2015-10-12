@@ -9,7 +9,7 @@
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="This is the fourth part in a series on Noah. Part 1, Part 2 and Part 3 are available as wellIn Part 1 and 2 of this series I covered background on ...">
+  <meta name="description" content="This is the fourth part in a series on Noah. Part 1, Part 2 and Part 3 are available as well In Part 1 and 2 of this series I covered background on &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,10 +21,11 @@
   <link rel="canonical" href="http://lusis.github.com/blog/2011/05/19/on-noah-part-4/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
 <link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
@@ -58,12 +59,14 @@
   <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
   
 </ul>
+  
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input type="hidden" name="sitesearch" value="lusis.github.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
+  
 <ul role=main-navigation>
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
@@ -88,14 +91,10 @@
 
 
 
-
-  
-
-
-
-<time datetime="2011-05-19T22:01:00-04:00" pubdate  data-updated="true" >May 19<span>th</span>, 2011</time>
+<time class='entry-date' datetime='2011-05-19T22:01:00-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>10:01 pm</span></time>
         
-         | <a href="#disqus_thread">Comments</a>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://lusis.github.com">Comments</a>
         
       </p>
     
@@ -108,7 +107,7 @@
 discussed the similarities and differences between it and Noah. Part 3
 was about the components underneath Noah that make it tick.</p>
 
-<p>This post is about the &#8220;future&#8221; of Noah. Since I&#8217;m a fan of Fourcast
+<p>This post is about the &ldquo;future&rdquo; of Noah. Since I&rsquo;m a fan of Fourcast
 podcast, I thought it would be nice to do an immediate, medium and long
 term set of goals.</p>
 
@@ -127,7 +126,7 @@ These are in no specific order.</p>
 <li>Better test coverage ESPECIALLY around the watch subsystem</li>
 <li>Full code comment coverage</li>
 <li>Chef cookbooks/Puppet manifests for doing a full install</li>
-<li>&#8220;fatty&#8221; installers for a standalone server</li>
+<li>&ldquo;fatty&rdquo; installers for a standalone server</li>
 <li>Documentation around operational best practices</li>
 <li>Documentation around clustering, redundancy and hadr</li>
 <li>Documentation around integration best practices</li>
@@ -163,18 +162,18 @@ ephemeral count, that kind of stuff)</li>
 </ul>
 
 
-<p>Now that doesn&#8217;t look like a very cool list but it&#8217;s a lot of work for
-one person. I don&#8217;t blame anyone for not getting excited about it. The
+<p>Now that doesn&rsquo;t look like a very cool list but it&rsquo;s a lot of work for
+one person. I don&rsquo;t blame anyone for not getting excited about it. The
 goal now is to get a functional and stable application out the door that
-people can start using. Mind you I think it&#8217;s usable now (and I&#8217;m
-already using it in &#8220;production&#8221;).</p>
+people can start using. Mind you I think it&rsquo;s usable now (and I&rsquo;m
+already using it in &ldquo;production&rdquo;).</p>
 
-<p>Obviously if anyone has something else they&#8217;d like to see on the list,
+<p>Obviously if anyone has something else they&rsquo;d like to see on the list,
 let me know.</p>
 
 <h1>Medium Rare</h1>
 
-<p>So beyond that 1.0 release, what&#8217;s on tap? Most of the work will
+<p>So beyond that 1.0 release, what&rsquo;s on tap? Most of the work will
 probably occur around the watcher subsystem and the callback daemon.
 However there are a few key server changes I need to implement.</p>
 
@@ -195,7 +194,7 @@ However there are a few key server changes I need to implement.</p>
 <li>Decouple the callback daemon from the Ruby API of the server.
 Instead the daemon itself needs to be a full REST client of the
 Noah server</li>
-<li>Break out the &#8220;official&#8221; callback daemon into a distinct package</li>
+<li>Break out the &ldquo;official&rdquo; callback daemon into a distinct package</li>
 </ul>
 </li>
 <li><p>Clients</p>
@@ -211,11 +210,11 @@ Noah server</li>
 as a whole. You can see a general mindmap of that
 <a href="https://github.com/lusis/Noah/wiki/Ecosystem">here</a>.</p>
 
-<p>Going into a bit more detail&#8230;</p>
+<p>Going into a bit more detail&hellip;</p>
 
 <h2>Tokens and keys</h2>
 
-<p>It&#8217;s plainly clear that something which has the ability to make runtime
+<p>It&rsquo;s plainly clear that something which has the ability to make runtime
 environment changes needs to be secure. The first thing to roll off the
 line post-1.0 will be that functionality. Full ACL support for all
 entries will be enabled and in can be set at any level in the namespace
@@ -230,10 +229,10 @@ bit.</p>
 
 <h2>In-band watches</h2>
 
-<p>While I&#8217;ve lamented the fact that watches were in-band only in
-Zookeeper, there&#8217;s a real world need for that model. The idea of
-long-polling functionality is something I&#8217;d actually like to have by 1.0
-but likely won&#8217;t happen. The intent is simply that when you call say
+<p>While I&rsquo;ve lamented the fact that watches were in-band only in
+Zookeeper, there&rsquo;s a real world need for that model. The idea of
+long-polling functionality is something I&rsquo;d actually like to have by 1.0
+but likely won&rsquo;t happen. The intent is simply that when you call say
 <code>/some/path/watch</code>, you can pass an optional flag in the message stating
 that you want to watch that endpoint for a fixed amount of time for any
 changes. Optionally a way to subscribe to all changes over long-polling
@@ -241,16 +240,16 @@ for a fixed amount of time is cool too.</p>
 
 <h2>Agent changes</h2>
 
-<p>These two are pretty high on my list. As I said, there&#8217;s a workable
+<p>These two are pretty high on my list. As I said, there&rsquo;s a workable
 solution with minimal tech debt going into the 1.0 release but long
-term, this needs to be a distinct package. A few other ideas I&#8217;m kicking
+term, this needs to be a distinct package. A few other ideas I&rsquo;m kicking
 around are allowing configurable filtering on WHICH callback types an
 agent will handle. The idea is that you can specify that this invocation
 only handle http callbacks while this other one handles AMQP.</p>
 
 <h2>Sinatra Helper</h2>
 
-<p>One idea I&#8217;d REALLY like to come to fruition is the Sinatra Helper. I
+<p>One idea I&rsquo;d REALLY like to come to fruition is the Sinatra Helper. I
 envision it working something like this:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -289,30 +288,30 @@ parameters entirely in Noah. The watch setting is kind of cool as well.
 What will happen is if you decide to <code>watch</code> something this way, the
 helper will create a random (and yes, secure) route in your application
 that watch events can notify. In this way, your Sinatra application can
-be notified of any changes and will automatically &#8220;reconfigure&#8221; itself.</p>
+be notified of any changes and will automatically &ldquo;reconfigure&rdquo; itself.</p>
 
-<p>Obviously I&#8217;d love to see other implementations of this idea for other
+<p>Obviously I&rsquo;d love to see other implementations of this idea for other
 languages and frameworks.</p>
 
 <h1>Long term changes</h1>
 
-<p>There aren&#8217;t so much specific list items here as general themes and
-ideas. While I list these as long term, I&#8217;ve already gotten an offer to
+<p>There aren&rsquo;t so much specific list items here as general themes and
+ideas. While I list these as long term, I&rsquo;ve already gotten an offer to
 help with some of them so they might actually get out sooner.</p>
 
 <h2>Making Noah itself distributed</h2>
 
-<p>This is something I&#8217;m VERY keen on getting accomplished and would really
+<p>This is something I&rsquo;m VERY keen on getting accomplished and would really
 consider it the fruition of what Noah itself does. The idea is simply
 that multiple Noah servers themselves are clients of other Noah servers.
-I&#8217;ve got several ideas about how to accomplish this but I got an
+I&rsquo;ve got several ideas about how to accomplish this but I got an
 interesting follow up from someone on Github the other day. He asked
 what my plans were in this area and we had several lengthy emails back
 and forth including an offer to work on this particular issue.</p>
 
 <p>Obviously there are a whole host of issues to consider. Race conditions
-in ordered delivery of Watch callbacks (getting a status &#8220;down&#8221; after a
-status &#8220;up&#8221; when it&#8217;s supposed to be the other way around..) and
+in ordered delivery of Watch callbacks (getting a status &ldquo;down&rdquo; after a
+status &ldquo;up&rdquo; when it&rsquo;s supposed to be the other way around..) and
 eventual consistency spring to mind first.</p>
 
 <p>The general architecture idea that was offered up is to use
@@ -323,24 +322,24 @@ need to know one other member to bootstrap and everything else happens
 using the natural flows within Noah.</p>
 
 <p>The other part of that is how to handle the Redis part. The natural
-inclination is to use the upcoming Redis clustering but that&#8217;s not
+inclination is to use the upcoming Redis clustering but that&rsquo;s not
 something I want to do. I want each Noah server to actually include its
-OWN Redis instance &#8220;embedded&#8221; and not need to rely on any external
+OWN Redis instance &ldquo;embedded&rdquo; and not need to rely on any external
 mechanism for replication of the data. Again, the biggest validation of
 what Noah is designed to do is using only Noah itself to do it.</p>
 
 <h2>Move off Redis/Swappable persistence</h2>
 
-<p>If NATS says anything to me, it says &#8220;Why do you even need Redis?&#8221;. If
+<p>If NATS says anything to me, it says &ldquo;Why do you even need Redis?&rdquo;. If
 you recall, I went with Redis because it solved multiple problems. If I
 can find a persistence mechanism that I can use without any external
-service running, I&#8217;d love to use it.</p>
+service running, I&rsquo;d love to use it.</p>
 
 <h2>ZeroMQ</h2>
 
-<p>If I were to end up moving off Redis, I&#8217;d need a cross platform and
+<p>If I were to end up moving off Redis, I&rsquo;d need a cross platform and
 cross language way to handle the pubsub component. NATS would be the
-first idea but NATS is Ruby only (unless I&#8217;ve missed something). ZeroMQ
+first idea but NATS is Ruby only (unless I&rsquo;ve missed something). ZeroMQ
 appears to have broad language and platform support so writing custom
 agents in the same vein as the Redis PUBSUB method should be feasible.</p>
 
@@ -356,7 +355,7 @@ Vogeler into Noah.</p>
 
 <h2>The PAXOS question</h2>
 
-<p>A lot of people have asked me about this. I&#8217;ll state right now that I
+<p>A lot of people have asked me about this. I&rsquo;ll state right now that I
 can only make it through about 20-30% of any reading about Paxos before
 my brain starts to melt. However in the interest of proving myself the
 fool, I think it would be possible to implement some Paxos like
@@ -367,9 +366,9 @@ is that the use case for doing it in Noah is fairly limited so as not to
 be worth it.</p>
 
 <p>The grand scheme is that Noah helps enable the construction of systems
-where you can say &#8220;This component is free to go off and operate in this
+where you can say &ldquo;This component is free to go off and operate in this
 way secure in the knowledge that if something it needs to know changes,
-someone will tell it&#8221;. I did say &#8220;grand&#8221; didn&#8217;t I? At some point, I may
+someone will tell it&rdquo;. I did say &ldquo;grand&rdquo; didn&rsquo;t I? At some point, I may
 hit the limit of what I can do using only Ruby. Who knows.</p>
 
 <h1>Wrap up - Part 4</h1>
@@ -386,11 +385,11 @@ hit the limit of what I can do using only Ruby. Who knows.</p>
 </ul>
 
 
-<p><em>I&#8217;m not kidding on that last one. Ask me about Parrot AR drones and
+<p><em>I&rsquo;m not kidding on that last one. Ask me about Parrot AR drones and
 Noah sometime</em></p>
 
 <p>If you made it this far, I want to say thank you to anyone who read any
-or all of the parts. Please don&#8217;t hesitate to contact me with any
+or all of the parts. Please don&rsquo;t hesitate to contact me with any
 questions about the project.</p>
 </div>
 
@@ -407,12 +406,7 @@ questions about the project.</p>
 
 
 
-
-  
-
-
-
-<time datetime="2011-05-19T22:01:00-04:00" pubdate  data-updated="true" >May 19<span>th</span>, 2011</time>
+<time class='entry-date' datetime='2011-05-19T22:01:00-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>10:01 pm</span></time>
       
 
 <span class="categories">
@@ -426,23 +420,19 @@ questions about the project.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2011/05/19/on-noah-part-4/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2011/05/19/on-noah-part-4/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2011/05/19/on-noah-part-4/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2011/05/19/on-noah-part-4/" >Tweet</a>
   
   
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
 </div>
 
     
     <p class="meta">
-       
+      
         <a class="basic-alignment left" href="/blog/2011/05/18/on-noah-part-3/" title="Previous Post: On Noah - Part 3">&laquo; On Noah - Part 3</a>
       
-       
-        <a class="basic-alignment right" href="/blog/2011/06/05/why-monitoring-sucks/" title="next Post: Why Monitoring Sucks">Why Monitoring Sucks &raquo;</a>
+      
+        <a class="basic-alignment right" href="/blog/2011/06/05/why-monitoring-sucks/" title="Next Post: Why Monitoring Sucks">Why Monitoring Sucks &raquo;</a>
       
     </p>
   </footer>
@@ -461,11 +451,15 @@ questions about the project.</p>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
+        <a href="/blog/2015/10/12/current-status/">Current Status</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/11/20/systemd-redux/">systemd-redux</a>
+        <a href="/blog/2014/11/21/a-few-things/">A Few Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/20/systemd-redux/">Systemd-redux</a>
       </li>
     
       <li class="post">
@@ -476,23 +470,19 @@ questions about the project.</p>
         <a href="/blog/2014/09/23/end-of-linux/">The End of Linux</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/07/15/berks/">berks</a>
-      </li>
-    
   </ul>
 </section>
 
 <section>
-  <h1>Github Repos</h1>
+  <h1>GitHub Repos</h1>
   <ul id="gh_repos">
     <li class="loading">Status updating...</li>
   </ul>
   
-  <a href="https://github.com/lusis">@lusis</a> on Github
+  <a href="https://github.com/lusis">@lusis</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -540,7 +530,7 @@ questions about the project.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - John E. Vincent -
+  Copyright &copy; 2015 - John E. Vincent -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -548,7 +538,6 @@ questions about the project.</p>
   
 
 <script type="text/javascript">
-    
       var disqus_shortname = 'lusisgithubblog';
       
         
@@ -556,29 +545,14 @@ questions about the project.</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
 
 
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
 
 
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
 
 
 
@@ -587,7 +561,7 @@ questions about the project.</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>
