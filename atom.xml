@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2015-10-12T00:54:55-04:00</updated>
+  <updated>2015-10-12T10:08:02-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,423 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Terraform Modules for Fun and Profit]]></title>
+    <link href="http://lusis.github.com/blog/2015/10/12/terraform-modules-for-fun-and-profit/"/>
+    <updated>2015-10-12T00:56:04-04:00</updated>
+    <id>http://lusis.github.com/blog/2015/10/12/terraform-modules-for-fun-and-profit</id>
+    <content type="html"><![CDATA[<p>One of the projects I&rsquo;ve been using more and more recently is <a href="http://terraform.io">terraform</a>.</p>
+
+<!-- more -->
+
+
+<p>I&rsquo;ve been using it for a while on a smaller scale but a recent project at <a href="http://stormpath.com">work</a> had me putting it through its paces and working out the issues I had. A few of my issues in the past have revolved around:</p>
+
+<ul>
+<li>reusability</li>
+<li>composability</li>
+<li>lifecycle</li>
+<li>&ldquo;safety&rdquo; (i.e. don&rsquo;t blow away an entire running stack accidentally)</li>
+<li>scope</li>
+</ul>
+
+
+<h1>Scope</h1>
+
+<p>One of the mistakes I made when first using terraform was trying to &ldquo;do too much&rdquo; with it. Like many people, I wanted to see how much I could replace the &ldquo;fragility&rdquo; of existing CM-focused stacks (i.e. <code>knife ec2</code> commands in a NOTES.md file) with something &ldquo;better&rdquo;.</p>
+
+<p>As I used Terraform, I tried to put more and more logic into it. I ended up fighting trying to get things like data about the current launch into userdata. Once I scaled back the scope of what I tried to do with Terraform, it became much easier to use it &ldquo;the right way&rdquo;. Combined with Packer to build images with just a BIT more baked in, things got much easier.</p>
+
+<p>If you can&rsquo;t bake immutable amis for your stack (and I think that most non-trivial cases can&rsquo;t yet), don&rsquo;t try to fit application lifecycle into terraform. I would argue that fitting application lifecycle into terraform is too much for a few reason.</p>
+
+<h1>Safety</h1>
+
+<p>Terraform does its job really well. Too well sometimes. Imagine the following scenario:</p>
+
+<ul>
+<li>provision VPC</li>
+<li>provision ELB</li>
+<li>provision an RDS instance</li>
+<li>provision instances with userdata to pull an application and run it</li>
+</ul>
+
+
+<p>You stand up your infrastructure with Terraform using the steps above. All is well. Now you need release a new version of your application.</p>
+
+<ul>
+<li>update the userdata to pull the new version of the application</li>
+<li><code>terraform apply</code></li>
+</ul>
+
+
+<p>Boom you&rsquo;ve just updated yourself into an outage. Any change you make to your terraform code will cause terraform to destroy that resource and recreate it.
+Now terraform has the following:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>lifecycle {
+</span><span class='line'>  create_before_destroy = true
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>but it does have limitations and you&rsquo;re forcing everyone to not forget to add that. Honestly that doesn&rsquo;t instill too much confidence that I won&rsquo;t automate myself in the foot.</p>
+
+<p>I realized the trick to terraform safety is to minimize the number of tf files you might have to modify as standard operation. By limiting its scope appropriately and through reuse/composability you can do this. About that reuse thing&hellip;</p>
+
+<h1>Composability/Reuse</h1>
+
+<p>And now we get to the part that will level up your Terraform game - using modules.</p>
+
+<p>The problem is that Terraform modules are currently the least documented part of the Terraform ecosystem either in the official documentation or the community precisely because they are a bit difficult to grok. At the end I&rsquo;m going to point you to some community resources that helped me figure it all out myself.</p>
+
+<h2>Outputs</h2>
+
+<p>The biggest thing that helped me understand modules was finally groking that <a href="https://www.terraform.io/docs/configuration/outputs.html">outputs</a> are NOT just for displaying at the end of a <code>terraform apply</code> or for use as variables in subshells with <code>terraform output</code>.</p>
+
+<p>When using modules, outputs are essentially part of the public API to your module. Once I framed it this way I realized that Terraform modules are libraries except there are no methods to call.</p>
+
+<h2>Modules as Libraries</h2>
+
+<p>A module defines its contract in two ways:</p>
+
+<ul>
+<li>Here are the inputs I can take</li>
+<li>Here are the outputs I give you</li>
+</ul>
+
+
+<p>Once you start moving some of your Terraform code into modules, you will be forced to create this contract for yourself. Let&rsquo;s take an example from AWS that is highly reusable, VPC creation:</p>
+
+<h3>variables.tf</h3>
+
+<p>First we define our inputs in <code>variables.tf</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>variable "mymod_region" {}
+</span><span class='line'>variable "mymod_az" {}
+</span><span class='line'>variable "mymod_vpc_cidr" {}
+</span><span class='line'>variable "mymod_private_subnet" {}
+</span><span class='line'>variable "mymod_public_subnet" {}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We&rsquo;re defining 5 inputs for this VPC all prefixed with <code>mymod</code> (more on that in a moment). This module is for creating a VPC that has two subnets - one for instances that get public IPs (like a nat instance) and one for private instances. We could add others here (and our internal vpc module actually provides for a subnet in each AZ of the region used). You can certainly provide sane defaults for these if the module is intended for specific internal use but I would say NOT to do that in the interest of forcing yourself to make it properly reusable.</p>
+
+<h3>outputs.tf</h3>
+
+<p>Now we define some outputs:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>output "vpc_id" { value = "${aws_vpc.default.id}" }
+</span><span class='line'>output "private_subnet_id" { value = "${aws_subnet.private.id}" }
+</span><span class='line'>output "public_subnet_id" { value = "${aws_subnet.public.id}" }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is where we return things in the format that most people are used to seeing in terraform (<em>resource.name.attribute</em>).
+At this point we now have a module that takes information in, does something and spits back out some data for us.</p>
+
+<h2>Using the module</h2>
+
+<p>Now let&rsquo;s say we need to launch an instance into the public subnet and we want to use this VPC module. So we create a new terraform project/repo with the following files:</p>
+
+<ul>
+<li><code>main.tf</code>: Holds our module import definitions.</li>
+<li><code>instance.tf</code>: Terraform code for the instance resource.</li>
+<li><code>outputs.tf</code>: The data we&rsquo;re outputing</li>
+<li><code>variables.tf</code>: The variables we&rsquo;re using</li>
+</ul>
+
+
+<h3><code>variables.tf</code></h3>
+
+<p>We&rsquo;ll start here. You&rsquo;ll notice we&rsquo;re going to mix and match our variables for the instance as well as the ones needed by the VPC module. I&rsquo;m not going to include all of the things I might make a variable in the interest of length:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>variable "aws_region" { default = "us-west-2" }
+</span><span class='line'>variable "az" { default = "us-west-2a" }
+</span><span class='line'>variable "ami" {}
+</span><span class='line'>variable "vpc_cidr" {}
+</span><span class='line'>variable "private_subnet" {}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3><code>main.tf</code></h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>provider "aws" { region = "${var.aws_region}" }
+</span><span class='line'>module "vpc" {
+</span><span class='line'>  source = "git::ssh://git@gitserver/org/my-tf-modules//vpc" // double slash intended. See terraform documentation
+</span><span class='line'>  mymod_region = "${var.aws_region}"
+</span><span class='line'>  mymod_az = "${var.az}"
+</span><span class='line'>  mymod_vpc_cidr = "${var.vpc_cidr}"
+</span><span class='line'>  mymod_private_subnet = "${var.private_subnet}"
+</span><span class='line'>  mymod_public_subnet = "${var.public_subnet}"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The reason I prefixed the inputs in the VPC module was to help with clarity. This is why it makes it (for me) easier to see where the flow of inputs and outputs is.</p>
+
+<h3><code>instance.tf</code></h3>
+
+<p>I&rsquo;m going to truncate this code a bit only to show where we reuse the various variables:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>resource "aws_instance" "node1" {
+</span><span class='line'>  ami = "${var.ami}"
+</span><span class='line'>  subnet_id = "${module.vpc.private_subnet_id}"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see we&rsquo;re using a bit of our local variables (the ami) with the variables from the VPC module. Obviously there are other things that are required here to actually launch that resource but you get the idea.</p>
+
+<h2>Some gotchas with modules</h2>
+
+<p>These aren&rsquo;t hard and fast rules but they will help your sanity</p>
+
+<h3>Don&rsquo;t nest modules</h3>
+
+<p>Looking above you might think that you could convert that into another module (an instance module which uses the VPC module). Don&rsquo;t.
+Module variable/output visibility is from the ROOT module only. In the case of nested module usage, the root module is not the one you&rsquo;re writing but the transitive module&rsquo;s caller.</p>
+
+<p>If you were to try and create a module that does these things you would end up needing to create inputs on each outer module to pass down to any modules IT calls as well as outputs to bubble the information all the way back up to the code from where you&rsquo;re using the module.</p>
+
+<p>i.e:</p>
+
+<ul>
+<li>instance module will need to define inputs that it accepts to pass to the vpc module</li>
+<li>instance module will need to define outputs that duplicate what is returned from the vpc module</li>
+</ul>
+
+
+<p>That becomes VERY cumbersome. Be very shallow with your module usage. Use a single wrapper project to pull in all the modules you need.</p>
+
+<h2>You can duplicate modules under different names</h2>
+
+<p>This is very handy (though cumbersome in terms of duplication of code). The following is from one of our internal &ldquo;wrapper&rdquo; project that launches a 3-node version of our stack for testing</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>resource "aws_key_pair" "deployer" {
+</span><span class='line'>  key_name = "${var.orgname}-deployer-key"
+</span><span class='line'>  public_key = "${file("${var.orgname}-deployer-key.pub")}"
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>module "vpc" {
+</span><span class='line'>  source = "git::ssh://git@repo/org/tf-modules.git//vpc"
+</span><span class='line'>  spath_orgname = "${var.orgname}"
+</span><span class='line'>  spath_nat_ami = "${lookup(var.amis, var.aws_region)}"
+</span><span class='line'>  spath_nat_a_private_ip = "${var.nat_a_private_ip}"
+</span><span class='line'>  spath_nat_b_private_ip = "${var.nat_b_private_ip}"
+</span><span class='line'>  spath_nat_c_private_ip = "${var.nat_c_private_ip}"
+</span><span class='line'>  spath_public_subnet_a_cidr = "${var.public_subnet_a_cidr}"
+</span><span class='line'>  spath_public_subnet_b_cidr = "${var.public_subnet_b_cidr}"
+</span><span class='line'>  spath_public_subnet_c_cidr = "${var.public_subnet_c_cidr}"
+</span><span class='line'>  spath_private_subnet_a_cidr = "${var.private_subnet_a_cidr}"
+</span><span class='line'>  spath_private_subnet_b_cidr = "${var.private_subnet_b_cidr}"
+</span><span class='line'>  spath_private_subnet_c_cidr = "${var.private_subnet_c_cidr}"
+</span><span class='line'>  spath_vpc_cidr = "${var.vpc_cidr}"
+</span><span class='line'>  spath_keyname = "${var.orgname}-deployer-key"
+</span><span class='line'>  aws_region = "${var.aws_region}"
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>module "rds" {
+</span><span class='line'>  source = "git::ssh://git@repo/org/tf-modules.git//rds"
+</span><span class='line'>  spath_orgname = "${var.orgname}"
+</span><span class='line'>  iam_rds_user = "${var.iam_rds_user}"
+</span><span class='line'>  iam_rds_password = "${var.iam_rds_password}"
+</span><span class='line'>  spath_rds_sg_id = "${module.vpc.default_sg_id}"
+</span><span class='line'>  spath_rds_private_subnet_a_id = "${module.vpc.private_subnet_a_id}"
+</span><span class='line'>  spath_rds_private_subnet_b_id = "${module.vpc.private_subnet_b_id}"
+</span><span class='line'>  spath_rds_private_subnet_c_id = "${module.vpc.private_subnet_c_id}"
+</span><span class='line'>  aws_region = "${var.aws_region}"
+</span><span class='line'>}
+</span><span class='line'>module "dockernode_subnet_a" {
+</span><span class='line'>  source = "git::ssh://git@repo/org/tf-modules.git//dockerhost"
+</span><span class='line'>  spath_orgname = "${var.orgname}"
+</span><span class='line'>  dockernode_ami = "${lookup(var.amis, var.aws_region)}"
+</span><span class='line'>  dockernode_keypair_name = "${var.orgname}-deployer-key"
+</span><span class='line'>  dockernode_subnet_id = "${module.vpc.private_subnet_a_id}"
+</span><span class='line'>  dockernode_az = "${module.vpc.private_subnet_a_az}"
+</span><span class='line'>  dockernode_sg_id = "${module.vpc.default_sg_id}"
+</span><span class='line'>  aws_region = "${var.aws_region}"
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>module "dockernode_subnet_b" {
+</span><span class='line'>  source = "git::ssh://git@repo/org/tf-modules.git//dockerhost"
+</span><span class='line'>  spath_orgname = "${var.orgname}"
+</span><span class='line'>  dockernode_ami = "${lookup(var.amis, var.aws_region)}"
+</span><span class='line'>  dockernode_keypair_name = "${var.orgname}-deployer-key"
+</span><span class='line'>  dockernode_subnet_id = "${module.vpc.private_subnet_b_id}"
+</span><span class='line'>  dockernode_az = "${module.vpc.private_subnet_b_az}"
+</span><span class='line'>  dockernode_sg_id = "${module.vpc.default_sg_id}"
+</span><span class='line'>  aws_region = "${var.aws_region}"
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>module "dockernode_subnet_c" {
+</span><span class='line'>  source = "git::ssh://git@repo/org/tf-modules.git//dockerhost"
+</span><span class='line'>  spath_orgname = "${var.orgname}"
+</span><span class='line'>  dockernode_ami = "${lookup(var.amis, var.aws_region)}"
+</span><span class='line'>  dockernode_keypair_name = "${var.orgname}-deployer-key"
+</span><span class='line'>  dockernode_subnet_id = "${module.vpc.private_subnet_c_id}"
+</span><span class='line'>  dockernode_az = "${module.vpc.private_subnet_c_az}"
+</span><span class='line'>  dockernode_sg_id = "${module.vpc.default_sg_id}"
+</span><span class='line'>  aws_region = "${var.aws_region}"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can see we&rsquo;re reusing the &ldquo;dockerhost&rdquo; module three times under different names. This is because we want to launch a host in each AZ in the region. Terraform currently lacks logic for making that sort of balancing easy so we do it this way. Also note that we&rsquo;re refering to other modules in when pass information into another module.</p>
+
+<p>This is okay as this is our root module and it has that visibility.</p>
+
+<h2>Let the graph resolver work for you</h2>
+
+<p>If you can avoid it, don&rsquo;t try to define dependencies yourself (i.e. using <code>depends_on</code>. You can&rsquo;t use it in module blocks anyway). Instead use variable names that give Terraform the information it needs to build the dependency graph itself. By using <code>${module.vpc.private_subnet_c_id}</code> as the <code>subnet_id</code> for <code>dockernode_subnet_c</code>, Terraform can infer the dependency itself and know that it needs to run that module FIRST before touching this one.</p>
+
+<h2>None of this addresses tfstate</h2>
+
+<p>Everything I&rsquo;ve shown so far doesn&rsquo;t address reusing STATE from a terraform run. These modules are great if you want to provide reusable code that people can use for standing up VPCs but what if you want to share the VPC itself.</p>
+
+<p>Recently terraform has added support for <a href="https://www.terraform.io/docs/state/remote.html">&ldquo;remote state&rdquo;</a>. This allows you to pull in the outputs of another terraform run so that it can be used elsewhere.</p>
+
+<p>If you recall earlier I mentioned that minimizing the need to touch terraform files after initial run helps to cut down on the risk of inadvertant destruction of resources. By using the remote state functionality you can provision your main VPC and refer to its IDs in other terraform code without having to touch the base VPC code.</p>
+
+<p>Mind you this does mean that the modifier of the VPC could could accidentally wipe infrastructure but this is a step in the right direction.</p>
+
+<h2>Don&rsquo;t forget about <code>null_resource</code></h2>
+
+<p>While it doesn&rsquo;t participate in the graph fully, the <code>null_resource</code> can come in really handy. It&rsquo;s currently undocumented but you can see an example of usage <a href="https://gist.github.com/lusis/9c0fd50e0de51c3d80b2">here</a>.</p>
+
+<p>The <code>null_resource</code> allows you to attach to run provisioners outside of a formal resource (such as an instance). You&rsquo;ll probably have to be explicit with dependencies when using the null resource but the limited to scope for it should be okay.</p>
+
+<h2>paths, paths and more paths</h2>
+
+<p>You may notice that our vpc module above makes reference to nat nodes. Our model for VPC usage is one Nat instance per AZ. The nat instance creation, however, is scoped inside the VPC module. It also happens to use a <code>remote-exec</code> provisioner (which requires the SSH key that we create as part of the wrapping terraform scripts).</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>resource "aws_instance" "nat_a" {
+</span><span class='line'>  // elided
+</span><span class='line'>  provisioner "remote-exec" {
+</span><span class='line'>    inline = [ "printf '${template_file.iptables_config.rendered}' &gt; /tmp/iptables.sav" ]
+</span><span class='line'>    connection {
+</span><span class='line'>        type = "ssh"
+</span><span class='line'>        user = "admin"
+</span><span class='line'>        key_file = "${path.cwd}/${var.spath_keyname}"
+</span><span class='line'>        agent = false
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here we define the path to the key file as being in <code>path.cwd</code>. This means we can create the ssh key in a wrapper terraform script, dump it to the current directory and the nat instance creation will know how to find it. There are other path variables availble (from the TF documentation</p>
+
+<blockquote><p>To reference path information, the syntax is path.TYPE. TYPE can be cwd, module, or root. cwd will interpolate the cwd. module will interpolate the path to the current module. root will interpolate the path of the root module. In general, you probably want the path.module variable.</p><footer><strong>terraform</strong> <cite><a href='https://www.terraform.io/docs/configuration/interpolation.html'>www.terraform.io/docs/&hellip;</a></cite></footer></blockquote>
+
+
+<h2>Modules are vendored</h2>
+
+<p>When you use modules, the first thing you&rsquo;ll have to do is <code>terraform get</code>. This pulls modules into the <code>.terraform</code> directory. Once you do that, unless you do another <code>terraform get -update=true</code>, you&rsquo;ve essentially vendored those modules. This is nice as you know an upstream change won&rsquo;t immediately invalidate and destroy your infra. I would suggest checking those into your wrapper repo.</p>
+
+<h1>Wrap up</h1>
+
+<p>I hope this has helped you with using terraform a bit. One of the best resources I found on module usage that really helped things click was the <a href="http://bobtfish.github.io/blog/2015/03/29/terraform-from-the-ground-up/">following awesome blogpost</a> from Tom Doran (@bobtfish) on the subject. He&rsquo;s made some really useful github repos demonstrating a bunch of stuff. Additionally the work done by Brandon Burton <a href="https://github.com/terraform-community-modules">here</a> can give good examples as well.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Current Status]]></title>
@@ -2223,137 +2640,6 @@ I&rsquo;ve worked in several different companies over the last 17 years. In some
 <h1>For the record</h1>
 
 <p>I still think AWS and public clouds are awesome. I really do. I think private clouds are just as awesome. The flexibility they offer is almost unmatched but that flexibility comes at a price - performance hits, multiple layers of abstraction and other things.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Monitoring Sucking Just a Little Bit Less]]></title>
-    <link href="http://lusis.github.com/blog/2012/06/05/monitoring-sucking-just-a-little-bit-less/"/>
-    <updated>2012-06-05T12:22:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2012/06/05/monitoring-sucking-just-a-little-bit-less</id>
-    <content type="html"><![CDATA[<p>So <a href="http://blog.zenoss.com/2012/06/turning-monitoringsucks-into-monitoringsucksless">it&rsquo;s come to my attention</a> that today is the &ldquo;anniversary&rdquo; of when I wrote my <a href="http://blog.lusis.org/blog/2011/06/05/why-monitoring-sucks/">first &ldquo;#monitoringsucks&rdquo; blog post</a>.</p>
-
-<!--more-->
-
-
-<p>So the question I found myself asking today is &ldquo;Does monitoring suck less than it did a year ago?&rdquo;. I&rsquo;d have to be an idiot to say anything other than &ldquo;yes&rdquo;.</p>
-
-<p>I didn&rsquo;t set out to start a &ldquo;movement&rdquo;. I&rsquo;m not someone who handles compliments very well. Mainly because I suffer from a bad case of <a href="http://kartar.net/2012/05/imposter-syndrome/">imposter syndrome</a>. The other side of this is that I know that I&rsquo;ve done next to nothing to make it any better. Meanwhile the real heros are people releasing code every day. People rethinking how we think about monitoring, trending, alerting and everything else. Companies like Etsy, Netflix, Yammer and countless more are sharing the deep squishy bits of how they do things and are releasing code to back it up.</p>
-
-<h1>What&rsquo;s gotten better?</h1>
-
-<p>I think the biggest thing that&rsquo;s gotten better is that people are really starting to leverage advances we&rsquo;ve had in ancillary tooling in recent times. Not that any of these ideas are new (message busses existed long before RabbitMQ) but the barrier to entry is much lower.</p>
-
-<p>I still feel like what drove this was a byproduct of configuration management uptake. As it became easier to stamp out servers, the rate of change in our infrastructure surpassed what tools were original designed to deal with. As we started having more time to think about what we wanted to monitor (because we weren&rsquo;t spending all our time building hand-crafted artisan machines), we started to feel the pain more. We wanted our monitoring systems to work as smoothly as the rest of the kit but it didn&rsquo;t.</p>
-
-<p>Combine that with:</p>
-
-<ul>
-<li>We now have data storage engines of varying complexity for storing time-series data. And with greater resolution and the ability to change that resolution.</li>
-<li>We have tooling that can read that timeseries data and represent it in dynamic ways.</li>
-<li>We revisted the idea of push vs. pull and leave/join of components in our infra.</li>
-</ul>
-
-
-<p>The world is a brighter place because of this and to everyone who had something to do with it - whether discussing on a mailing list, talking on IRC, tweeting, writing code or whatever - thank you.</p>
-
-<h1>What&rsquo;s coming down the pipe</h1>
-
-<p>As a side effect of this monitoring thing, people ask my opinion a lot. Like I said, I&rsquo;m still weirded out by this. Stepping back, though, and just geeking out on things, I see some really cool stuff in the future. Here&rsquo;s just a subset of &lsquo;stuff&rsquo; I&rsquo;ve been thinking about:</p>
-
-<h2>Presence-based Discovery</h2>
-
-<p>I couldn&rsquo;t think of a better way to describe it but the idea is simply (or not so simply) that by virtue of coming online, a system is saying &ldquo;I wish to be monitored in this way&rdquo;. This is pretty dependent on configuration management for this to go smoothly, imho.</p>
-
-<p>I mentioned this in a post on the devops toolchain but it goes something like this:</p>
-
-<ul>
-<li>new node comes online</li>
-<li>new node registers its presence in some way (I&rsquo;m kind of keen on the XMPP idea) with a notification of services it offers</li>
-<li>centralized system is monitoring (har har) this presence system and starts monitoring the system based on predefined criteria at a &ldquo;well-known&rdquo; endpoint</li>
-<li>optionally the system can dictate what it wants monitored</li>
-</ul>
-
-
-<p>Obviously this would all be very painful without some sort of configuration management system. However, it&rsquo;s very easy for me in my base group or role for a system to say &ldquo;Install <code>W</code>, register via <code>X</code>, listen on <code>Y</code> for active checks and publish everything to <code>Z</code> endpoint&rdquo;. What <code>W</code>,<code>X</code>,<code>Y</code> and <code>Z</code> are is irrelevant. We can cookie cutter this stuff. FWIW this is nothing new. We&rsquo;re just seeing &ldquo;consumer-grade&rdquo; options that are usable by everyone.</p>
-
-<h2>Push vs Poll</h2>
-
-<p>I&rsquo;ve said many times that poll-based monitoring is dead. That&rsquo;s a bit of hyperbole. What&rsquo;s dead is the idea that we can only check <code>X</code> every <code>N</code> times over <code>K</code> period. This is a hold-over from ineffecient polling mechanisms that would crumble under too-frequent polling as well as systems that weren&rsquo;t able to handle being polled that often. I see polling moving from &ldquo;check host <code>X</code> every 5 minutes for memory usage&rdquo; to &ldquo;watch this bus for memory usage stats and if there&rsquo;s not anything in 2 minutes, make sure the world is okay&rdquo;. We&rsquo;ll always need the outside-in checks of things but that&rsquo;s much less intensive than polling ALL the things.</p>
-
-<p>We&rsquo;re so close with tools like Graphite now which can accept arbitrary metrics from anywhere with no need to preconfigure it to accept them. There are some concerns here around bad data being injected from unauthorized sources. As we automate more and make decisions based on this data, we need to be aware of it. Another discussion for another day though something akin to the way mcollective does trust is probably in order.</p>
-
-<h2>Self-service and Culture</h2>
-
-<p>This is a big one too and I think will cut down on many complaints that people have around even something like Nagios.</p>
-
-<p>We have to be able to say &ldquo;You know what? We don&rsquo;t need to monitor that. Let&rsquo;s disable that check&rdquo;. If something is unactionable, then why the hell are you alerting on it? This is where decoupling the trending/visualization from alerting can be so powerful. I&rsquo;m currently rebuilding our monitoring setup to do most checks based on data in Graphite. Why? Because if I flip the relationship around, I&rsquo;ve now got to deal with the alert question before I can even get the information. Instead of alerting on data and then storing it as an afterthought (perfdata anyone?) let&rsquo;s start collecting the data, storing it and then alerting based on it.</p>
-
-<p>This also provides for options around self-service. Not everyone needs to know about the disk space on nodeX. Only the people who can fix it do. Maybe your database folks want to get alerts on queries taking longer than N. As an operations person, you can&rsquo;t do anything about that and certainly not at that moment (in most cases). You&rsquo;re just going to push it down the line ANYWAY. And do you really want to have to deal with changing thresholds on behalf of someone?</p>
-
-<p>I&rsquo;m also a big fan of the idea that components in your infrastructure - applications, os, whatever - self-host a pubsub type of endpoint where users can get realtime information about the system themselves. I do this with every logstash install I setup where possible. Every remote logstash agent I&rsquo;ve setup in enStratus also provides a pubsub 0mq socket that you can use to live tail log information from that host broken down in topic keys around metadata.</p>
-
-<h2>Application health by default</h2>
-
-<p>I&rsquo;ve fawned over Coda Hale&rsquo;s &ldquo;Metrics&rdquo; talk several times. I&rsquo;m far from a fanboy but &ldquo;Metrics&rdquo; gets it right. This ties into self-service quite a bit. Developers need to be free to instrument the application without creating &ldquo;yet another place to look&rdquo;. Metrics does this so well with the idea of pushing instrumentation out of the application (oh look - push again!) and into Graphite or whereever is appropriate. And if you aren&rsquo;t ready for push yet, you can still poll via JMX.</p>
-
-<p>The idea has been ported to multiple other languages at this point. There no excuse not to deeply instrument your applications. If you have an application that CAN&rsquo;T be instrumented properly, maybe you should consider a different application?</p>
-
-<h2>Applying science and common sense</h2>
-
-<p>The last thing that I see as being a step forward is we start applying science to our process. No more <code>-w 60,60,60 -c 75,75,75</code> canned thresholds. We start thinking about our thresholds. Maybe we do away with them entirely as static constructs. Instead we apply event processing and historical data to build thresholds that are intelligent.</p>
-
-<p>We start looking at the shape of our infra. Is it REALLY important that you get woken up at 3AM because a Riak node is down? Not if it&rsquo;s just one but maybe if it&rsquo;s two depending on your cluster size. Maybe both of those nodes were in the same rack. Okay that&rsquo;s bad.</p>
-
-<p>We start to consider context and start applying science! We step out of the shamanistic ages of monitoring (who the hell still sets swap space to double physical memory and is 75% of a 1TB volume in use really something that can&rsquo;t wait?) where &ldquo;We&rsquo;ve always done it this way&rdquo;. Start thinking like the Apple 1984 commercial, whip out your hammer and smash your preexisting notions around what constitutes an alert.</p>
-
-<h1>What I&rsquo;m building</h1>
-
-<p>Right now I&rsquo;m spending most of my time being pragmatic. I&rsquo;m still adding new checks to Nagios but the information is coming from different sources now. I&rsquo;m dumping data into graphite via logstash and doing checks on that. Collectd is now pushing directly to graphite as well. Nagios is becoming less and less of a factor. When I finally strip it down to its bare essentials, I&rsquo;ll have a better idea what gap needs to be filled. It&rsquo;s starting to look like riemann at that point.</p>
-
-<p>I still want to tackle this presence based idea in some form. Even if presence is just a signal to run chef-client. At my previous company, we used Noah for this. I&rsquo;ve not yet had time to decide if Noah is the right fight here.</p>
-
-<h1>What others are building</h1>
-
-<p>What&rsquo;s more important is what others are building. There are too many to list but I&rsquo;m going to give it a shot off the top of my head. Please don&rsquo;t take offense if your project isn&rsquo;t here.</p>
-
-<ul>
-<li>Sensu</li>
-<li>Graphite-tattle</li>
-<li>Cepmon</li>
-<li>Logstash</li>
-<li>Librato</li>
-<li>PagerDuty</li>
-<li>Umpire</li>
-<li>alerting-controller</li>
-<li>Graphite</li>
-<li>Statsd</li>
-<li>Logster</li>
-<li>Metrics</li>
-<li>Incinga (yes, they&rsquo;re starting to diverge from Nagios)</li>
-<li>ZeroMQ</li>
-<li>Chef</li>
-<li>Puppet</li>
-<li>Zookeeper</li>
-<li>Riemann</li>
-<li>OpenTSDB</li>
-<li>Ganglia</li>
-<li>TempoDB</li>
-<li>CollectD</li>
-<li>Datadog</li>
-<li>Folsom</li>
-<li>JMXTrans</li>
-<li>Pencil</li>
-<li>Rocksteady</li>
-<li>Boundary</li>
-<li>Circonus</li>
-<li>GDash</li>
-</ul>
-
-
-<p>Probably the best bet is to head over to <a href="https://github.com/monitoringsucks/tool-repos">the monitoringsucks tool repo on github</a>. I can&rsquo;t do the awesomeness of what people are doing justice here.</p>
-
-<p>and so many more.</p>
 ]]></content>
   </entry>
   
