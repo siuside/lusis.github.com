@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2015-10-12T10:08:02-04:00</updated>
+  <updated>2015-12-09T23:36:00-05:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,309 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Aws Api Gateway for Fun and Profit]]></title>
+    <link href="http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/"/>
+    <updated>2015-12-09T22:06:59-05:00</updated>
+    <id>http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit</id>
+    <content type="html"><![CDATA[<p>At we&rsquo;re currently in the process of reconfiguring our monitoring, logging and alerting setup.</p>
+
+<!-- more -->
+
+
+<p>Obviously this is something near and dear to my heart. At my previous employer we did everything in house due to various constraints.
+I&rsquo;ve got a rich set of experiences in this space so my first inclination was to build not buy. However, due to OTHER constraints, building was not a practical solution at present.</p>
+
+<p>After much research and evaluation, we finally settled on the following stack:</p>
+
+<ul>
+<li>Loggly</li>
+<li>SignalFx</li>
+<li>OpsGenie</li>
+</ul>
+
+
+<p>I&rsquo;m not going into reasons for switching in this post or details about WHY these providers were chosen. This is to discuss a specific AWS service and how it can really change the nature of ChatOps and more.</p>
+
+<h1>Integration</h1>
+
+<p>Our monitoring and metrics provider, SignalFx, is still building out its integrations.
+They have a rich set already and are iterating very quickly but coupled with the migration to OpsGenie, we needed to work out a solution for wiring the two together.
+Using the power of google, I came across a great post from <a href="https://twitter.com/ripienaar">R.I. Pienaar</a> about leveraging <a href="https://www.devco.net/archives/2015/08/13/translating-webhooks-with-aws-api-gateway-and-lambda.php">Lambda and the AWS API Gateway products</a>.</p>
+
+<p>In his post, he didn&rsquo;t really go over the API Gateway configuration so I figured I would document what I &ldquo;figured out&rdquo; for others.</p>
+
+<h2>The flow</h2>
+
+<p>The above post covers most of it but the general idea is:</p>
+
+<ul>
+<li><a href="https://support.signalfx.com/hc/en-us/articles/203824569-Detectors-and-alerts">SignalFx Alerting</a> webhook fires</li>
+<li>AWS API Gateway gets webhook and fires off a Lambda task</li>
+<li>Lambda task translates webhook into OpsGenie <a href="https://www.opsgenie.com/docs/web-api/alert-api">create alert</a> api call</li>
+<li>OpsGenie wakes you from a dead sleep</li>
+</ul>
+
+
+<p>Now you might wonder why go through all this hassle? OpsGenie can create email integrations and SignalFx can send alerts to email address.</p>
+
+<h1>It&rsquo;s about context.</h1>
+
+<p>When email alerts come in to OpsGenie, they&rsquo;re just &ldquo;pings&rdquo;:</p>
+
+<blockquote><p>Hey this thing sent us an email and here's the subject. Log in to the website to see the body</p></blockquote>
+
+
+<p>Frankly there&rsquo;s not much else they can do. SignalFx will also send another email when an alert auto-clears but to OpsGenie, that&rsquo;s another &ldquo;ping&rdquo;. It&rsquo;s unrelated to the previous email.</p>
+
+<p><img src="http://lusis.github.com/images/posts/apigateway-lambda/hipchat-emails.png" alt="Hipchat alerts from OpsGenie" /></p>
+
+<p>As you can see above this could get painful and I already have issues with &ldquo;alert fatigue&rdquo;.</p>
+
+<p>Additional, even if you <strong>DID</strong> log into the OpsGenie website to look at the details, there&rsquo;s really not much there:</p>
+
+<p><img src="http://lusis.github.com/images/posts/apigateway-lambda/opsgenie-emails.png" alt="Emails in OpsGenie" /></p>
+
+<p>Yeah that&rsquo;s helpful&hellip;</p>
+
+<p>So we need to accomplish two things:</p>
+
+<ul>
+<li>Correlate alerts and auto-closes from SignalFx</li>
+<li>Get some damn context into the alert so we can act intelligently on it</li>
+</ul>
+
+
+<p>The end result, gives us this:</p>
+
+<p><img src="http://lusis.github.com/images/posts/apigateway-lambda/webhook-hipchat.png" alt="Hipchat alerts from OpsGenie" />
+<img src="http://lusis.github.com/images/posts/apigateway-lambda/signalfx-context-1.png" alt="SignalFx Metadata in OpsGenie" />
+<img src="http://lusis.github.com/images/posts/apigateway-lambda/opsgenie-alert-history.png" alt="OpsGenie Alert History" /></p>
+
+<p>and that&rsquo;s MUCH more useful.</p>
+
+<h1>How we did it</h1>
+
+<p>AWS API Gateway is a PRETTY intimidating thing. There&rsquo;s lots of very specific terminology and frankly I found the docs not so useful.
+The general idea is this:</p>
+
+<ul>
+<li>Create an api</li>
+<li>Create a &ldquo;resource&rdquo; this is just a route that the api gateway responds to i.e. <code>/signalfx_to_loggly</code> via <code>POST</code></li>
+<li>Create a &ldquo;model&rdquo;: This is a json schema that describes what the incoming <code>POST</code> body looks like and its content type</li>
+<li>Create an &ldquo;integration request&rdquo;: What do you do when you get it? In this case call a Lambda task</li>
+</ul>
+
+
+<p>There are also concepts like &ldquo;stages&rdquo; which frankly were a bit useless in my case.
+In the end, after you get all of this wired up, you&rsquo;ll be given a url that looks something like this:</p>
+
+<p><code>https://&lt;random id&gt;.execute-api.&lt;region&gt;.amazonaws.com/&lt;stage name&gt;/&lt;resource name&gt;</code></p>
+
+<p>and that&rsquo;s your webhook url.</p>
+
+<h2>Models</h2>
+
+<p>In the case of SignalFx, a webhook post looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;incidentId&quot;</span><span class="p">:</span><span class="s2">&quot;XXXXXXX&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;detectorUrl&quot;</span><span class="p">:</span><span class="s2">&quot;https://app.signalfx.com/#/detector/XXXXXXX/edit&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="s2">&quot;too high&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;rule&quot;</span><span class="p">:</span><span class="s2">&quot;500 errors over 10&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="s2">&quot;Major&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;eventType&quot;</span><span class="p">:</span><span class="s2">&quot;_SF_PLOT_KEY_XXXXXXX_3_17&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;currentValue&quot;</span><span class="p">:</span><span class="s2">&quot;2&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;sources&quot;</span><span class="p">:</span><span class="s2">&quot;chef-external-elb&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;detector&quot;</span><span class="p">:</span><span class="s2">&quot;ELB 5xx Detector&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>which translates to the following model:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;signalfx-webhook-model&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;incidentId&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;detectorUrl&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;status&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;rule&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;severity&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;eventType&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;currentValue&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;sources&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;detector&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>The lambda function</h1>
+
+<p>I&rsquo;m still cleaning up the banged out code for the Lambda function to post on github however here&rsquo;s the relevant bits from the <code>opsgenie.js</code> file I added to <a href="https://github.com/ripienaar/lambda_webhook_gwy">R.I.&rsquo;s code</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="nx">sfxNotification</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">apiKey</span><span class="o">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">api_key</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">alias</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">incidentId</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">note</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">detectorUrl</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Alert: &quot;</span><span class="o">+</span><span class="nx">event</span><span class="p">.</span><span class="nx">rule</span><span class="o">+</span><span class="s2">&quot; (&quot;</span><span class="o">+</span><span class="nx">event</span><span class="p">.</span><span class="nx">detector</span><span class="o">+</span><span class="s2">&quot;)&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;Current value: &quot;</span><span class="o">+</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentValue</span><span class="o">+</span><span class="s2">&quot; is &quot;</span><span class="o">+</span><span class="nx">event</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">details</span><span class="o">:</span> <span class="nx">event</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">tags</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">sources</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">),</span>
+</span><span class='line'>      
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is the meat of the translation. You can customize this as needed but note how we immediately add a <code>note</code> to the incident with the link to the graph in SignalFX.
+When you create a detector in SignalFx, any groupings you create in the signal function are put into the <code>sources</code> key as comma-separated values.
+We take these and make them <code>tags</code> in OpsGenie.</p>
+
+<p>We also leverage the OpsGenie <code>alias</code> to create our own ID for the event. Normally you would store this id somewhere for reference later but instead we use the unique id from SignalFX.
+This make correlating a previous alert dead simple as you can see below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">publish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">handler</span><span class="p">,</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">webhook</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./webhook_request.js&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./config.js&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="s2">&quot;ok&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">closeRequest</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">opsgenie</span><span class="p">);</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">apiKey</span><span class="o">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">opsgenie</span><span class="p">.</span><span class="nx">api_key</span><span class="p">,</span>
+</span><span class='line'>          <span class="nx">alias</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">incidentId</span>
+</span><span class='line'>      <span class="p">};</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">opsgenie</span><span class="p">);</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="nx">handler</span><span class="p">](</span><span class="nx">event</span><span class="p">,</span> <span class="nx">config</span><span class="p">.</span><span class="nx">opsgenie</span><span class="p">,</span> <span class="nx">context</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">webhook</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="nx">request</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>SignalFX has 4 status it can set for an alert:</p>
+
+<ul>
+<li><code>ok</code></li>
+<li><code>too high</code></li>
+<li><code>too low</code></li>
+<li><code>anomalous</code></li>
+</ul>
+
+
+<p>Here we check if the status is <code>ok</code> and if so, we call a different function to generate the request object to a different path (the <code>close</code> alert path).
+Since we created the alert using an <code>alias</code> of the SignalFx <code>incidentId</code>, we don&rsquo;t even need to do any more parsing - just <code>POST</code> to the <code>close</code> resource with the <code>alias</code> id.</p>
+
+<p>As you saw above we get more more data and context about the alert and this is all also visible in the OpsGenie mobile app.</p>
+
+<h1>Benefits</h1>
+
+<p>Honestly the biggest benefit is not having to wait on service providers to create native integrations.
+Almost every service I&rsquo;ve used over the past several years offers an outgoing webhook capability for their system.
+API Gateway solves the part of getting those webhooks and its native Lambda support means I don&rsquo;t need to leave anything &ldquo;running&rdquo; to maintain, upgrade and support just to do something with that webhook.</p>
+
+<p>However one other huge benefit that is also hinted in the other post is that using this model, you get a simple abstraction from your service provider.
+If we wanted to move to some other alerting provider, we just change the lambda function to post there instead. No need to redo all the integrations in SignalFx.
+My plan is to work towards a model where we try and utilize the API gateway as the webhook endpoint for various services and translate to our other providers from there.</p>
+
+<p>I really enjoyed working with the gateway. Testing wasn&rsquo;t too painful as it has a &ldquo;mock&rdquo; mode as well where it behaves similarly to requestb.in. It supports a couple of different authentication methods well (though sadly they couldn&rsquo;t be leveraged in this case due to provider webhook formats (note if you offer webhook support, let your users define a custom header as part of the webhook!).</p>
+
+<p>Lambda needs to support more languages but python is a happy medium from the mess of javascript and the heft of java.</p>
+
+<h1>Future steps</h1>
+
+<p>I&rsquo;m going to work on first cleaning up this specific Lambda task and making it available on github. After that my next steps are to rewrite the damn thing in Python because I &ldquo;dislike&rdquo; javascript.
+We&rsquo;re already using this similar model for another integration as well: Loggly and HipChat.</p>
+
+<p>Loggly has HipChat support already but it posts the messages in HipChat as a raw json dump which is useless:</p>
+
+<p><img src="http://lusis.github.com/images/posts/apigateway-lambda/loggly-json.png" alt="Loggly JSON" /></p>
+
+<p>by migrating it to use API Gateway and Lambda, we get the following instead:</p>
+
+<p><img src="http://lusis.github.com/images/posts/apigateway-lambda/loggly-better.png" alt="Loggly better" />
+<em>Obviously that&rsquo;s an MVP</em></p>
+
+<p>We&rsquo;ll probably go down this route farther for other integrations and especially when HipChat Connect goes GA. Then we&rsquo;ll likely start posting richer messages using &ldquo;cards&rdquo; similar to my previous experience with Slack&rsquo;s API.</p>
+
+<h2>ChatOps</h2>
+
+<p>One thing that&rsquo;s really neat is that the api gateway approach can let you make some REALLY simple tools for ChatOps using outgoing webhooks from your chat system.</p>
+
+<p>However it will REALLY open up when Lambda gets VPC support. Imagine a Lambda function that can fire inside your VPC and interact with all your private resources. It&rsquo;s both terrifying and thrilling assuming all the appropriate controls are in place (using api keys, rbac in your outgoing webhook).</p>
+
+<p>Thanks for reading. I hope it was valuable to you.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Terraform Modules for Fun and Profit]]></title>
@@ -2555,91 +2858,6 @@ I&rsquo;ve worked in several different companies over the last 17 years. In some
 <p>As enStratus migrates its backend to Riak DS and builds out secondary and tertiary datacenters, I look forward to losing a data node not being the end of the world. DevOps über alles and all that.</p>
 
 <p>So dear friends and family, the next time someone tells you they&rsquo;re on-call for production&hellip;.cut &lsquo;em some slack.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why EBS Was a Bad Idea]]></title>
-    <link href="http://lusis.github.com/blog/2012/06/15/why-ebs-was-a-bad-idea/"/>
-    <updated>2012-06-15T09:41:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2012/06/15/why-ebs-was-a-bad-idea</id>
-    <content type="html"><![CDATA[<p>Since I just tweeted about this and I know people would want an explaination, I figured I&rsquo;d short circuit 140 character hell and explain why I think EBS was the worst thing Amazon ever did to AWS.</p>
-
-<!-- more -->
-
-
-<p><em>First time I&rsquo;ve had to do this but: the following is my personal opinion and in no way reflects any policy or position of my employer</em></p>
-
-<h1>A journey through time</h1>
-
-<p>I remember when EC2 was first unleashed. At the time I was working at Roundbox Media (later Roundbox Global - because we had an office in Costa Rica!). I was asked frequently if we could possibly host some of our production stuff there.</p>
-
-<p>It was pretty much a no go from the start:</p>
-
-<ul>
-<li>No persistent IPs</li>
-<li>No persistent storage</li>
-</ul>
-
-
-<p>Sure we could bake a bunch of stuff into the AMI root but the ephemeral storage wasn&rsquo;t big enough to hold a fraction of our data. Still, we leveraged it as much as possible. We ran quite a bit of low risk stuff on it - test installs of our platform and demo sites for customers.</p>
-
-<p>After I left RBX in Feb of 2008, I didn&rsquo;t get an opportunity to work with AWS for a year or so and by then quite a bit had changed. If Amazon does one thing really well, it&rsquo;s iterating quickly on its service offerings.</p>
-
-<h1>So why is EBS a bad thing?</h1>
-
-<p>For Amazon, EBS is NOT a bad thing. It was probably one of the smartest business moves they made (along with Elastic IPs). They could now claim that EC2 was JUST like running your own kit - you have a SAN! you have static IPs!</p>
-
-<p>The problem is it&rsquo;s not.</p>
-
-<h1>The nature of block storage</h1>
-
-<p>Anyone who&rsquo;s dealt with any sort of networked filesystem knows the pains it can cause with certain application profiles. Traditional databases are notorious for expecting actual local storage and real block devices. It amazes me the number of people who put up with the pain of running a database in something like vmware using virtual disks hosted on an NFS device.</p>
-
-<p>The point is the block devices have specific semantics and presumptions.</p>
-
-<p>With EBS you&rsquo;re promised a tasty block device that your OS can address as if it were local disk. Only it&rsquo;s not&hellip;.</p>
-
-<h2>Latency</h2>
-
-<p>Let&rsquo;s get the biggest elephant out of the way. EBS is a block device to the OS but under the hood it&rsquo;s using the network. It may or may not be shared with non-block device traffic but it&rsquo;s still subject to network latencies. God I hope that EBS at least gets its own port on the host side&hellip;</p>
-
-<h2>Shared</h2>
-
-<p>There&rsquo;s a whole lot of sharing going on here to:</p>
-
-<ul>
-<li>local bandwidth from the physical server where your instance is to a given EBS subsystem (array, CEC, whatever)</li>
-<li>aggregate bandwidth from all pysical servers talking to a given EBS subsystem</li>
-<li>disk I/O itself on a given EBS subsystem</li>
-</ul>
-
-
-<p>I don&rsquo;t know how the connection from server to EBS is done. I would hope at least there are bonded ports or multiple uplinks/multipathing going on. I would REALLY hope that network I/O and Disk I/O are not on the same channel. Regardless, you&rsquo;re still sharing whatever the size of that connection is with everyone else on the physical server your instance is on if they&rsquo;re using EBS as well.</p>
-
-<p>And the physical EBS array where your volume is? Depending on the size of your EBS volume, you&rsquo;re dealing with network I/O on that unit&rsquo;s connection from an unknown number of other customers. And to top it off, you&rsquo;re not just sharing network bandwidth, you&rsquo;re sharing disk bandwidth as well. There are still spindles under there folks. Sticking an API in front of it doesn&rsquo;t change the fact that there is spinning rust under the covers.</p>
-
-<p>Above ALL of that, you&rsquo;ve got competing workloads - sequential vs random read.</p>
-
-<p>Sure, just stick your root OS volume on that. That&rsquo;s a great idea.</p>
-
-<h1>Mixed messages</h1>
-
-<p>To me, however, the biggest problem with EBS is not the latency. It&rsquo;s not the shared resources. It&rsquo;s not even taking something that is fundamentally locality oriented and trying to shoehorn it into something distributed.</p>
-
-<p>It&rsquo;s the fact that it sends the wrong damn message. I&rsquo;ve said this before, I&rsquo;ll say it again and I&rsquo;ll stand by it.</p>
-
-<p><strong>Unless you are willing, able or have designed your applications to have any single part of your infrastructure - connectivity, disk, node, whatever - ripped from under you with no warning whatsoever, you should not be running it on Amazon EC2.</strong></p>
-
-<p>By providing EBS, Amazon sends the message that &ldquo;you can treat this just like your own datacenter&rdquo;. Just use EBS and you can treat it just like a SAN. Look, we have snapshots!</p>
-
-<p>Hell, I get pissy when folks refer to instances as &ldquo;boxes&rdquo; and talk about them like they&rsquo;re something they physically own. Stop trying to map physical datacenter analogies to AWS. It won&rsquo;t work and you&rsquo;ll be disappointed.</p>
-
-<p>You want to know the real kicker? You should be designing like this ANYWAY. Yes, you have much greater control over failure points when you run everything yourself. You have much greater control over resource sharing and I/O profiles. That doesn&rsquo;t remove the need to design for failure. How far you take it is up to you (and realistically your budget) but when you&rsquo;re running on AWS, you need to be much more attentive to it.</p>
-
-<h1>For the record</h1>
-
-<p>I still think AWS and public clouds are awesome. I really do. I think private clouds are just as awesome. The flexibility they offer is almost unmatched but that flexibility comes at a price - performance hits, multiple layers of abstraction and other things.</p>
 ]]></content>
   </entry>
   

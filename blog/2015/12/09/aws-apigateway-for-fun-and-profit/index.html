@@ -1,0 +1,586 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Aws Api Gateway for Fun and Profit - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="At we&rsquo;re currently in the process of reconfiguring our monitoring, logging and alerting setup. Obviously this is something near and dear to my &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="lusis.github.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Aws Api Gateway for Fun and Profit</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-09T22:06:59-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:06 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://lusis.github.com">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>At we&rsquo;re currently in the process of reconfiguring our monitoring, logging and alerting setup.</p>
+
+<!-- more -->
+
+
+<p>Obviously this is something near and dear to my heart. At my previous employer we did everything in house due to various constraints.
+I&rsquo;ve got a rich set of experiences in this space so my first inclination was to build not buy. However, due to OTHER constraints, building was not a practical solution at present.</p>
+
+<p>After much research and evaluation, we finally settled on the following stack:</p>
+
+<ul>
+<li>Loggly</li>
+<li>SignalFx</li>
+<li>OpsGenie</li>
+</ul>
+
+
+<p>I&rsquo;m not going into reasons for switching in this post or details about WHY these providers were chosen. This is to discuss a specific AWS service and how it can really change the nature of ChatOps and more.</p>
+
+<h1>Integration</h1>
+
+<p>Our monitoring and metrics provider, SignalFx, is still building out its integrations.
+They have a rich set already and are iterating very quickly but coupled with the migration to OpsGenie, we needed to work out a solution for wiring the two together.
+Using the power of google, I came across a great post from <a href="https://twitter.com/ripienaar">R.I. Pienaar</a> about leveraging <a href="https://www.devco.net/archives/2015/08/13/translating-webhooks-with-aws-api-gateway-and-lambda.php">Lambda and the AWS API Gateway products</a>.</p>
+
+<p>In his post, he didn&rsquo;t really go over the API Gateway configuration so I figured I would document what I &ldquo;figured out&rdquo; for others.</p>
+
+<h2>The flow</h2>
+
+<p>The above post covers most of it but the general idea is:</p>
+
+<ul>
+<li><a href="https://support.signalfx.com/hc/en-us/articles/203824569-Detectors-and-alerts">SignalFx Alerting</a> webhook fires</li>
+<li>AWS API Gateway gets webhook and fires off a Lambda task</li>
+<li>Lambda task translates webhook into OpsGenie <a href="https://www.opsgenie.com/docs/web-api/alert-api">create alert</a> api call</li>
+<li>OpsGenie wakes you from a dead sleep</li>
+</ul>
+
+
+<p>Now you might wonder why go through all this hassle? OpsGenie can create email integrations and SignalFx can send alerts to email address.</p>
+
+<h1>It&rsquo;s about context.</h1>
+
+<p>When email alerts come in to OpsGenie, they&rsquo;re just &ldquo;pings&rdquo;:</p>
+
+<blockquote><p>Hey this thing sent us an email and here's the subject. Log in to the website to see the body</p></blockquote>
+
+
+<p>Frankly there&rsquo;s not much else they can do. SignalFx will also send another email when an alert auto-clears but to OpsGenie, that&rsquo;s another &ldquo;ping&rdquo;. It&rsquo;s unrelated to the previous email.</p>
+
+<p><img src="/images/posts/apigateway-lambda/hipchat-emails.png" alt="Hipchat alerts from OpsGenie" /></p>
+
+<p>As you can see above this could get painful and I already have issues with &ldquo;alert fatigue&rdquo;.</p>
+
+<p>Additional, even if you <strong>DID</strong> log into the OpsGenie website to look at the details, there&rsquo;s really not much there:</p>
+
+<p><img src="/images/posts/apigateway-lambda/opsgenie-emails.png" alt="Emails in OpsGenie" /></p>
+
+<p>Yeah that&rsquo;s helpful&hellip;</p>
+
+<p>So we need to accomplish two things:</p>
+
+<ul>
+<li>Correlate alerts and auto-closes from SignalFx</li>
+<li>Get some damn context into the alert so we can act intelligently on it</li>
+</ul>
+
+
+<p>The end result, gives us this:</p>
+
+<p><img src="/images/posts/apigateway-lambda/webhook-hipchat.png" alt="Hipchat alerts from OpsGenie" />
+<img src="/images/posts/apigateway-lambda/signalfx-context-1.png" alt="SignalFx Metadata in OpsGenie" />
+<img src="/images/posts/apigateway-lambda/opsgenie-alert-history.png" alt="OpsGenie Alert History" /></p>
+
+<p>and that&rsquo;s MUCH more useful.</p>
+
+<h1>How we did it</h1>
+
+<p>AWS API Gateway is a PRETTY intimidating thing. There&rsquo;s lots of very specific terminology and frankly I found the docs not so useful.
+The general idea is this:</p>
+
+<ul>
+<li>Create an api</li>
+<li>Create a &ldquo;resource&rdquo; this is just a route that the api gateway responds to i.e. <code>/signalfx_to_loggly</code> via <code>POST</code></li>
+<li>Create a &ldquo;model&rdquo;: This is a json schema that describes what the incoming <code>POST</code> body looks like and its content type</li>
+<li>Create an &ldquo;integration request&rdquo;: What do you do when you get it? In this case call a Lambda task</li>
+</ul>
+
+
+<p>There are also concepts like &ldquo;stages&rdquo; which frankly were a bit useless in my case.
+In the end, after you get all of this wired up, you&rsquo;ll be given a url that looks something like this:</p>
+
+<p><code>https://&lt;random id&gt;.execute-api.&lt;region&gt;.amazonaws.com/&lt;stage name&gt;/&lt;resource name&gt;</code></p>
+
+<p>and that&rsquo;s your webhook url.</p>
+
+<h2>Models</h2>
+
+<p>In the case of SignalFx, a webhook post looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;incidentId&quot;</span><span class="p">:</span><span class="s2">&quot;XXXXXXX&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;detectorUrl&quot;</span><span class="p">:</span><span class="s2">&quot;https://app.signalfx.com/#/detector/XXXXXXX/edit&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="s2">&quot;too high&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;rule&quot;</span><span class="p">:</span><span class="s2">&quot;500 errors over 10&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="s2">&quot;Major&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;eventType&quot;</span><span class="p">:</span><span class="s2">&quot;_SF_PLOT_KEY_XXXXXXX_3_17&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;currentValue&quot;</span><span class="p">:</span><span class="s2">&quot;2&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;sources&quot;</span><span class="p">:</span><span class="s2">&quot;chef-external-elb&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;detector&quot;</span><span class="p">:</span><span class="s2">&quot;ELB 5xx Detector&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>which translates to the following model:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft-04/schema#&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;signalfx-webhook-model&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;incidentId&quot;</span><span class="p">:</span> <span class="p">{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;detectorUrl&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;status&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;rule&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;severity&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;eventType&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;currentValue&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;sources&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;detector&quot;</span><span class="p">:{</span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="s2">&quot;string&quot;</span><span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>The lambda function</h1>
+
+<p>I&rsquo;m still cleaning up the banged out code for the Lambda function to post on github however here&rsquo;s the relevant bits from the <code>opsgenie.js</code> file I added to <a href="https://github.com/ripienaar/lambda_webhook_gwy">R.I.&rsquo;s code</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'>  <span class="nx">sfxNotification</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">apiKey</span><span class="o">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">api_key</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">alias</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">incidentId</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">note</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">detectorUrl</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Alert: &quot;</span><span class="o">+</span><span class="nx">event</span><span class="p">.</span><span class="nx">rule</span><span class="o">+</span><span class="s2">&quot; (&quot;</span><span class="o">+</span><span class="nx">event</span><span class="p">.</span><span class="nx">detector</span><span class="o">+</span><span class="s2">&quot;)&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;Current value: &quot;</span><span class="o">+</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentValue</span><span class="o">+</span><span class="s2">&quot; is &quot;</span><span class="o">+</span><span class="nx">event</span><span class="p">.</span><span class="nx">status</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">details</span><span class="o">:</span> <span class="nx">event</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">tags</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">sources</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">),</span>
+</span><span class='line'>      
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is the meat of the translation. You can customize this as needed but note how we immediately add a <code>note</code> to the incident with the link to the graph in SignalFX.
+When you create a detector in SignalFx, any groupings you create in the signal function are put into the <code>sources</code> key as comma-separated values.
+We take these and make them <code>tags</code> in OpsGenie.</p>
+
+<p>We also leverage the OpsGenie <code>alias</code> to create our own ID for the event. Normally you would store this id somewhere for reference later but instead we use the unique id from SignalFX.
+This make correlating a previous alert dead simple as you can see below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">publish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">handler</span><span class="p">,</span> <span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">webhook</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./webhook_request.js&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;./config.js&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="s2">&quot;ok&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">closeRequest</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">opsgenie</span><span class="p">);</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>          <span class="nx">apiKey</span><span class="o">:</span> <span class="nx">config</span><span class="p">.</span><span class="nx">opsgenie</span><span class="p">.</span><span class="nx">api_key</span><span class="p">,</span>
+</span><span class='line'>          <span class="nx">alias</span><span class="o">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">incidentId</span>
+</span><span class='line'>      <span class="p">};</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">opsgenie</span><span class="p">);</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">self</span><span class="p">[</span><span class="nx">handler</span><span class="p">](</span><span class="nx">event</span><span class="p">,</span> <span class="nx">config</span><span class="p">.</span><span class="nx">opsgenie</span><span class="p">,</span> <span class="nx">context</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">webhook</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="nx">request</span><span class="p">,</span> <span class="nx">context</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>SignalFX has 4 status it can set for an alert:</p>
+
+<ul>
+<li><code>ok</code></li>
+<li><code>too high</code></li>
+<li><code>too low</code></li>
+<li><code>anomalous</code></li>
+</ul>
+
+
+<p>Here we check if the status is <code>ok</code> and if so, we call a different function to generate the request object to a different path (the <code>close</code> alert path).
+Since we created the alert using an <code>alias</code> of the SignalFx <code>incidentId</code>, we don&rsquo;t even need to do any more parsing - just <code>POST</code> to the <code>close</code> resource with the <code>alias</code> id.</p>
+
+<p>As you saw above we get more more data and context about the alert and this is all also visible in the OpsGenie mobile app.</p>
+
+<h1>Benefits</h1>
+
+<p>Honestly the biggest benefit is not having to wait on service providers to create native integrations.
+Almost every service I&rsquo;ve used over the past several years offers an outgoing webhook capability for their system.
+API Gateway solves the part of getting those webhooks and its native Lambda support means I don&rsquo;t need to leave anything &ldquo;running&rdquo; to maintain, upgrade and support just to do something with that webhook.</p>
+
+<p>However one other huge benefit that is also hinted in the other post is that using this model, you get a simple abstraction from your service provider.
+If we wanted to move to some other alerting provider, we just change the lambda function to post there instead. No need to redo all the integrations in SignalFx.
+My plan is to work towards a model where we try and utilize the API gateway as the webhook endpoint for various services and translate to our other providers from there.</p>
+
+<p>I really enjoyed working with the gateway. Testing wasn&rsquo;t too painful as it has a &ldquo;mock&rdquo; mode as well where it behaves similarly to requestb.in. It supports a couple of different authentication methods well (though sadly they couldn&rsquo;t be leveraged in this case due to provider webhook formats (note if you offer webhook support, let your users define a custom header as part of the webhook!).</p>
+
+<p>Lambda needs to support more languages but python is a happy medium from the mess of javascript and the heft of java.</p>
+
+<h1>Future steps</h1>
+
+<p>I&rsquo;m going to work on first cleaning up this specific Lambda task and making it available on github. After that my next steps are to rewrite the damn thing in Python because I &ldquo;dislike&rdquo; javascript.
+We&rsquo;re already using this similar model for another integration as well: Loggly and HipChat.</p>
+
+<p>Loggly has HipChat support already but it posts the messages in HipChat as a raw json dump which is useless:</p>
+
+<p><img src="/images/posts/apigateway-lambda/loggly-json.png" alt="Loggly JSON" /></p>
+
+<p>by migrating it to use API Gateway and Lambda, we get the following instead:</p>
+
+<p><img src="/images/posts/apigateway-lambda/loggly-better.png" alt="Loggly better" />
+<em>Obviously that&rsquo;s an MVP</em></p>
+
+<p>We&rsquo;ll probably go down this route farther for other integrations and especially when HipChat Connect goes GA. Then we&rsquo;ll likely start posting richer messages using &ldquo;cards&rdquo; similar to my previous experience with Slack&rsquo;s API.</p>
+
+<h2>ChatOps</h2>
+
+<p>One thing that&rsquo;s really neat is that the api gateway approach can let you make some REALLY simple tools for ChatOps using outgoing webhooks from your chat system.</p>
+
+<p>However it will REALLY open up when Lambda gets VPC support. Imagine a Lambda function that can fire inside your VPC and interact with all your private resources. It&rsquo;s both terrifying and thrilling assuming all the appropriate controls are in place (using api keys, rbac in your outgoing webhook).</p>
+
+<p>Thanks for reading. I hope it was valuable to you.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-12-09T22:06:59-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:06 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/dirtydirtyhacks/'>dirtydirtyhacks</a>, <a class='category' href='/blog/categories/monitoring/'>monitoring</a>, <a class='category' href='/blog/categories/opsgenie/'>opsgenie</a>, <a class='category' href='/blog/categories/signalfx/'>signalfx</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/10/12/terraform-modules-for-fun-and-profit/" title="Previous Post: terraform modules for fun and profit">&laquo; terraform modules for fun and profit</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">Aws Api Gateway for Fun and Profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/12/terraform-modules-for-fun-and-profit/">Terraform Modules for Fun and Profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/12/current-status/">Current Status</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/21/a-few-things/">A Few Things</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/20/systemd-redux/">Systemd-redux</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'lusisgithubblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/';
+        var disqus_url = 'http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
