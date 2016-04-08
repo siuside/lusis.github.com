@@ -9,7 +9,7 @@
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="I mentioned briefly in my previous post that I got quite a few people coming up to me after the panel and asking me for advice on monitoring. ">
+  <meta name="description" content="AMQP in Logstash is one of the most complicated parts of the workflow. I&rsquo;ve taken it on myself, as the person with the most AMQP experience ( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,58 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load Balancing Logstash With AMQP</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-01-31T01:12:00-05:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2012</span></span> <span class='time'>1:12 am</span></time>
+        
+           | <a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/#disqus_thread"
+             data-disqus-identifier="http://lusis.github.com/blog/2012/01/31/load-balancing-logstash-with-amqp/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>AMQP in Logstash is one of the most complicated parts of the workflow. I&rsquo;ve taken it on myself, as the person with the most AMQP experience (both RabbitMQ and Qpid) to try and explain as much as need for logstash users.</p>
+
+<p><a href="https://twitter.com/patrickdebois">Patrick DeBois</a> hit me up with a common logstash design pattern that I felt warranted a full detailed post.</p>
+
+<p><em>Warning: This is an image heavy post. Terminal screenshots are linked to larger versions</em></p>
+
+<h2>Requirements</h2>
+
+<ul>
+<li>No lost messages in transit/due to inputs or outputs.</li>
+<li>Shipper-only configuration on the source</li>
+<li>Worker-based filtering model</li>
+<li>No duplicate messages due to transit mediums (i.e. fanout is inappropriate as all indexers would see the same message)</li>
+<li>External ElasticSearch cluster as final destination</li>
+</ul>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -475,63 +527,6 @@ The one tool I enjoyed the most?</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/07/21/monitoring-sucks-watch-your-language/">Monitoring Sucks - Watch Your Language</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2011-07-21T18:19:00-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2011</span></span> <span class='time'>6:19 pm</span></time>
-        
-           | <a href="/blog/2011/07/21/monitoring-sucks-watch-your-language/#disqus_thread"
-             data-disqus-identifier="http://lusis.github.com/blog/2011/07/21/monitoring-sucks-watch-your-language/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><em>The following post is a recap of what was discussed in the 07/21/11 #monitoringsucks irc meeting</em></p>
-
-<p>Before I get any further, I just want to thank everyone who attended,
-either in virtual person or in spirit. There have been so many awesome
-discussions going around this topic since we started. I am truly
-priviledged to interact with each and every one of you. I struggle to
-count myself a peer and I can only hope that I provide something in
-return.</p>
-
-<p>I mentioned to someone today that I’m literally sick of the current
-landscape. I consider the current crop of monitoring solutions to be
-technologically bankrupt. The situation is fairly untenable at this
-point.</p>
-
-<p>I just installed (after having a total loss of an existing Zenoss setup)
-Nagios again. I’m not joking when I say that it depressed the everliving
-hell out of me. The monitoring landscape simply has not kept up with
-modern developments. At first it was mildly frustrating. Then it was
-annoying. Now it’s actually a detriment.</p>
-
-<p>Now that we have that out of the way….</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/07/21/monitoring-sucks-watch-your-language/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/5">&larr; Older</a>
@@ -553,6 +548,10 @@ annoying. Now it’s actually a detriment.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">How Is Rundeck Formed</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">Aws Api Gateway for Fun and Profit</a>
       </li>
     
@@ -566,10 +565,6 @@ annoying. Now it’s actually a detriment.</p>
     
       <li class="post">
         <a href="/blog/2014/11/21/a-few-things/">A Few Things</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/20/systemd-redux/">Systemd-redux</a>
       </li>
     
   </ul>
@@ -631,7 +626,7 @@ annoying. Now it’s actually a detriment.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - John E. Vincent -
+  Copyright &copy; 2016 - John E. Vincent -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
