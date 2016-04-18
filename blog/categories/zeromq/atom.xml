@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: zeromq | blog dot lusis]]></title>
+  <link href="http://lusis.github.com/blog/categories/zeromq/atom.xml" rel="self"/>
+  <link href="http://lusis.github.com/"/>
+  <updated>2016-04-18T07:53:49-04:00</updated>
+  <id>http://lusis.github.com/</id>
+  <author>
+    <name><![CDATA[John E. Vincent]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ZeroMQ and Logstash - Part 2]]></title>
+    <link href="http://lusis.github.com/blog/2012/02/08/zeromq-and-logstash-part-2/"/>
+    <updated>2012-02-08T21:08:00-05:00</updated>
+    <id>http://lusis.github.com/blog/2012/02/08/zeromq-and-logstash-part-2</id>
+    <content type="html"><![CDATA[<p>A few days ago I wrote up some notes on how we're making Logstash better by adding ZeroMQ as an option for inputs and outputs. That night we decided to take it a bit further and add support for ZeroMQ as a filter plugin as well.</p>
+
+<!-- more -->
+
+
+<p>I've had a lot of people ask me what's so hot about ZeroMQ. It's hard to explain but I really would suggest you read the excellent <a href="http://zguide.zeromq.org">zguide</a>. The best way I can describe it is that it's sockets on steroids. Sockets that behave the way you would expect sockets to behave as opposed to the way they do now. <a href="http://www.quora.com/What-is-the-background-of-the-just-open-a-socket-meme">Just open a socket!</a>.</p>
+
+<h1>Inputs and Outputs</h1>
+
+<p>I'm only going to touch briefly on inputs and outputs. They were discussed briefly previously and I have a full fledged post in the wings about it.</p>
+
+<p>They essentially work like the other implementations (AMQP and Redis) with the exception that you don't have a broker in the middle. Let me show you:</p>
+
+<pre><code>[Collector 1] ------ load balanced events ----&gt; [Indexer 1, Indexer 2, Indexer 3, Indexer 4]
+[Collector 2] ------ load balanced events ----&gt; [Indexer 1, Indexer 2, Indexer 3, Indexer 4]
+[Collector 3] ------ load balanced events ----&gt; [Indexer 1, Indexer 2, Indexer 3, Indexer 4]
+[Collector 4] ------ load balanced events ----&gt; [Indexer 1, Indexer 2, Indexer 3, Indexer 4]
+</code></pre>
+
+<p>As you can see we're doing a pattern very similar to before. We want to send events of our nodes over to a cluster of indexers that do filtering. The difference here is that we don't have a broker. Not big deal, right? One less thing to worry about! You don't have to learn some new tool just to get some simple load balancing of workers. This works great.....until you need to scale workers.</p>
+
+<p>Even using awesome configuration management, you've now got to cycle all your collectors to add the new endpoints. This means lost events. This makes me unhappy. It makes you unhappy. The world is sad. Why are you doing this to us?</p>
+
+<p>Luckily I've been authorized by the Franklin Mint to release the source code to an enterprise class ZeroMQ broker that you can use. Not only is it enterprise class but it has built-in clustering. You can <a href="https://github.com/lusis/enterprise-zeromq-broker">grab the code here from github</a>.</p>
+
+<p>Here are the configs for the logstash agents (output.conf is collector config, input.conf is indexer config):</p>
+
+<p>output.conf:</p>
+
+<p>```
+input { stdin { type => "stdin" } }
+output {
+  zeromq {</p>
+
+<pre><code>topology =&gt; "pushpull"
+address =&gt; ["tcp://localhost:5555", "tcp://localhost:5557"]
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<p>input.conf:</p>
+
+<p>```
+input {
+  zeromq {</p>
+
+<pre><code>type =&gt; "pull-input"
+topology =&gt; "pushpull"
+address =&gt; ["tcp://localhost:5556", "tcp://localhost:5558"]
+mode =&gt; "client"
+</code></pre>
+
+<p>  }
+}
+output { stdout { debug => true }}
+```</p>
+
+<h2>Action shot</h2>
+
+<p>Here's a shot of our fancy clustered broker in action (click to zoom):</p>
+
+<p><a href="/images/posts/zeromq-part2/zeromq-broker-ss.png"><img src="/images/posts/zeromq-part2/zeromq-broker-ss.png" alt="zeromq-broker-ss.png" /></a></p>
+
+<p>As you can see the two events we sent were automatically load balanced across our <em>"brokers"</em> which then load balanced across our indexers.</p>
+
+<h2>What have we bought ourselves?</h2>
+
+<p>Obviously this is all something of a joke. All we have done is point our collectors at other nodes instead of directly at our indexers. But realize that you can create 2 fixed points on your network with 8 lines of core code and use those as the static information in your indexers and collectors. You can then scale either side without ever having to update a configuration file.</p>
+
+<p>I dare say you can even run those on t1.micro instances on Amazon.</p>
+
+<p>Oh and if you don't like Ruby, write it in something else. That's the beauty of ZeroMQ.</p>
+
+<h1>Filters</h1>
+
+<p>The thing that has me most excited is the addition of ZeroMQ as a filter to logstash. As you've already seen, ZeroMQ makes it REALLY easy to wire network topologies up with complex patterns. In the inputs and outputs we've exposed a few topologies that make sense. However there's another topology that we had not yet exposed because it didn't make sense - <code>reqrep</code>.</p>
+
+<h2>REQ/REP</h2>
+
+<p><code>reqrep</code> is short for request and reply. The reason we didn't expose it previously is that it didn't really make sense with the nature of inputs and outputs. However after talking with Jordan, we decided it actually DID make sense to use it for filters. After all, filters get a request -> do something -> return a response.</p>
+
+<p>If it's not immediately clear yet how this makes sense, I've got another example for you. Let's take the case of needing to look something up externally to mutate a field. You COULD write a Logstash filter to do this ONE thing for you. Maybe you can make it generic enough to even submit a pull request.</p>
+
+<p>Or you could use a ZeroMQ filter:</p>
+
+<p><code>
+input { stdin { type =&gt; "stdin-type" } }
+filter { zeromq { } }
+output { stdout { debug =&gt; true } }
+</code></p>
+
+<p>Here's the code for the filter:</p>
+
+<p>```ruby
+require 'rubygems'
+require 'ffi-rzmq'
+require "json"</p>
+
+<p>context = ZMQ::Context.new
+socket = context.socket(ZMQ::REP)
+socket.bind("tcp://*:2121")
+msg = ''
+puts "starting up"
+while true do
+  socket.recv_string(msg)
+  modified_message = JSON.parse(msg)
+  puts "Message received: #{msg}"
+  # Simulate using an external data source to
+  # to something that you need
+  case modified_message["@source"]
+  when "stdin://jvstratusmbp.lusis.org/"</p>
+
+<pre><code>puts "Doing db lookup"
+sleep 10
+modified_message["@source"] = "john's laptop"
+</code></pre>
+
+<p>  end
+  puts "Message responded: #{modified_message.to_json}"
+  socket.send_string(modified_message.to_json)
+end
+```</p>
+
+<p>By default, the filter will send the entire event over a ZeroMQ <code>REQ</code> socket to <code>tcp://localhost:2121</code>. It will then take the reply and send it up the chain to the Logstash output with the following results:</p>
+
+<p><a href="/images/posts/zeromq-part2/zeromq-filter-event.png"><img src="/images/posts/zeromq-part2/zeromq-filter-event.png" alt="zeromq-filter-event.png" /></a></p>
+
+<p>Alternately, you can send a single field to the filter and have it to work with:</p>
+
+<p><code>
+input { stdin { type =&gt; "stdin-test" } }
+filter { zeromq { field =&gt; "@message" } }
+output { stdout { debug =&gt; true }}
+</code></p>
+
+<p>and the code:</p>
+
+<p>```ruby
+require 'rubygems'
+require 'ffi-rzmq'
+require "json"</p>
+
+<p>context = ZMQ::Context.new
+socket = context.socket(ZMQ::REP)
+socket.bind("tcp://*:2121")
+msg = ''
+puts "starting up"
+while true do
+  socket.recv_string(msg)
+  puts "Recieved message: #{msg}"
+  modified_message = "this field was changed externally"
+  puts "Modified message: #{modified_message}"
+  socket.send_string(modified_message)
+end
+```
+and the result:</p>
+
+<p><a href="/images/posts/zeromq-part2/zeromq-filter-field.png"><img src="/images/posts/zeromq-part2/zeromq-filter-field.png" alt="zeromq-filter-field.png" /></a></p>
+
+<p>Many people have been asking for an <code>exec</code> filter for some time now. Dealing with that overhead is insane when coming from the JVM. By doing this type of work over ZeroMQ, there's much less overhead AND a reliable conduit for making it happen.</p>
+
+<p>Here's just a few of the use cases I could think of:</p>
+
+<ul>
+<li>Artifically throttling your flow. Just use a sleep and return the original event.</li>
+<li>Doing external lookups for replacing parts of the event</li>
+<li>Adding arbitrary tags to a message using external criteria based on the event.</li>
+<li>Moving underperforming filters out of logstash and into an external process that is more performant</li>
+<li>Reducing the need to modify configs in logstash for greater uptime.</li>
+</ul>
+
+
+<h1>Wrap up</h1>
+
+<p>All the ZeroMQ support is currently tagged experimental (hence the warnings you saw in my screenshots). It also exists in the form described only in master. If this interests you at all, please build from master and run some tests of your own. We would love the feedback and any bugs or tips you can provide are always valuable.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ZeroMQ and Logstash - Part 1]]></title>
+    <link href="http://lusis.github.com/blog/2012/02/06/zeromq-and-logstash-part-1/"/>
+    <updated>2012-02-06T01:07:00-05:00</updated>
+    <id>http://lusis.github.com/blog/2012/02/06/zeromq-and-logstash-part-1</id>
+    <content type="html"><![CDATA[<p>Every once in a while, a software project comes along that makes you rethink how you've done things up until that point. I've often said that ElasticSearch was the first of those projects for me. The other is ZeroMQ.</p>
+
+<!-- more -->
+
+
+<h1>Edit and update</h1>
+
+<p>Evidently my testing missed a pretty critical usecase - pubsub. It doesn't work right now. Due to the way we're doing sockopts works for setting topics. However we don't have a commensurate setting on the PUB side. I've created <a href="https://logstash.jira.com/browse/LOGSTASH-399">LOGSTASH-399</a> and <a href="https://logstash.jira.com/browse/LOGSTASH-400">LOGSTASH-400</a> to deal with these issues. I am so sorry about that however it doesn't change the overall tone and content of this message as <code>pair</code> and <code>pushpull</code> still work.</p>
+
+<h1>A little history</h1>
+
+<p>In January of this year, <a href="https://twitter.com/jordansissel">Jordan</a> merged the first iteration of ZeroMQ support for Logstash. Several people had been asking for it and I had it on my plate to do as well. Funny side note, the pull request for the ZeroMQ plugin was my inspiration for adding <a href="http://logstash.net/docs/1.1.0/plugin-status">plugin_status</a> to Logstash.</p>
+
+<p>The reason for wanting to mark it experimental is that there was concern over the best approach to using ZeroMQ with Logstash. Did we create a single context per agent? Did we do a context per thread? How well would the multiple layers of indirection work (jvm + ruby + ffi)?</p>
+
+<p><a href="https://twitter.com/_masterzen_">Brice's</a> original pull request only hadnled one part of the total ZeroMQ package (PUBSUB) but it was an awesome start. We actually had two other pull requests around the same time but his was first.</p>
+
+<p>A week or so ago, I started a series of posts around doing load balanced filter pipelines with Logstash. The first was <a href="http://goo.gl/vWyCH">AMQP</a> and then <a href="http://goo.gl/6W8Lv">Redis</a>. The next logical step was ZeroMQ (and something of a "Oh..and one more thing.." post). Sadly, the current version of the plugin was not amenable to doing the same flow. Since it only supported PUBSUB, I needed to do some work on the plugin to get the other socket types supported. I made this my weekend project.</p>
+
+<h1>Something different</h1>
+
+<p>One thing that ZeroMQ does amazingly well is make something complex very easy. It exposes common communication patterns over socket types and makes it easy to use them. It really is just plug and play communication.</p>
+
+<p>However it also makes some really powerful flows available to you if you dig deep enough. Look at this example from the <a href="http://zguide.zeromq.org">zguide</a></p>
+
+<p><img src="https://github.com/imatix/zguide/raw/master/images/fig14.png" alt="complex-flow" /></p>
+
+<p>Mind you the code for that is pretty simple (<a href="http://zguide.zeromq.org/rb:taskwork2">ruby example</a>) but we need to enable that level of flexibility and power behind the Logstash config language. We also wanted to avoid the confusion that we faced with the AMQP plugin around exchange vs. queue.</p>
+
+<p>Jordan came up with the idea of removing the socket type confusion and just exposing the patterns. And that's what we've done.</p>
+
+<h1>Configuration</h1>
+
+<p>In the configuration language, Logstash exposes the ZeroMQ socket type pairs in the using the same syntax on both inputs and outputs. We call these a "topology". In fact, out of the box, Logstash ZeroMQ support will work out of the box with two agents on the same machine:</p>
+
+<h2>Output</h2>
+
+<p><code>
+input {
+  stdin { type =&gt; "stdin-input" }
+}
+output {
+  zeromq { topology =&gt; "pushpull" }
+}
+</code></p>
+
+<h2>Input</h2>
+
+<p><code>
+input {
+  zeromq { topology =&gt; "pushpull" type =&gt; "zeromq-input" }
+}
+output {
+  stdout { debug =&gt; true }
+}
+</code></p>
+
+<h2>Opinionated</h2>
+
+<p>Because any side of a socket type in ZeroMQ can be the connecting or binding side (the underlying message flow is disconnected from how the connection is established), Logstash follows the recommendation of the zguide. The more "stable" parts of your infrastructure should be the side that binds/listens while they ephemeral side should be the one that initiates connections.</p>
+
+<p>Following this, we have some sane defaults around the plugins:</p>
+
+<ul>
+<li>Logstash inputs will, by default, be the <code>bind</code> side and bind to all interfaces on port 2120</li>
+<li>Logstash outputs will, by default, be the <code>connect</code> side</li>
+<li>Logstash inputs will be the consumer side of a flow</li>
+<li>Logstash outputs will be the producing side of a flow</li>
+</ul>
+
+
+<p>The last two are obviously pretty "duh" but worth mentioning. Right now Logstash exposes three socket types that make sense for Logstash:</p>
+
+<ul>
+<li>PUSHPULL (Output is PUSH. Input is PULL)</li>
+<li>PUBSUB (Output is PUB. Input is SUB)</li>
+<li>PAIR</li>
+</ul>
+
+
+<p>It's worth reading up on ALL <a href="http://api.zeromq.org/2-1:zmq-socket">the socket types in ZeroMQ</a>.</p>
+
+<p>By default, because of how ZeroMQ will most commonly be slotted into your pipeline, it sets the default message format to the Logstash native <em>json_event</em>.</p>
+
+<p>You can still get to the low-level tuning of the sockets via the <code>sockopts</code> configuration setting. This is a Logstash config hash. For example, if you wanted to tune the high water mark of a socket (<code>ZMQ_HWM</code>), you would do so with this option:</p>
+
+<p><code>zeromq { topology =&gt; "pushpull" sockopts =&gt; ["ZMQ::HWM", 20] }</code></p>
+
+<p>These options are passed directly to the <code>ffi-rzmq</code> library we use (hence the syntax on the option name). If a new option is added in a later release, it's already available that way.</p>
+
+<h1>Usage of each topology</h1>
+
+<p>While I have a few more blog posts in the hopper around ZeroMQ (and various patterns with Logstash), I'll briefly cover where each type might fit.</p>
+
+<h2>PUBSUB</h2>
+
+<p>This is exactly what it sounds like. Each output (PUB) broadcasts to all connected inputs (SUB).</p>
+
+<h2>PUSHPULL</h2>
+
+<p>This most closely mimics the examples in my previous posts on AMQP and Redis. Each output (PUSH) load-balances across all connected inputs (PULL).</p>
+
+<h2>PAIR</h2>
+
+<p>This is essentially a one-to-one streaming socket. While messages CAN flow both directions, Logstash does not support (nor need) that. Outputs stream events to the input.</p>
+
+<p>ZeroMQ has other topologies (like REQREP - request response and ROUTER/DEALER) but they don't really make sense for Logstash right now. For the type of messaging that Logstash does between peers, PAIR is a much better fit. We have plans to expose these in a future release.</p>
+
+<h1>Future</h1>
+
+<p>As I said, I've got quite a few ideas for posts around this plugin. It opens up so many avenues for users and makes doing complex pipelines much easier. Here's a sample of some things you'll be able to do:</p>
+
+<ul>
+<li>Writing your own "broker" to sit between edges and indexers in whatever language works best (8 lines of Ruby)</li>
+<li>Log directly from your application (e.g. log4j ZMQ appender) to logstash with minimal fuss</li>
+<li>Tune ZeroMQ sockopts for durability</li>
+</ul>
+
+
+<p>Current ZeroMQ support only exists in master right now. However building from source is very easy. Simply clone the repo and type <code>make</code>. You don't even need to have Ruby installed. This will leave your very own jar file in the <code>build</code> directory.</p>
+]]></content>
+  </entry>
+  
+</feed>

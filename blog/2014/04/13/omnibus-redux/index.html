@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>omnibus-redux - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="I&#8217;ve been a pretty big proponent of omnibus. I still think it&#8217;s the right way to go but recent changes have removed the primary reason ...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/blog/2014/04/13/omnibus-redux/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Omnibus-redux</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2014-04-13T23:01:00-04:00" pubdate  data-updated="true" >Apr 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&#8217;ve been a pretty big proponent of omnibus. I still think it&#8217;s the right way to go but recent changes have removed the primary reason for recommending it</p>
+
+<!-- more -->
+
+
+<p>I did a lot of evangelism for <a href="https://github.com/opscode/omnibus-ruby">omnibus</a> last year. Presentations, blogposts, a sysadvent article. It is/was a great tool however it no longer fits the primary usecase.</p>
+
+<h1>Original workflow</h1>
+
+<p>Originally the biggest benefit to omnibus (outside of the core of what it did) was the Vagrantfile it generated. Because of this Vagrantfile, I could generate a project and publish the repo for anyone to use. That person didn&#8217;t have to have any ruby tooling installed. They just needed vagrant and two plugins (<code>vagrant-omnibus</code> and <code>vagrant-berkshelf</code>).</p>
+
+<p>They could check out the repository and just run <code>vagrant up</code> and the packages would be nice and neat dropped off in the <code>pkg</code> directory locally. I didn&#8217;t see this as a problem workflow because I didn&#8217;t listen to my own advise.</p>
+
+<p>This is from the original generated README of a fresh omnibus project:</p>
+
+<p><img src="http://s3itch.lusis.org/1wzxjV.png" alt="original README" /></p>
+
+<p>This was the part of the workflow I was bullish on. In fact we went whole hog internally with this. Anyone could contribute because they could test locally with only the exising tools that we already had installed.</p>
+
+<p>But that seems to have all changed with Omnibus version 3. Now omnibus requires a full ruby development environment just to do what it previously did with a <code>Vagrantfile</code> alone.
+The reason for this is that instead of Vagrant, now omnibus uses <a href="https://github.com/test-kitchen/test-kitchen">test-kitchen</a>. Additionally it seems to ALSO require <code>Berkshelf</code> locally now.</p>
+
+<p>This is where it gets really ugly.</p>
+
+<p>It doesn&#8217;t just require Berkshelf. It requires an UNRELEASED version of Berkshelf.</p>
+
+<h2>Sidebar on tooling</h2>
+
+<p>I wanted to take a minute to talk a little bit about Chef tooling.</p>
+
+<p>There is evidently a shift going on in the Chef community and I apparently haven&#8217;t been keeping up. The Chef community flocked to Berkshelf for reasons I don&#8217;t understand. It evidently solved a problem I didn&#8217;t have. You see I used chef-client and knife (with several plugins). I work with a lot of folks who are NOT ruby or chef people. For us, Chef is a means to an end. It&#8217;s a tool just like Maven or Artifactory. We use chef-solo as the installer for our platform, for instance. We are not ruby developers or users. All of our tooling is either in Python or Java and our application code base is in Java.</p>
+
+<p>Opscode (or rather Chef) has previously made a big push to make being a Chef user mean not being a ruby expert. There seems to have been not only a shift in that thinking but also in how the tools are to be used.</p>
+
+<p>A good example is chef-metal. This originally confused me because this was the chef model:</p>
+
+<ul>
+<li><code>knife</code> is for your workstation</li>
+<li><code>chef-client</code> is for your servers</li>
+</ul>
+
+
+<p>With <code>chef-metal</code> that changes a bit because the understanding is that where you might use <code>knife rackspace &lt;blah&gt;</code> you&#8217;ll now run <code>chef-client recipe[rackspace_servers]</code>.</p>
+
+<p>So back to berkshelf and other tools&#8230;</p>
+
+<p>Before these were optional. Slowly but surely they&#8217;re becoming NOT optional. The problem with this is as I described above. No longer is the workflow:</p>
+
+<ul>
+<li>install knife</li>
+<li>checkout our chef repo</li>
+<li>edit/upload cookbooks</li>
+</ul>
+
+
+<p>It&#8217;s now become a ruby developer workflow of somekind. I don&#8217;t have a cookbook directory. All of my cookbooks are somewhere in <code>~/.berkshelf</code> and I&#8217;m expected to have every cookbook be its own repo or something. I still don&#8217;t fully understand what&#8217;s going on here and frankly I don&#8217;t have the time. I have chef novices on my team and I don&#8217;t have any official documentation to point them at because this is something that exists outside of the official chef documentation.</p>
+
+<p>I&#8217;m not trying to slander ANY of these tools. I&#8217;m sure they&#8217;re all wonderful. <code>test-kitchen</code> looks great for being able to break away from tying the provisoner to vagrant but again that&#8217;s not the workflow that works for us (or frankly anyone who just wants to use chef). My argument is simply that if these things are going to be the defacto model then they should be rolled into Chef somehow and be documented on the official documentation.</p>
+
+<h1>So back to omnibus</h1>
+
+<p>So we have two issues here that make omnibus not a fit anymore:</p>
+
+<ul>
+<li>Requires a full blown ruby environment to <strong>BUILD</strong> a project whereas before it only required a full blown ruby environment to <strong>CREATE</strong> a project.</li>
+<li>the 3.x RELEASE of Omnibus had a dependency on an <strong>UNRELEASED</strong> artifact</li>
+</ul>
+
+
+<p>That second one is really painful to swallow. Quite frankly it&#8217;s just poor form to do that. You can argue about version numbers being meaningless or &#8220;it&#8217;s stable just still in beta&#8221; but when you&#8217;re asking someone to use and depend on your tools it&#8217;s just not right. If your dependencies aren&#8217;t released yet then you don&#8217;t get to release. Let&#8217;s also not forget that EVERY anicllary add-on in the Chef world seems to have its own dependency on Berkshelf now.</p>
+
+<h1>How did this all come to a head</h1>
+
+<p>When Heartbleed hit, I needed to rebuild our two big omnibus packages. Recently I had switched over to a new laptop and didn&#8217;t yet have anything checked out. This was fine because I had the omnibus projects checked out on my desktop. It was running a 1.4 release of vagrant and was where I did most of my builds before. So we generated new packages and were happy.</p>
+
+<p>We also have new team members on our ops team. I was using this as an opportunity to show them the omnibus packages and let them build them as well. So I tell them to check out the repos, make sure they have the plugins installed and run <code>vagrant up</code>. This didn&#8217;t work and it turns out somebody had vagrant 1.5 installed. No big deal I think. We&#8217;ll punt on that one and just make a note that we&#8217;ll need a new <code>vagrant-berkshelf</code> plugin when it&#8217;s released.</p>
+
+<p>But yesterday I went to work on a massive refactor of our omnibus packages since we&#8217;re cleaning up a bunch of extras and changing things around. I knew that omnibus 3 had several things to make the whole build process go faster. It also allowed me greater control in build determinism. So I upgrade and generate a new project to see what the new layout looks like and test the builds. When I realize there&#8217;s no Vagrantfile, I&#8217;m really confused. The readme says a Vagrantfile would be generated.</p>
+
+<p>That set off the things I tweeted and posted on the mailing list. In the end it came down to me evidently relying on something I was never supposed to rely on and being told I should learn to RTFM.</p>
+
+<h1>So where does that leave things?</h1>
+
+<p>Right now I have to take back everything I said about omnibus. It&#8217;s not that I don&#8217;t think it&#8217;s a great tool and I certainly don&#8217;t give two shits about getting subtweeted. I still think it&#8217;s a great tool and I think the idea is the right one.</p>
+
+<p>However the main reason I recommended omnibus and bothered to integrate it is gone. It&#8217;s simply not the straightforward process it was and the removal of the vagrant build lab puts too much on the non-ruby-ecosystem user. This is where I didn&#8217;t listen to my own advice. I frequently warned people that omnibus exists first and foremost for the needs of Chef. We got lucky that it worked this long and it was an awesome ride.</p>
+
+<p>I&#8217;m still trying to figure out the best way to get BACK to the vagrant build-lab but it&#8217;s not working out so well. I&#8217;m attempting to rebuild my <a href="https://github.com/lusis/omnibus-omnibus-omnibus">omnibus-omnibus-omnibus</a> project to ship everything needed but now I&#8217;m back to stepping outside the community framework and making people who wanted to just create packages needing something extra I created.</p>
+
+<h1>One last thing</h1>
+
+<p>I&#8217;m not posting this expecting anyone to change anything in Omnibus and I&#8217;m not trying to be passive-aggressive. I&#8217;m not entitled to anything from anyone. This is more about providing something I can link to for users of the omnibus builds I&#8217;ve already published since they will no longer work out-of-the-box.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2014-04-13T23:01:00-04:00" pubdate  data-updated="true" >Apr 13<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2014/04/13/omnibus-redux/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2014/04/13/omnibus-redux/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2013/09/23/stop-fighting-distros-part-2/" title="Previous Post: Stop fighting distros - part 2">&laquo; Stop fighting distros - part 2</a>
+      
+       
+        <a class="basic-alignment right" href="/blog/2014/06/13/no-konami-for-operations/" title="next Post: There's no konami code for operations">There's no konami code for operations &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/12/current-status/">current status</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lusis.github.com/blog/2014/04/13/omnibus-redux/';
+        var disqus_url = 'http://lusis.github.com/blog/2014/04/13/omnibus-redux/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,635 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>How we vagrant - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="People may or may not have noticed but I&#8217;ve been largely offline for the past 4 weeks or so. This is because I&#8217;ve been in the middle of...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/blog/2012/12/17/how-we-vagrant/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">How We Vagrant</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-12-17T22:10:00-05:00" pubdate  data-updated="true" >Dec 17<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>People may or may not have noticed but I&#8217;ve been largely offline for the past 4 weeks or so. This is because I&#8217;ve been in the middle of a pretty heavy redesign of a few key parts of our application stack. This also required me to learn Java so I&#8217;ve been doubly slammed.</p>
+
+<p>As part of that redesign, I worked on what we lovingly refer to internally as the &#8220;solo installer&#8221;. I gave a bit of background on this in a post to the Chef mailing list at one point but I&#8217;ll go over it again as part of this post.</p>
+
+<!-- more -->
+
+
+<h1>Beginnings</h1>
+
+<p>To understand why this is something of a departure for us, it&#8217;s worth understanding from whence we came. enStratus, like most hosted solutions, has experienced largely organic growth. One of the nice things about a SaaS product is that you have the freedom to experiment to some degree. You might be in the middle of a MySQL to Riak migration and still need two data stores for the time being. You might be in the process of changing how some background process works so you&#8217;ve got an older designed system running along side the newer system which is only doing a subset of the work.</p>
+
+<p>With a hosted platform these kinds of things are hidden from the end-user to some degree. They don&#8217;t know what&#8217;s going on behind the scenes and they really don&#8217;t care as long as you&#8217;re doing X, Y and Z that you&#8217;re being paid to do.</p>
+
+<p>Now for those of you running/developing/managing some sort of SaaS/Hosted solution I want you to take a journey with me. Imagine that tomorrow someone walked into your office and said:</p>
+
+<blockquote><p>We need to take our production environment and make it so that a customer can run it on-premise. Oh and it has to be able to run entirely isolated and can&#8217;t always talk back to any external service.</p></blockquote>
+
+
+<p>That&#8217;s pretty much the place enStratus found itself. enStratus is a cloud management platform. Not all clouds are public. Maybe someone wants to use your service but has regulatory needs that prevent them from using it as is. Maybe it needs to run entirely isolated from the rest of the world. There are valid reasons for all of these despite my general attitude towards security theater in the enterprise.</p>
+
+<p>Now you&#8217;ve got an interesting laundry list in front of you:</p>
+
+<ul>
+<li>How do you teach someone to manage this organic &#8220;thing&#8221; you&#8217;ve built?</li>
+<li>How do you take not one application but an entire company and its stack and shove it in a box?</li>
+<li>Do you wrap up all the external components (monitoring, file servers, access control) and deal with those?</li>
+</ul>
+
+
+<p>We aren&#8217;t the first company to do this and we won&#8217;t be the last. Take a look at Github. They offer a private version of Github. But we&#8217;re not just talking about one part of Github - e.g. Gist. We&#8217;re talking about the entire stack the company runs to provide Github as we know it.</p>
+
+<p>Unless you design with this in mind, you can&#8217;t really begin to understand how difficult of a task this can be. As I understand it, Github finally went the appliance route and offer prefab vms with some setup glue. Please correct me if I&#8217;m wrong here.</p>
+
+<h1>Early iterations</h1>
+
+<p>Obviously you can see that this was/is a daunting task. Original versions of our install process were based around a collection of shell scripts. Because of certain details of the stack (such as encryption keys for our key management system), we had to maintain state between each component of the stack when it was installed. Currently there are roughly 7 core components/services that make up enStratus:</p>
+
+<ul>
+<li>The console</li>
+<li>The api endpoint</li>
+<li>The key management subsystem</li>
+<li>The provisioning subsystem</li>
+<li>The directory integration service</li>
+<li>The &#8220;worker&#8221; system</li>
+<li>The &#8220;monitor&#8221; system</li>
+</ul>
+
+
+<p>and those are just the enStratus components. You also need RabbitMQ, MySQL and Riak (as we&#8217;re currently transitioning from MySQL to Riak). All of these things largely talk to each other over some web service or via RabbitMQ. With one or two exceptions, they can all be loadbalanced in an active/active type of configuration and scaled horizontally simply by adding an additional &#8220;whatever&#8221; node.</p>
+
+<p>So the original installation process was a set of shell scripts that persisted some state and this &#8220;state&#8221; file had to be copied between systems. Yes, we could use some sort of external configuration store but that&#8217;s another component that we would have to install just to do the installation.</p>
+
+<h1>Phase two</h1>
+
+<p>One of my coworkers, <a href="https://twitter.com/zomgreg">Greg Moselle</a> was sort of &#8220;sysadmin number one&#8221; at enStratus. This was in addition to his duties as managing all customer installs. So he did what most of us would do and brute forced a workable solution with the original shell scripts. As enStratus started to offer Chef and Puppet support in the product, Greg gets this wild hair up his ass and thinks:</p>
+
+<blockquote><p>I wonder if I can rewrite these shell scripts into something a bit more cross-platform and idempotent using chef-solo.</p></blockquote>
+
+
+<p>You might be thinking the same thing I originally did that this was largely a bad idea. In my mind we had a workable solution for the interim in the existing shell scripts that had the install of enStratus down to a day or so. Pragmatism right? It&#8217;s also worth noting that this was how he wanted to learn Chef&#8230;</p>
+
+<p>So off he goes and does what I recommend any new Puppet or Chef user does - exec resources all over the fucking place. Wrap your shell scripts in <code>exec</code>. Hardcode all the fucking things.</p>
+
+<p>Once he did this, then I started working with him on some basic attributes to make them a bit more flexible. Before too long we had a stack of roles matching different components and we had moved everything from <code>cookbook_file</code> to <code>remote_file</code>. It was still a mess of execs but it worked.</p>
+
+<p>But we still had this &#8220;state&#8221; we had to maintain between runs. This is not going away anytime soon. In production we store this state in attributes and use chef-server. We didn&#8217;t have that luxury here.</p>
+
+<p>Then <a href="https://twitter.com/jimsander">Jim Sander</a> drops in and writes a small setup script that maintains some of that state for us. Basically a wrapper around raw <code>chef-solo</code>. Side note, if you ever need someone to drop some shell scripting knowledge on your ass, Jim&#8217;s the man to see. Ask him about his Tivoli days to really piss him off.</p>
+
+<p>At this point, I start working on cleaning up the recipes as a sort of tutorial for folks. I&#8217;d pick a particular recipe and refactor it to all native resources and make it data driven. I&#8217;d commit these in small chunks so folks could easily see what the differences were easily - stuff like &#8220;instead of execing to call rpm, we&#8217;ll use the yum provider&#8221;.</p>
+
+<p>At this point we&#8217;ve got something pretty far evolved from where we were. Now that we&#8217;ve got this workable chef-solo repository, I decide to hack out a quick Vagrantfile. The problem was it wasn&#8217;t entirely idempotent and we still had some manual steps that had to be dealt with. In addition to finishing up the recipes and ended up rewriting large chunks of the setup script. Now that I had something largely repeatable and localized, we suddenly had a Vagrant setup that folks could use for development. It wasn&#8217;t fully automated but it worked. We also still had this shared state thing.</p>
+
+<p>So I set out to refactor the setup script a bit more. What&#8217;s important to keep in mind is that the primary use-case for this chef-solo repository wasn&#8217;t for Vagrant. This is our &#8220;installer&#8221;. The interesting part to me is that the improvements to how we do on-premise installs are coming as a direct result of making this work better with Vagrant. There&#8217;s a lot of wrapper work tied up in the setup script that wouldn&#8217;t need to be done if we used a base box that had more stuff baked in. However not baking stuff in actually gives us a more real-world scenario for installation.</p>
+
+<p>Additionally we needed to be able to somehow pass user-specific configuration settings into the <code>vagrant up</code> process and get those into <code>chef-solo</code> by way of the setup wrapper. We have things like license keys, hostnames and my personal hated favorite - database credentials - that need to be handled in a way that we can make it so a developer can just type <code>vagrant up</code> and be running. If I have to require someone to edit a json file or anything else, the whole thing will fall flat on its face.</p>
+
+<p>So any time we needed something like that, we added support to the setup wrapper and then used environment variables to pass that information in to vagrant.</p>
+
+<h1>So how do we vagrant?</h1>
+
+<p>We leverage environment variables pretty heavily in our Vagrantfile. If it&#8217;s something that someone might need to tune for whatever reason, it&#8217;s an environment variable that triggers an option to our setup script.</p>
+
+<h2>Current list of tunables</h2>
+
+<p>This is just a subset of the tunables we control via environment variables. The majority of these map directly to options for the setup script:</p>
+
+<ul>
+<li><code>ES_DLPASS</code> and <code>ES_LICENSE</code>: the basic set of credentials needed to fetch our assets and your personal license key.</li>
+<li><code>ES_MEM</code>: this is the result of some of our front end developers having less memory than others.</li>
+<li><code>ES_CACHE</code>: We have an office in New Zealand and bandwidth there is &#8220;challenging&#8221;. This allows us to cache as much as possible between calls to <code>vagrant up</code>. This not only triggers caching of system packages downloaded but also triggers the <code>prefetch</code> option in our setup script that predownloads all the assets. These assets are all stored in the <code>cache</code> directory of the repository which is not coincidently the value of <code>file_cache_path</code> in chef-solo. Remember that we may not always have external network access during installation so we offer a way to warm the <code>cache</code> directory with as many assets as possible.</li>
+<li><code>ES_BOX</code>: let&#8217;s you specify an alternate base box to use. This is how we test the installer on different distros.</li>
+<li><code>ES_DEVDIR</code>: shares an additional directory from the host to the vagrant image. This is how development is done (at least for me). I map this to the root of all of my git repository checkouts.</li>
+<li><code>ES_VAGRANT_NW</code>: Allows you to configure bridged networking in addition to the host-only network we use.</li>
+<li><code>ES_PROFILE</code>: This directly maps to an option in our setup script for persisting state between runs.</li>
+</ul>
+
+
+<p>There are other options that are specific to the enStratus product as well but you get the idea.</p>
+
+<h2>The setup script</h2>
+
+<p>I can&#8217;t post the full thing here but I can give you a general idea of how it works and some of the options it supports. This is a &#8220;sanitized&#8221; truncated version of the help output:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Usage: setup.sh [-h] [-e] [-f] -p &lt;download password&gt; -l &lt;license key&gt; [-s savename] [-c &lt;console hostname&gt;] [-n &lt;number of nodes&gt;] [-m &lt;mapping string&gt;] [-a &lt;optional sourceCidr string&gt;]
+</span><span class='line'>-------------------------------------------------------------------------
+</span><span class='line'>-p: The password for downloading enStratus
+</span><span class='line'>-l: The license key for enStratus
+</span><span class='line'>
+</span><span class='line'>For most single node installations, specify the download password and license key.
+</span><span class='line'>
+</span><span class='line'>optional arguments
+</span><span class='line'>------------------
+</span><span class='line'>-h: This text
+</span><span class='line'>-e: extended help
+</span><span class='line'>-f: fetch-only mode. Downloads and caches *MOST* assets. Requires download password and *WILL* install chef
+</span><span class='line'>-c: Alternate hostname to use for the console. [e.g. cloud.mycompany.com] (default: fqdn of console node)
+</span><span class='line'>-a: Alternate string to use for the sourceCidr entry. You know if you need this.
+</span><span class='line'>-s: A name to identify this installation
+</span><span class='line'>-n: Number of nodes in installation [1,2,4] (default: 1)
+</span><span class='line'>-m: Mapping string [e.g. frontend:192.168.1.1,backend:backend.mydomain.com]
+</span><span class='line'>
+</span><span class='line'>About savename:
+</span><span class='line'>---------------
+</span><span class='line'>Savename is a way to persist settings between runs of enStratus.
+</span><span class='line'>If you specify a save name, a directory will be created under local_settings
+</span><span class='line'>will be created. It will contain a YAML file with your settings as well 4 JSON files.
+</span><span class='line'>
+</span><span class='line'>The YAML file is the source of truth for the named installation. The JSON files MAY
+</span><span class='line'>be recreated if the contents of the YAML file change. They exist to migrate between systems.
+</span><span class='line'>If a save file is found, no other arguments are honored. If you need to change the 
+</span><span class='line'>download password or license key, please update the YAML file itself
+</span><span class='line'>
+</span><span class='line'>If you lose this YAML file you will not be able to recover this enStratus installation.
+</span><span class='line'>You should save it somewhere secure and optionally version it.</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Persisting settings</h3>
+
+<p>One of the &#8220;gotchas&#8221; we have is how do we basically build a node JSON file for chef-solo to use with any information we need to persist. Since we don&#8217;t know the state of all the systems involved when we go in, we have to &#8220;punt&#8221; on a few things. What we end up doing is something we call the <code>savename</code>. If you use this option, the settings you define will be persisted to a directory that git ignores called <code>local_settings</code>. This directory will contain directories named after the above <code>savename</code> parameter. The setup script (written for now in bash) will create a yaml file (easy to do in bash with HEREDOC as opposed to JSON) and also a copy of the generated encryption keys in a plain text file for the customer to store.</p>
+
+<p>The only thing we can count on being on the system up front is the Chef omnibus install (since that&#8217;s a requirement). Instead of complicating things with ruby at this point (and chicken/egg issues since the setup script actually installs chef omnibus), we use the <code>erubis</code> binary that gets installed with omnibus to pass the yaml to to a JSON erb template. That generated JSON is the node json with attribute overrides. We actually support multi-node installation in the setup script if you provide a mapping of where certain components are running when calling setup. If you rerun setup using an existing <code>savename</code> parameter, the yaml file is updated (only certain values) and then regenerate the JSON file.</p>
+
+<h1>The upshot</h1>
+
+<p>The best part of all of this is that we can now say the same process is used when installing enStratus locally in Vagrant, in our dev, staging and production environments (though production uses chef-server) as well as what we install on the customer&#8217;s site. We version this repository around static points in our release cycle. We branch for a new release and create tags at given points in the branch based on either a patch release for enStratus itself in that release OR a patch to the installer itself.</p>
+
+<p>It&#8217;s not all unicorns pooping rainbows. The process is much more complicated than it needs to be but it&#8217;s almost a world of difference from where it was when I started and it was entirely a team effort. This setup allowed us to do full testing to switch entirely off the SunJDK (and the need to manually download the JCE during customer installs) onto OpenJDK. We were able to migrate from Tomcat to Jetty and refactor our build process using this method. I was able to do this work without affecting anyone else. All I had to do when we were ready for full testing was tell everyone to switch branches, run <code>vagrant up</code> and test away.</p>
+
+<h1>Special thanks</h1>
+
+<p>I want to give a serious shout-out to Mitchell Hashimoto and John Bender for the work they did with Vagrant. Last year I said that no two software products impacted my career more than ElasticSearch and ZeroMQ. This year, without a doubt, Vagrant is at the top of that list.</p>
+
+<h1>Addendum</h1>
+
+<p>What follows is the sanitized version of our <code>Vagrantfile</code>. If anyone has any suggestions, I&#8217;m all ears:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Vagrant</span><span class="o">::</span><span class="no">Config</span><span class="o">.</span><span class="n">run</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_BOX&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_BOX&#39;</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;es-dev&quot;</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box_url</span> <span class="o">=</span> <span class="s2">&quot;https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_VAGRANT_NW&#39;</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&quot;bridged&quot;</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:bridged</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="c1"># If you change this address, the conditional logic</span>
+</span><span class='line'>    <span class="c1"># in console.rb will break</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:hostonly</span><span class="p">,</span> <span class="s2">&quot;172.16.129.19&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1"># These entries allow you to run code locally and talk to a</span>
+</span><span class='line'>  <span class="c1"># &quot;working set&quot; of data services</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">15000</span>   <span class="c1"># api</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">3302</span><span class="p">,</span> <span class="mi">3302</span>     <span class="c1"># dispatcher</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">2013</span><span class="p">,</span> <span class="mi">2013</span>     <span class="c1"># km</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">5672</span><span class="p">,</span> <span class="mi">5672</span>     <span class="c1"># RabbitMQ (autostarts)</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">8098</span><span class="p">,</span> <span class="mi">8098</span>     <span class="c1"># Riak HTTP (autostarts)</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">8097</span><span class="p">,</span> <span class="mi">8097</span>     <span class="c1"># Riak protobuf (autostarts)</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">3306</span><span class="p">,</span> <span class="mi">3306</span>     <span class="c1"># MySQL (autostarts)</span>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">forward_port</span> <span class="mi">55672</span><span class="p">,</span> <span class="mi">55672</span>   <span class="c1"># RabbitMQ management interface</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_MEM&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">customize</span> <span class="o">[</span><span class="s2">&quot;modifyvm&quot;</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="s2">&quot;--memory&quot;</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_MEM&#39;</span><span class="o">]]</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">customize</span>  <span class="o">[</span><span class="s2">&quot;modifyvm&quot;</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="s2">&quot;--memory&quot;</span><span class="p">,</span> <span class="mi">8192</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_DEVDIR&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">share_folder</span> <span class="s2">&quot;es-dev-data&quot;</span><span class="p">,</span> <span class="s2">&quot;/es_dev_data&quot;</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_DEVDIR&#39;</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_CACHE&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Shared cache enabled&quot;</span>
+</span><span class='line'>    <span class="no">FileUtils</span><span class="o">.</span><span class="n">mkdir_p</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;cache&quot;</span><span class="p">,</span><span class="s2">&quot;apt&quot;</span><span class="p">,</span><span class="s2">&quot;partial&quot;</span><span class="p">))</span> <span class="k">unless</span> <span class="no">Dir</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;cache&quot;</span><span class="p">,</span><span class="s2">&quot;apt&quot;</span><span class="p">,</span> <span class="s2">&quot;partial&quot;</span><span class="p">))</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">share_folder</span><span class="p">(</span><span class="s2">&quot;apt&quot;</span><span class="p">,</span> <span class="s2">&quot;/var/cache/apt/archives&quot;</span><span class="p">,</span> <span class="s2">&quot;cache/apt&quot;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="ss">:shell</span> <span class="k">do</span> <span class="o">|</span><span class="n">shell</span><span class="o">|</span>
+</span><span class='line'>    <span class="no">ES_LICENSE</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_LICENSE&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="no">ES_DLPASS</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_DLPASS&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="no">ES_PROFILE</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_PROFILE&#39;</span><span class="o">]</span> <span class="o">||</span> <span class="s2">&quot;vagrant-</span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">to_i</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="no">ES_LICENSE</span><span class="o">.</span><span class="n">nil?</span> <span class="ow">or</span> <span class="no">ES_DLPASS</span><span class="o">.</span><span class="n">nil?</span>
+</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;You must set the environment variables: ES_LICENSE and ES_DLPASS!&quot;</span>
+</span><span class='line'>      <span class="nb">exit</span> <span class="mi">1</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="no">ES_CLOUD</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_CLOUD&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="no">ES_CIDR</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_CIDR&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="no">ES_DEBUG</span><span class="o">=</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_DEBUG&#39;</span><span class="o">]</span> <span class="o">||</span> <span class="kp">false</span>
+</span><span class='line'>    <span class="n">setup_opts</span> <span class="o">=</span> <span class="s2">&quot;-l </span><span class="si">#{</span><span class="no">ES_LICENSE</span><span class="si">}</span><span class="s2"> -p </span><span class="si">#{</span><span class="no">ES_DLPASS</span><span class="si">}</span><span class="s2"> -s </span><span class="si">#{</span><span class="no">ES_PROFILE</span><span class="si">}</span><span class="s2"> &quot;</span>
+</span><span class='line'>    <span class="n">setup_opts</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;-c </span><span class="si">#{</span><span class="no">ES_CLOUD</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="k">if</span> <span class="no">ES_CLOUD</span>
+</span><span class='line'>    <span class="n">setup_opts</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;-a </span><span class="si">#{</span><span class="no">ES_CIDR</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="k">if</span> <span class="no">ES_CIDR</span>
+</span><span class='line'>    <span class="no">ES_DEBUG</span> <span class="p">?</span> <span class="n">chef_opts</span><span class="o">=</span><span class="s2">&quot;-l debug -L local_settings/</span><span class="si">#{</span><span class="no">ES_PROFILE</span><span class="si">}</span><span class="s2">/chef-run.log&quot;</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>    <span class="n">shell</span><span class="o">.</span><span class="n">inline</span> <span class="o">=</span> <span class="s2">&quot;cd /vagrant; ./setup.sh </span><span class="si">#{</span><span class="n">setup_opts</span><span class="si">}</span><span class="s2">; chef-solo -j local_settings/</span><span class="si">#{</span><span class="no">ES_PROFILE</span><span class="si">}</span><span class="s2">/single_node.json -c solo.rb </span><span class="si">#{</span><span class="n">chef_opts</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_POSTRUN&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span> <span class="ss">:shell</span> <span class="k">do</span> <span class="o">|</span><span class="n">shell</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">shell</span><span class="o">.</span><span class="n">inline</span> <span class="o">=</span> <span class="s2">&quot;chef-solo -j /vagrant/local_settings/</span><span class="si">#{</span><span class="no">ES_PROFILE</span><span class="si">}</span><span class="s2">/single_node.json -c /vagrant/solo.rb -o </span><span class="se">\&quot;</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;ES_POSTRUN&#39;</span><span class="o">]</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-12-17T22:10:00-05:00" pubdate  data-updated="true" >Dec 17<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2012/12/17/how-we-vagrant/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2012/12/17/how-we-vagrant/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2012/07/09/what-production-means/" title="Previous Post: What production means">&laquo; What production means</a>
+      
+       
+        <a class="basic-alignment right" href="/blog/2013/01/20/future-of-noah/" title="next Post: Future of Noah">Future of Noah &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/12/current-status/">current status</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lusis.github.com/blog/2012/12/17/how-we-vagrant/';
+        var disqus_url = 'http://lusis.github.com/blog/2012/12/17/how-we-vagrant/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

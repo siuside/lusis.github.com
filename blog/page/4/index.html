@@ -1,0 +1,703 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="AMQP in Logstash is one of the most complicated parts of the workflow. I&#8217;ve taken it on myself, as the person with the most AMQP experience (...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/blog/page/4/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load Balancing Logstash With AMQP</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-01-31T01:12:00-05:00" pubdate  data-updated="true" >Jan 31<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>AMQP in Logstash is one of the most complicated parts of the workflow. I&#8217;ve taken it on myself, as the person with the most AMQP experience (both RabbitMQ and Qpid) to try and explain as much as need for logstash users.</p>
+
+<p><a href="https://twitter.com/patrickdebois">Patrick DeBois</a> hit me up with a common logstash design pattern that I felt warranted a full detailed post.</p>
+
+<p><em>Warning: This is an image heavy post. Terminal screenshots are linked to larger versions</em></p>
+
+<h2>Requirements</h2>
+
+<ul>
+<li>No lost messages in transit/due to inputs or outputs.</li>
+<li>Shipper-only configuration on the source</li>
+<li>Worker-based filtering model</li>
+<li>No duplicate messages due to transit mediums (i.e. fanout is inappropriate as all indexers would see the same message)</li>
+<li>External ElasticSearch cluster as final destination</li>
+</ul>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/23/lowtech-monitoring-with-jenkins/">Lowtech Monitoring With Jenkins</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-01-23T00:07:00-05:00" pubdate  data-updated="true" >Jan 23<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I mentioned briefly in my previous post that I got quite a few people coming up to me after the panel and asking me for advice on monitoring.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/01/23/lowtech-monitoring-with-jenkins/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/22/scale10x-recap/">Scale10x Recap</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-01-22T07:02:00-05:00" pubdate  data-updated="true" >Jan 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This past week I had the awesome pleasure of participating in my first <a href="http://www.socallinuxexpo.org/">SoCal Linux Expo</a>. As I later discovered, this was the 10th installment of this awesome event (hence the 10x).</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/01/22/scale10x-recap/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/02/2011-in-review/">2011-in-review</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-01-02T15:40:00-05:00" pubdate  data-updated="true" >Jan 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The holidays are a busy time for me. I was hoping to get this written before the end of the year but it didn&#8217;t happen.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/01/02/2011-in-review/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/22/github-trolling-for-fun-and-profit/">Github Trolling for Fun and Profit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-11-22T21:43:00-05:00" pubdate  data-updated="true" >Nov 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last Friday was a pretty crappy day.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/11/22/github-trolling-for-fun-and-profit/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/18/deploy-all-the-things/">Deploy ALL the Things</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-10-18T06:59:00-04:00" pubdate  data-updated="true" >Oct 18<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>This is part 2 in a post on deployment strategies. The previous post is located <a href="http://blog.lusis.org/blog/2011/10/18/rollbacks-and-other-deployment-myths/">here</a></em></p>
+
+<p>My previous post covered some of the annoying excuses and complaints that people like to use when discussing deployments. The big take away should have been the following:</p>
+
+<ul>
+<li>The risk associated with deploying new code is not in the deploy itself but everything you did up to that point.</li>
+<li>The way to make deploying new code less risky is to do it more often, not less.</li>
+<li>Create a culture and environment that enables and encourages small, frequent releases.</li>
+<li>Everything fails. Embrace failure.</li>
+<li>Make deploys trivial, automated and tolerant of failure.</li>
+</ul>
+
+
+<p>I want to make one thing perfectly clear. I&#8217;ve said this several times before. You can get 90% of the way to a fully automated environment, never go that last 10% and still be better off than you were before. I understand that people have regulations, requirements and other things that prevent a fully automated system. You don&#8217;t ever have to flip that switch but you should strive to get as close as possible.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/10/18/deploy-all-the-things/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/10/18/rollbacks-and-other-deployment-myths/">Rollbacks and Other Deployment Myths</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-10-18T00:35:00-04:00" pubdate  data-updated="true" >Oct 18<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I came across an interesting post today via HN. I&#8217;m surprised (only moderately) that I missed it the first time around since this is right up my alley:</p>
+
+<p><a href="http://briancrescimanno.com/2011/09/29/why-are-you-still-deploying-overnight/">Why are you still deploying overnight?</a></p>
+
+<p>I thought this post was particularly apropos for several reasons. I just got back from DevOpsDays EU <strong>AND</strong> I&#8217;m currently in the process of refactoring our deploy process.</p>
+
+<p>I&#8217;m breaking this up into two parts since it&#8217;s a big topic. The first one will cover the more &#8220;theoretical&#8221; aspects of the issue while the second will provide more concrete information.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/10/18/rollbacks-and-other-deployment-myths/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/08/22/the-configuration-management-divide/">The Configuration Management Divide</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-22T22:07:00-04:00" pubdate  data-updated="true" >Aug 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>wherein John admits he was wrong about something</em></p>
+
+<p>As I was checking my Github feed tonight (as I&#8217;ve been known to do on occassion), I saw an update for a project that I was watching. This project is, for all intents and purposes, a redo of Capistrano with some additional system management stuff on top. From the description:</p>
+
+<blockquote><p>All together mixed to make your life easier.
+As mentioned before do is a fun mix of capistrano, rake, thor and brew.
+With XXXXX you are be able to do easily common task on your local or remote machine. The aim of XXXXX is to become the unique and universal tool language that permit you to make your own brew, apt-get or yum package, same syntax for all your machine.</p></blockquote>
+
+<p>Now I&#8217;ve said before I&#8217;m a tool junkie. I&#8217;m always looking for ideas and inspiration from other tools. I also love to contribute where I can.
+What bothered me particularly about this project is that it felt like a &#8220;solved problem&#8221;.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/08/22/the-configuration-management-divide/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/08/13/migrating-from-blogger/">Migrating From Blogger</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-13T21:50:00-04:00" pubdate  data-updated="true" >Aug 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Many, many years ago I started blogging. It&#8217;s fun and I like to feel self-important by dumping my ideas. I enjoy writing so blogging is cool like that.</p>
+
+<p>Over the past 12 years I&#8217;ve gone through various tools to help me do that (in no particular order):</p>
+
+<ul>
+<li>PHPnuke</li>
+<li>Postnuke</li>
+<li>Moveable Type</li>
+<li>Plone</li>
+<li>CakePHP</li>
+<li>rst2html vim plugin</li>
+<li>Blogger</li>
+<li>Wordpress</li>
+<li>Homegrown shit</li>
+</ul>
+
+
+<p>With the exception of one, all of these tools were simply a pain in the ass. They required lots of moving pieces, we&#8217;re bug ridden and security nightmares.
+The one tool I enjoyed the most?</p>
+
+<p>rst2html in Vim</p>
+
+<p>The only reason I used those tools was because I hated writing HTML. I hated dealing with styling. About 3 years ago I finally settled on using Blogger. Now I&#8217;m changing again.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/08/13/migrating-from-blogger/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/08/13/fun-with-celluloid/">Fun With Celluloid</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-13T00:30:00-04:00" pubdate  data-updated="true" >Aug 13<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>warning! This is a really long post</em></p>
+
+<p>In the course of rewriting the <a href="https://github.com/lusis/Noah">Noah</a> callback daemon, I started to get really frustrated with EventMachine. This is nothing against EventMachine by any stretch of the imagination. I really like it.</p>
+
+<p>What I was having issues with is making the plugin framework as dirt simple as possible. By using EM, I had no choice but to require folks to understand how EM works. This primarily meant not blocking the reactor. Additionally, through no fault of EM, I was starting to get mired in callback spaghetti.</p>
+
+<h1>Actors</h1>
+
+<p>I&#8217;ve mentioned several times before that I love the actor model. It makes sense to me. The idea of mailboxes and message passing is really simple to understand. For a while, there was project that implemented actors on top of EM called Revactor but it stalled. I started following the author (Tony Arcieri) on GitHub to see if he would ever update it. He did not but I caught wind of his new project and it was pretty much exactly what I was looking for.</p>
+
+<p>Actors have a proven track record in Erlang and the Akka framework for Scala and Java uses them as well.</p>
+
+<h1>Celluloid</h1>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/08/13/fun-with-celluloid/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/5/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/3/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I&#8217;m currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you&#8217;re curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/12/current-status/">current status</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

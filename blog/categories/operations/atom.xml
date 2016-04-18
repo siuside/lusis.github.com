@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: operations | blog dot lusis]]></title>
+  <link href="http://lusis.github.com/blog/categories/operations/atom.xml" rel="self"/>
+  <link href="http://lusis.github.com/"/>
+  <updated>2016-04-18T07:53:49-04:00</updated>
+  <id>http://lusis.github.com/</id>
+  <author>
+    <name><![CDATA[John E. Vincent]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Go for System Administrators]]></title>
+    <link href="http://lusis.github.com/blog/2013/08/11/go-for-system-administrators/"/>
+    <updated>2013-08-11T15:44:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2013/08/11/go-for-system-administrators</id>
+    <content type="html"><![CDATA[<p><blockquote><p>If I never directly touch a Go concurrency primitive, I'm convinced I'm going to write all my cli apps with it just for ease of deployment.</p></blockquote></p>
+
+<!-- more -->
+
+
+<p>This is something I said the other day. I figured it deserved a more detailed blog post.</p>
+
+<h2>NKOTB</h2>
+
+<p>Most people who know me professionally know two things about me:</p>
+
+<ul>
+<li>I'm fairly pragmatic and somewhat conservative about technology decisions</li>
+<li>I'm a language tourist</li>
+</ul>
+
+
+<p>This second one is something Bryan Berry attributed to me in an early FoodFight episode. What's interesting is the two things seemingly conflict.</p>
+
+<p>I love learning new programming languages. This comes as a pretty big shock to me on a regular basis because I'm not a professional programmer. I didn't go to college for programming (I actually didn't go to college at all). My career in IT has been pretty much 100% focused on the area of operations. Anything I've ever touched - qa, dba, dev - has always been from that lens and to satisfy some need operationally.</p>
+
+<p>So it's weird that I find myself 18 years later having a working knowledge of ruby, python, perl, java and a few other languages to a lesser degree. Mainly I come to new languages to scratch an itch.</p>
+
+<p>This leads me to picking up Go.</p>
+
+<p>If you haven't heard of Go, there are countless articles, blog posts and a shitload of new tooling written in it. The latest batch of hotness around linux containers and new deployment models (docker) is based on Go. There are also quite a few other "big" name projects built in Go as well - packer, etcd. Mozilla is doing all new internal tooling in Go (as I understand it) and quite a few folks are switching to it.</p>
+
+<p>Mind you I don't pick up languages based on popularity. I don't care for JavaScript and Node at all, for instance. Originally I had no interest in Go either. I figured it was another Google experiment that was more academic than anything else. Besides, if I had to get a handle on a c-like language, why not just learn C and be done with it?</p>
+
+<p>I actually attempted that route working on a PAM module for StormPath. While it was somewhat satisfying, it was ultimately VERY frustrating.</p>
+
+<h2>So why Go now?</h2>
+
+<p>One of the reasons I decided to give Go another shot was that it appeared to be around for the long haul after all. That made at least a contender for me.
+But then some of the tooling I was using operationally was being built in Go. Since I wanted to be able to fix issues in those tools (especially considering they were new projects which would surely need fixes) I really needed to pick up on the language.</p>
+
+<p>However one tool really pushed me that last step - <a href="https://github.com/coreos/etcd">etcd</a>.</p>
+
+<p>You can read up on etcd yourself but if you know my history with <a href="https://github.com/lusis/Noah">Noah</a>, you realize WHY I have such an interest in this.</p>
+
+<p>What surprised me was when I decided that I'd probably be writing a lot of tooling myself in Go.</p>
+
+<h2>On Pragmatism</h2>
+
+<p>All the internal tooling my team develops at Dell Enstratius is written in Python. This was a pragmatic choice for us:</p>
+
+<ul>
+<li>It's the least common denominator on platforms our product supports (So it will always be on customer systems)</li>
+<li>It's rigid in the right ways for new programmers (of which we had quite a few on our team)</li>
+<li>Regardless of skill level with Python, you can usually look at someone else's code and follow it thanks to the previous item</li>
+</ul>
+
+
+<p>Why didn't we go with Ruby considering I was personally much stronger at Ruby and we had some Ruby experience via Chef internally?</p>
+
+<ul>
+<li>Have you seen the state of Ruby on distros?</li>
+<li>We didn't want to conflict with any possible customer tooling using Ruby</li>
+<li>Not enough rigidity for the new folks</li>
+<li>As comfortable as I am at Ruby, because of the flexibility of the language and metaprogramming, it can be downright impossible to navigate someone else's code</li>
+</ul>
+
+
+<p>Our team weighed all the options here and we all agreed on Python. I set out to write a library for accessing our API. This would give us a foundation for our tooling as well as serve as a reference project - with tests, project structure, bin scripts and the like - for new tooling.</p>
+
+<p>Things are/were going great up until a recent situation with a customer. We try and minimize dependencies in our tooling for obvious reasons. However there are a few libraries that just make things SO much easier - <a href="https://github.com/kennethreitz/requests">requests</a>, <a href="https://github.com/kennethreitz/envoy">envoy</a>. We also like to use <a href="http://fabfile.org">Fabric</a> to wrap some things up.</p>
+
+<p>However we ran into a situation where a customer refused to let us pull packages in externally. So while we could "sneakernet" the bulk of our tools over, some things wouldn't work. Tracking down all the transitive deps and vendoring everything was a pain in the ass.</p>
+
+<p>This is what lead to my statement above.</p>
+
+<h2>Tooling in Go</h2>
+
+<p>Go, while not as tight a feedback loop as Python, is still pretty tight. Compilations happen fast and you can test fairly quickly. But the dependency issue is really the killer. It simply doesn't exist. I can take that binary I compiled and move it around with no problem without needing the runtime installed. There are lots of batteries included in the stdlib as well.</p>
+
+<p>I can also compile that same code on osx, windows or linux with no modification. This bit us in Python with some of our deps as well.</p>
+
+<p>As I said, while the tooling I'm currently writing has no need for any of the advanced concurrency stuff in go, it's nice that's it there out of the box should I want to use it.</p>
+
+<h2>This isn't a switching story</h2>
+
+<p>We're not switching to Go for our tooling but I probably will. I'm already working on writing a wrapper for our API in Go so I can duplicate some of the tools. This will be really handy when I'm on a system where dependencies are limited. That's really what this post is about.</p>
+
+<p>If you're in operations, there is no reason you shouldn't learn Go.</p>
+
+<p>The syntax is easy. The stuff that made C painful is largely hidden from you. Meanwhile you don't need to worry about what version of Python or Ruby is installed on your systems. It's a great language to use for bootstrap tools where you don't yet have your deps installed. It'll also help should you start adopting tools like docker, packer or etcd.</p>
+
+<p>Give it a shot.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[DevOps - The title match]]></title>
+    <link href="http://lusis.github.com/blog/2013/06/04/devops-the-title-match/"/>
+    <updated>2013-06-04T21:38:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2013/06/04/devops-the-title-match</id>
+    <content type="html"><![CDATA[<p>I've noticed an annoying trend recently. I was content to ignore it for a while but now it's getting almost stupid. That trend is the job title of "DevOps".</p>
+
+<!-- more -->
+
+
+<p>I came across an article tonight that confused the hell out of me. It was an interview. The outlet wasn't a technical one per se but it was a technical interview none the less.</p>
+
+<p>This part is what confused me (<em>highlights mine</em>):</p>
+
+<p><blockquote><p>To do this requires a well-integrated platform that is full of capabilities for the <strong>developer</strong>; contemplates the needs of <strong>DevOps</strong>; provides command, control and visibility for <strong>operations</strong>; and is ....</p></blockquote></p>
+
+<p>To quote an internet-famous person:</p>
+
+<p><strong>WAT</strong></p>
+
+<h2>Stepping back</h2>
+
+<p>I don't like the idea of <em>devops</em> as a job title in the first place. I don't like it as a role either. It makes no sense. You don't call someone an <em>agile</em> so why would you call them a <em>devop</em>?</p>
+
+<p>My problem lies in the fact that it implies that there's something wrong with being a sysadmin, operations person, developer or whatnot. Not only that but the idea behind devops is the elimination of silos, not the creation of new ones.</p>
+
+<p>I have, however, made a bit of peace with the fact that <em>devops</em> has become a replacement title of sorts for <em>sysadmin</em> or <em>developer</em>.</p>
+
+<p>I get the problem domain. Companies want to be able to qualify the types of people they want. The phrase <em>devops</em> carries a certain meaning with it. People are trying to leverage that. In other cases, it's become a codeword for "generalist" or "technologist". And, yes, even in some cases it's become a code word for "doing both development and ops work"</p>
+
+<h2>What does devops mean though</h2>
+
+<p>Here's the secret. I'll tell you EXACTLY what devops means.</p>
+
+<p>Devops means giving a shit about your job enough to not pass the buck. Devops means giving a shit about your job enough to want to learn all the parts and not just your little world.</p>
+
+<p>Developers need to understand infrastructure. Operations people need to understand code. People need to fucking work with each other and not just occupy space next to each other.</p>
+
+<p>I worked at a company several years ago. We created a dedicated devops team. The rationale was solid - the company had a monolithic idea of roles and titles. We also had a large group on both sides that were only interested in doing their little bit and going home. By creating this title/team, it was easier at a company level to justify them working on non-standard projects.</p>
+
+<p>So a "devops" team was created. This was a small team of what essentially boiled down to "super sysadmins". We wrote puppet manifests, worked with the developers to automate build processes...shit like that.</p>
+
+<p>What ended up happening was that the devops team was seen as elitist by the operations team, nosy and invasive by the developers and everyone just passed the blame on to them - "Devops did that. Not us"</p>
+
+<h2>So back to that quote</h2>
+
+<p>Having said all that, what about the quote?</p>
+
+<p>This is indicative of the problem I described above. I think I've finally figured out the question I want to ask people who think this way:</p>
+
+<p>If devops is a distinct role/title apart from development and operations, then what the fuck does a "devop" do?</p>
+
+<p>Let's look at that quote again. It implies that:</p>
+
+<ul>
+<li>"command, control and visibility" is something developers have no need for</li>
+<li>operations won't need the same capabilities as developers</li>
+<li>There's a third group that has an entirely different set of needs</li>
+</ul>
+
+
+<p>What is that third group? What possible aspect outside of development and operations of the IT needs of a company do those two groups not think affects them in some way and thus have a vested interest in being involved? <em>(Yes I'm aware companies have dbas, security and what not - those are shitty silos too)</em></p>
+
+<p>This topic comes up all the time on various mailing lists and it never seems to really reach any sort of consensus. So I'm asking you. If a "devops" is something different than someone in operations or development, someone different than a sysadmin or developer....</p>
+
+<p>What the fuck is it?</p>
+
+<h2>Disclaimer</h2>
+
+<p>This post was writting on an airplane with an annoying passenger in front of me, quite a bit of rum in me and a lack of sleep. I'm guessing it really doesn't look any different than any other post though does it?</p>
+]]></content>
+  </entry>
+  
+</feed>

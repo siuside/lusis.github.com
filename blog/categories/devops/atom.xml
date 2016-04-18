@@ -4,7 +4,7 @@
   <title><![CDATA[Category: devops | blog dot lusis]]></title>
   <link href="http://lusis.github.com/blog/categories/devops/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2016-04-18T01:20:56-04:00</updated>
+  <updated>2016-04-18T07:53:49-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -12,6 +12,331 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[DevOps - The title match]]></title>
+    <link href="http://lusis.github.com/blog/2013/06/04/devops-the-title-match/"/>
+    <updated>2013-06-04T21:38:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2013/06/04/devops-the-title-match</id>
+    <content type="html"><![CDATA[<p>I've noticed an annoying trend recently. I was content to ignore it for a while but now it's getting almost stupid. That trend is the job title of "DevOps".</p>
+
+<!-- more -->
+
+
+<p>I came across an article tonight that confused the hell out of me. It was an interview. The outlet wasn't a technical one per se but it was a technical interview none the less.</p>
+
+<p>This part is what confused me (<em>highlights mine</em>):</p>
+
+<p><blockquote><p>To do this requires a well-integrated platform that is full of capabilities for the <strong>developer</strong>; contemplates the needs of <strong>DevOps</strong>; provides command, control and visibility for <strong>operations</strong>; and is ....</p></blockquote></p>
+
+<p>To quote an internet-famous person:</p>
+
+<p><strong>WAT</strong></p>
+
+<h2>Stepping back</h2>
+
+<p>I don't like the idea of <em>devops</em> as a job title in the first place. I don't like it as a role either. It makes no sense. You don't call someone an <em>agile</em> so why would you call them a <em>devop</em>?</p>
+
+<p>My problem lies in the fact that it implies that there's something wrong with being a sysadmin, operations person, developer or whatnot. Not only that but the idea behind devops is the elimination of silos, not the creation of new ones.</p>
+
+<p>I have, however, made a bit of peace with the fact that <em>devops</em> has become a replacement title of sorts for <em>sysadmin</em> or <em>developer</em>.</p>
+
+<p>I get the problem domain. Companies want to be able to qualify the types of people they want. The phrase <em>devops</em> carries a certain meaning with it. People are trying to leverage that. In other cases, it's become a codeword for "generalist" or "technologist". And, yes, even in some cases it's become a code word for "doing both development and ops work"</p>
+
+<h2>What does devops mean though</h2>
+
+<p>Here's the secret. I'll tell you EXACTLY what devops means.</p>
+
+<p>Devops means giving a shit about your job enough to not pass the buck. Devops means giving a shit about your job enough to want to learn all the parts and not just your little world.</p>
+
+<p>Developers need to understand infrastructure. Operations people need to understand code. People need to fucking work with each other and not just occupy space next to each other.</p>
+
+<p>I worked at a company several years ago. We created a dedicated devops team. The rationale was solid - the company had a monolithic idea of roles and titles. We also had a large group on both sides that were only interested in doing their little bit and going home. By creating this title/team, it was easier at a company level to justify them working on non-standard projects.</p>
+
+<p>So a "devops" team was created. This was a small team of what essentially boiled down to "super sysadmins". We wrote puppet manifests, worked with the developers to automate build processes...shit like that.</p>
+
+<p>What ended up happening was that the devops team was seen as elitist by the operations team, nosy and invasive by the developers and everyone just passed the blame on to them - "Devops did that. Not us"</p>
+
+<h2>So back to that quote</h2>
+
+<p>Having said all that, what about the quote?</p>
+
+<p>This is indicative of the problem I described above. I think I've finally figured out the question I want to ask people who think this way:</p>
+
+<p>If devops is a distinct role/title apart from development and operations, then what the fuck does a "devop" do?</p>
+
+<p>Let's look at that quote again. It implies that:</p>
+
+<ul>
+<li>"command, control and visibility" is something developers have no need for</li>
+<li>operations won't need the same capabilities as developers</li>
+<li>There's a third group that has an entirely different set of needs</li>
+</ul>
+
+
+<p>What is that third group? What possible aspect outside of development and operations of the IT needs of a company do those two groups not think affects them in some way and thus have a vested interest in being involved? <em>(Yes I'm aware companies have dbas, security and what not - those are shitty silos too)</em></p>
+
+<p>This topic comes up all the time on various mailing lists and it never seems to really reach any sort of consensus. So I'm asking you. If a "devops" is something different than someone in operations or development, someone different than a sysadmin or developer....</p>
+
+<p>What the fuck is it?</p>
+
+<h2>Disclaimer</h2>
+
+<p>This post was writting on an airplane with an annoying passenger in front of me, quite a bit of rum in me and a lack of sleep. I'm guessing it really doesn't look any different than any other post though does it?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[It sucks to be right]]></title>
+    <link href="http://lusis.github.com/blog/2012/03/20/it-sucks-to-be-right/"/>
+    <updated>2012-03-20T09:00:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2012/03/20/it-sucks-to-be-right</id>
+    <content type="html"><![CDATA[<p>So it looks like Adrian Cockcroft finally spilled the beans on <a href="http://perfcap.blogspot.com/2012/03/ops-devops-and-noops-at-netflix.html">Netflix (no)Operations</a> and sadly it reads like I expected.</p>
+
+<!-- more -->
+
+
+<h1>Netflix still does operations</h1>
+
+<p>Regardless of what words Adrian uses, Netflix still does operations. <a href="http://twitter.com/allspaw">John Allspaw</a> summed it up pretty well in this tweet:</p>
+
+<p><img src="http://i.imgur.com/OW0kh.png" alt="Imgur" /></p>
+
+<p>and here are the things, he mentions:</p>
+
+<ul>
+<li>Metrics collection</li>
+<li>PaaS/IaaS evaluation/investigation</li>
+<li>Automation (auto-build, auto-recovery)</li>
+<li>Fault tolerance</li>
+<li>Availability</li>
+<li>Monitoring</li>
+<li>Performance</li>
+<li>Capex and Opex forecasting</li>
+<li>Outage response</li>
+</ul>
+
+
+<h1>So what does Adrian get wrong?</h1>
+
+<p>These are just a few things that jumped out at me (and annoyed me)</p>
+
+<p><blockquote><p>However, there are teams at Netflix that do traditional Operations, and teams that do DevOps as well.</p></blockquote></p>
+
+<p>Ops is ops is ops. No matter what you call it, Operations is operations.</p>
+
+<p><blockquote><p>Notice that we didn't use the typical DevOps tools Puppet or Chef to create builds at runtime</p></blockquote></p>
+
+<p>There's no such thing as a "DevOps tool". People were using CFengine, Puppet and Chef long before DevOps was even a term. These are configuration management tools. In fact Adrian has even said they use Puppet in their legacy datacenter:</p>
+
+<p><img src="http://i.imgur.com/RJIX1.png" alt="Imgur" /></p>
+
+<p>yet he seems to make the distinction between the ops guys there and the "devops" guys (whatever those are).</p>
+
+<p><blockquote><p>There is no ops organization involved in running our cloud...</p></blockquote></p>
+
+<p>Just because you outsourced it, doesn't mean it doesn't exist. Oh and it's not your cloud. It's Amazon's.</p>
+
+<h1>Reading between the lines</h1>
+
+<p>Actually this doesn't take much reading between the lines. It's out there in plain sight:</p>
+
+<p><blockquote><p>In reality we had the usual complaints about how long it took to get new capacity, the lack of consistency across supposedly identical systems, and failures in Oracle, in the SAN and the networks, that took the site down too often for too long.</p></blockquote></p>
+
+<p><blockquote><p>We tried bringing in new ops managers, and new engineers, but they were always overwhelmed by the fire fighting needed to keep the current systems running.</p></blockquote></p>
+
+<p><blockquote><p>This is largely because the people making decisions are development managers, who have been burned repeatedly by configuration bugs in systems that were supposed to be identical.</p></blockquote></p>
+
+<p><blockquote><p>The developers used to spend hours a week in meetings with Ops discussing what they needed, figuring out capacity forecasts and writing tickets to request changes for the datacenter.</p></blockquote></p>
+
+<p><blockquote><p>There is no ops organization involved in running our cloud, no need for the developers to interact with ops people to get things done, and less time spent actually doing ops tasks than developers would spend explaining what needed to be done to someone else.</p></blockquote></p>
+
+<p>I'm glad to see this spelled out in such detail. This is what I've been telling people semi-privately for a while now. Because Netflix had such a terrible experience with its operations team, they went to the opposite extreme and disintermediated them.</p>
+
+<p>Imagine you were scared as a kid by a clown. Now imagine you have kids of your own. You hate clowns. You had a bad experience with clowns. But it's your kid's birthday party so here you are making baloon animals, telling jokes and doing silly things to entertain the kids.</p>
+
+<p>Just because you aren't wearing makeup doesn't make you any less of a clown. You're doing clown shit. Through the eyes of the kids, you're a clown. Deal with it.</p>
+
+<p>Netflix is still doing operations. What should be telling and frightening to operations teams everywhere is this:</p>
+
+<p>The Netflix response to poorly run operations that can't service the business is going to become the norm and not the exception. Evolve or die.</p>
+
+<p>Please note that I don't lay all the blame on the Netflix operations team. I would love to hear the flipside of this story from someone who was there originally when the streaming initiative started. It would probably be full of stories we've heard before - no resources, misalignment of incentives and a whole host of others.</p>
+
+<p>Adrian, thank you for writing the blog post. I hope it serves as a warning to those who come. Hopefully someday you'll be able to see a clown again and not get scared ;)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why you should stop fighting distro vendors]]></title>
+    <link href="http://lusis.github.com/blog/2012/03/16/why-you-should-stop-fighting-distro-vendors/"/>
+    <updated>2012-03-16T14:37:00-04:00</updated>
+    <id>http://lusis.github.com/blog/2012/03/16/why-you-should-stop-fighting-distro-vendors</id>
+    <content type="html"><![CDATA[<p>Recently I saw a tweet from <a href="https://twitter.com/#!/kohsukekawa/status/180717301795008512">Kohsuke Kawaguchi</a> that really got me frustrated.</p>
+
+<!-- more -->
+
+
+<p>I've addressed this topic a bit before <a href="http://lusislog.blogspot.com/2010/09/distributions-and-dynamic-languages.html">here</a>. At the time it was addressing specifically dynamic languages. However the post that Kohsuke wrote (and the post that inspired it) have led me to a new line attitude.</p>
+
+<p><strong>Don't bother trying to get your packages into upstream vendor distros</strong></p>
+
+<h1>Wait. What? Let's step back a sec</h1>
+
+<p>Let me clarify something first. System packages are a good thing. The hassle has always been with BUILDING those packages. It was simply easier to build the software on the machine and install to <code>/usr/local/</code> than to try and express anything more than the most moderately simple application in RPM or DEB build scripts:</p>
+
+<ul>
+<li>If what you are packaging has dependencies not shipped with the OS, now you've got to package those</li>
+<li>If your dependency conflicts with a vendor-shipped version, you're screwed.</li>
+<li>If your dependency is a language runtime, give up.</li>
+<li>If your dependency is a specific version of python, just go into another line of work.</li>
+<li>If it's a distro LTS release, just don't bother</li>
+</ul>
+
+
+<h1>Ahh but we can work around this!</h1>
+
+<p>Yes, you're right. We now have tools like <a href="https://github.com/jordansissel/fpm">fpm</a> that take the pain out of it! Maven has had plugins that generate rpms and debs for you for a while now. Things are looking up! Let's just use those tools.</p>
+
+<p>So now you think, I'll just get these things submitted to Debian....</p>
+
+<p><strong>KABLOCK</strong></p>
+
+<p>I could rant a bit about Debian's packaging policy but it's addressed in the posts above. So maybe the Fedora people are more flexible?</p>
+
+<p><img src="http://i.imgur.com/px5ug.png" alt="Imgur" /></p>
+
+<p><strong>WAT</strong></p>
+
+<p>So here we have the two major distros that won't even consider your package unless you give the end-user the "freedom" to make your application unusable. Essentially you are told if you want your package to be included in upstream then you have to make sure they can swap out <code>libfunkytown.so.23</code> with <code>libfunkytown.so.1</code>.</p>
+
+<p>But maybe your application doesn't work on that version. So maybe you think, I'll just vendor ALL the things and shove it into <code>/opt</code> or <code>/usr/local</code>? Yeah that doesn't fly either (for various reasons).</p>
+
+<p>The point is that you'll probably never be able to get your package included upstream because you'll never be able to jump through the hoops to do it.</p>
+
+<h1>So stop trying</h1>
+
+<p>I know, I know. It would be awesome if you could tell users to just <code>yum install kickass</code> or <code>apt-get install kickass</code> but it's not worth it for several reasons as enumerated above.</p>
+
+<p>Distributions are not your friend. One could argue that its not thier job to be your friend. I would even agree with that argument. The distros have (or at least SHOULD have) an allegience to their user base. My argument is that position is directly opposed to your needs as a software provider.</p>
+
+<h2>Things you should not do</h2>
+
+<ul>
+<li>Waste your time trying to ensure that your software works on some busted as old version of libfunkytown that won't get upgrade for 7 years.</li>
+<li>Waste your time breaking your application into 436 interdependent subpackages just to please upstream</li>
+<li>Ignore the prexisting dependency management ecosystem of your language of choice (especially if it works)</li>
+</ul>
+
+
+<h2>Things you should do</h2>
+
+<ul>
+<li>Use your language's preexisting dependency management system to collect all your dependencies</li>
+<li>Rebar, bundle, virtualenv, mavenize, fatjar whatever ALL the dependencies</li>
+<li>Use FPM or some homegrown script to create a monolithic rpm or deb of your codebase that installs to <code>/opt/appname</code></li>
+<li>Make these packages available to your users on your download site</li>
+<li>Alternately, create a repo and repo config file they can use to stay up to date</li>
+</ul>
+
+
+<p>You will be happy. Your users will be happy. The distros can go lick themselves. We have reached something of a crossroads. As I argued in the previous post, the concept of a distribution is becoming somewhat irrelevant. Distros are more concerned about politics and making statements and broken concepts like software that doesn't need upgrading for 7 years (or even 2 years) than providing a framework and ecosystem that encourages developers to target software at it.</p>
+
+<p>If someone takes up the noble cause of trying to get your software included upstream, I would go so far as to make it plainly clear on whatever communication you have that you simply cannot support an unofficial repackaging of your software. Be polite. These are still your potential userbase. Simply state that those were not created by you and that the official packages are here.</p>
+
+<h1>A case in point</h1>
+
+<p>What I'm suggesting you do is not unheard of and honestly is the most tenable long term path for your users. Look at projects like Vagrant, Chef and Puppet among others. All of these tools are "owning their availability" the right way and are arguably providing better end user experiences than getting included in upstream could provide. In fact the experience of official packaging is above and beyond trying to do it yourself. As it should be.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Graphs in operations]]></title>
+    <link href="http://lusis.github.com/blog/2012/03/06/graphs-in-operations/"/>
+    <updated>2012-03-06T23:59:00-05:00</updated>
+    <id>http://lusis.github.com/blog/2012/03/06/graphs-in-operations</id>
+    <content type="html"><![CDATA[<p>So anyone who knows me knows I spend an inordinate amount of time bitching about Maven. I don't know if it's the type of companies I end up working for or what but I always seem to find myself ass-deep in Maven.</p>
+
+<!-- more -->
+
+
+<p><em>please note that I'm drifiting into deeply unfamiliar territory for me. Someone once told me the best way to learn about something is to write about it. Keep that in mind when making comments?</em></p>
+
+<p>One of the more interesting parts of maven is the dependency graph and concepts like transitive and (god forbid) circular dependencies. These problems aren't exlcusive to java, mind you. See bundler for Ruby.</p>
+
+<h2>A bit on graphs</h2>
+
+<p>Graph is a fairly overloaded term. In the context of this discussion I'm talking about graph theory (insofar as I can grok it). Specifically I want to talk about it in the context of IT operations.</p>
+
+<p>Graphs are nothing "new". Programmers have binary trees. Network geeks have OSPF. Puppet and Git are fans of the DAG (directed acyclic graph). These are all rooted in the same place no? You have nodes and edges. It's math all the way down. Unfortunately I suck at math.</p>
+
+<p>If the topic interests you at all, wikipedia has a good couple of articles worth reading. Seeing as I'm far from a domain expert, I can't vouch for the quality:</p>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Graph_theory">Graph Theory</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Graph_(mathematics">Graph (mathematics)</a>)</li>
+<li><a href="http://en.wikipedia.org/wiki/Glossary_of_graph_theory">Glossary of graph theory</a></li>
+</ul>
+
+
+<h1>How can graphs apply to IT operations</h1>
+
+<p>I've said for a while now that I feel like there's something fuzzy on the horizon that I can't make quite make out and it involves orchestration and graphs. I'm still not clear on how to express it but I'll try.</p>
+
+<p>Anyone who has ever used Puppet or Git has dabbled in graphs even if they don't know it. However my interest in graphs in operations relates to the infrastructure as a whole. James Turnbull expressed it very well last year in Mt. View when discussion orchestration. Obviously this is a topic near and dear to my heart.</p>
+
+<p>Right now much of orchestration is in the embryonic stages. We define relationships manually. We register watches on znodes. We define hard links between components in a stack. X depends on Y depends on Z. We're not really being smart about it. If someone disagrees, I would LOVE to see a tool addressing the space.</p>
+
+<p>Justin Sheehy did an awesome high level presentation on distributed systems, databases and the like at Velocity last year. While the talk was good, one thing that stuck out with me was his usage of the Riak logo:</p>
+
+<p><img src="https://assets.github.com/img/b4d183fe3181209da593ed5c6bf0f4c805ab2a62/687474703a2f2f6769746875622d696d616765732e73332e616d617a6f6e6177732e636f6d2f626c6f672f323031302f7269616b2d6c6f676f2e706e67" alt="Riak Logo" /></p>
+
+<p>During the presentation he would zoom out of the logo and replace it with the same logo. It expressed the idea of moving up the stack. Macro versus micro. I have the same feeling about where orchestration is going.</p>
+
+<h2>Express yourself</h2>
+
+<p>Currently we do a great job (and have the tools) to express relationships and dependencies at the node level:</p>
+
+<ul>
+<li>webapp needs container</li>
+<li>container needs java</li>
+<li>container needs system user</li>
+</ul>
+
+
+<p>Going a level higher, we even have some limited ability to express relationships between nodes:</p>
+
+<ul>
+<li>Load balancer needs app servers</li>
+<li>App server needs database</li>
+</ul>
+
+
+<p>We're not quite as good at this part yet but people have workarounds. I use Noah for this. enStratus also handles this very well.</p>
+
+<p>But we're still defining those relationships manually.</p>
+
+<p>When we get to this next level up, things get REALLY fuzzy. As people start to (re)discover SOA, we now have stacks that have dependencies on other stacks. Currently we use tools like Zookeeper to broker that relationship. But we still have to explcitly manage it.</p>
+
+<p>The level of coupling here isn't the problem. You can mitigate failure in one stack as it relates to another stack. Fail fast and fall back to sane/safe defaults. Read any article about how Netflix architects to get an idea.</p>
+
+<h1>What's missing?</h1>
+
+<p>What I feel like we're missing is a way to express those relationships and then trigger on them all the way up and down the chain as needed. We're starting to get into graph territory here.</p>
+
+<p>We must we be able to express and act on changes at the micro level (<em>I changed a config, I must restart nginx</em>) and even at the intranode level (<em>something changed in my app tier, need to tell my load balancer</em>) but now we need a way handle it at that macro level. Not only do we need a way to handle it but we must also be able to calculate what is impacted by that change.</p>
+
+<ul>
+<li>If I have this internode change, does it affect the intranode relationship?</li>
+<li>If I have an intranode change, does it affect the intrastack relationship?</li>
+</ul>
+
+
+<p>It seems to me that a graph of SOME kind is the best way to express this. I just can't quite make it out. Does current graph technology even handle that subgraph relationship? Excuse the pun but where do we draw the line? Are there multiple lines?</p>
+
+<p>Maybe this isn't an issue. Maybe through resilience engineering we simply keep that "intrastack" dependency as loose as possible so that we don't have this problem?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Load balancing Logstash with Redis]]></title>
@@ -202,877 +527,6 @@ output {stdout {debug =&gt; true} }
 <h2>Part three</h2>
 
 <p>I'm also working on a part three in this "series". The last configuration I'd like to show is doing this same setup but using <a href="http://zeromq.org">0mq</a> as the bus. This is going to be especially challenging since our 0mq support is curretly 'alpha'-ish quality. Beyond that, I plan on doing a similar series using pub/sub patterns. If you're enjoying these posts, please comment and let me know!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Load balancing Logstash with AMQP]]></title>
-    <link href="http://lusis.github.com/blog/2012/01/31/load-balancing-logstash-with-amqp/"/>
-    <updated>2012-01-31T01:12:00-05:00</updated>
-    <id>http://lusis.github.com/blog/2012/01/31/load-balancing-logstash-with-amqp</id>
-    <content type="html"><![CDATA[<p>AMQP in Logstash is one of the most complicated parts of the workflow. I've taken it on myself, as the person with the most AMQP experience (both RabbitMQ and Qpid) to try and explain as much as need for logstash users.</p>
-
-<p><a href="https://twitter.com/patrickdebois">Patrick DeBois</a> hit me up with a common logstash design pattern that I felt warranted a full detailed post.</p>
-
-<p><em>Warning: This is an image heavy post. Terminal screenshots are linked to larger versions</em></p>
-
-<h2>Requirements</h2>
-
-<ul>
-<li>No lost messages in transit/due to inputs or outputs.</li>
-<li>Shipper-only configuration on the source</li>
-<li>Worker-based filtering model</li>
-<li>No duplicate messages due to transit mediums (i.e. fanout is inappropriate as all indexers would see the same message)</li>
-<li>External ElasticSearch cluster as final destination</li>
-</ul>
-
-
-<!-- more -->
-
-
-<h2>EDIT</h2>
-
-<p>Originally our list stated the requirements as <em>No lost messages</em> and <em>No duplicate messages</em>. I've amended those with a slight modification to closer reflect the original intent. Please see <a href="http://blog.lusis.org/blog/2012/01/31/load-balancing-logstash-with-amqp/#comment-426175086">comment from Jelle Smet here</a> for details. Thanks Jelle!</p>
-
-<h2>Notes</h2>
-
-<p>We're going to leave the details of filtering and client-side input up to the imagination.
-For this use case we'll simply use <code>stdin</code> as our starting point. You can modify this as you see fit.
-The same goes for filtering. The assumption is that your filters will be correct and not be the source of any messages NOT making it into ElasticSearch.</p>
-
-<p>Each configuration will be explained so don't stress over it at first glance. We're also going to explicitly set some options for the sake of easier comprehension.</p>
-
-<h1>Client-side agent config</h1>
-
-<p>```
-{
-  input {</p>
-
-<pre><code>stdin { debug =&gt; true type =&gt; "host-agent-input" }
-</code></pre>
-
-<p>  }
-  output {</p>
-
-<pre><code>amqp {
-  name =&gt; "logstash-exchange"
-  exchange_type =&gt; "direct"
-  host =&gt; "rabbitmq-server"
-  key =&gt; "logstash-routing-key"
-  durable =&gt; true
-  persistent =&gt; true
-}
-</code></pre>
-
-<p>  }
-}
-```</p>
-
-<h2>Config Explained</h2>
-
-<p>The amqp output:</p>
-
-<h3>name</h3>
-
-<p>This is the name that will be provided to RabbitMQ for the exchange. By default, the Bunny driver will auto-generate a name. This won't work in this usecase because the consumers will need a known name. Remember exchanges are for producers. Queues are for consumers. When we wire up the indexer side, we'll need to know the name of the exchange to perform the binding.</p>
-
-<h3>exchange_type</h3>
-
-<p>For this particular design, we want to use a direct exchange. It's the only way we can guarantee that only one copy of a log message will be processed.</p>
-
-<h3>key</h3>
-
-<p>We're going to explicitly set the routing key as direct exchanges do not support wildcard routing key bindings. Again, we'll need this on the consumer side to ensure we get the right messages.</p>
-
-<h3>durable</h3>
-
-<p>This setting controls if the exchange should survive RabbitMQ restarts or not.</p>
-
-<h3>persistent</h3>
-
-<p>This is for the messages. Should they be persisted to disk or not?</p>
-
-<p>Note that for a fully "no lost messages scenario" to work in RabbitMQ, you have to jump through some hoops. This is explain more below.</p>
-
-<h2>Running the agent</h2>
-
-<p>This same configuration should be used on ALL host agents where logs are being read. You can have variation in the inputs. You can have additional outputs however the amqp output stanza above will ensure that all messages will be sent to RabbitMQ.</p>
-
-<h1>Indexer agent config</h1>
-
-<p>```
-input {
-  amqp {</p>
-
-<pre><code>host =&gt; "rabbitmq-server"
-name =&gt; "indexer-queue"
-exchange =&gt; "logstash-exchange"
-key =&gt; "logstash-routing-key"
-exclusive =&gt; false
-durable =&gt; true
-auto_delete =&gt; false
-type =&gt; "logstash-indexer-input"
-</code></pre>
-
-<p>  }
-}</p>
-
-<p>filter {
-  # your filters here
-}</p>
-
-<p>output {
-  elasticsearch {</p>
-
-<pre><code># your elasticsearch settings here
-</code></pre>
-
-<p>  }
-}
-```</p>
-
-<h2>Config explained</h2>
-
-<p>The amqp input:</p>
-
-<h3>name</h3>
-
-<p>This is the name that will be provided to RabbitMQ for the queue. Again, as with exchange, we need a known name. The reason for this is that all of our indexers are going to share a common queue. This will make sense in a moment.</p>
-
-<h3>exchange</h3>
-
-<p>This should match exactly with the name of the exchange that was created before in the host-side config.</p>
-
-<h3>key</h3>
-
-<p>This should, again, match the routing key provided in the host-side configuration exactly. <code>direct</code> exchanges do NOT support wildcard routing keys. By providing a routing key, you are creating a <code>binding</code> in RabbitMQ terms. This <code>binding</code> says "I want all messages sent to the <code>logstash-exchange</code> with a routing key of <code>logstash-routing-key</code> to be sent to the queue named <code>indexer-queue</code>.</p>
-
-<h3>exclusive</h3>
-
-<p>As with the exchange in the host-side config, we're going to have multiple workers using this queue. This is another AMQP detail. When you bind a queue to an exchange, a <code>channel</code> is created for the messages to flow across. A single queue can have multiple channels. This is how our worker pool is going to operate.</p>
-
-<p><strong>You do not want a different queue name for each worker despite how weird that sounds</strong></p>
-
-<p>If you give each worker its own queue, then you <strong>WILL</strong> get duplicate messages. It's counterintuitive, I know. Just trust me. The way to ensure that multiple consumers don't see the same message is to use mutliple channels on the same queue.</p>
-
-<h3>durable</h3>
-
-<p>Same as the exchange declarition, this ensures that the queue will stick around if the broker (the RabbitMQ server) restarts.</p>
-
-<h3>auto_delete</h3>
-
-<p>This is the setting most people miss when trying to ensure no lost messages. By default, RabbitMQ will throw away even durable queues once the last user of the queue disconnects.</p>
-
-<h3>type</h3>
-
-<p>This is the standard logstash requirement for inputs. They must have a <code>type</code> defined. Arbitrary string.</p>
-
-<h1>Sidebar on RabbitMQ message reliability</h1>
-
-<p>Simply put, RabbitMQ makes you jump through hoops to ensure that no message is lost. There's a trifecta of settings that you have to have for it to work:</p>
-
-<ul>
-<li>Your exchange must be durable with persistent messages</li>
-<li>Your queue must be durable</li>
-<li>Auto-delete must not be disabled</li>
-</ul>
-
-
-<p><strong>EVEN IF YOU DO ALL THESE THINGS, YOU CAN STILL LOSE MESSAGES!</strong></p>
-
-<h2>Order matters</h2>
-
-<p>I know ... you're thinking "What the F---?". There is still a scenario where you can lose messages. It has to do with how you start things up.</p>
-
-<ul>
-<li>If you start the exchange side but never start the queue side, messages are dropped on the floor</li>
-<li>You can't start the queue side without first starting the exchange side</li>
-</ul>
-
-
-<p>While RabbitMQ let's you predeclare exchanges and queues from the command-line, it normally only creates things when someone asks for it. Since exchanges know nothing about the consumption side of the messages (the queues), creating an exchange with all the right settings does NOT create the queue and thus no binding is ever created.</p>
-
-<p>Conversely, you can't declare a totally durable queue when there is no exchange in place to bind against.</p>
-
-<p>Follow these rules and you'll be okay. You only need to do it once:</p>
-
-<ul>
-<li>Start a producer (the host-side logstash agent)</li>
-<li>Ensure via <code>rabbitmqctl</code> or the management web interface that the exchange exists</li>
-<li>Start one of the consumers (the indexer config)</li>
-</ul>
-
-
-<p>Once the indexer agent has started, you will be good to go. You can shutdown the indexers and messages will start piling up. You can shut everything down - rabbitmq (with backlogged messages), the indexer agent and the host-side agent. When you start RabbitMQ, the queues, exchanges and messages will all still be there. If you start an indexer agent, it will drain the outstanding messages.</p>
-
-<p>However, if you screw the configuration up you'll have to delete the exchange and the queue via <code>rabbitmqctl</code> or the management web interface and start over.</p>
-
-<h1>How it looks visually</h1>
-
-<p>There are two plugins you should install with RabbitMQ:</p>
-
-<ul>
-<li>rabbitmq_management</li>
-<li>rabbitmq_management_visualizer</li>
-</ul>
-
-
-<p>The first will provide a web interface (and HTTP API!) listening on port 55672 of your RabbitMQ server. It provides a really easy way to see messages backlogged, declared exchanges/queue and pretty much everything else. Seeing as it also provides a very nice REST api to everything inside the RabbitMQ server, you'll want it anyway if for nothing but monitoring hooks.</p>
-
-<p>The visualizer is an ad-hoc addon that helps you see the flows through the system. It's not as pretty as the management web interface proper but it gets the job done.</p>
-
-<h1>Starting it all up</h1>
-
-<p>Now we can start things up</p>
-
-<h2>Producers</h2>
-
-<p>We're going to start up our four client side agents. These will create the exchange (or alternately connect to the existing one). If you look at the management interface, you'll see four channels established:</p>
-
-<p>Management view:
-<img src="/images/posts/load-balancing-logstash-with-amqp/amqp-four-channels.png" alt="amqp-four-channels.png" /></p>
-
-<p>Visualizer view:
-<img src="/images/posts/load-balancing-logstash-with-amqp/amqp-four-producers.png" alt="amqp-four-producers.png" /></p>
-
-<p>Remember that until we connect with a consumer configuration (the indexer) messages sent to these exchanges WILL be lost.</p>
-
-<h2>Consumers</h2>
-
-<p>Now we start our indexer configurations - all four of them</p>
-
-<p>Now if we take a peek around the management interface and the visualizer, we start to see some cool stuff.</p>
-
-<p>In the managment interface, you'll see eight total channels - four for the queue and four for the exchange</p>
-
-<p><img src="/images/posts/load-balancing-logstash-with-amqp/amqp-eight-channels.png" alt="amqp-eight-channels.png" /></p>
-
-<p>If you click on "Queues" at the top and then on the entry for our <code>indexer-queue</code>, you'll see more details:</p>
-
-<p><img src="/images/posts/load-balancing-logstash-with-amqp/amqp-indexer-queue-details.png" alt="amqp-indexer-queue-details.png" /></p>
-
-<p>But the real visual is in the visualizer tab. Click on it and then click on the <code>indexer-queue</code> on the far right</p>
-
-<p><img src="/images/posts/load-balancing-logstash-with-amqp/amqp-visualizer-detail.png" alt="amqp-visualizer-detail.png" /></p>
-
-<p>You can see the lines showing the flow of messages.</p>
-
-<p>One thing to make note of about RabbitMQ load balancing. Messages are load balanced across CONSUMERS not QUEUES. There's a subtle distinction there from RabbitMQ's semantic point of view.</p>
-
-<h2>Testing the message flow</h2>
-
-<p>Over in your terminal window, let's send some test messages. For this test, again, I'm using <code>stdin</code> for my origination and <code>stdout</code> to mimic the ElasticSearch destination.</p>
-
-<p>In my first input window, I'm going just type 1 through 4 with a newline after each. This should result in each consumer getting a message round-robin style:</p>
-
-<p><a href="/images/posts/load-balancing-logstash-with-amqp/load-balance-test-1.png"><img src="/images/posts/load-balancing-logstash-with-amqp/load-balance-test-1.png" alt="load-balance-test-1.png" /></a></p>
-
-<p>Now I'm going to cycle through the input windows and send a single message from each:</p>
-
-<p><a href="/images/posts/load-balancing-logstash-with-amqp/load-balance-test-4.png"><img src="/images/posts/load-balancing-logstash-with-amqp/load-balance-test-4.png" alt="load-balance-test-4.png" /></a></p>
-
-<p>You can see that messages 4-7 were sent round-robin style.</p>
-
-<h2>Testing persistence</h2>
-
-<p>All of this is for naught if we lose messages because our workers are offline. Let's shutdown all of our workers and send a bunch of messages from each input window:</p>
-
-<p><a href="/images/posts/load-balancing-logstash-with-amqp/workers-offline-terminal.png"><img src="/images/posts/load-balancing-logstash-with-amqp/workers-offline-terminal.png" alt="workers-offline-terminal.png" /></a></p>
-
-<p>We sent two lines of text per window. This amounts to eight log messages that should be queued up for us. Let's check the management interface:</p>
-
-<p><img src="/images/posts/load-balancing-logstash-with-amqp/eight-messages-waiting.png" alt="eight-messages-waiting.png" /></p>
-
-<p>Now if we stop rabbitmq entirely and restart it, those messages should still be there (along with the queue and exchanges we created).</p>
-
-<p>Once you've verified that, start one of the workers back up. When it comes fully online, it should drain all of the messages from the exchange:</p>
-
-<p><a href="/images/posts/load-balancing-logstash-with-amqp/drained-messages.png"><img src="/images/posts/load-balancing-logstash-with-amqp/drained-messages.png" alt="drained-messages.png" /></a></p>
-
-<p>Yep, there they went. The last two messages you get should be the ones from window 4. This is another basic functionality of message queue software in general. Messages should be delivered in the order in which they were recieved.</p>
-
-<h1>One last diagram</h1>
-
-<p>Here's a flowchart I created with Gliffy to show what the high-level overview of our setup would look like. Hope it helps and feel free to hit me up on freenode irc in the <code>#logstash</code> channel or on <a href="https://twitter.com/lusis">twitter</a>.</p>
-
-<p><a href="/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png"><img src="/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png" alt="gliffy-overview.png" /></a></p>
-
-<p><em>This post will eventually make its way into the <a href="http://cookbook.logstash.net">Logstash Cookbook Site</a>.</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Lowtech monitoring with Jenkins]]></title>
-    <link href="http://lusis.github.com/blog/2012/01/23/lowtech-monitoring-with-jenkins/"/>
-    <updated>2012-01-23T00:07:00-05:00</updated>
-    <id>http://lusis.github.com/blog/2012/01/23/lowtech-monitoring-with-jenkins</id>
-    <content type="html"><![CDATA[<p>I mentioned briefly in my previous post that I got quite a few people coming up to me after the panel and asking me for advice on monitoring.</p>
-
-<!-- more -->
-
-
-<p>I tweeted about this scenario not long after it happened but here's the gist:</p>
-
-<p><blockquote><p>I just need something simple to check on the status of a few jobs and run some SQL statements. I'm a DBA and I can't get any help from my ops team.</p></blockquote></p>
-
-<p>The person who asked this was very friendly and I could sense the frustration in her voice. It frustrates me to no end to hear stories of my tribe being this way to customers.</p>
-
-<p>I thought for a minute because I really wanted to help and the best thing I could think of was Jenkins. Yes, Jenkins.</p>
-
-<h1>Reasoning</h1>
-
-<p>Let's look for a minute at what we need from a simple health check system:</p>
-
-<ul>
-<li>Performing some task on a given schedule</li>
-<li>Ability to run a given command</li>
-<li>Reporting on the output of the given command (success/failure)</li>
-</ul>
-
-
-<p>Now you might think to your self "Self, this sure does sound a lot like cron". You'd be right. And that's EXACTLY what took me down the Jenkins path. There have been numerous posts about people replacing individual cron jobs with a centralized model based on Jenkins. This makes perfect sense and is something of a holy grail. I clearly remember researching and evaluating batch scheduling products many years ago to essentially do just this. If only Jenkins had been around then.</p>
-
-<h2>Small disclaimer</h2>
-
-<p>While Jenkins is a great low friction way to accomplish this task, it may or may not be scalable in the long run. While Jenkins jobs are defined as XML files and can be managed via an API, it's still a bit cumbersome to automate.</p>
-
-<h1>Getting started</h1>
-
-<p>First thing to do is grab the <a href="http://mirrors.jenkins-ci.org/war/latest/jenkins.war">latest Jenkins war</a>. The nice thing about Jenkins is that it ships in such an easy to use format - a self-contained executable war. You can start it very simply with:</p>
-
-<p><code>
-java -jar jenkins.war
-</code></p>
-
-<p>You should probably click around to get comfortable with the interface. It's pretty difficult to screw something up but if you do, just shutdown jenkins, <code>rm -rf ~/.jenkins</code> and start it back up.</p>
-
-<p>Since this post is geared primarily at someone who probably isn't familiar with Jenkins, I'm going to go over a few quick basics and key areas we'll be working with:</p>
-
-<h2>Menus</h2>
-
-<p>The menu is the section on the left handside. It will change based on your location in the application. If you don't always see something you're expecting, you can use the breadcrumb navigation to work your way back. Alternately, you can click on the Jenkins logo to get to the main page.</p>
-
-<h3>Main menu</h3>
-
-<p>This is the menu you see from the top-level of the Jenkins interface</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/menu.png" alt="Main interface" /></p>
-
-<h3>Job menu</h3>
-
-<p>This is the menu you see when you are viewing the main page of a job</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/job-menu.png" alt="Job Menu" /></p>
-
-<p>Note the "Build History" section at the bottom. This is a list of all builds that have been performed for this job. You can click on a given build to see details about it.</p>
-
-<h3>Build menu</h3>
-
-<p>This menu is visible when you select a specific build from the "Build History" menu of a Job page</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/build-menu.png" alt="Build Menu" /></p>
-
-<p>Notice the "Console Output" menu option. This will show you the log of what Jenkins did during a build. If you ever have problems with a build, you should come here and look at what happened.</p>
-
-<h3>Auto Refresh</h3>
-
-<p>In the interest of eliminating any confusion, we're going to enable "Auto Refresh" from the link on the top right:</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/enable-auto-refresh.png" alt="Enable Auto Refresh" /></p>
-
-<h2>Configuration</h2>
-
-<p>For the purposes of this exercise, we won't do too much configuration. We're going to take the perspective of the person above. We'll make few assumptions though in the interest of expidiency:</p>
-
-<ul>
-<li>The user has no passphrase on the SSH key. While this is probably not true, it makes this demo easier.</li>
-<li>The DB test will be executed locally.</li>
-<li>The local environment is some unix-y/linux-y one. The environment for this post was OS X communicating with Linux VMs</li>
-</ul>
-
-
-<p>The key to success here is something called a "free-style software project". This is essentially a blank canvas with very few requirements. I'm aware that the "Monitor an external job" type has been recently added but the steps were a bit too invasive for this particular case.</p>
-
-<h1>Our test case</h1>
-
-<p>I don't obviously have the specifics of what the user wanted checked so I'm going to extrapolate from her original statement:</p>
-
-<ul>
-<li>Run a SQL statement to see if some record is found</li>
-<li>Check for a running process</li>
-<li>Check a log file for some given string</li>
-</ul>
-
-
-<h2>The test database</h2>
-
-<p>The test database will be MySQL running on a Linux VM. Getting this going is an exercise for the reader, however here is the DDL and test data we're using:</p>
-
-<p><code>sql
---- This is just a sample, folks. Yes I know it's insecure.
-create database foo_db;
-use foo_db;
-create table jobs ( id int not null auto_increment primary key, name varchar(10), depth int);
-insert into jobs (name, depth) values ("job_a", 100);
-insert into jobs (name, depth) values ("job_b", 0);
-insert into jobs (name, depth) values ("job_c", 5);
-grant select on jobs to 'jenkins'@'%' IDENTIFIED BY 'password';
-flush privileges;
-</code></p>
-
-<h2>First Job</h2>
-
-<p>So we'll create a new freestyle job called "Check FooDB Backlog". Click on "New Job" from the main menu.</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/create-db-job.png" alt="Create Job" /></p>
-
-<p>Once you've created the job, the screen gets a bit more hectic. We're only going to concern ourselves with a few key areas:</p>
-
-<ul>
-<li><p>Build Triggers <img class="right" src="/images/posts/lowtech-monitoring-with-jenkins/build-triggers.png"></p></li>
-<li><p>Build Steps <img class="right" src="/images/posts/lowtech-monitoring-with-jenkins/build-step.png"></p></li>
-<li><p>I'll frequently refer to the <code>?</code> icon. <img class="right" src="/images/posts/lowtech-monitoring-with-jenkins/help-icon.png"></p></li>
-</ul>
-
-
-<h3>Scheduling</h3>
-
-<p>Under build triggers, we want to use the "Build Periodically" option. The syntax is akin to cron and there are some additional macros for known intervals. As with any Jenkins option, you can click on the <code>?</code> icon to the right of the option for inline help.</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/build-triggers.png" alt="Build Triggers" /></p>
-
-<p>So we're going to set up our health check to run every 15 minutes:
-<img src="/images/posts/lowtech-monitoring-with-jenkins/build-periodically.png" alt="Build Periodically" /></p>
-
-<h3>Defining the Build Step</h3>
-
-<p>Through Jenkins plugins, you can get an insane amount of additional build steps. However, the shipped experience has the stuff we need for now. We're going to be using the "Execute Shell" option. If you are running Jenkins on Windows, you'll want to use the "Execute Windows Batch command" instead. You will, of course, need to modify the commands appropriately yourself.</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/build-step.png" alt="Build Step Options" /></p>
-
-<p>Here's the body of our build step:</p>
-
-<p>```</p>
-
-<h1>!/bin/bash -l</h1>
-
-<p>CHECK=<code>mysql -u jenkins -ppassword -h 192.168.56.101 -BNe 'SELECT COUNT(*) FROM foo_db.jobs WHERE depth &gt;= 100'</code>
-exit ${CHECK}
-```</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/db-build-step.png" alt="DB Build Step" /></p>
-
-<h3>Running the job</h3>
-
-<p>Once you click save, you can click "Build Now" on the job menu to give it a test. It should fail:</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/db-failed.png" alt="Failed build" /></p>
-
-<p>Let's modify the job so we can see what success looks like. Click on the "Configure" link in the build menu and modify your build step. Set the threshold in the query to <code>101</code>. The build should now be blue:</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/db-good.png" alt="Good build" /></p>
-
-<p>This all works very well if you just want to manually inspect the status however let's take it a step further. Click on the "Configure" link from the Job menu. Notice at the bottom of the following screen, there's a section called "Post-build Actions". The very last option is "E-mail Notification". You can click the <code>?</code> to see the default behaviour. Check the box and add your email address:</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/email-notification.png" alt="Email Notification" /></p>
-
-<h3>Getting Notified</h3>
-
-<p>Sadly, this isn't enough to enable email notifications. You'll need to tell Jenkins an SMTP server it can use. Go back to the main menu and click "Manage Jenkins".</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/manage-jenkins.png" alt="Manage Jenkins" /></p>
-
-<p>From here, we're going to click "Configure System"</p>
-
-<p>Another busy screen! The settings in this section can get you in trouble if you aren't careful. The most common problem is people attempting to enable security and inadvertently locking themselves out.
-We're not worried about that for now. Scroll to the bottom and configure your SMTP server. The settings shown are for gmail and you'll need to click the "Advanced" button to enable additional settings.</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/email-settings.png" alt="Configure Email Servers" /></p>
-
-<p>You can select the last checkbox to test that your settings work.</p>
-
-<p>Once that's done, click save. Now we're going to rerun the job (Go back to the main menu then click your job from the list to see the "Build Now" option in the job menu.
-You most likely won't get an email because the job is passing. Let's configure our job again and set the threshold back to 100. Save the job and click "Build Now" again from the job menu.</p>
-
-<p>You should get an email that looks something like this:</p>
-
-<p>```
-Subject: Build failed in Jenkins: Check FooDB backlog
-See <a href="http://localhost:8080/job/Check%20FooDB%20backlog/8/">http://localhost:8080/job/Check%20FooDB%20backlog/8/</a></p>
-
-<hr />
-
-<p>Started by user anonymous
-Building in workspace <a href="http://localhost:8080/job/Check%20FooDB%20backlog/ws/">http://localhost:8080/job/Check%20FooDB%20backlog/ws/</a>
-[workspace] $ /bin/bash -l /var/folders/d6/h7dxb_zj49s8xlj91zd3z6fr0000gn/T/hudson1906255485094144268.sh
-Build step 'Execute shell' marked build as failure
-```</p>
-
-<p>There's not much information in there since our job is swallowing the mysql output and using it as the exit code. You can spice the output however you like it by adding <code>echo</code> statements to the build step. Any output from the job will be included in the email. If you change the thresholds back to a value that you know will pass, you'll get at least one email when the build recovers. Unless the build starts failing again, you won't get any emails.</p>
-
-<p><code>
-Subject: Jenkins build is back to normal : Check FooDB backlog
-See &lt;http://localhost:8080/job/Check%20FooDB%20backlog/9/&gt;
-</code></p>
-
-<h2>Second Job</h2>
-
-<p>So now we've got something handling our DB test. We also needed to check to see if some process was running. Let's do a simple one to see if MySQL is running. Let's call it "Check MySQL Running". Follow the steps for creating a free-style job but this time we're going to create our build step like so:</p>
-
-<p>```sh</p>
-
-<h1>!/bin/bash -l</h1>
-
-<p>ssh 192.168.56.101 'ps -ef' | grep mysqld
-```</p>
-
-<p>Again, we're going to assume that SSH keys are setup with no password. We're keeping it simple. Just as in the case of the other job, we should get a blue build status.</p>
-
-<h2>Third Job</h2>
-
-<p>The third job is the most complex in that we're going to need to install a plugin for maximum effect. This will have you jumping around a bit but hopefully you're a bit more comfortable navigating by now.
-At a high level we're going to do the following:</p>
-
-<ul>
-<li>Install a new Jenkins plugin</li>
-<li>Create a new job</li>
-<li>Take note of a new build option</li>
-<li>Configure the plugin globally</li>
-<li>Enable the plugin in our job</li>
-</ul>
-
-
-<h3>Installing a Plugin</h3>
-
-<p>We're going to go back to "Manage Jenkins" (accessible from the main menu) but now we're going to select "Manage Plugins".</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/plugin-main.png" alt="Plugin Page" /></p>
-
-<p>Once on the plugin screen, click the "Available" tab. This part can be overwhelming. It's especially confusing since plugins will be listed twice if they fall into multiple categories. However, you only need to mark it once.</p>
-
-<p>The plugin we want is called the "Log Parser Plugin". If you can't easily find it, use your browser's "find on page" (CTRL-F, APPLE-F) to find it.</p>
-
-<p>Check the box and click "Install without Restart". You should see a screen similar to this:</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/plugin-install.png" alt="Plugin Install" /></p>
-
-<h3>Back to the job</h3>
-
-<p>Now let's create our final job. Following the same steps as above, create a new job called "Check DHCP Errors". Again, reaching for a contrived case, I'm going to check my VM's syslog to see if it had any errors related to DHCP.</p>
-
-<p>```sh</p>
-
-<h1>!/bin/bash -l</h1>
-
-<p>ssh 192.168.56.101 'tail -n 5 /var/log/syslog'
-```</p>
-
-<p>Now we could have done this with a grep statement just like above. However I wanted to show installing plugins and the "Log Parser Plugin" actually offers some more flexible options, understands more than just pass or fail and can match multiple items without building overly complex flow into your shell step.</p>
-
-<p>You'll notice at the bottom we now have an ADDITIONAL option in our "Post-build Actions" - <code>Console output (build log) parsing</code>:</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/post-build-log-parser.png" alt="New Option" /></p>
-
-<p>Whenever you install a plugin, where it's used depends on what it does. In this case, we're doing post processing of the job run log. We can add a third state via this plugin as opposed to just "Pass" or "Fail" - "Unstable". Before we can enable it, however, we need to give it some parsing rules.</p>
-
-<p>For now leave the option unchecked and click "Save"</p>
-
-<h3>Configuring the new plugin</h3>
-
-<p>Go back to the "Manage Jenkins" screen (where you set the Email settings). At the bottom, you should now have an option for <code>Console Output Parsing</code>:</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/console-output-parsing.png" alt="Console Output Parsing Configuration" /></p>
-
-<p>Again, anything you configure in this section is GLOBAL. Luckily you can define various rule sets for parsing and apply them individualy to jobs. This plugin is a bit complex so you'll probably want to look at the <a href="https://wiki.jenkins-ci.org/display/JENKINS/Log+Parser+Plugin">documentation</a>.</p>
-
-<p>We're going to create a very basic rules file in <code>/tmp</code> on our LOCAL machine (where Jenkins is running) called <code>jenkins-dhclient-rules</code>:</p>
-
-<p><code>
-warn /^.*dhclient: can't create .*: No such file or directory$/
-info /^.*dhclient: bound to .*$/
-</code></p>
-
-<p>This is telling the log parser that the following line is a "warning":</p>
-
-<p><code>Jan 23 01:49:52 ubuntu dhclient: can't create /var/lib/dhcp3/dhclient.eth1.leases: No such file or directory</code></p>
-
-<p>and that</p>
-
-<p><code>Jan 23 01:49:52 ubuntu dhclient: bound to 192.168.56.101 -- renewal in 1367 seconds.</code></p>
-
-<p>is informational. These distinctions are handy for the plugin's colorized output support.</p>
-
-<p>Now that we've created that file, under the plugin settings we want to name it and give it the location to the file:</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/console-parsing-plugin.png" alt="Configured Parsing Rules" /></p>
-
-<h3>Back to our job</h3>
-
-<p>Finally!</p>
-
-<p>Let's go back to our new job (Check DHCP Errors) and modify it. We want to enable the parsing plugin in the post-build steps. We're going to check "Mark build Unstable" for warnings and select our rule. Now save the job. The reason we're going for warning is that this error is not fatal. Our system still gets an IP address. What we want to do is draw attention to it.</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/console-parsing-plugin-enabled.png" alt="Post Build Parsing" /></p>
-
-<p>Now if you run the job, you'll get a yellow ball indicating that the job is unstable. If we were to change the first line of our rule to error and check the appropriate box, the job would have been marked a failure. Something additional this plugin provides is the "parsed console output". If you click on the job detail and select "Parse Console Output" from the job menu, you'll actually get a nicer way to see exactly what was wrong:</p>
-
-<p><img src="/images/posts/lowtech-monitoring-with-jenkins/parsed-output.png" alt="Parsed Console Output" /></p>
-
-<p>Again, this is a totally contrived example. Obviously we would fail long before the parsing had the host been down.</p>
-
-<h1>Tying it all together</h1>
-
-<p>All of these individual jobs are neat but there's an obvious dependency there. We need to be able to SSH to the host, we need mysql to be running and then we want to query it. We don't want multiple emails for each failure. We only want the actual failed job to alert us. Let's chain these jobs together to match that flow.</p>
-
-<ul>
-<li>Under the "MySQL Running" and "FooDB" jobs, disable the cron schedule. We only want it on the "DHCP" job.</li>
-<li>Under the DHCP job, we're going to select the Post-build step of "Build other projects"</li>
-<li>Check "Trigger even if build is unstable" since we know it's going to be unstable.</li>
-<li>In the text area, we want to add our "Check MySQL Running" job</li>
-<li>Under the "Check MySQL Running" job, we want to select "Trigger only if build succeeds" and set our text area to the "Check FooDB Backlog" job.</li>
-</ul>
-
-
-<p>Now if you run the top-level job (Check DHCP Errors), all of the jobs will run. If any fail, the run will stop there and alert you! Since this is now scheduled, every 15 minutes this entire workflow will be checked.</p>
-
-<h1>Additional plugins and tips</h1>
-
-<p>Jenkins has a boatload of plugins. It's worth investigating them to see if they make some given task (like output parsing) easier. Some provide additional notification paths like jabber or irc. Others provide additional build step types in specific languages like Groovy or Powershell. You can also do things like create a "Parameterized Build". This is especially handy for thresholds. There's also a very handy SSH plugin that let's you define hosts globally and keys per host. This helps clean up your build steps too.</p>
-
-<p>One plugin that was recommended is the "Email-ext" plugin. This allows you to REALLY spice up and configure your email notifications.</p>
-
-<p>There's a plugin for checking a web site for some criteria and plugins for starting virtual machines. There are also plugins for creating a radiator view so you can get a nice big dashboard for just checking the state of jobs at a glance.</p>
-
-<p>The key to remember is that Jenkins is an unopinionated build tool. This flexiblity lends itself to doing off-the-wall stuff (like being a monitoring system or a cron replacement). The trick is translating the concepts and terminology of building software to something that fits your use case.</p>
-
-<h1>Additional Credits</h1>
-
-<p>I'd like to thank <a href="https://twitter.com/miller_joe">Joe Miller</a>, <a href="https://twitter.com/ches">Ches Martin</a> and <a href="https://twitter.com/agentdero">R. Tyler Croy</a> for reviewing this post and offering up corrections, tips and advice.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Scale10x Recap]]></title>
-    <link href="http://lusis.github.com/blog/2012/01/22/scale10x-recap/"/>
-    <updated>2012-01-22T07:02:00-05:00</updated>
-    <id>http://lusis.github.com/blog/2012/01/22/scale10x-recap</id>
-    <content type="html"><![CDATA[<p>This past week I had the awesome pleasure of participating in my first <a href="http://www.socallinuxexpo.org/">SoCal Linux Expo</a>. As I later discovered, this was the 10th installment of this awesome event (hence the 10x).</p>
-
-<!-- more -->
-
-
-<h1>The email and enStratus</h1>
-
-<p>I got an email from <a href="https://twitter.com/irabinovitch">Ilan Rabinovitch</a> just as things were going down with me headed to <a href="http://enstratus.com">enStratus</a>. Since the event was going to be right around the time I started, I pretty much put it out of my mind.
-Then I realized that <a href="https://twitter.com/botchagalupe">my boss</a> was going to be attending. I figured it wouldn't hurt to ask and it was decided that I would shadow John on his trip to enStratus HQ for my mandatory cultural immersion (translation: does the fat redneck own a winter coat?) and on to SCaLE. While I didn't make it to Minnesota (diverted to San Jose on business), I did still make it to the conference.</p>
-
-<p>I had an awesome time in San Francisco and San Jose. I got to meet a great bunch of folks and geek out hardcore.</p>
-
-<h1>Monitoring sucks</h1>
-
-<p>Ilan asked me if I would be willing to be on a panel about the whole <a href="https://github.com/monitoringsucks">#monitoringsucks</a> thing. We were able to score a great panel of folks:</p>
-
-<ul>
-<li>Simon Jakesch from Zenoss</li>
-<li>James Litton from PagerDuty</li>
-<li>Jody Mulkey from Shopzilla</li>
-</ul>
-
-
-<p>The event was awesome. I did some minor introductions, got the ball rolling with some questions and then we let the audience take it from there.
-The participation was AWESOME. We had great questions from the audience and the feedback I got AFTER the fact was mindblowing. One particular post-panel question is worth a blog post in its own right.</p>
-
-<p>One thing that really stood out was this: People just don't know where to start. The landscape is pretty "cluttered". <a href="https://twitter.com/cwebber">Chris Webber</a> brought up a very salient point that I sometimes forget; When we talk about "monitoring", we're really talking about multiple things - collection, alerting, visualization, trending and multitudes of other aspects.</p>
-
-<p>I got asked several times in the hallway - "What should I use?" or "What do you think about <foo>?". My first response was always "What are you using now?".</p>
-
-<p>I like to think I'm pretty pragmatic. I love the new shiny. I love pretty graphs. I'm a technologist. However, I know when to be realistic. My thought process goes something like this:</p>
-
-<h2>Do you have something in place now?</h2>
-
-<h3>Yes</h3>
-
-<p>Why are you looking to switch? Is it unreliable? Is it painful to configure? Basically, if it's getting the job done and has relatively minor overhead there's no reason to switch.
-The pain points for me with monitoring solutions usually come much later. It doesn't scale or scaling it is difficult. It doesn't provide the visibility I need. It's unreliable (usually due to scaling problems).
-Until then, use what you've got and be guard for early signs of problems like check latency going up or missed notifications.</p>
-
-<p>If you have a configuration management solution in place, it probably has native support for configuring Nagios. When you add a new host to your environment, you only need to tell your CM tool to run on your monitoring server. If you've done any sort of logical grouping, you'll have the right things monitored quickly.</p>
-
-<h3>No</h3>
-
-<p>If you don't have ANYTHING in place, you need to cover two bases pretty quick:</p>
-
-<ul>
-<li>Outside-In Checks: is my site up and responding timely?</li>
-<li>Stupid stuff: Are my disks filling up? Is my database slave behind?</li>
-</ul>
-
-
-<p>For outside in checks, use something quick and easy like Pingdom. For the inside checks, don't underestimate the power of a cron job. If you want something a bit more packaged, look at <a href="http://mmonit.com">monit</a>. It's dead simple and can get you to a safe place.</p>
-
-<h2>A note on visibility</h2>
-
-<p>Monitoring tools are great but many times they fall down when you need to diagnose a problem ex post facto. If you went the simple route, you probably don't have any real trending data. This is where many complaints start to come from folks. You end up monitoring the same thing twice - once for alerting systems like Nagios and another time for your visualization, trending and other engines. When you reach this point, start looking at things like Sensu or all-in-one solutions that, while cumbersome and imprecise use the same collected data - Zenoss, Zabbix, Icinga (originally a fork of Nagios).</p>
-
-<p>The event was recorded (both audio and video) but I have no timeframe on when it's going to be available but I'll let you know as soon as it's up.</p>
-
-<h1>The rest of the conference</h1>
-
-<p>The rest of the conference was epic as well. Being that this was my first time, I didn't know what to expect. The thing that most stood out was the number of children. This was probably the most family friendly conference I've ever been to. Encouraging stuff. Plenty of events and in fact an entire track dedicated to children.</p>
-
-<p>I didn't get to attend as many talks as I wanted to. While the facility was really nice, the building is like a faraday cage. My phone spent what little battery life it had just trying to get a signal. I spent quite a bit of time running back to my room to charge up. <a href="https://twitter.com/cwebber">Chris Webber</a> totally got me hooked on portable chargers.</p>
-
-<h1>Juju talk</h1>
-
-<p><em>disclaimer: I'm fully aware that Juju is undergoing heavy active development and is a very young project</em></p>
-
-<p>One of the talks I attended was on <a href="http://juju.ubuntu.com">Juju</a>. I was probably a bit harsh on Juju when it was first announced. The original name was much better and the whole witch doctor thing just doesn't sit well with me.</p>
-
-<p>I also hate the tag line - "DevOps distilled". It's marketing pure and simple. I have very little tolerance for things that bill themselves as a "devops tool" or "for devops".</p>
-
-<p>But more than the name, something about Juju didn't feel right. After the talk, something still doesn't feel right. While I don't like pooping all over someone else's hard work so writing this part is tough.</p>
-
-<h2>Where does it fit?</h2>
-
-<p>Right now, I don't think Juju even knows where it fits. It's got some great ideas and on any other day, I'd be all over it. The problem is that Juju tries to do too much in some areas and not enough in others.</p>
-
-<p>Parts of Juju are EXACTLY what I see as my primary use case for Noah. The service orchestration is great. The ideas are pretty solid. Juju even uses ZooKeeper under the hood.</p>
-
-<h2>Services not servers</h2>
-
-<p>Everyone knows that I preach the mantra of "services matter. hosts don't"</p>
-
-<p>The problem is that in an attempt to be the Nagios (unlimited flexibility) of configuration management, it can't actually do enough in that area. Because it only concerns itself with services (and the configuration of them), it doesn't do enough to manage the host. Just because the end state is "I'm serving a web page" doesn't mean you should ignore the host its running on. Since Juju isn't designed to deal with that (and actually LACKS any primitives to do it), you're left with needing to manage a system in multiple places - once with your CM tool and then again with the charms.</p>
-
-<p>Someone said it best when he described Juju as "apt for services". It's quite evident that the same broken mentality that apt takes to managing packages is applied to Juju as well. Charms have upgrade and downgrade steps. They're just as complicated too. Not only is there no standard (since charms can be written in any language) it's actually detrimental. The reason for a common DSL or language like the ones exposed by CM tools is not some academic mental masturbation. It's repeatability and efficiency. I can go into a puppet shop and look at a module and know what it does. I can look at most chef recipes (outside of ones that might use a custom LWRP) and know what's going on.</p>
-
-<p>In the Juju world, a single charm could be written in one spot in Python and another spot in Bash. It pushes too much responsibility to the end user NOT to mess something up. I dare say that idempotence doesn't even exist in Juju.</p>
-
-<h2>A fair shake</h2>
-
-<p>Again, I'm going to do some more playing around with Juju. I think it can meet a critical need for folks but I think they need to revisit what problem they're trying to solve. I appreciate the work they've done and I'm totally excited that orchestration is getting the proper attention. The presenters were fantastic.</p>
-
-<h1>Other stuff</h1>
-
-<p>I attended a really good talk about the history of Openstack and where it's going. It was great. As someone who is working with openstack professionally now (and had just dealt with some of its warts not 3 days before hand), I found it very valuable. Also congrats to the speaker, <a href="https://twitter.com/anotherjesse">Jesse Andrews</a> on the birth of his first child!</p>
-
-<p>I managed to make it to Brendan Gregg's talk as well. If you ever have the opportunity to hear him speak, you should take it. While I'm not a SmartOS user, the talk was really not about that. I walked out with some amazing insight on how smart people troubleshoot performance problems. Very well done.</p>
-
-<h1>The hallway track</h1>
-
-<p>Of course the real value in any conference is the hallway track. The chance to interact with your peers. I met so many smart people (some twice because I suck at remembering faces at first - sorry!). Chatting with folks like C. Flores, Jason Cook, Sean O'Meara, Chris Webber, Dave Rawks, Matt Ray, Matt Silvey and so many others that I can't keep straight in my head. Everyone was awesome and I hope that you were able to get as much out of me as I got out of you.</p>
-
-<p>Thanks again to Ilan for the invitation and for running such an amazing conference.</p>
-
-<p>Also, little known made-up fact: Lusis is Tagalog for "He who eats with both hands".....</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Configuration Management Divide]]></title>
-    <link href="http://lusis.github.com/blog/2011/08/22/the-configuration-management-divide/"/>
-    <updated>2011-08-22T22:07:00-04:00</updated>
-    <id>http://lusis.github.com/blog/2011/08/22/the-configuration-management-divide</id>
-    <content type="html"><![CDATA[<p><em>wherein John admits he was wrong about something</em></p>
-
-<p>As I was checking my Github feed tonight (as I've been known to do on occassion), I saw an update for a project that I was watching. This project is, for all intents and purposes, a redo of Capistrano with some additional system management stuff on top. From the description:</p>
-
-<blockquote><p>All together mixed to make your life easier.
-As mentioned before do is a fun mix of capistrano, rake, thor and brew.
-With XXXXX you are be able to do easily common task on your local or remote machine. The aim of XXXXX is to become the unique and universal tool language that permit you to make your own brew, apt-get or yum package, same syntax for all your machine.</p></blockquote>
-
-<p>Now I've said before I'm a tool junkie. I'm always looking for ideas and inspiration from other tools. I also love to contribute where I can.
-What bothered me particularly about this project is that it felt like a "solved problem".</p>
-
-<!-- more -->
-
-
-<h2>Open mouth, insert foot (at least partially)</h2>
-
-<p>So at DevOps Days Mt. View this year, I made a statement. I said with quite a bit of firmness that I thought configuration management was a solved problem. I didn't get a chance to clarify what I meant by that. At least not before <a href="http://twitter.com/littleidea">Andrew Clay Shafer</a> strongly disagreed with me. Before I go any further, I want to clarify what I meant by that.</p>
-
-<p>I, personally, feel like there comes a point where a class of tool reaches a certain level that makes it "good enough". So what is good enough?
-By "good enough", I mean that it solves the first in a broader series of problems. By no means am I implying that we should no longer pursue improvement. But what I am suggesting is that at a certain point, tools are refining the first stage of what they do.</p>
-
-<p>When we get to this point in a class of tool (let's stick with CM), we start to see gaps in what it can do. At this point, you get a rush of tools that attempt to fill that gap. What we essentially do is try and figure out if the gap should be filled by the tool or does it make sense to exist apart. So taking the discussion I was involved in at the time - orchestration, what I was attempting to say (epic fail, I might add) is that the current crop of configuration management tools have reached a usable point where they do enough (for now). What we're seeing as questions now are "How do I think beyond the single node where this tool is running?". What we might find is that functionality DOES belong in our CM tool. We might also find that, no, we need this to exist apart from it for whatever reasons. Basically I was attempting to say "Hey, CM is in a pretty good state right now. Let's tackle these OTHER problems and regroup later".</p>
-
-<p>So where was I <a href="http://youtu.be/V3y3QoFnqZc">wrong</a>?</p>
-
-<h2>Developers, developers, developers</h2>
-
-<p>I made the following comment on Twitter earlier:</p>
-
-<blockquote><p>The sheer number of what are essentially Capistrano clones makes me realize that the config. management message fails to resonate somewhere.</p></blockquote>
-
-<p>What I find most interesting about these various "clones" is that they're all created by developers. People apparently pine for the days of Capistrano. Come to think of it though, who blames them?</p>
-
-<p>As I look at the current crop of configuration management tools, and follow various tweets and blog posts I realize that people either aren't aware of tools like puppet and chef or, in the worst cases, they feel that they're too much hassle/too complicated to deal with. What we're seeing is the developer community starting to come to the same realizations that the sysadmin community came to a while ago. What's also interesting is that the sysadmin community is coming to the same realizations that developers came to a while ago.</p>
-
-<p>It's like some crazy romantic movie where the two lovebirds, destined to be together in the end have the pivotal mix-up scene. He leaves the bar to stop her from getting on the airplane. Meanwhile she heads to the bar upon realizing that she can't get on the plane without him.</p>
-
-<p>People are going to great lengths, either out of ignorance* about available tools or from frustration about the complexities involved.</p>
-
-<h2>So where's the divide?</h2>
-
-<p>I think the divide is in the message. While I still stand behind the statement that the "dev" vs "ops" ratios are regionally specific, I'm starting to agree that the current crop of tools <strong>ARE</strong> very operationally focused. That's not a bad thing either. Remember that the tools were created by people who were primarily by sysadmins.</p>
-
-<p>When you look at the tools created by people who were primarily developers, what do you see?</p>
-
-<ul>
-<li>Apache Whirr</li>
-<li>Do</li>
-<li>Fabric</li>
-<li>Capistrano</li>
-<li>Glu</li>
-<li>DeployML</li>
-</ul>
-
-
-<p>What's interesting about all of these tools is that they're designed to get the code out there as easily as possible or to stand up a stack as quickly as possible. What's frustrating for me, as primariy a sysadmin, is that I see the pain points that will come down the road. These tools don't really scale. Yes, sometimes you need "ssh in a for loop" however inherting these types of environments can be painful. Concepts like idemopotence and repeatability don't exist. They generally don't take into account the non-functional requirements. They certainly don't handle multiple operating environments or distributions very well.</p>
-
-<p>What's really sad is that the end goal is the same. We just want to automate away the annoying parts of our jobs so we can get on to more important shit.</p>
-
-<h3>You arrogant prick</h3>
-
-<p>I figured I'd get that out of the way now. It's very easy to dismiss these concerns as some pissy sysadmin but I don't think that's entirely fair. Remember what I said earlier. Sysadmins are starting to come to realizations that developers had a long time ago. The same exists for developers. Both sides, regardless of primary role, still have much to learn from each other.</p>
-
-<h2>What do we do?</h2>
-
-<p>I'm going to share a fairly generic dirty little secret. Developers don't want to write puppet manifests/modules. They don't want to write chef cookbooks/recipes. In most every situation I've been in, there has been little interest in those tools from outside the sysadmin community. That's changing. I think as people are getting introduced to the power they have, they come around. But there's still a gap. Is the gap around deployment? Partially. I think the gap also exists around configuration. Obviously I'm biased in that statement.</p>
-
-<p>A bit of a personal story. At my previous company, we were a puppet shop. We tried to get developers to contribute to the modules. It didn't work. It just didn't make sense. It's not that they were stupid. It's that it was an extra step. "Oh you mean I have to put that variable over here instead of in my configuration file? That's annoying because I have to be able to test locally". What ended up happening was that one of the guys on the operations side learned just enough Java to write lookup classes himself. Instead of us populating hosts using ERB templates, we were now querying Cobbler for classes using XML-RPC. There were some other factors at play, mind you. It was a really large company with developers who came from the silo'd worldview. There was also quite a bit of ass-covering attitude running around.</p>
-
-<p>This is why I'm so bullish on bridge tools like Noah and even Vagrant. We're all attempting to do the same thing. Bridge that last little bit between the two groups. Find a common ground. Noah is attempting to bridge that by allowing the information to be "shared" between teams. ZooKeeper let's the developers manage it all themselves (just push this app out, we'll find each other). Vagrant takes the route of bringing the world of production down to the developer desktop.</p>
-
-<p>But none of these tools address the deploy issue. Do we want to use the Opscode deploy cookbook? We can but it's fairly opinionated**. Maybe we decide to use FPM to generate native system packages and roll those out with a Puppet run? Putting on my fairly small developer hat, none of these sounds really appealing to me. Maybe as the java developer, I just want to use JRebel. That's nice but what about the configuration elements? Do we now write code to ask Puppet or Chef for a list of nodes with a given class or role?</p>
-
-<p>Look at what Netflix does (not that I approve really). They roll entire fucking AMIs for releases. While the sysadmin in me is choking back the bile at the inflexibility of that, stepping into another perspective says "It works and I don't have to deal with another server just to manage my systems".</p>
-
-<h2>I don't have all the answers</h2>
-
-<p>That much is obvious. What I can say is that I see a need. I'm addressing it the way I think is best but I still see gaps. Shared configuration is still complicated. Deploy is still complicated. While I would generally agree that things like rolling back are the wrong approach, I also realize that not everyone is at the point where they can roll-forward through a bad deploy. Hell, we do all of our deploys with Jenkins and some really ugly bash scripts and knife scripts.</p>
-
-<p>I'd love any commentary folks might have. I'll leave you with a few comments from other's on twitter when I made my original comment:</p>
-
-<blockquote><p>Capistrano serves a different need. Rapid deployment with rollback isn't implicit in the current crop config mgmt tools - <a href="https://twitter.com/altobey">@altobey</a></p>
-
-<p>deploying code with a CM tool (eg, the chef <code>deploy</code> resource) is a grey area for me. for example: does rollback really fit? - <a href="https://twitter.com/dpiddee">@dpiddee</a></p>
-
-<p>or that it might be missing some use case? - <a href="https://twitter.com/jordansissel">@jordansissel</a></p>
-
-<p>I've played with using deployml in its local only mode kicking off deploys with mcollective, worked really nice - <a href="https://twitter.com/ripienaar">@ripienaar</a></p>
-
-<p>Roll forward, never back. - <a href="https://twitter.com/bdha">@bdha</a></p>
-
-<p>This is a fight I have at least two or three times at every conference I speak at and in a bucket load of other places - <a href="https://twitter.com/kartar">@kartar</a></p>
-
-<p>further thought: I consider capistrano to be one impl of a "deployment service" on the same level as, say, a CM tool  - <a href="https://twitter.com/dpiddee">@dpiddee</a></p></blockquote>
-
-<ul>
-<li>"Ignorance": I don't mean ignorance in the sense of stupidity. I mean it strictly in the sense of not having knowledge of something. No judgement is implied</li>
-<li>"Opinionated" - Opinionated isn't bad. It's just opinionated.</li>
-</ul>
-
 ]]></content>
   </entry>
   

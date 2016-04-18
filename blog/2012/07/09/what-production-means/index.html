@@ -1,0 +1,399 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>What production means - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="This post is something that&#8217;s been brewing for a while. While it may sound targeted in tone, it&#8217;s more general than that. Let&#8217;s j...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/blog/2012/07/09/what-production-means/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">What Production Means</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-07-09T21:31:00-04:00" pubdate  data-updated="true" >Jul 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This post is something that&#8217;s been brewing for a while. While it may sound targeted in tone, it&#8217;s more general than that. Let&#8217;s just call it an open letter to family, friends and coworkers around the world.</p>
+
+<!-- more -->
+
+
+<p>One thing that I have the hardest time communicating to friends and family who aren&#8217;t in the IT industry is the concept of &#8220;production&#8221; and what it means to be on-call. Even coworkers have a hard time understanding what it means.</p>
+
+<p>The topic recently came up again and the confusion bothered me so much that I resolved to write this blog post as soon as humanly possible.</p>
+
+<h1>A few clarifications</h1>
+
+<p>I want to clarify a few very important things:</p>
+
+<ul>
+<li>I&#8217;m not whining about what I do</li>
+<li>I love what I do</li>
+<li>I&#8217;m not burned out</li>
+<li>I&#8217;m not being self-important</li>
+<li>I&#8217;ve always had a hard time &#8216;ranking&#8217; problems. EVERYTHING is important to me.</li>
+<li>I&#8217;m not really interested in critiques of what SHOULD have been done. Riak wasn&#8217;t around, for instance, when I was managing the financial stuff for instance.</li>
+<li>Yes, rotations are important but not always viable. Luckily we have a solid rotation at enStratus.</li>
+</ul>
+
+
+<h1>What production means to me (and why)</h1>
+
+<p>Production environments take many forms. It&#8217;s even harder to define. For me, production has always meant &#8220;any system, service or component that the business requires to do business&#8221;.
+I&#8217;ve worked in several different companies over the last 17 years. In some cases, production was an ERP system or a file server. In other cases, production was a web presence. What&#8217;s interesting each of these is that in some cases, production had a time associated with it.</p>
+
+<p>Let&#8217;s take a few of these and compare them:</p>
+
+<h2>The retail financial company</h2>
+
+<p>Long ago I worked for a company that did payday and title loans. We operated over 600+ retail locations from east to west coast. The primary application used by these outlets was a web-based loan management application (websphere + db2). Stores were located across the country and store hours were from 9AM to 6PM (IIRC). From this you might think &#8220;production was the web application and it needed to be online from 9AM EST to 10PM EST&#8221;. You would be correct at the highest level.</p>
+
+<p>However employees started the day at 8AM (lining up customers to call and what not) and left at 7PM (closing out books for the day). After the last store went &#8220;offline&#8221;, we began various nightly batch jobs. Being that this was financial in nature, batch jobs were the norm. We also had backups that had to run as we rebuilt our QA database nightly from sanitized production database backups. If the batch jobs didn&#8217;t finish in time, we actually had to delay the start of the day for the stores. Our datawarehouse was also loaded from a secondary copy of the database restored from backup. If I recall the main reason for this was that our nightly window was SO crunched for time that we couldn&#8217;t even load the warehouse from the main database because we had to start various batch jobs as soon as backup was done.</p>
+
+<p>But that&#8217;s just the main system. We had ancillary services as well. None of the retail outlets had access to the internet except through a squid proxy. There were print servers that did server-side check printing. In the backoffice, we had collections and other things that depending on the reports that came out of the data warehouse. We had nightly backups of the LAN stuff. DNS servers that the stores had to use. VPN concentrators. ALL of this had the same SLA as production.</p>
+
+<p>All told, I recall the final number for any business hours outage as costing us something like $100k for 15 minutes of downtime.</p>
+
+<h2>The Learning Management System</h2>
+
+<p>This system was used by a charter school system in the state of Ohio. It was an online classroom system that provided education for at-risk students. This WAS the school for these kids. Obviously it had normal school hours but since the students had no physical textbooks of any kind, the system HAD to be online for something as simple as homework. As with the previous setup, there were all sorts of ancillary services that we had to have available. All of the static content was shared across all of the tomcat servers via a SAN (OCFS2 - I have scars). It was backed by MySQL. We still had to do backups. We had to maintain connectivity. Everything we had was &#8216;production&#8217;. Since we had developers in other countries on different hours, we burned what money we had when the development environment or our SVN repo was offline. That was production too.</p>
+
+<h2>Web applications in general</h2>
+
+<p>To those in the industry I&#8217;m not telling you anything new. But to those not in the know, the internet doesn&#8217;t have office hours. Yes, you can gauge where your largest userbase is but take a system like enStratus.</p>
+
+<p>It manages cloud resources for people all across the world. For many of these people, the only access they have to their cloud account is VIA enStratus. Take AWS for instance. enStratus is responsible for detecting outages and replacing components in the infrastructure for these companies or autoscaling to meet some demand. If enStratus is offline, these actions are NOT being taken on behalf of the user. The biggest fear for me is that enStratus is offline when AWS is having an outage. Some customers are paying us for this use case alone. Mind you in the last few outages, not even enStratus could fix the problem because of control plane issues. One thing enStratus can do is scale across multiple clouds so even AWS control plane issues are no excuse.</p>
+
+<p>enStratus production itself is a pretty complex beast. The stack in general is designed to be fairly &#8220;SOA&#8221;. We use RabbitMQ pretty heavily for workers. However we&#8217;ve had some issues in the recent past where our workers were getting OutOfMemory exceptions. We run multiple workers (obviously) but in this case an OOM on one worker would eventually translate into OOMs across all the workers. When all the workers OOMd, they would stop processing messages from the queue. When that happened, RabbitMQ could eventually tank from units of work waiting to be picked up. We never had this happen, mind you but that was the end game.</p>
+
+<p>This meant we had to be diligent on these OOMs. All the time. 24x7x365.</p>
+
+<p>Luckily this problem was fairly short-lived but until the bug was identified and fixed (it happened to be related to an edge case with S3 bucket sizes), we had to be on guard for these OOM exceptions.</p>
+
+<h1>What does it mean?</h1>
+
+<p>The thing that I want to get across is that &#8220;production&#8221; is DIRECTLY related to the bottom line of the business. If &#8220;production&#8221; is offline, customers can&#8217;t use the system. Customers are unhappy. If customers are unhappy they eventually go elsewhere. If customers go elsewhere the company loses money. If the company loses money eventually the company lays people off. This isn&#8217;t rocket science. We talk about complex systems and cascading failures. This is a cascading failure that means someone doesn&#8217;t have a job at Christmas.</p>
+
+<p>Yes, I take it that seriously. When I talk about production, that&#8217;s what I mean.</p>
+
+<h1>On-call</h1>
+
+<p>Now that you know what production means and what impact it has, I shouldn&#8217;t need to say much about being &#8220;on-call&#8221;. Yes, I&#8217;m on-call now and then. Yes, just like a doctor. Sometimes, depending on the company, I&#8217;ve been the only person on-call. Ever. No rotation. No help. Just me. The one person keeping shit running all the time so that customers (internal or external) aren&#8217;t impacted by the slightest glitch in the system. Yes we should build more resilient systems and we strive to do that. However, tech debt is a thing. It&#8217;s not always immediately an option.</p>
+
+<p>So when I&#8217;m on-call it means I&#8217;m the person responsible for production as defined above and all the baggage that comes with it.</p>
+
+<p>Someone once said to me &#8220;Most of us work nights and weekends, although we try to balance it when we can.&#8221;</p>
+
+<p>While I appreciate the sentiment, I don&#8217;t just work nights and weekends, I work ALL the time. I have to be able to respond at a moments notice to a production issue when I&#8217;m on-call. Think about that for a moment. I have to essentially be 15 minutes from a working internet connection and may need to sit in front of a computer for an unspecified amount of time until the issue is resolved. I can&#8217;t just go to bed or decide that I&#8217;ve worked enough for the day.</p>
+
+<h1>The joys of working remote</h1>
+
+<p>I&#8217;ve been pretty fortunate in the past several years to be in a situation where I can support production from pretty much anywhere. I need at most a 3G connection and my laptop. I can VPN into production and fix most any problem. Yes, I always bring my laptop on &#8220;vacation&#8221;. If I don&#8217;t have a decent signal, then there&#8217;s a chance I&#8217;ll have to drive to the McDonald&#8217;s 15 minutes away to use the wifi. I try not to be on-call when I&#8217;m on vacation but sometimes it&#8217;s not always an option.</p>
+
+<p>I just got back from visiting my in-laws Up North in Michigan. The only time I was able to get a single bar of 3G was late at night when enough subscribers stopped using the cell towers. Up until a year or so ago, there was no option for any sort of broadband internet in the area.</p>
+
+<p>I&#8217;ve finally gotten my in-laws to understand much of what I&#8217;ve written here. They&#8217;ll be wiring the cottage for cable internet so that I can take the family up for longer periods of time. Yes, I&#8217;ll be &#8220;working&#8221; on vacation but I&#8217;d rather work a bit on vacation and stay longer than have to cut the trip short just so I can get back.</p>
+
+<h1>Poor poor me</h1>
+
+<p>As I said at the start, please don&#8217;t misinterpret what I&#8217;m saying as whining or some sort of god complex. This is the field I&#8217;ve chosen. I love what I do and I take that responsibility very seriously. As we start to build more resilient systems and accept that failure WILL happen and design for it, things will only get better. I still remember the first time I was able to replace a problematic system from scratch in 20 minutes via configuration management and call it a night.</p>
+
+<p>As enStratus migrates its backend to Riak DS and builds out secondary and tertiary datacenters, I look forward to losing a data node not being the end of the world. DevOps über alles and all that.</p>
+
+<p>So dear friends and family, the next time someone tells you they&#8217;re on-call for production&#8230;.cut &#8216;em some slack.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-07-09T21:31:00-04:00" pubdate  data-updated="true" >Jul 9<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2012/07/09/what-production-means/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2012/07/09/what-production-means/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2012/06/15/why-ebs-was-a-bad-idea/" title="Previous Post: Why EBS was a bad idea">&laquo; Why EBS was a bad idea</a>
+      
+       
+        <a class="basic-alignment right" href="/blog/2012/12/17/how-we-vagrant/" title="next Post: How we vagrant">How we vagrant &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/12/current-status/">current status</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lusis.github.com/blog/2012/07/09/what-production-means/';
+        var disqus_url = 'http://lusis.github.com/blog/2012/07/09/what-production-means/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

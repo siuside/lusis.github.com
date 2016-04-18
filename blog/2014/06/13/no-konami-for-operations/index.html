@@ -1,0 +1,435 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>There's no konami code for operations - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="up up down down left right left right b a select startI went on a bit of a rip today about all sorts of technology. I figured I should at least cla...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/blog/2014/06/13/no-konami-for-operations/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">There's No Konami Code for Operations</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2014-06-13T23:45:00-04:00" pubdate  data-updated="true" >Jun 13<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>up up down down left right left right b a select start</p>
+
+<!-- more -->
+
+
+<p>I went on a bit of a rip today about all sorts of technology. I figured I should at least clarify some of it in long form.</p>
+
+<h2>Vmotion/live migration technologies</h2>
+
+<p>Vmotion is a scam. I have frequently said that only trivial workloads are safe for vmotion. Here&#8217;s the reasoning:</p>
+
+<ul>
+<li>live migration realistically requires the workload on the vm being migrated to be quiesced.</li>
+<li>any workload that can be quiesced with no impact is most likely a trivial workload</li>
+<li>trivial workloads don&#8217;t NEED the benefit of live migration</li>
+<li>to that end, you&#8217;re basically paying a lot of money to allow a system to copy its files from one node to another</li>
+</ul>
+
+
+<p>Let&#8217;s also not forget that live migration claims to have accomplished a lot of things such as time travel. You may also know live motion technology by its other names like:</p>
+
+<ul>
+<li>Dude where&#8217;s my clock?</li>
+<li>I paused your workload for you but you didn&#8217;t notic&#8230;hey why did I just get a network partition in my cluster?</li>
+</ul>
+
+
+<p>But hey it demos really well when you can keep watching that streaming video while your vm is moved from host to another.</p>
+
+<h2>Autoscaling</h2>
+
+<p>Autoscaling is a myth. My reasoning behind this has similarities with vmotion/live migration.
+Again we have a set of things we need to clarify:</p>
+
+<ul>
+<li>horizontal vs vertical autoscaling</li>
+<li>triviality of the workload being autoscaled</li>
+<li>workload support for autoscaling</li>
+<li>scale up vs scale down</li>
+</ul>
+
+
+<p>I am not concerns with trivial workloads. Trivial workloads are&#8230;well&#8230;trivial. The largely cached static marketing website takes no effort whatsoever to scale. Oh look I just brought up a new server with the same static content! Instant capacity!</p>
+
+<p>Let&#8217;s take a standard architecture here:</p>
+
+<ul>
+<li>caching (memcache)</li>
+<li>frontend</li>
+<li>load balancer</li>
+<li>database (this applies to traditional RDBMS as well as NoSQL)</li>
+</ul>
+
+
+<p>When I &#8220;autoscale&#8221; my caching layer, I now have to concern myself with the following things:</p>
+
+<ul>
+<li>hashing algos</li>
+<li>cache miss increase</li>
+</ul>
+
+
+<p>So sure, feel free to autoscale that group of memcache servers but your performance just went to through the floor. Now you&#8217;ve had a downstream affect on your database as you&#8217;re having to go to origin due to cache misses. Oh and by the way not all servers talking to the caching tier saw the same topology so now you&#8217;ve got possibly incorrect data you&#8217;re serving from the cache</p>
+
+<p>When I autoscale my frontend, I&#8217;ve now add <code>n</code> number of connections to the database. How&#8217;s that network looking? Oh wait did you just autoscale to the point of starving the database of resources? Have you possible shot yourself in the foot because now the stuff that was working before is getting rejected because of connection counts?</p>
+
+<p>Autoscaling load balancers is also a problem as you now have the issue of topology mismatch of your backends as well as dealing with session injection that was PREVIOUSLY handled by only one LB.</p>
+
+<p>Finally let&#8217;s get to autoscaling our database. Vertical or horizontal, relational or &#8220;NoSQL&#8221; it doesn&#8217;t matter. If you vertically scale your DB, do you have to restart the process with larger memory allocations? What about rebalancing of data when you scale horizontally?</p>
+
+<p>And we&#8217;ve not even gotten to if your application is actually ABLE to be autoscaled (are you entirely stateless? 12 factor friendly?).</p>
+
+<p>Combining these things along with unmentioned downstream impacts and transitive dependencies, means that in most cases when you need to autoscale you won&#8217;t be able to respond to the workload for some time. It&#8217;s possible that AFTER that time has passed, the workload may be gone.</p>
+
+<p>And let&#8217;s not even talk about trying to unwind all that madness via scale down.</p>
+
+<h1>private PaaS</h1>
+
+<p>This is almost the most egregious of them all. It ranks right up there with &#8220;private cloud&#8221; in the bullshit-o-meter department. Resources are not infinite.
+I have a bit of a guidepost I use when thinking about &#8220;new&#8221; functionality in applications.</p>
+
+<ul>
+<li>what functionality am I adding?</li>
+<li>is it my core competency</li>
+<li>what does the landscape of existing ecosystem look like for that functionality</li>
+<li>how successful is that landscape for that functionality</li>
+</ul>
+
+
+<p>In most cases, the landscape is either saturated with business whose core focus and expertise is on that concept/functionality. In worst cases the majority of the businesses in that space are failing. Think long and hard about if you have the expertise to do this thing.</p>
+
+<p>PaaS and IaaS are in the same boat. I&#8217;m a bit more harsh on the IaaS front as I truly believe that if an operations team had been able to deliver on the promise of virtualization but couldn&#8217;t (for any reason) then sticking ANOTHER layer on top isn&#8217;t going to magically make it work. The platform still has real hardware under the covers that has the same limitations it had before - bandwidth capcity, io, patching of hypervisors. This stuff doesn&#8217;t just disappear. In many cases you can actually hit a wall VERY early on for capacity issues.</p>
+
+<p><a href="http://www.slideshare.net/TimMackey/hypervisor-31754727">This slide deck about Cloudstack Hypervisor choices</a> is an amazing read for understanding limitations. Some of these are actually imposed by the hypervisor:</p>
+
+<ul>
+<li>Max VLANs</li>
+<li>Max Storage</li>
+<li>Max vms per hypervisor</li>
+<li>Max hypervisors per pool</li>
+</ul>
+
+
+<p>There&#8217;s no cheat code for this shit, folks. Very few PaaS and IaaS products tackle operational issues at all. Time to first success is important but not if it comes at the expense of cost to operate over time. Yes, I can sudocurlbash your product on to my system but that&#8217;s trivial. How do I deal with:</p>
+
+<ul>
+<li>Backups</li>
+<li>Affinity/Anti-affinity issues</li>
+<li>Upgrades</li>
+<li>Supportability</li>
+</ul>
+
+
+<p>IaaS actualy isn&#8217;t as bad as a PaaS in some of those but they both have issues. PaaS is mainly worse because you have adopt into an ecosystem and philosophy (not that 12 factor isn&#8217;t entire good but it&#8217;s a start) if you want to have any real success.</p>
+
+<p>You will <em>NOT</em> forklift a workload into one of these models and be successful in the long term. In the short term you will simply have given someone else a lot of your money.</p>
+
+<p>I drove a forklift for two years. I know forklifts.</p>
+
+<h1>End rant</h1>
+
+<p>I&#8217;m not saying that people can&#8217;t be successful at these things. Clearly they are to some degree. But that&#8217;s only the public face. How much shit did they have to wade through to make this work? Where are the bits of baling wire, duct tape and a healthy belief in a higher power that keep it from just failling over the edge of the abyss?</p>
+
+<p>Anyway that&#8217;s just a short list of things from a very tired and worn out person with less hair than he started the day with. I know I shouldn&#8217;t get mad about this stuff but it&#8217;s hard when the people trying to smokescreen you ARE you in a sense (professionally speaking). Frankly I&#8217;m just tired of people thinking that the operational aspects of this stuff are irrelevant because somebody promised them &#8220;autoscaling selfhealing magical rainbow-colored unicorn piss in a bottle&#8221; where they didn&#8217;t have to interact with operations folks ever again.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2014-06-13T23:45:00-04:00" pubdate  data-updated="true" >Jun 13<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2014/06/13/no-konami-for-operations/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2014/06/13/no-konami-for-operations/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2014/04/13/omnibus-redux/" title="Previous Post: omnibus-redux">&laquo; omnibus-redux</a>
+      
+       
+        <a class="basic-alignment right" href="/blog/2014/06/14/paas-for-realists/" title="next Post: PaaS for Realists">PaaS for Realists &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/10/12/current-status/">current status</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lusis.github.com/blog/2014/06/13/no-konami-for-operations/';
+        var disqus_url = 'http://lusis.github.com/blog/2014/06/13/no-konami-for-operations/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
