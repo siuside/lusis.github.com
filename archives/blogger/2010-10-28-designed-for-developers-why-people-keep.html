@@ -1,7 +1,301 @@
---- 
-name: designed-for-developers-why-people-keep
-layout: post
-title: Designed for Developers - Why people keep asking you to use Github
-time: 2010-10-28 05:25:00 -04:00
----
-<p>I'll be the first to admit that I'm a Github fanboy. The shocker is that my love of Github has nothing to do with the DVCS underneath. While Git plays a major part of what makes github so great, the bigger reason github is so successful is this:</p><p><span style="font-size: large;">Github is designed for developers</span></p><p>What do I mean by that? Let's compare a series of screenshots from various code hosting sites:</p><p>&nbsp;</p><table style="width: 194px;"><tbody><tr><td style="height: 194px; background: url(http://picasaweb.google.com/s/c/transparent_album_background.gif) no-repeat left;" align="center"><a href="http://picasaweb.google.com/lusisjv/CodeHostingSolutionsComparison?feat=embedwebsite"><img style="margin: 1px 0 0 4px;" src="http://lh5.ggpht.com/_DB1q19qzGOg/TMksZgT2EZE/AAAAAAAAALY/XggULu12it4/s160-c/CodeHostingSolutionsComparison.jpg" alt="" width="160" height="160" /></a></td></tr><tr><td style="text-align: center; font-family: arial,sans-serif; font-size: 11px;"><a style="color: #4d4d4d; font-weight: bold; text-decoration: none;" href="http://picasaweb.google.com/lusisjv/CodeHostingSolutionsComparison?feat=embedwebsite">Code Hosting Solutions comparison</a></td></tr></tbody></table><p>I want you to take a look at the screenshots very carefully especially the "project" pages. What's the one thing you notice about Github compared to the others (excluding BitBucket). What's the focus of the project?</p><p><span style="font-size: large;">It's all about the code</span></p><p>You'll see quite clearly that with all the sites except for BitBucket, the focus of the project is the code itself. Not only is the focus of the project the code but everything about the code is about the community. I can "watch" a developer or project. I can easily see from the first page how to download the codebase. However the biggest part of what makes Github a success is one button:</p><p>Fork</p><p>From the start of a project page, not only can I easily browse the code and am provided with the information I need to checkout the code but I'm invited with a single button to become a contributor to that project. Immediately, I'm a potential contributor to that project. If I change something and push the code back to my fork, I can push one button and send a message to the project maintainers asking them to merge the changes back in. As a project maintainer, I have an easy way to evaluate the impact of the change and communicate with the requester and other team members about said change. At the bottom of the pull request page, I'm provided the information on how to easily merge those changes into my main tree.</p><p><span style="font-size: large;">Designed for Developers</span></p><p>I've been on a bit of a tear lately about usability in developer-targeted products. The latest target of my ire has been Atlassian. Let me clarify that I think Atlassian makes some wonderful products. Confluence is one of the best wikis out there. JIRA is a great issue tracking system for Developers.</p><p>However, Atlassian has some "duds" in my opinion. The biggest thorn in my side these days is Bamboo. Bamboo is Atlassian's Continuous Integration server. Like most Atlassian products, its primary target is Java developers. Everything about Bamboo is designed around the Java development toolchain - Maven, Ant and the like. But I don't have a problem with that. What I have a problem with is the over-complication. I grabbed the latest beta of Bamboo at the recommendation of one of the Bamboo developers who heard my rant on Twitter one day. He asked for some feed back and I provided it in a very detailed email. I'm happy to say that the new interface for adding build plans in Bamboo is much simpler than previous versions. I can't do screenshots of our company Bamboo install but previous versions had a VERY complicated multitab build plan configuration.</p><p>One point I mentioned in my email is that Bamboo felt like it lacked a focus. Jira was very clearly about Issues. That was the "unit of work". Confluence was very clearly about being a wiki. That was its "unit of work". Bamboo didn't have a singular focus. It was a CI server but what was the unit of work? A build plan? Test results? Fisheye integration? It wasn't clear.</p><p>Compare that with Hudson which had a very clear focus. The strength in Hudson is that it performs tasks. Those tasks are typically centered around CI but they don't have to be. In Hudson I can define a job that does nothing more than list directories. I don't even need to back it with a VCS. Bamboo, sadly, in the beta version still hasn't gotten this part right. I can't define a build plan without having a repository somewhere. It still assumes that I want to define all my work inside of an ant script. Using the "shell" builder is still VERY limiting.&nbsp;</p><p>You can see some sample comparison shots between the two <a href="http://picasaweb.google.com/lusisjv/BambooVsHudson?feat=directlink" target="_blank">here</a>. I'll try to actually setup a repo that Bamboo can use and do a deeper comparison later.&nbsp;</p><p><span style="font-size: large;">So what's the focus of Google Code, Launchpad...</span></p><p>Going back to code hosting and comparing Github to the others, I think it's clear that they lack a focus. They try to do too much. They "feel" like they were designed by project managers and targeted at them. Maybe it was a faulty assumption that to effectively manage a large project, you had have all of the extra stuff. I don't know. Launchpad and others DO some things better than Github. Issue tracking is one. Github issue tracking is a pretty weak area for them. However here's where Github understands its focus and strengths.</p><p>Where Github lacks, it makes up for in integration. Github doesn't TRY to be the project manager's tool. It doesn't try to be a good issue tracker. What it DOES do is say "I suck at this. My focus is on the code and making working with and contributing to the code dead simple. I'll add hooks for the other stuff"</p><p>And they do. Github has a boatload of service hooks for everything from issue tracking to project management to irc and IM. They even have a "generic" hook that will submit JSON to a url for you so you can write your own&nbsp;receiver.</p><p><span style="font-size: large;">About BitBucket, backend technology and focus</span></p><p>I haven't mentioned much about BitBucket. The main reason is that at this point, BitBucket is simple attempting to feature copy from Github except using Mercurial in the background. Sadly, this isn't enough I think. If my only reason for using BitBucket is the DVCS tool then I honestly might as well use Github. I'll get more engagement there. See this quote from Mark Philips from Basho about why the moved from BitBucket to Github:</p><blockquote><p style="text-align: left;">Why? There are several reasons, the primary of which is that GitHub,</p><p style="text-align: left;">the application, lends itself to more collaboration when developing</p><p style="text-align: left;">open source software. Again, this was a decision made on the basis of</p><p style="text-align: left;">community development; technically-speaking we were satisfied with</p><p style="text-align: left;">what Bitbucket offered.</p></blockquote><p>The issue wasn't the technology. Mercurial and Git are pretty much at feature parity (as is Bazaar). One thing mercurial doesn't do out of the box is cherry picking but it's supported with extra configuration. Mercurial has <em><span style="font-family: 'courier new', courier;">hg incoming</span></em> which let's you see what people are working on. Git has staging. Mercurial has better Windows support than Git. It's really six in one, half dozen in the other.</p><p>However what BitBucket DOESN'T have is the community. You see, BitBucket was playing catchup to Github. Simply copying the social aspects of Github isn't enough. Github has too much momentum precisely because they had the focus right from the start - code is king.</p><p>As a developer, my key focus is my code. It's what says the most about me. As a developer who wants to attract other developers, the best way to do that is showing the code and making that contribution as easy as possible. Github gets that.</p><p>That's why people keep asking you to switch to Github.</p><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-1879087323323070313?l=lusislog.blogspot.com' alt='' /></div>
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Designed for Developers - Why people keep asking you to use Github - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="I&#8217;ll be the first to admit that I&#8217;m a Github fanboy. The shocker is that my love of Github has nothing to do with the DVCS underneath. ...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/archives/blogger/2010-10-28-designed-for-developers-why-people-keep.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Designed for Developers - Why People Keep Asking You to Use Github</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&#8217;ll be the first to admit that I&#8217;m a Github fanboy. The shocker is that my love of Github has nothing to do with the DVCS underneath. While Git plays a major part of what makes github so great, the bigger reason github is so successful is this:</p><p><span style="font-size: large;">Github is designed for developers</span></p><p>What do I mean by that? Let&#8217;s compare a series of screenshots from various code hosting sites:</p><p>&nbsp;</p><table style="width: 194px;"><tbody><tr><td style="height: 194px; background: url(http://picasaweb.google.com/s/c/transparent_album_background.gif) no-repeat left;" align="center"><a href="http://picasaweb.google.com/lusisjv/CodeHostingSolutionsComparison?feat=embedwebsite"><img style="margin: 1px 0 0 4px;" src="http://lh5.ggpht.com/_DB1q19qzGOg/TMksZgT2EZE/AAAAAAAAALY/XggULu12it4/s160-c/CodeHostingSolutionsComparison.jpg" alt="" width="160" height="160" /></a></td></tr><tr><td style="text-align: center; font-family: arial,sans-serif; font-size: 11px;"><a style="color: #4d4d4d; font-weight: bold; text-decoration: none;" href="http://picasaweb.google.com/lusisjv/CodeHostingSolutionsComparison?feat=embedwebsite">Code Hosting Solutions comparison</a></td></tr></tbody></table><p>I want you to take a look at the screenshots very carefully especially the &#8220;project&#8221; pages. What&#8217;s the one thing you notice about Github compared to the others (excluding BitBucket). What&#8217;s the focus of the project?</p><p><span style="font-size: large;">It&#8217;s all about the code</span></p><p>You&#8217;ll see quite clearly that with all the sites except for BitBucket, the focus of the project is the code itself. Not only is the focus of the project the code but everything about the code is about the community. I can &#8220;watch&#8221; a developer or project. I can easily see from the first page how to download the codebase. However the biggest part of what makes Github a success is one button:</p><p>Fork</p><p>From the start of a project page, not only can I easily browse the code and am provided with the information I need to checkout the code but I&#8217;m invited with a single button to become a contributor to that project. Immediately, I&#8217;m a potential contributor to that project. If I change something and push the code back to my fork, I can push one button and send a message to the project maintainers asking them to merge the changes back in. As a project maintainer, I have an easy way to evaluate the impact of the change and communicate with the requester and other team members about said change. At the bottom of the pull request page, I&#8217;m provided the information on how to easily merge those changes into my main tree.</p><p><span style="font-size: large;">Designed for Developers</span></p><p>I&#8217;ve been on a bit of a tear lately about usability in developer-targeted products. The latest target of my ire has been Atlassian. Let me clarify that I think Atlassian makes some wonderful products. Confluence is one of the best wikis out there. JIRA is a great issue tracking system for Developers.</p><p>However, Atlassian has some &#8220;duds&#8221; in my opinion. The biggest thorn in my side these days is Bamboo. Bamboo is Atlassian&#8217;s Continuous Integration server. Like most Atlassian products, its primary target is Java developers. Everything about Bamboo is designed around the Java development toolchain - Maven, Ant and the like. But I don&#8217;t have a problem with that. What I have a problem with is the over-complication. I grabbed the latest beta of Bamboo at the recommendation of one of the Bamboo developers who heard my rant on Twitter one day. He asked for some feed back and I provided it in a very detailed email. I&#8217;m happy to say that the new interface for adding build plans in Bamboo is much simpler than previous versions. I can&#8217;t do screenshots of our company Bamboo install but previous versions had a VERY complicated multitab build plan configuration.</p><p>One point I mentioned in my email is that Bamboo felt like it lacked a focus. Jira was very clearly about Issues. That was the &#8220;unit of work&#8221;. Confluence was very clearly about being a wiki. That was its &#8220;unit of work&#8221;. Bamboo didn&#8217;t have a singular focus. It was a CI server but what was the unit of work? A build plan? Test results? Fisheye integration? It wasn&#8217;t clear.</p><p>Compare that with Hudson which had a very clear focus. The strength in Hudson is that it performs tasks. Those tasks are typically centered around CI but they don&#8217;t have to be. In Hudson I can define a job that does nothing more than list directories. I don&#8217;t even need to back it with a VCS. Bamboo, sadly, in the beta version still hasn&#8217;t gotten this part right. I can&#8217;t define a build plan without having a repository somewhere. It still assumes that I want to define all my work inside of an ant script. Using the &#8220;shell&#8221; builder is still VERY limiting.&nbsp;</p><p>You can see some sample comparison shots between the two <a href="http://picasaweb.google.com/lusisjv/BambooVsHudson?feat=directlink" target="_blank">here</a>. I&#8217;ll try to actually setup a repo that Bamboo can use and do a deeper comparison later.&nbsp;</p><p><span style="font-size: large;">So what&#8217;s the focus of Google Code, Launchpad&#8230;</span></p><p>Going back to code hosting and comparing Github to the others, I think it&#8217;s clear that they lack a focus. They try to do too much. They &#8220;feel&#8221; like they were designed by project managers and targeted at them. Maybe it was a faulty assumption that to effectively manage a large project, you had have all of the extra stuff. I don&#8217;t know. Launchpad and others DO some things better than Github. Issue tracking is one. Github issue tracking is a pretty weak area for them. However here&#8217;s where Github understands its focus and strengths.</p><p>Where Github lacks, it makes up for in integration. Github doesn&#8217;t TRY to be the project manager&#8217;s tool. It doesn&#8217;t try to be a good issue tracker. What it DOES do is say &#8220;I suck at this. My focus is on the code and making working with and contributing to the code dead simple. I&#8217;ll add hooks for the other stuff&#8221;</p><p>And they do. Github has a boatload of service hooks for everything from issue tracking to project management to irc and IM. They even have a &#8220;generic&#8221; hook that will submit JSON to a url for you so you can write your own&nbsp;receiver.</p><p><span style="font-size: large;">About BitBucket, backend technology and focus</span></p><p>I haven&#8217;t mentioned much about BitBucket. The main reason is that at this point, BitBucket is simple attempting to feature copy from Github except using Mercurial in the background. Sadly, this isn&#8217;t enough I think. If my only reason for using BitBucket is the DVCS tool then I honestly might as well use Github. I&#8217;ll get more engagement there. See this quote from Mark Philips from Basho about why the moved from BitBucket to Github:</p><blockquote><p style="text-align: left;">Why? There are several reasons, the primary of which is that GitHub,</p><p style="text-align: left;">the application, lends itself to more collaboration when developing</p><p style="text-align: left;">open source software. Again, this was a decision made on the basis of</p><p style="text-align: left;">community development; technically-speaking we were satisfied with</p><p style="text-align: left;">what Bitbucket offered.</p></blockquote><p>The issue wasn&#8217;t the technology. Mercurial and Git are pretty much at feature parity (as is Bazaar). One thing mercurial doesn&#8217;t do out of the box is cherry picking but it&#8217;s supported with extra configuration. Mercurial has <em><span style="font-family: 'courier new', courier;">hg incoming</span></em> which let&#8217;s you see what people are working on. Git has staging. Mercurial has better Windows support than Git. It&#8217;s really six in one, half dozen in the other.</p><p>However what BitBucket DOESN&#8217;T have is the community. You see, BitBucket was playing catchup to Github. Simply copying the social aspects of Github isn&#8217;t enough. Github has too much momentum precisely because they had the focus right from the start - code is king.</p><p>As a developer, my key focus is my code. It&#8217;s what says the most about me. As a developer who wants to attract other developers, the best way to do that is showing the code and making that contribution as easy as possible. Github gets that.</p><p>That&#8217;s why people keep asking you to switch to Github.</p><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-1879087323323070313?l=lusislog.blogspot.com' alt='' /></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+
+
+
+      
+
+<span class="categories">
+  
+    Liquid error: undefined method `sort!' for nil:NilClass
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/archives/blogger/2010-10-28-designed-for-developers-why-people-keep.html" data-via="lusis" data-counturl="http://lusis.github.com/archives/blogger/2010-10-28-designed-for-developers-why-people-keep.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-redis/">Load balancing Logstash with Redis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load balancing Logstash with AMQP</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

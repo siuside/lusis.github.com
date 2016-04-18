@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Aws Api Gateway for Fun and Profit - blog dot lusis</title>
+  <title>aws api gateway for fun and profit - blog dot lusis</title>
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="At we&rsquo;re currently in the process of reconfiguring our monitoring, logging and alerting setup. Obviously this is something near and dear to my &hellip;">
+  <meta name="description" content="At we&#8217;re currently in the process of reconfiguring our monitoring, logging and alerting setup.Obviously this is something near and dear to my...">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,11 +21,10 @@
   <link rel="canonical" href="http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/ender.js"></script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
   <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
 <link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
@@ -59,14 +58,12 @@
   <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
   
 </ul>
-  
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="lusis.github.com">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
-  
 <ul role=main-navigation>
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
@@ -91,23 +88,25 @@
 
 
 
-<time class='entry-date' datetime='2015-12-09T22:06:59-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:06 pm</span></time>
-        
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://lusis.github.com">Comments</a>
+
+  
+
+
+
+<time datetime="2015-12-09T22:06:59-05:00" pubdate  data-updated="true" >Dec 9<span>th</span>, 2015</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>At we&rsquo;re currently in the process of reconfiguring our monitoring, logging and alerting setup.</p>
+<div class="entry-content"><p>At we&#8217;re currently in the process of reconfiguring our monitoring, logging and alerting setup.</p>
 
 <!-- more -->
 
 
 <p>Obviously this is something near and dear to my heart. At my previous employer we did everything in house due to various constraints.
-I&rsquo;ve got a rich set of experiences in this space so my first inclination was to build not buy. However, due to OTHER constraints, building was not a practical solution at present.</p>
+I&#8217;ve got a rich set of experiences in this space so my first inclination was to build not buy. However, due to OTHER constraints, building was not a practical solution at present.</p>
 
 <p>After much research and evaluation, we finally settled on the following stack:</p>
 
@@ -118,7 +117,7 @@ I&rsquo;ve got a rich set of experiences in this space so my first inclination w
 </ul>
 
 
-<p>I&rsquo;m not going into reasons for switching in this post or details about WHY these providers were chosen. This is to discuss a specific AWS service and how it can really change the nature of ChatOps and more.</p>
+<p>I&#8217;m not going into reasons for switching in this post or details about WHY these providers were chosen. This is to discuss a specific AWS service and how it can really change the nature of ChatOps and more.</p>
 
 <h1>Integration</h1>
 
@@ -126,7 +125,7 @@ I&rsquo;ve got a rich set of experiences in this space so my first inclination w
 They have a rich set already and are iterating very quickly but coupled with the migration to OpsGenie, we needed to work out a solution for wiring the two together.
 Using the power of google, I came across a great post from <a href="https://twitter.com/ripienaar">R.I. Pienaar</a> about leveraging <a href="https://www.devco.net/archives/2015/08/13/translating-webhooks-with-aws-api-gateway-and-lambda.php">Lambda and the AWS API Gateway products</a>.</p>
 
-<p>In his post, he didn&rsquo;t really go over the API Gateway configuration so I figured I would document what I &ldquo;figured out&rdquo; for others.</p>
+<p>In his post, he didn&#8217;t really go over the API Gateway configuration so I figured I would document what I &#8220;figured out&#8221; for others.</p>
 
 <h2>The flow</h2>
 
@@ -142,24 +141,24 @@ Using the power of google, I came across a great post from <a href="https://twit
 
 <p>Now you might wonder why go through all this hassle? OpsGenie can create email integrations and SignalFx can send alerts to email address.</p>
 
-<h1>It&rsquo;s about context.</h1>
+<h1>It&#8217;s about context.</h1>
 
-<p>When email alerts come in to OpsGenie, they&rsquo;re just &ldquo;pings&rdquo;:</p>
+<p>When email alerts come in to OpsGenie, they&#8217;re just &#8220;pings&#8221;:</p>
 
-<blockquote><p>Hey this thing sent us an email and here's the subject. Log in to the website to see the body</p></blockquote>
+<blockquote><p>Hey this thing sent us an email and here&#8217;s the subject. Log in to the website to see the body</p></blockquote>
 
 
-<p>Frankly there&rsquo;s not much else they can do. SignalFx will also send another email when an alert auto-clears but to OpsGenie, that&rsquo;s another &ldquo;ping&rdquo;. It&rsquo;s unrelated to the previous email.</p>
+<p>Frankly there&#8217;s not much else they can do. SignalFx will also send another email when an alert auto-clears but to OpsGenie, that&#8217;s another &#8220;ping&#8221;. It&#8217;s unrelated to the previous email.</p>
 
 <p><img src="/images/posts/apigateway-lambda/hipchat-emails.png" alt="Hipchat alerts from OpsGenie" /></p>
 
-<p>As you can see above this could get painful and I already have issues with &ldquo;alert fatigue&rdquo;.</p>
+<p>As you can see above this could get painful and I already have issues with &#8220;alert fatigue&#8221;.</p>
 
-<p>Additional, even if you <strong>DID</strong> log into the OpsGenie website to look at the details, there&rsquo;s really not much there:</p>
+<p>Additional, even if you <strong>DID</strong> log into the OpsGenie website to look at the details, there&#8217;s really not much there:</p>
 
 <p><img src="/images/posts/apigateway-lambda/opsgenie-emails.png" alt="Emails in OpsGenie" /></p>
 
-<p>Yeah that&rsquo;s helpful&hellip;</p>
+<p>Yeah that&#8217;s helpful&#8230;</p>
 
 <p>So we need to accomplish two things:</p>
 
@@ -175,27 +174,27 @@ Using the power of google, I came across a great post from <a href="https://twit
 <img src="/images/posts/apigateway-lambda/signalfx-context-1.png" alt="SignalFx Metadata in OpsGenie" />
 <img src="/images/posts/apigateway-lambda/opsgenie-alert-history.png" alt="OpsGenie Alert History" /></p>
 
-<p>and that&rsquo;s MUCH more useful.</p>
+<p>and that&#8217;s MUCH more useful.</p>
 
 <h1>How we did it</h1>
 
-<p>AWS API Gateway is a PRETTY intimidating thing. There&rsquo;s lots of very specific terminology and frankly I found the docs not so useful.
+<p>AWS API Gateway is a PRETTY intimidating thing. There&#8217;s lots of very specific terminology and frankly I found the docs not so useful.
 The general idea is this:</p>
 
 <ul>
 <li>Create an api</li>
-<li>Create a &ldquo;resource&rdquo; this is just a route that the api gateway responds to i.e. <code>/signalfx_to_loggly</code> via <code>POST</code></li>
-<li>Create a &ldquo;model&rdquo;: This is a json schema that describes what the incoming <code>POST</code> body looks like and its content type</li>
-<li>Create an &ldquo;integration request&rdquo;: What do you do when you get it? In this case call a Lambda task</li>
+<li>Create a &#8220;resource&#8221; this is just a route that the api gateway responds to i.e. <code>/signalfx_to_loggly</code> via <code>POST</code></li>
+<li>Create a &#8220;model&#8221;: This is a json schema that describes what the incoming <code>POST</code> body looks like and its content type</li>
+<li>Create an &#8220;integration request&#8221;: What do you do when you get it? In this case call a Lambda task</li>
 </ul>
 
 
-<p>There are also concepts like &ldquo;stages&rdquo; which frankly were a bit useless in my case.
-In the end, after you get all of this wired up, you&rsquo;ll be given a url that looks something like this:</p>
+<p>There are also concepts like &#8220;stages&#8221; which frankly were a bit useless in my case.
+In the end, after you get all of this wired up, you&#8217;ll be given a url that looks something like this:</p>
 
 <p><code>https://&lt;random id&gt;.execute-api.&lt;region&gt;.amazonaws.com/&lt;stage name&gt;/&lt;resource name&gt;</code></p>
 
-<p>and that&rsquo;s your webhook url.</p>
+<p>and that&#8217;s your webhook url.</p>
 
 <h2>Models</h2>
 
@@ -265,7 +264,7 @@ In the end, after you get all of this wired up, you&rsquo;ll be given a url that
 
 <h1>The lambda function</h1>
 
-<p>I&rsquo;m still cleaning up the banged out code for the Lambda function to post on github however here&rsquo;s the relevant bits from the <code>opsgenie.js</code> file I added to <a href="https://github.com/ripienaar/lambda_webhook_gwy">R.I.&rsquo;s code</a>:</p>
+<p>I&#8217;m still cleaning up the banged out code for the Lambda function to post on github however here&#8217;s the relevant bits from the <code>opsgenie.js</code> file I added to <a href="https://github.com/ripienaar/lambda_webhook_gwy">R.I.&#8217;s code</a>:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -355,28 +354,28 @@ This make correlating a previous alert dead simple as you can see below:</p>
 
 
 <p>Here we check if the status is <code>ok</code> and if so, we call a different function to generate the request object to a different path (the <code>close</code> alert path).
-Since we created the alert using an <code>alias</code> of the SignalFx <code>incidentId</code>, we don&rsquo;t even need to do any more parsing - just <code>POST</code> to the <code>close</code> resource with the <code>alias</code> id.</p>
+Since we created the alert using an <code>alias</code> of the SignalFx <code>incidentId</code>, we don&#8217;t even need to do any more parsing - just <code>POST</code> to the <code>close</code> resource with the <code>alias</code> id.</p>
 
 <p>As you saw above we get more more data and context about the alert and this is all also visible in the OpsGenie mobile app.</p>
 
 <h1>Benefits</h1>
 
 <p>Honestly the biggest benefit is not having to wait on service providers to create native integrations.
-Almost every service I&rsquo;ve used over the past several years offers an outgoing webhook capability for their system.
-API Gateway solves the part of getting those webhooks and its native Lambda support means I don&rsquo;t need to leave anything &ldquo;running&rdquo; to maintain, upgrade and support just to do something with that webhook.</p>
+Almost every service I&#8217;ve used over the past several years offers an outgoing webhook capability for their system.
+API Gateway solves the part of getting those webhooks and its native Lambda support means I don&#8217;t need to leave anything &#8220;running&#8221; to maintain, upgrade and support just to do something with that webhook.</p>
 
 <p>However one other huge benefit that is also hinted in the other post is that using this model, you get a simple abstraction from your service provider.
 If we wanted to move to some other alerting provider, we just change the lambda function to post there instead. No need to redo all the integrations in SignalFx.
 My plan is to work towards a model where we try and utilize the API gateway as the webhook endpoint for various services and translate to our other providers from there.</p>
 
-<p>I really enjoyed working with the gateway. Testing wasn&rsquo;t too painful as it has a &ldquo;mock&rdquo; mode as well where it behaves similarly to requestb.in. It supports a couple of different authentication methods well (though sadly they couldn&rsquo;t be leveraged in this case due to provider webhook formats (note if you offer webhook support, let your users define a custom header as part of the webhook!).</p>
+<p>I really enjoyed working with the gateway. Testing wasn&#8217;t too painful as it has a &#8220;mock&#8221; mode as well where it behaves similarly to requestb.in. It supports a couple of different authentication methods well (though sadly they couldn&#8217;t be leveraged in this case due to provider webhook formats (note if you offer webhook support, let your users define a custom header as part of the webhook!).</p>
 
 <p>Lambda needs to support more languages but python is a happy medium from the mess of javascript and the heft of java.</p>
 
 <h1>Future steps</h1>
 
-<p>I&rsquo;m going to work on first cleaning up this specific Lambda task and making it available on github. After that my next steps are to rewrite the damn thing in Python because I &ldquo;dislike&rdquo; javascript.
-We&rsquo;re already using this similar model for another integration as well: Loggly and HipChat.</p>
+<p>I&#8217;m going to work on first cleaning up this specific Lambda task and making it available on github. After that my next steps are to rewrite the damn thing in Python because I &#8220;dislike&#8221; javascript.
+We&#8217;re already using this similar model for another integration as well: Loggly and HipChat.</p>
 
 <p>Loggly has HipChat support already but it posts the messages in HipChat as a raw json dump which is useless:</p>
 
@@ -385,15 +384,15 @@ We&rsquo;re already using this similar model for another integration as well: Lo
 <p>by migrating it to use API Gateway and Lambda, we get the following instead:</p>
 
 <p><img src="/images/posts/apigateway-lambda/loggly-better.png" alt="Loggly better" />
-<em>Obviously that&rsquo;s an MVP</em></p>
+<em>Obviously that&#8217;s an MVP</em></p>
 
-<p>We&rsquo;ll probably go down this route farther for other integrations and especially when HipChat Connect goes GA. Then we&rsquo;ll likely start posting richer messages using &ldquo;cards&rdquo; similar to my previous experience with Slack&rsquo;s API.</p>
+<p>We&#8217;ll probably go down this route farther for other integrations and especially when HipChat Connect goes GA. Then we&#8217;ll likely start posting richer messages using &#8220;cards&#8221; similar to my previous experience with Slack&#8217;s API.</p>
 
 <h2>ChatOps</h2>
 
-<p>One thing that&rsquo;s really neat is that the api gateway approach can let you make some REALLY simple tools for ChatOps using outgoing webhooks from your chat system.</p>
+<p>One thing that&#8217;s really neat is that the api gateway approach can let you make some REALLY simple tools for ChatOps using outgoing webhooks from your chat system.</p>
 
-<p>However it will REALLY open up when Lambda gets VPC support. Imagine a Lambda function that can fire inside your VPC and interact with all your private resources. It&rsquo;s both terrifying and thrilling assuming all the appropriate controls are in place (using api keys, rbac in your outgoing webhook).</p>
+<p>However it will REALLY open up when Lambda gets VPC support. Imagine a Lambda function that can fire inside your VPC and interact with all your private resources. It&#8217;s both terrifying and thrilling assuming all the appropriate controls are in place (using api keys, rbac in your outgoing webhook).</p>
 
 <p>Thanks for reading. I hope it was valuable to you.</p>
 </div>
@@ -411,7 +410,12 @@ We&rsquo;re already using this similar model for another integration as well: Lo
 
 
 
-<time class='entry-date' datetime='2015-12-09T22:06:59-05:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:06 pm</span></time>
+
+  
+
+
+
+<time datetime="2015-12-09T22:06:59-05:00" pubdate  data-updated="true" >Dec 9<span>th</span>, 2015</time>
       
 
 <span class="categories">
@@ -425,19 +429,23 @@ We&rsquo;re already using this similar model for another integration as well: Lo
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/" >Tweet</a>
   
   
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
 </div>
 
     
     <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2012/01/31/load-balancing-logstash-with-redis/" title="Previous Post: Load balancing Logstash with Redis">&laquo; Load balancing Logstash with Redis</a>
       
-        <a class="basic-alignment left" href="/blog/2015/10/12/terraform-modules-for-fun-and-profit/" title="Previous Post: terraform modules for fun and profit">&laquo; terraform modules for fun and profit</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2016/04/07/how-is-rundeck-formed/" title="Next Post: how is rundeck formed">how is rundeck formed &raquo;</a>
+       
+        <a class="basic-alignment right" href="/blog/2016/04/07/how-is-rundeck-formed/" title="next Post: how is rundeck formed">how is rundeck formed &raquo;</a>
       
     </p>
   </footer>
@@ -462,38 +470,38 @@ We&rsquo;re already using this similar model for another integration as well: Lo
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2016/04/07/how-is-rundeck-formed/">How Is Rundeck Formed</a>
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">Aws Api Gateway for Fun and Profit</a>
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2015/10/12/terraform-modules-for-fun-and-profit/">Terraform Modules for Fun and Profit</a>
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2015/10/12/current-status/">Current Status</a>
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-redis/">Load balancing Logstash with Redis</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/11/21/a-few-things/">A Few Things</a>
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load balancing Logstash with AMQP</a>
       </li>
     
   </ul>
 </section>
 
 <section>
-  <h1>GitHub Repos</h1>
+  <h1>Github Repos</h1>
   <ul id="gh_repos">
     <li class="loading">Status updating...</li>
   </ul>
   
-  <a href="https://github.com/lusis">@lusis</a> on GitHub
+  <a href="https://github.com/lusis">@lusis</a> on Github
   
   <script type="text/javascript">
-    $(document).ready(function(){
+    $.domReady(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -549,7 +557,8 @@ We&rsquo;re already using this similar model for another integration as well: Lo
   
 
 <script type="text/javascript">
-      var disqus_shortname = 'lusisgithubblog';
+    
+      var disqus_shortname = 'lusis';
       
         
         // var disqus_developer = 1;
@@ -559,14 +568,29 @@ We&rsquo;re already using this similar model for another integration as well: Lo
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
 
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
 
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
 
 
 
@@ -575,7 +599,7 @@ We&rsquo;re already using this similar model for another integration as well: Lo
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

@@ -1,7 +1,301 @@
---- 
-name: devops-developers-to-operations
-layout: post
-title: DevOps - Developers to Operations
-time: 2010-03-29 13:56:00 -04:00
----
-<i>I apologize in advance since this post is likely to be leaner than the previous one. My background is NOT in development and I've never officially held a development role. Having said that, I'm looking to the comments for people to provide something else I "missed". I need a guest blogger for this section ;)</i><div><br /><div><b><span class="Apple-style-span"  style="font-size:large;">Production</span></b></div></div><div>I understand that production is important. I understand that it sucks when bugs happen but would it kill you to give me a little more insight into HOW things operate so I can do my job better?</div><div><br /></div><div>I mean seriously. I wouldn't have to have to bug you all the time if you would just give me the tools to get the information I need. I'm not interested in your job. I'm not going to break something. Give me a limited account on the servers so I can look at the logs real time. Better yet, I heard of this nifty thing called <a href="http://www.splunk.com/">Splunk</a>. You think we can get the free version up and running somewhere so I can see aggregated logging?</div><div><br /></div><div>Oh...you have to jump through 20 hoops to make that happen? Never mind, I'll just keep pestering you to email me the logs until the bug is fixed.</div><div><br /></div><div><b><span class="Apple-style-span"  style="font-size:large;">Change Control</span></b></div><div>Why the hell can't we push my bug fix out tonight? It's a minor fix and leaving it out there just means more data cleanup for you until we do fix it. Yes, it's already been through testing. Yes, there's some data cleanup but I've already written the SQL to do it. Look, the DBA even signed off on it. </div><div><br /></div><div>Seriously, I'm handing you everything you need to get it done. Oh, you don't have the resources to do it tonight? How about cross-training one of us to do it for edge cases like these. I know that new features have to wait for major release but I've got the business unit breathing down my neck on this one bug. I guess I'll keep telling them we have to wait for you guys.</div><div><br /></div><div><b><span class="Apple-style-span"  style="font-size:large;">Bugs</span></b></div><div>I'm sorry but bugs will happen. Yes we write unit tests but those always have to be refined as new bugs are found. I don't enjoy having to revisit old code and fix the same thing over and over. I'm not intentionally putting these bugs out there for my health! If you would give us a proper preproduction environment we might catch these sooner. Yes, I know that the production dataset is much larger than our QA set. We asked for a refresh from production but you still haven't done it. We've got to get this stuff released now. No, I'm not being hyperbolic.</div><div><br /></div><div>Look at it from my perspective. I'm trying to get requirements from 5 different groups of people. I need to understand the intricacies of revolving credit and interest payments. I have to find the BEST way to present a complex set of information in most appealing manner because the only thing these people care about is how fast can I get it done and how pretty is it?</div><div><br /></div><div>I'm sorry my solution isn't the most optimal but it's only a stopgap. We're trying to work out a better long-term solution.</div><div><br /></div><div><b><span class="Apple-style-span"  style="font-size:large;">Attitude</span></b></div><div>Look, we're good developers. We have a process that works. The business units work with us because we don't let them down. We're extremely agile. We give them what we want and we're ready to generate some income but we're ALWAYS stymied by all your stupid roadblocks. We all have the same goal so why not let us help out? </div><div><br /></div><div>You always treat us like a bunch of idiots. We can't POSSIBLY understand the complex and rich interconnectedness of your universe despite the fact that we wrote the code that actually RUNS that universe. As I said, I have no interest in being a system administrator. I just want to get my bugs fixed. I want to get my code released because I have five other projects waiting on this one to finish. It really ISN'T as complicated as you want to make it out to be. In the end, you're just copying files somewhere. I know we have 10 servers serving the application and I took that into account. See? Totally stateless application. </div><div><br /></div><div>Oh, you're impressed that I understand statelessness? Your condescension is not surprising.</div><div><br /></div><div><b><span class="Apple-style-span"  style="font-size:large;">Cooperation</span></b></div><div>I know you think we're stupid because we don't understand the interactions of your fiber channel card and the SAN. I know you think we write buggy software to keep ourselves in a job. I know you have certain regulations and rules that you have to work with to maintain the integrity of the production environment.</div><div><br /></div><div>I know all of these things but would it KILL you to work with us on this stuff? What do you need from us? Did we not give you enough information? Let us know and we'll make sure we have that next time. Can you give us some sort of production access to help troubleshoot issues? I hate having to ask you for everything just as much as you hate being asked. There really are some things we can do on our own. Just give us the guidelines (we're good at working with those, you know) and we'll offload some of that stuff for you. Don't worry we're not going to change anything, we just need to look.</div><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-850589938238479554?l=lusislog.blogspot.com' alt='' /></div>
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>DevOps - Developers to Operations - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="I apologize in advance since this post is likely to be leaner than the previous one. My background is NOT in development and I&#8217;ve never offic...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/archives/blogger/2010-03-29-devops-developers-to-operations.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">DevOps - Developers to Operations</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><i>I apologize in advance since this post is likely to be leaner than the previous one. My background is NOT in development and I&#8217;ve never officially held a development role. Having said that, I&#8217;m looking to the comments for people to provide something else I &#8220;missed&#8221;. I need a guest blogger for this section ;)</i><div><br /><div><b><span class="Apple-style-span"  style="font-size:large;">Production</span></b></div></div><div>I understand that production is important. I understand that it sucks when bugs happen but would it kill you to give me a little more insight into HOW things operate so I can do my job better?</div><div><br /></div><div>I mean seriously. I wouldn&#8217;t have to have to bug you all the time if you would just give me the tools to get the information I need. I&#8217;m not interested in your job. I&#8217;m not going to break something. Give me a limited account on the servers so I can look at the logs real time. Better yet, I heard of this nifty thing called <a href="http://www.splunk.com/">Splunk</a>. You think we can get the free version up and running somewhere so I can see aggregated logging?</div><div><br /></div><div>Oh&#8230;you have to jump through 20 hoops to make that happen? Never mind, I&#8217;ll just keep pestering you to email me the logs until the bug is fixed.</div><div><br /></div><div><b><span class="Apple-style-span"  style="font-size:large;">Change Control</span></b></div><div>Why the hell can&#8217;t we push my bug fix out tonight? It&#8217;s a minor fix and leaving it out there just means more data cleanup for you until we do fix it. Yes, it&#8217;s already been through testing. Yes, there&#8217;s some data cleanup but I&#8217;ve already written the SQL to do it. Look, the DBA even signed off on it. </div><div><br /></div><div>Seriously, I&#8217;m handing you everything you need to get it done. Oh, you don&#8217;t have the resources to do it tonight? How about cross-training one of us to do it for edge cases like these. I know that new features have to wait for major release but I&#8217;ve got the business unit breathing down my neck on this one bug. I guess I&#8217;ll keep telling them we have to wait for you guys.</div><div><br /></div><div><b><span class="Apple-style-span"  style="font-size:large;">Bugs</span></b></div><div>I&#8217;m sorry but bugs will happen. Yes we write unit tests but those always have to be refined as new bugs are found. I don&#8217;t enjoy having to revisit old code and fix the same thing over and over. I&#8217;m not intentionally putting these bugs out there for my health! If you would give us a proper preproduction environment we might catch these sooner. Yes, I know that the production dataset is much larger than our QA set. We asked for a refresh from production but you still haven&#8217;t done it. We&#8217;ve got to get this stuff released now. No, I&#8217;m not being hyperbolic.</div><div><br /></div><div>Look at it from my perspective. I&#8217;m trying to get requirements from 5 different groups of people. I need to understand the intricacies of revolving credit and interest payments. I have to find the BEST way to present a complex set of information in most appealing manner because the only thing these people care about is how fast can I get it done and how pretty is it?</div><div><br /></div><div>I&#8217;m sorry my solution isn&#8217;t the most optimal but it&#8217;s only a stopgap. We&#8217;re trying to work out a better long-term solution.</div><div><br /></div><div><b><span class="Apple-style-span"  style="font-size:large;">Attitude</span></b></div><div>Look, we&#8217;re good developers. We have a process that works. The business units work with us because we don&#8217;t let them down. We&#8217;re extremely agile. We give them what we want and we&#8217;re ready to generate some income but we&#8217;re ALWAYS stymied by all your stupid roadblocks. We all have the same goal so why not let us help out? </div><div><br /></div><div>You always treat us like a bunch of idiots. We can&#8217;t POSSIBLY understand the complex and rich interconnectedness of your universe despite the fact that we wrote the code that actually RUNS that universe. As I said, I have no interest in being a system administrator. I just want to get my bugs fixed. I want to get my code released because I have five other projects waiting on this one to finish. It really ISN&#8217;T as complicated as you want to make it out to be. In the end, you&#8217;re just copying files somewhere. I know we have 10 servers serving the application and I took that into account. See? Totally stateless application. </div><div><br /></div><div>Oh, you&#8217;re impressed that I understand statelessness? Your condescension is not surprising.</div><div><br /></div><div><b><span class="Apple-style-span"  style="font-size:large;">Cooperation</span></b></div><div>I know you think we&#8217;re stupid because we don&#8217;t understand the interactions of your fiber channel card and the SAN. I know you think we write buggy software to keep ourselves in a job. I know you have certain regulations and rules that you have to work with to maintain the integrity of the production environment.</div><div><br /></div><div>I know all of these things but would it KILL you to work with us on this stuff? What do you need from us? Did we not give you enough information? Let us know and we&#8217;ll make sure we have that next time. Can you give us some sort of production access to help troubleshoot issues? I hate having to ask you for everything just as much as you hate being asked. There really are some things we can do on our own. Just give us the guidelines (we&#8217;re good at working with those, you know) and we&#8217;ll offload some of that stuff for you. Don&#8217;t worry we&#8217;re not going to change anything, we just need to look.</div><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-850589938238479554?l=lusislog.blogspot.com' alt='' /></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+
+
+
+      
+
+<span class="categories">
+  
+    Liquid error: undefined method `sort!' for nil:NilClass
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/archives/blogger/2010-03-29-devops-developers-to-operations.html" data-via="lusis" data-counturl="http://lusis.github.com/archives/blogger/2010-03-29-devops-developers-to-operations.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-redis/">Load balancing Logstash with Redis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load balancing Logstash with AMQP</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

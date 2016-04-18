@@ -4,7 +4,7 @@
   <title><![CDATA[Category: redis | blog dot lusis]]></title>
   <link href="http://lusis.github.com/blog/categories/redis/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2016-04-07T20:10:27-04:00</updated>
+  <updated>2016-04-18T01:20:56-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -18,7 +18,7 @@
     <link href="http://lusis.github.com/blog/2012/01/31/load-balancing-logstash-with-redis/"/>
     <updated>2012-01-31T23:24:00-05:00</updated>
     <id>http://lusis.github.com/blog/2012/01/31/load-balancing-logstash-with-redis</id>
-    <content type="html"><![CDATA[<p>After yesterday&rsquo;s post about load balancing logstash with AMQP and RabbitMQ, I got to thinking that it might be useful to show a smilar pattern with other inputs and outputs.
+    <content type="html"><![CDATA[<p>After yesterday's post about load balancing logstash with AMQP and RabbitMQ, I got to thinking that it might be useful to show a smilar pattern with other inputs and outputs.
 To me this, is the crux of what makes Logstash so awesome. Someone asked me to describe Logstash in one sentence. The best I could come up with was:</p>
 
 <p><blockquote><p>Logstash is a unix pipe on steroids</p></blockquote></p>
@@ -30,7 +30,7 @@ To me this, is the crux of what makes Logstash so awesome. Someone asked me to d
 
 <h1>Revisiting our requirements and pattern</h1>
 
-<p>If you recall from the post <a href="http://goo.gl/vWyCH">yesterday</a>, we had the following &lsquo;requirements&rsquo;:</p>
+<p>If you recall from the post <a href="http://goo.gl/vWyCH">yesterday</a>, we had the following 'requirements':</p>
 
 <ul>
 <li>No lost messages in transit/due to inputs or outputs.</li>
@@ -42,22 +42,22 @@ To me this, is the crux of what makes Logstash so awesome. Someone asked me to d
 
 <h2>EDIT</h2>
 
-<p>Originally our list stated the requirements as <em>No lost messages</em> and <em>No duplicate messages</em>. I&rsquo;ve amended those with a slight modification to closer reflect the original intent. Please see <a href="http://blog.lusis.org/blog/2012/01/31/load-balancing-logstash-with-amqp/#comment-426175086">comment from Jelle Smet here</a> for details. Thanks Jelle!</p>
+<p>Originally our list stated the requirements as <em>No lost messages</em> and <em>No duplicate messages</em>. I've amended those with a slight modification to closer reflect the original intent. Please see <a href="http://blog.lusis.org/blog/2012/01/31/load-balancing-logstash-with-amqp/#comment-426175086">comment from Jelle Smet here</a> for details. Thanks Jelle!</p>
 
 <p>Our design looked something like this:</p>
 
 <p><a href="/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png"><img src="/images/posts/load-balancing-logstash-with-amqp/gliffy-overview.png" alt="gliffy-overview.png" /></a></p>
 
 <p>One of the reasons that post was so long was that AMQP is a complicated beast. There was quite a bit of dense frontloading I had to do to cover AMQP before we got to the meat.
-We&rsquo;re going to take that same example, and swap out RabbitMQ for something a bit simpler and achieve the same results.</p>
+We're going to take that same example, and swap out RabbitMQ for something a bit simpler and achieve the same results.</p>
 
 <h1>Quick background on Redis</h1>
 
-<p><a href="http://redis.io">Redis</a> is commonly lumped in with a group of data storage technologies called NoSQL. Its name is short for &ldquo;REmoteDIctionaryServer&rdquo;. It typically falls into the &ldquo;key/value&rdquo; family of NoSQL.
+<p><a href="http://redis.io">Redis</a> is commonly lumped in with a group of data storage technologies called NoSQL. Its name is short for "REmoteDIctionaryServer". It typically falls into the "key/value" family of NoSQL.
 Several things set Redis apart from most key/value systems however:</p>
 
 <ul>
-<li>&ldquo;data types&rdquo; as values</li>
+<li>"data types" as values</li>
 <li>native operations on those data types</li>
 <li>atomic operations</li>
 <li>built-in PUB/SUB subsystem</li>
@@ -67,7 +67,7 @@ Several things set Redis apart from most key/value systems however:</p>
 
 <h2>Data types</h2>
 
-<p>I&rsquo;m not going to go into too much detail about the data types except to list them and highlight the one we&rsquo;ll be leveraging. You can read more about them <a href="http://redis.io/topics/data-types">here</a></p>
+<p>I'm not going to go into too much detail about the data types except to list them and highlight the one we'll be leveraging. You can read more about them <a href="http://redis.io/topics/data-types">here</a></p>
 
 <ul>
 <li>Strings</li>
@@ -84,17 +84,18 @@ Several things set Redis apart from most key/value systems however:</p>
 
 <p><a href="/images/posts/load-balancing-logstash-with-redis/mapping-table.png"><img src="/images/posts/load-balancing-logstash-with-redis/mapping-table.png" alt="mapping-table.png" /></a></p>
 
-<p>This is a somewhat over simplified list. In the case of a message producer, mimicing <code>direct</code> exchanges is done by writing to a Redis <code>list</code> while consumption of that is done via the Redis command <code>BLPOP</code><a href="http://redis.io/commands/blpop">*</a>. However mimicing the <code>fanout</code> and <code>topic</code> functionality is done strictly with the commands <code>PUBLISH</code><a href="http://redis.io/commands/publish">*</a>, <code>SUBSCRIBE</code><a href="http://redis.io/commands/subscribe">*</a> and <code>PSUBSCRIBE</code><a href="http://redis.io/commands/psubscribe">*</a>. It&rsquo;s worth reading each of those for a better understanding.</p>
+<p>This is a somewhat over simplified list. In the case of a message producer, mimicing <code>direct</code> exchanges is done by writing to a Redis <code>list</code> while consumption of that is done via the Redis command <code>BLPOP</code><a href="http://redis.io/commands/blpop">*</a>. However mimicing the <code>fanout</code> and <code>topic</code> functionality is done strictly with the commands <code>PUBLISH</code><a href="http://redis.io/commands/publish">*</a>, <code>SUBSCRIBE</code><a href="http://redis.io/commands/subscribe">*</a> and <code>PSUBSCRIBE</code><a href="http://redis.io/commands/psubscribe">*</a>. It's worth reading each of those for a better understanding.</p>
 
 <p>Oddly enough, the use of Redis as a messaging bus is something of a side effect. Redis supported lists that are auto-sorted by insert order. The <code>POP</code> command variants allowed single transaction get and remove of the data. It just fit the use case.</p>
 
 <h1>The configs</h1>
 
-<p>As with our previous example, we&rsquo;re going to show the configs needed on each side and explain them a little bit.</p>
+<p>As with our previous example, we're going to show the configs needed on each side and explain them a little bit.</p>
 
 <h2>Client-side/Producer</h2>
 
-<pre><code>input { stdin { type =&gt; "producer"} }
+<p><code>
+input { stdin { type =&gt; "producer"} }
 output {
 redis {
  host =&gt; 'localhost'
@@ -102,21 +103,22 @@ redis {
  key =&gt; 'logstash:redis'
 }
 }
-</code></pre>
+</code></p>
 
 <h3>data_type</h3>
 
-<p>This is where we tell Logstash how to send the data to Redis. In the case, again, we&rsquo;re storing it in a list data type.</p>
+<p>This is where we tell Logstash how to send the data to Redis. In the case, again, we're storing it in a list data type.</p>
 
 <h3>key</h3>
 
-<p>Unfortunately, key means different things (though with the same effect) depending on the <code>data_type</code> being used. In the case of a <code>list</code> this maps cleanly to the understanding of a <code>key</code> in a key/value system. It&rsquo;s common in Redis to namespace keys with a <code>:</code> though it&rsquo;s entirely unneccesary.</p>
+<p>Unfortunately, key means different things (though with the same effect) depending on the <code>data_type</code> being used. In the case of a <code>list</code> this maps cleanly to the understanding of a <code>key</code> in a key/value system. It's common in Redis to namespace keys with a <code>:</code> though it's entirely unneccesary.</p>
 
 <p>As an aside, when using <code>key</code> on <code>channel</code> data type, this behaves like the routing key in AMQP parlance with the exception of being able to use any separator you like (in other words, you can namespace with <code>.</code>,<code>:</code>,<code>::</code> whatever).</p>
 
 <h2>Indexer-side/Consumer</h2>
 
-<pre><code>input {
+<p><code>
+input {
 redis {
   host =&gt; 'localhost'
   data_type =&gt; 'list'
@@ -125,7 +127,7 @@ redis {
 }
 }
 output {stdout {debug =&gt; true} }
-</code></pre>
+</code></p>
 
 <h3>data_type</h3>
 
@@ -137,33 +139,33 @@ output {stdout {debug =&gt; true} }
 
 <h1>Starting it all up</h1>
 
-<p>We&rsquo;re going to simplify our original tests a little bit in the interest of brevity. Showing 2 producers and 2 consumers gives us the same benefit as showing four of each. Since we don&rsquo;t have the benefit of a pretty management interface, we&rsquo;re going to use the redis server debug information and the <code>redis-cli</code> application to allow us to see certain management information.</p>
+<p>We're going to simplify our original tests a little bit in the interest of brevity. Showing 2 producers and 2 consumers gives us the same benefit as showing four of each. Since we don't have the benefit of a pretty management interface, we're going to use the redis server debug information and the <code>redis-cli</code> application to allow us to see certain management information.</p>
 
 <h2>redis-server</h2>
 
-<p>Start the server with the command <code>redis-server</code> I&rsquo;m running this from homebrew but you literally build Redis on any machine that has <code>make</code> and a compiler. That&rsquo;s all you need. You can even run it straight from the source directory:</p>
+<p>Start the server with the command <code>redis-server</code> I'm running this from homebrew but you literally build Redis on any machine that has <code>make</code> and a compiler. That's all you need. You can even run it straight from the source directory:</p>
 
 <p><a href="/images/posts/load-balancing-logstash-with-redis/redis-server.png"><img src="/images/posts/load-balancing-logstash-with-redis/redis-server.png" alt="redis-server.png" /></a></p>
 
-<p>You&rsquo;ll notice that the redis server is periodically dumping some stats - number of connected clients and the amount of memory in use.</p>
+<p>You'll notice that the redis server is periodically dumping some stats - number of connected clients and the amount of memory in use.</p>
 
 <h2>Starting the logstash agents</h2>
 
-<p>We&rsquo;re going to start two producers (redis output) and two consumers (redis input):</p>
+<p>We're going to start two producers (redis output) and two consumers (redis input):</p>
 
 <p><a href="/images/posts/load-balancing-logstash-with-redis/agents.png"><img src="/images/posts/load-balancing-logstash-with-redis/agents.png" alt="agents.png" /></a></p>
 
-<p>Back in our redis-server window, you should now see two connected clients in the periodic status messages. Why not four? Because the producers don&rsquo;t have a persistent connection to Redis. Only the consumers do (via BLPOP):</p>
+<p>Back in our redis-server window, you should now see two connected clients in the periodic status messages. Why not four? Because the producers don't have a persistent connection to Redis. Only the consumers do (via BLPOP):</p>
 
 <p><a href="/images/posts/load-balancing-logstash-with-redis/two-clients.png"><img src="/images/posts/load-balancing-logstash-with-redis/two-clients.png" alt="two-clients.png" /></a></p>
 
 <h1>Testing message flow</h1>
 
-<p>As with our previous post, we&rsquo;re going to alternate messages between the two producers. In the first producer, we&rsquo;ll type <code>window 1</code> and in the second <code>window 2</code>. You&rsquo;ll see the consumers pick up the messages:</p>
+<p>As with our previous post, we're going to alternate messages between the two producers. In the first producer, we'll type <code>window 1</code> and in the second <code>window 2</code>. You'll see the consumers pick up the messages:</p>
 
 <p><a href="/images/posts/load-balancing-logstash-with-redis/delivery.png"><img src="/images/posts/load-balancing-logstash-with-redis/delivery.png" alt="delivery.png" /></a></p>
 
-<p>If you look over in the redis-server window, you&rsquo;ll also see that our client count went up to four. If we were to leave these clients alone, eventually it would drop back down to two.</p>
+<p>If you look over in the redis-server window, you'll also see that our client count went up to four. If we were to leave these clients alone, eventually it would drop back down to two.</p>
 
 <p><a href="/images/posts/load-balancing-logstash-with-redis/new-connections.png"><img src="/images/posts/load-balancing-logstash-with-redis/new-connections.png" alt="new-connections.png" /></a></p>
 
@@ -171,15 +173,15 @@ output {stdout {debug =&gt; true} }
 
 <h2>Offline consumers</h2>
 
-<p>This is all well and good but as with the previous example, we want to test how this configuration handles the case of consumers going offline. Shut down the two indexer configs and let&rsquo;s verify. To do this, we&rsquo;re going to also open up a new window and run the <code>redis-cli</code> app. Technically, you don&rsquo;t even need that. You can telnet to the redis port and just run these commands yourself. We&rsquo;re going to use the <code>LLEN</code> command to get the size of our &ldquo;backlog&rdquo;.</p>
+<p>This is all well and good but as with the previous example, we want to test how this configuration handles the case of consumers going offline. Shut down the two indexer configs and let's verify. To do this, we're going to also open up a new window and run the <code>redis-cli</code> app. Technically, you don't even need that. You can telnet to the redis port and just run these commands yourself. We're going to use the <code>LLEN</code> command to get the size of our "backlog".</p>
 
 <p>In the producer windows, type a few messages. Alternate between producers for maximum effect. Then go over to the <code>redis-cli</code> window and type <code>LLEN logstash:redis</code>. You should see something like the following (obviously varied by how many messages you sent):</p>
 
 <p><a href="/images/posts/load-balancing-logstash-with-redis/llen.png"><img src="/images/posts/load-balancing-logstash-with-redis/llen.png" alt="llen.png" /></a></p>
 
-<p>You&rsquo;ll also notice in the redis server window that the amount of memory in use went up slightly.</p>
+<p>You'll also notice in the redis server window that the amount of memory in use went up slightly.</p>
 
-<p>Now let&rsquo;s start our consumers back up and ensure they drain (and in insert order):</p>
+<p>Now let's start our consumers back up and ensure they drain (and in insert order):</p>
 
 <p><a href="/images/posts/load-balancing-logstash-with-redis/drain.png"><img src="/images/posts/load-balancing-logstash-with-redis/drain.png" alt="drain.png" /></a></p>
 
@@ -187,11 +189,11 @@ output {stdout {debug =&gt; true} }
 
 <h1>Persistence</h1>
 
-<p>You might have noticed I didn&rsquo;t address disk-based persistence at all. This was intentional. Redis is primarily a memory-based store. However it does have support for a few different ways of persisting to disk - RDB and AOF. I&rsquo;m not going to go into too much detail on those. The Redis documentation does a good job of explaining the pros and cons of each. You can read that <a href="http://redis.io/topics/persistence">here</a>.</p>
+<p>You might have noticed I didn't address disk-based persistence at all. This was intentional. Redis is primarily a memory-based store. However it does have support for a few different ways of persisting to disk - RDB and AOF. I'm not going to go into too much detail on those. The Redis documentation does a good job of explaining the pros and cons of each. You can read that <a href="http://redis.io/topics/persistence">here</a>.</p>
 
 <h1>Wrap up</h1>
 
-<p>One thing that&rsquo;s important to note is that Redis is pretty damn fast. The limitation for Redis is essentially memory. However if speed isn&rsquo;t your primary concern, there&rsquo;s an interesting alpha project called <a href="http://inaka.github.com/edis">edis</a> worth investigating. It is a port of Redis to Erlang. Its primary goal is better persistence for Redis. For this post I also tested Logstash against edis and I&rsquo;m happy to say it works:</p>
+<p>One thing that's important to note is that Redis is pretty damn fast. The limitation for Redis is essentially memory. However if speed isn't your primary concern, there's an interesting alpha project called <a href="http://inaka.github.com/edis">edis</a> worth investigating. It is a port of Redis to Erlang. Its primary goal is better persistence for Redis. For this post I also tested Logstash against edis and I'm happy to say it works:</p>
 
 <p><a href="/images/posts/load-balancing-logstash-with-redis/edis.png"><img src="/images/posts/load-balancing-logstash-with-redis/edis.png" alt="edis.png" /></a></p>
 
@@ -199,7 +201,7 @@ output {stdout {debug =&gt; true} }
 
 <h2>Part three</h2>
 
-<p>I&rsquo;m also working on a part three in this &ldquo;series&rdquo;. The last configuration I&rsquo;d like to show is doing this same setup but using <a href="http://zeromq.org">0mq</a> as the bus. This is going to be especially challenging since our 0mq support is curretly &lsquo;alpha&rsquo;-ish quality. Beyond that, I plan on doing a similar series using pub/sub patterns. If you&rsquo;re enjoying these posts, please comment and let me know!</p>
+<p>I'm also working on a part three in this "series". The last configuration I'd like to show is doing this same setup but using <a href="http://zeromq.org">0mq</a> as the bus. This is going to be especially challenging since our 0mq support is curretly 'alpha'-ish quality. Beyond that, I plan on doing a similar series using pub/sub patterns. If you're enjoying these posts, please comment and let me know!</p>
 ]]></content>
   </entry>
   

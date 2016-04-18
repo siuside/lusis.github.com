@@ -9,8 +9,7 @@
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="(and what we&rsquo;re doing about it) About two weeks ago someone made a tweet. At this point, I don&rsquo;t
-remember who said it but the gist was &hellip;">
+  <meta name="description" content="(and what we&#8217;re doing about it)About two weeks ago someone made a tweet. At this point, I don&#8217;tremember who said it but the gist was th...">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -22,11 +21,10 @@ remember who said it but the gist was &hellip;">
   <link rel="canonical" href="http://lusis.github.com/blog/2011/06/05/why-monitoring-sucks/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/ender.js"></script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
   <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
 <link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
@@ -60,14 +58,12 @@ remember who said it but the gist was &hellip;">
   <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
   
 </ul>
-  
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="lusis.github.com">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
-  
 <ul role=main-navigation>
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
@@ -92,22 +88,24 @@ remember who said it but the gist was &hellip;">
 
 
 
-<time class='entry-date' datetime='2011-06-05T19:30:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>7:30 pm</span></time>
-        
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://lusis.github.com">Comments</a>
+
+  
+
+
+
+<time datetime="2011-06-05T19:30:00-04:00" pubdate  data-updated="true" >Jun 5<span>th</span>, 2011</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><em>(and what we&rsquo;re doing about it)</em></p>
+<div class="entry-content"><p><em>(and what we&#8217;re doing about it)</em></p>
 
-<p>About two weeks ago someone made a tweet. At this point, I don&rsquo;t
-remember who said it but the gist was that &ldquo;monitoring sucks&rdquo;. I
+<p>About two weeks ago someone made a tweet. At this point, I don&#8217;t
+remember who said it but the gist was that &#8220;monitoring sucks&#8221;. I
 happened to be knee-deep in frustrating bullshit around that topic and
-was currently evaluating the same effing tools I&rsquo;d evaluated at every
+was currently evaluating the same effing tools I&#8217;d evaluated at every
 other company over the past 10 years or so. So I did what seems to be
 S.O.P for me these days. I started something.</p>
 
@@ -116,15 +114,15 @@ S.O.P for me these days. I started something.</p>
 
 <h1>But does monitoring REALLY suck?</h1>
 
-<p>Heck no! Monitoring is AWESOME. Metrics are AWESOME. I love it. Here&rsquo;s
-what I don&rsquo;t love: - Having my hands tied with the model of host and
-service bindings. - Having to set up &ldquo;fake&rdquo; hosts just to group
+<p>Heck no! Monitoring is AWESOME. Metrics are AWESOME. I love it. Here&#8217;s
+what I don&#8217;t love: - Having my hands tied with the model of host and
+service bindings. - Having to set up &#8220;fake&#8221; hosts just to group
 arbitrary metrics together - Having to either collect metrics twice -
 once for alerting and another for trending - Only being able to see my
 metrics in 5 minute intervals - Having to chose between shitty interface
 but great monitoring or shitty monitoring but great interface - Dealing
 with a monitoring system that thinks <strong>IT</strong> is the system of truth for
-my environment - Perl (I kid&hellip;sort of) - Not actually having any real
+my environment - Perl (I kid&#8230;sort of) - Not actually having any real
 choices</p>
 
 <p>Yes, yes I know:</p>
@@ -132,45 +130,45 @@ choices</p>
 <blockquote><p>You can just combine Nagios + collectd + graphite + cacti +
 pnp4nagios and you have everything you need!</p></blockquote>
 
-<p>Seriously? Kiss my ass. I&rsquo;m a huge fan of the Unix pipeline philosophy
-but, christ, have you ever heard the phrase &ldquo;antipattern&rdquo;?</p>
+<p>Seriously? Kiss my ass. I&#8217;m a huge fan of the Unix pipeline philosophy
+but, christ, have you ever heard the phrase &#8220;antipattern&#8221;?</p>
 
 <h1>So what the hell are you going to do about it?</h1>
 
-<p>I&rsquo;m going to let smart people be smart and do smart things.</p>
+<p>I&#8217;m going to let smart people be smart and do smart things.</p>
 
 <p>Step one was getting everyone who had similar complaints together on
 IRC. That went pretty damn well. Step two was creating a github repo.
-Seriously. Step two should ALWAYS be &ldquo;create a github repo&rdquo;. Step three?
+Seriously. Step two should ALWAYS be &#8220;create a github repo&#8221;. Step three?
 Hell if I know.</p>
 
-<p>Here&rsquo;s what I do know. There are plenty of frustrated system
-administrators, developers, engineers, &ldquo;devops&rdquo; and everything under the
-sun who don&rsquo;t want much. All they really want is for shit to work. When
+<p>Here&#8217;s what I do know. There are plenty of frustrated system
+administrators, developers, engineers, &#8220;devops&#8221; and everything under the
+sun who don&#8217;t want much. All they really want is for shit to work. When
 shit breaks, they want to be notified. They want pretty graphs. They
 want to see business metrics along side operational ones. They want to
 have a 52-inch monitor in the office that everyone can look at and say:</p>
 
-<blockquote><p>See that red dot? That&rsquo;s bad. Here&rsquo;s what was going on when we got
-that red dot. Let&rsquo;s fix that shit and go get beers</p></blockquote>
+<blockquote><p>See that red dot? That&#8217;s bad. Here&#8217;s what was going on when we got
+that red dot. Let&#8217;s fix that shit and go get beers</p></blockquote>
 
-<h1>About the &ldquo;repo&rdquo;</h1>
+<h1>About the &#8220;repo&#8221;</h1>
 
-<p>So the plan I have in place for the repository is this. We don&rsquo;t really
+<p>So the plan I have in place for the repository is this. We don&#8217;t really
 need code. What we need is an easy way for people to contribute ideas.
-The plan I have in place for this is partially underway. There&rsquo;s now a
+The plan I have in place for this is partially underway. There&#8217;s now a
 <em>monitoringsucks</em> organization on Github. Pretty much anyone who is
 willing to contribute can get added to the team. The idea is that, as
 smart people think of smart shit, we can create new repository under
 some unifying idea and put blog posts, submodules, reviews,
 ideas..whatever into that repository so people have an easy place to go
-get information. I&rsquo;d like to assign someone per repository to be the
-owner. We&rsquo;re all busy but this is something we&rsquo;re all highly interested
+get information. I&#8217;d like to assign someone per repository to be the
+owner. We&#8217;re all busy but this is something we&#8217;re all highly interested
 in. If we spread the work out and allow easy contribution, then we can
 get some real content up there.</p>
 
 <p>I also want to keep the repos as light and cacheable as possible. The
-organization is under the github &ldquo;free&rdquo; plan right now and I&rsquo;d like to
+organization is under the github &#8220;free&#8221; plan right now and I&#8217;d like to
 keep it that way.</p>
 
 <h2>Blog Posts Repo</h2>
@@ -180,49 +178,49 @@ posts people come across. Think of it as hyper-local delicious in a
 DVCS.</p>
 
 <p>Currently, by virtue of the first commit, Michael Conigliaro is the
-&ldquo;owner&rdquo;. You can follow him on twitter and github as @mconigliaro</p>
+&#8220;owner&#8221;. You can follow him on twitter and github as @mconigliaro</p>
 
 <h2>IRC Logs Repo</h2>
 
-<p>This repo is a log of any &ldquo;scheduled&rdquo; irc sessions. Personally, I don&rsquo;t
+<p>This repo is a log of any &#8220;scheduled&#8221; irc sessions. Personally, I don&#8217;t
 think we need a distinct #monitoringsucks channel but people want to
 keep it around. The logs in this repo are not full logs. Just those from
-when someone says &ldquo;Hey smart people. Let&rsquo;s think of smart shit at this
-date/time&rdquo; on twitter.</p>
+when someone says &#8220;Hey smart people. Let&#8217;s think of smart shit at this
+date/time&#8221; on twitter.</p>
 
 <p>Currently <strong>I</strong> appear to be the owner of this repo. I would love for
 someone who can actually make the logs look good to take this over.</p>
 
 <h2>Tools Repo</h2>
 
-<p>This repo is really more of a &ldquo;curation&rdquo; repo. The plan is that each
+<p>This repo is really more of a &#8220;curation&#8221; repo. The plan is that each
 directory is the name of some tool with two things it in:</p>
 
 <ul>
 <li>A README.md as a review of the tool</li>
-<li>A submodule link to the tool&rsquo;s repo (where appropriate)</li>
+<li>A submodule link to the tool&#8217;s repo (where appropriate)</li>
 </ul>
 
 
-<p>Again, I think I&rsquo;m running point on this one. Please note that the
+<p>Again, I think I&#8217;m running point on this one. Please note that the
 submodule links APPEAR to have some sort of UI issue on github. Every
-submodule appears to point to Dan DeLeo&rsquo;s &lsquo;critical&rsquo; project.</p>
+submodule appears to point to Dan DeLeo&#8217;s &#8216;critical&#8217; project.</p>
 
 <h2>Metrics Catalog Repo</h2>
 
 <p>This is our latest member and it already has an official manager! Jason
 Dixon (@obfuscurity on github/twitter - jdixon on irc) suggested it so
-he get&rsquo;s to run it ;) The idea here is that this will serves as a set of
+he get&#8217;s to run it ;) The idea here is that this will serves as a set of
 best practices around what metrics you might want to collect and why.
-I&rsquo;m leaving the organization up to Jason but I suggested a
+I&#8217;m leaving the organization up to Jason but I suggested a
 per-app/service/protocol directory.</p>
 
 <h1>Wrap Up</h1>
 
-<p>So that&rsquo;s where we are. Where it goes, I have no idea. I just want to
+<p>So that&#8217;s where we are. Where it goes, I have no idea. I just want to
 help where ever I can. If you have any ideas, hit me up on
 twitter/irc/github/email and let me know. It might help to know that if
-you suggest something, you&rsquo;ll probably be made the person reponsible for
+you suggest something, you&#8217;ll probably be made the person reponsible for
 it ;)</p>
 
 <p><strong>Update!</strong></p>
@@ -254,7 +252,12 @@ repositories. Here they are:</p>
 
 
 
-<time class='entry-date' datetime='2011-06-05T19:30:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>7:30 pm</span></time>
+
+  
+
+
+
+<time datetime="2011-06-05T19:30:00-04:00" pubdate  data-updated="true" >Jun 5<span>th</span>, 2011</time>
       
 
 <span class="categories">
@@ -268,19 +271,23 @@ repositories. Here they are:</p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2011/06/05/why-monitoring-sucks/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2011/06/05/why-monitoring-sucks/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2011/06/05/why-monitoring-sucks/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2011/06/05/why-monitoring-sucks/" >Tweet</a>
   
   
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
 </div>
 
     
     <p class="meta">
-      
+       
         <a class="basic-alignment left" href="/blog/2011/05/19/on-noah-part-4/" title="Previous Post: On Noah - Part 4">&laquo; On Noah - Part 4</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2011/07/21/monitoring-sucks-watch-your-language/" title="Next Post: Monitoring Sucks - Watch your language">Monitoring Sucks - Watch your language &raquo;</a>
+       
+        <a class="basic-alignment right" href="/blog/2011/07/21/monitoring-sucks-watch-your-language/" title="next Post: Monitoring Sucks - Watch your language">Monitoring Sucks - Watch your language &raquo;</a>
       
     </p>
   </footer>
@@ -305,38 +312,38 @@ repositories. Here they are:</p>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2016/04/07/how-is-rundeck-formed/">How Is Rundeck Formed</a>
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">Aws Api Gateway for Fun and Profit</a>
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2015/10/12/terraform-modules-for-fun-and-profit/">Terraform Modules for Fun and Profit</a>
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2015/10/12/current-status/">Current Status</a>
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-redis/">Load balancing Logstash with Redis</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/11/21/a-few-things/">A Few Things</a>
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load balancing Logstash with AMQP</a>
       </li>
     
   </ul>
 </section>
 
 <section>
-  <h1>GitHub Repos</h1>
+  <h1>Github Repos</h1>
   <ul id="gh_repos">
     <li class="loading">Status updating...</li>
   </ul>
   
-  <a href="https://github.com/lusis">@lusis</a> on GitHub
+  <a href="https://github.com/lusis">@lusis</a> on Github
   
   <script type="text/javascript">
-    $(document).ready(function(){
+    $.domReady(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -392,7 +399,8 @@ repositories. Here they are:</p>
   
 
 <script type="text/javascript">
-      var disqus_shortname = 'lusisgithubblog';
+    
+      var disqus_shortname = 'lusis';
       
         
         // var disqus_developer = 1;
@@ -402,14 +410,29 @@ repositories. Here they are:</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
 
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
 
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
 
 
 
@@ -418,7 +441,7 @@ repositories. Here they are:</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

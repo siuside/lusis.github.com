@@ -1,7 +1,301 @@
---- 
-name: no-operations-team-left-behind-where
-layout: post
-title: No operations team left behind - Where DevOps misses the mark
-time: 2010-07-13 21:53:00 -04:00
----
-I'm a big fan of the "DevOps" movement. I follow any and everyone on twitter who's involved. I've watched SlideShare presentation after presentation. I've pined for a chance to go to Velocity. I watched the keynote live. I've got "the book". These guys are my heroes, not because they did something new per se but because they put a name on it. Gave it a face from the formless mass. Brought it to the forefront.<div><br /></div><div>Any operations guy worth his salt has been doing some part of what is constituting DevOps for a long time. We automated builds. If we had to do something more than once, we wrote a script to handle it. My favorite item from ThinkGeek was a sticker that said "Go away or I will replace you with a very small shell script". We pxe-booted machines from kickstart files. We were lazy and didn't want to have to deal with the same bullshit mistakes over and over. When I read the intro to the Web Operations book, I was shouting outloud because this was the FIRST book that accurately described what I've been doing for the past 15 years.</div><div><br /></div><div>I tell you all that so you don't think I'm down on the "tribe" (as Tim O'Reilly called us). These are my people. We're on the same wavelength. I love you guys. Seriously. But just like any intervention, someone has to speak out. There's a "trend" that seems to be forming that's leaving some operations teams behind and those folks don't have a choice.</div><div><br /></div><div>I mentioned in a previous post that I'm working for a new company. Because of legal restrictions and company security policy, among other things, I can't go into too many details. However, the same things I'm going to be talking about apply to more than just our company. </div><div><br /></div><div>The company recently formed a dedicated group called "DevOps". The traditional SA/Operations team was reformed into a "DevOps Support" and a handful of other folks were formed into a "DevOps Architecture" team. Right now that second group consists of me and two of the senior staff who moved over from the original SA team. Now you might look at this and say "Yer doin' it wrong!" but there's some logic behind this thought process.  Without breaking out a few people from the daily operational support issues, no headway could be really made on implementing anything.  This isn't to imply anything about how the company operates or the quality of the product. It's simply a fact of trying to retrofit a new operational model on top of an already moving traditional business process. The same issues arose when teams started migrating from a waterfall to agile. Sure you could implement agile in the NEXT project but forget about upsetting the boat on the current product line. In addition to changing how developers operated, you had a whole host of other stakeholders who needed to be convinced.</div><div><br /></div><div>I once had a manager who I really disliked but he had a saying - "It's like changing the tires on the race car while it's going around the track"</div><div><br /></div><div>That's the position many traditional companies are in right now. Walking in the door and telling them they really should be doing X instead of Y is nice. Everyone with a brain knows it makes sense. It's obviously more efficient, reduces support issues, makes for a better work environment and cures cancer but it simply cannot be implemented by burning the boat. So, yes, some companies will have to form dedicated groups and work with stakeholders and go through the whole process that a DevOps mentality is trying to replace just to implement it.</div><div><br /></div><div>But that's not the only roadblock.</div><div><br /></div><h2>Sarbanes-Oxley</h2><div>Any publicly traded company regardless of industry has its hands tied by three letters - SOX. Excluding specific sector requirements - HIPPA for medical, PCI for financial, FCPA, GLBA or (insert acronym here), Sarbanes-Oxley puts vague and onerous demands on public companies. Hell, you don't even have to be publicly traded. You could be a vendor to a publicly traded company and subject to it by proxy. Sarbanes-Oxley is notoriously ambiguous about what you actually have to DO to pass an audit. Entire industries have sprung up around it from hardware and software to wetware.</div><div><br /></div><div>What's most amazing about it is that, I personally think implementing a DevOps philosophy across the board would make compliance EASIER. All change control is AUTOMATICALLY documented. Traditional access rules aren't an issue because no human actually logs onto servers for instance. </div><div><br /></div><div>However in the end you have to convince the auditor that what you are doing matches with the script they have. In every company I've been at we've had the same workflow. It's like all the auditors went to the same fly by night school based on some infomercial: "Make big money as a SOX auditor. Call now for your free information packet!"</div><div><ul><li>Change is requested by person W</li><li>Change is  approved by X stake holders</li><li>Change is approved by Y executive</li><li>Change is performed by person Z</li><li>The person who requested the change can't approve it. </li><li>The person approving the change can't perform the actual work. </li><li>So on and so forth.</li></ul></div><div><br /></div><div>Continuous deployment? Not gonna happen. It can't be done with that level of handcuffing.</div><div><br /></div><h2>Security Controls</h2><div>Moving past the whole SOX issue, there are also security concerns that prevent automation. It's not uncommon for companies to have internal VPNs that have to be used to reach the production environment. That means the beautiful automated build system you have is good up until, say, QA. Preproduction and on requires manual access to even GET to the servers. This model is used in companies all over the world. Mandatory encryption requirements can further complicate things.</div><div><br /></div><h2>Corporate Hierarchy</h2><div>I was recently asked what I found was the biggest roadblock to implementing the DevOps philosophy. In my standard roundabout way of thinking something through, I realized that the biggest roadblock is people. People with agendas. People who have control issues. People who are afraid of sharing knowledge for fear of losing some sort of role as "Keeper of the Knowledge". Those issues can extend all the way to the top of a company. There's also the fear of change. It's a valid concern and it's even MORE valid when a misstep can cost your company millions of dollars. You have no choice but to move slow and use what works because you know it works. It's not the most efficient but when it's bringing in the money, you can afford to throw bodies at the issue. You can afford to have 10 developers on staff focused on nothing but maintaining the current code base and another 10 working on new features.</div><div><br /></div><div>The whole point of this long-winded post is to say "Don't write us off". We know. You're preaching to the choir. It takes baby steps and we have to pursue it in a way that works with the structure we have in place. It's great that you're a startup and don't have the legacy issues older companies have. We're all on the same team. <b>Don't leave us behind.</b></div><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-3821010815222480932?l=lusislog.blogspot.com' alt='' /></div>
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>No operations team left behind - Where DevOps misses the mark - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="I&#8217;m a big fan of the &#8220;DevOps&#8221; movement. I follow any and everyone on twitter who&#8217;s involved. I&#8217;ve watched SlideShare ...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/archives/blogger/2010-07-13-no-operations-team-left-behind-where.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">No Operations Team Left Behind - Where DevOps Misses the Mark</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">I&#8217;m a big fan of the &#8220;DevOps&#8221; movement. I follow any and everyone on twitter who&#8217;s involved. I&#8217;ve watched SlideShare presentation after presentation. I&#8217;ve pined for a chance to go to Velocity. I watched the keynote live. I&#8217;ve got &#8220;the book&#8221;. These guys are my heroes, not because they did something new per se but because they put a name on it. Gave it a face from the formless mass. Brought it to the forefront.<div><br /></div><div>Any operations guy worth his salt has been doing some part of what is constituting DevOps for a long time. We automated builds. If we had to do something more than once, we wrote a script to handle it. My favorite item from ThinkGeek was a sticker that said &#8220;Go away or I will replace you with a very small shell script&#8221;. We pxe-booted machines from kickstart files. We were lazy and didn&#8217;t want to have to deal with the same bullshit mistakes over and over. When I read the intro to the Web Operations book, I was shouting outloud because this was the FIRST book that accurately described what I&#8217;ve been doing for the past 15 years.</div><div><br /></div><div>I tell you all that so you don&#8217;t think I&#8217;m down on the &#8220;tribe&#8221; (as Tim O&#8217;Reilly called us). These are my people. We&#8217;re on the same wavelength. I love you guys. Seriously. But just like any intervention, someone has to speak out. There&#8217;s a &#8220;trend&#8221; that seems to be forming that&#8217;s leaving some operations teams behind and those folks don&#8217;t have a choice.</div><div><br /></div><div>I mentioned in a previous post that I&#8217;m working for a new company. Because of legal restrictions and company security policy, among other things, I can&#8217;t go into too many details. However, the same things I&#8217;m going to be talking about apply to more than just our company. </div><div><br /></div><div>The company recently formed a dedicated group called &#8220;DevOps&#8221;. The traditional SA/Operations team was reformed into a &#8220;DevOps Support&#8221; and a handful of other folks were formed into a &#8220;DevOps Architecture&#8221; team. Right now that second group consists of me and two of the senior staff who moved over from the original SA team. Now you might look at this and say &#8220;Yer doin&#8217; it wrong!&#8221; but there&#8217;s some logic behind this thought process.  Without breaking out a few people from the daily operational support issues, no headway could be really made on implementing anything.  This isn&#8217;t to imply anything about how the company operates or the quality of the product. It&#8217;s simply a fact of trying to retrofit a new operational model on top of an already moving traditional business process. The same issues arose when teams started migrating from a waterfall to agile. Sure you could implement agile in the NEXT project but forget about upsetting the boat on the current product line. In addition to changing how developers operated, you had a whole host of other stakeholders who needed to be convinced.</div><div><br /></div><div>I once had a manager who I really disliked but he had a saying - &#8220;It&#8217;s like changing the tires on the race car while it&#8217;s going around the track&#8221;</div><div><br /></div><div>That&#8217;s the position many traditional companies are in right now. Walking in the door and telling them they really should be doing X instead of Y is nice. Everyone with a brain knows it makes sense. It&#8217;s obviously more efficient, reduces support issues, makes for a better work environment and cures cancer but it simply cannot be implemented by burning the boat. So, yes, some companies will have to form dedicated groups and work with stakeholders and go through the whole process that a DevOps mentality is trying to replace just to implement it.</div><div><br /></div><div>But that&#8217;s not the only roadblock.</div><div><br /></div><h2>Sarbanes-Oxley</h2><div>Any publicly traded company regardless of industry has its hands tied by three letters - SOX. Excluding specific sector requirements - HIPPA for medical, PCI for financial, FCPA, GLBA or (insert acronym here), Sarbanes-Oxley puts vague and onerous demands on public companies. Hell, you don&#8217;t even have to be publicly traded. You could be a vendor to a publicly traded company and subject to it by proxy. Sarbanes-Oxley is notoriously ambiguous about what you actually have to DO to pass an audit. Entire industries have sprung up around it from hardware and software to wetware.</div><div><br /></div><div>What&#8217;s most amazing about it is that, I personally think implementing a DevOps philosophy across the board would make compliance EASIER. All change control is AUTOMATICALLY documented. Traditional access rules aren&#8217;t an issue because no human actually logs onto servers for instance. </div><div><br /></div><div>However in the end you have to convince the auditor that what you are doing matches with the script they have. In every company I&#8217;ve been at we&#8217;ve had the same workflow. It&#8217;s like all the auditors went to the same fly by night school based on some infomercial: &#8220;Make big money as a SOX auditor. Call now for your free information packet!&#8221;</div><div><ul><li>Change is requested by person W</li><li>Change is  approved by X stake holders</li><li>Change is approved by Y executive</li><li>Change is performed by person Z</li><li>The person who requested the change can&#8217;t approve it. </li><li>The person approving the change can&#8217;t perform the actual work. </li><li>So on and so forth.</li></ul></div><div><br /></div><div>Continuous deployment? Not gonna happen. It can&#8217;t be done with that level of handcuffing.</div><div><br /></div><h2>Security Controls</h2><div>Moving past the whole SOX issue, there are also security concerns that prevent automation. It&#8217;s not uncommon for companies to have internal VPNs that have to be used to reach the production environment. That means the beautiful automated build system you have is good up until, say, QA. Preproduction and on requires manual access to even GET to the servers. This model is used in companies all over the world. Mandatory encryption requirements can further complicate things.</div><div><br /></div><h2>Corporate Hierarchy</h2><div>I was recently asked what I found was the biggest roadblock to implementing the DevOps philosophy. In my standard roundabout way of thinking something through, I realized that the biggest roadblock is people. People with agendas. People who have control issues. People who are afraid of sharing knowledge for fear of losing some sort of role as &#8220;Keeper of the Knowledge&#8221;. Those issues can extend all the way to the top of a company. There&#8217;s also the fear of change. It&#8217;s a valid concern and it&#8217;s even MORE valid when a misstep can cost your company millions of dollars. You have no choice but to move slow and use what works because you know it works. It&#8217;s not the most efficient but when it&#8217;s bringing in the money, you can afford to throw bodies at the issue. You can afford to have 10 developers on staff focused on nothing but maintaining the current code base and another 10 working on new features.</div><div><br /></div><div>The whole point of this long-winded post is to say &#8220;Don&#8217;t write us off&#8221;. We know. You&#8217;re preaching to the choir. It takes baby steps and we have to pursue it in a way that works with the structure we have in place. It&#8217;s great that you&#8217;re a startup and don&#8217;t have the legacy issues older companies have. We&#8217;re all on the same team. <b>Don&#8217;t leave us behind.</b></div><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-3821010815222480932?l=lusislog.blogspot.com' alt='' /></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+
+
+
+      
+
+<span class="categories">
+  
+    Liquid error: undefined method `sort!' for nil:NilClass
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/archives/blogger/2010-07-13-no-operations-team-left-behind-where.html" data-via="lusis" data-counturl="http://lusis.github.com/archives/blogger/2010-07-13-no-operations-team-left-behind-where.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-redis/">Load balancing Logstash with Redis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load balancing Logstash with AMQP</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

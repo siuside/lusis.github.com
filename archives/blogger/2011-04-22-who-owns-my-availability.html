@@ -1,7 +1,301 @@
---- 
-name: who-owns-my-availability
-layout: post
-title: Who owns my availability?
-time: 2011-04-22 02:51:00 -04:00
----
-Hey did you know EC2 had problems today? Yeah nothing major just a total effing collapse of the EBS system at US-EAST-1.<br /><br />You know what that means....<br /><br /><blockquote>"Hey guys, can anyone tell me who owns my availability?"</blockquote><blockquote>"Internet learns lesson of putting "all eggs in the EC2 basket". Buy your own machines, brothers."</blockquote><br />I could go on....but I won't. I'm also going to stop short of posting a CeeLo video at this point.<br /><br />Your stupid little comments mean nothing. I especially find it hilarious that someone from Twitter would make a comment availability. I also find the short-lived memory of some people hilarious (paraphrasing here):<br /><br /><blockquote>"Thank god we're hosted on Joyent/Linode/My mom's basement"</blockquote><br />Please. Your attempt to curry favor and free service with your provider are transparent and frankly, makes you look stupid.<br /><br />Yo Netflix/SimpleGeo/JRandomDude I'm happy for you and and all. I'ma let you finish but....<br /><br />So who DOES own my availability?<br />Here's a hint; it's not always that simple.<br /><br />Yes, the ultimate responsibility for those impacted lies with those who were impacted but let's look at a few facts (or excuses - if you're being a dick about it):<br /><br /><span class="Apple-style-span" style="font-size: large;"><b>Not everyone has the resources of a Netflix</b></span><br />Comparing anyone else's EC2 usage to Netflix is simply retarded. It's a lot like working with an ex-Google employee (I've worked with a few). They have some awesome ideas and learned some great stuff there but guess what? About 85% of it is USELESS to anyone except someone the size of Google. What works at Google doesn't work at my company.<br /><br />It's not even a matter of scaling down the concept. It's simply NOT possible. Yeah let me just go buy a shipping container and build a datacenter in a box. Hardware failure? Replace the box with one off the shelf. Oh wait, not everyone has a warehouse of replacement servers. People have trouble getting a few spare hard drives to swap out.<br /><br />Telling someone that they should just do what Netflix does makes you look stupid. Not them.<br /><br /><span class="Apple-style-span" style="font-size: large;"><b>WE used Joyent/Linode/GoGrid/My mom's basement</b></span><br />Really? Really? I'm not being an AWS fanboy here but here is a simple fact: No other 'cloud' provider comes even REMOTELY close to the feature set of AWS. No one. Not only does no one come close but Amazon is CONSTANTLY iterating on new stuff to widen the gap even more.<br /><br />It's not like your provider hasn't had a major outage in recent memory. And comparing an effing VPS provider to Amazon? You seriously just don't get it.<br /><br /><span class="Apple-style-span" style="font-size: large;"><b>You should have designed around this possibility</b></span><br />Well no shit, sherlock. Guess what, it was rejected. Why? Who knows? Who cares? It's irrelevant. Sometimes the decision isn't ours to make. In the REAL world, people have to balance risk vs. reward.<br /><br />Here's a tidbit of information. At EVERY single company I've been at where I was involved with architecting a solution from the ground up, we never had redundancy built in from the get go. Did I find it appalling. Absolutely but the choice wasn't mine. I did the best I could to prevent anything that would make adding it TOO difficult later on but we didn't have our DR site online from day one. We sometimes had to accrue a little technical debt. The best we could do was to minimize it as much as possible.<br /><br />Designing around failure is not the same as designing for the worse case scenario. Sometimes you just have to accept that "if component X has Y number of failures, we're going to have an outage". If you have the ability to deal with it now (resources/money/whatever), then that's awesome. Sometimes you just have to accept that risk.<br /><br />Oh sure I'd love to use (insert buzzword/concurrent/distributed language of the day) here. But I can't. It would be totally awesome if everything were designed from the ground up to handle that level of failure but it's not.<br /><br /><span class="Apple-style-span" style="font-size: large;"><b>And another thing</b></span><br />The thing that bothers me most is the two-faced attitude around it all. <br /><br />On one hand people are telling you it's stupid to host your own hardware. On the other hand they'll laugh at you when your provider has an outage and tell you that you should have built your own. <br /><br />On one hand they'll tell you it's stupid to use some non-traditional new-fangled language and on the other hand laugh at you when you could have avoided all these problems if you had just used non-traditional new-fangled language.<br /><br />On one hand they'll tell you that you should use insert-traditional-RDBMS here and on the other hand say that it's your fault for not rearchitecting your entire codebase around some NoSQL data store.<br /><br />Not everyone has the same options. I hate the phrase "hindsight is 20/20". Why? Because it's all relevant. Sometimes you don't know that something is the wrong choice till it bites you in the ass. Hindsight in technology is only valuable for about a year. Maybe 6 months. Technology moves fast. It's easy to say that someone should have used X when you don't realize that they started working on things six months before X came along. If you have that kind of foresight, I'd love to hire you to play the stock market for me.<br /><br />Not everyone has the luxury of switching midstream. You have to make the most what technology is available. If you keep chasing the latest and greatest, you'll never actually accomplish anything.<br /><br />Are these excuses? Absolutely but there's nothing inherently wrong with excuses. You live and learn. So to those affected by the outage (still on-going mind you), take some comfort. Learn from your mistakes. The worst thing you could do at this point would be to <b>NOT</b> change anything. At a minimum, if you aren't the decision maker, you should document your recommendations and move on. If you are the decision maker, you need to..you know...decide if the risk of this happening again is acceptable.<div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-2509813607251480083?l=lusislog.blogspot.com' alt='' /></div>
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Who owns my availability? - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="Hey did you know EC2 had problems today? Yeah nothing major just a total effing collapse of the EBS system at US-EAST-1.You know what that means&#8...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/archives/blogger/2011-04-22-who-owns-my-availability.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Who Owns My Availability?</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">Hey did you know EC2 had problems today? Yeah nothing major just a total effing collapse of the EBS system at US-EAST-1.<br /><br />You know what that means&#8230;.<br /><br /><blockquote>&#8220;Hey guys, can anyone tell me who owns my availability?&#8221;</blockquote><blockquote>&#8220;Internet learns lesson of putting &#8220;all eggs in the EC2 basket&#8221;. Buy your own machines, brothers.&#8221;</blockquote><br />I could go on&#8230;.but I won&#8217;t. I&#8217;m also going to stop short of posting a CeeLo video at this point.<br /><br />Your stupid little comments mean nothing. I especially find it hilarious that someone from Twitter would make a comment availability. I also find the short-lived memory of some people hilarious (paraphrasing here):<br /><br /><blockquote>&#8220;Thank god we&#8217;re hosted on Joyent/Linode/My mom&#8217;s basement&#8221;</blockquote><br />Please. Your attempt to curry favor and free service with your provider are transparent and frankly, makes you look stupid.<br /><br />Yo Netflix/SimpleGeo/JRandomDude I&#8217;m happy for you and and all. I&#8217;ma let you finish but&#8230;.<br /><br />So who DOES own my availability?<br />Here&#8217;s a hint; it&#8217;s not always that simple.<br /><br />Yes, the ultimate responsibility for those impacted lies with those who were impacted but let&#8217;s look at a few facts (or excuses - if you&#8217;re being a dick about it):<br /><br /><span class="Apple-style-span" style="font-size: large;"><b>Not everyone has the resources of a Netflix</b></span><br />Comparing anyone else&#8217;s EC2 usage to Netflix is simply retarded. It&#8217;s a lot like working with an ex-Google employee (I&#8217;ve worked with a few). They have some awesome ideas and learned some great stuff there but guess what? About 85% of it is USELESS to anyone except someone the size of Google. What works at Google doesn&#8217;t work at my company.<br /><br />It&#8217;s not even a matter of scaling down the concept. It&#8217;s simply NOT possible. Yeah let me just go buy a shipping container and build a datacenter in a box. Hardware failure? Replace the box with one off the shelf. Oh wait, not everyone has a warehouse of replacement servers. People have trouble getting a few spare hard drives to swap out.<br /><br />Telling someone that they should just do what Netflix does makes you look stupid. Not them.<br /><br /><span class="Apple-style-span" style="font-size: large;"><b>WE used Joyent/Linode/GoGrid/My mom&#8217;s basement</b></span><br />Really? Really? I&#8217;m not being an AWS fanboy here but here is a simple fact: No other &#8216;cloud&#8217; provider comes even REMOTELY close to the feature set of AWS. No one. Not only does no one come close but Amazon is CONSTANTLY iterating on new stuff to widen the gap even more.<br /><br />It&#8217;s not like your provider hasn&#8217;t had a major outage in recent memory. And comparing an effing VPS provider to Amazon? You seriously just don&#8217;t get it.<br /><br /><span class="Apple-style-span" style="font-size: large;"><b>You should have designed around this possibility</b></span><br />Well no shit, sherlock. Guess what, it was rejected. Why? Who knows? Who cares? It&#8217;s irrelevant. Sometimes the decision isn&#8217;t ours to make. In the REAL world, people have to balance risk vs. reward.<br /><br />Here&#8217;s a tidbit of information. At EVERY single company I&#8217;ve been at where I was involved with architecting a solution from the ground up, we never had redundancy built in from the get go. Did I find it appalling. Absolutely but the choice wasn&#8217;t mine. I did the best I could to prevent anything that would make adding it TOO difficult later on but we didn&#8217;t have our DR site online from day one. We sometimes had to accrue a little technical debt. The best we could do was to minimize it as much as possible.<br /><br />Designing around failure is not the same as designing for the worse case scenario. Sometimes you just have to accept that &#8220;if component X has Y number of failures, we&#8217;re going to have an outage&#8221;. If you have the ability to deal with it now (resources/money/whatever), then that&#8217;s awesome. Sometimes you just have to accept that risk.<br /><br />Oh sure I&#8217;d love to use (insert buzzword/concurrent/distributed language of the day) here. But I can&#8217;t. It would be totally awesome if everything were designed from the ground up to handle that level of failure but it&#8217;s not.<br /><br /><span class="Apple-style-span" style="font-size: large;"><b>And another thing</b></span><br />The thing that bothers me most is the two-faced attitude around it all. <br /><br />On one hand people are telling you it&#8217;s stupid to host your own hardware. On the other hand they&#8217;ll laugh at you when your provider has an outage and tell you that you should have built your own. <br /><br />On one hand they&#8217;ll tell you it&#8217;s stupid to use some non-traditional new-fangled language and on the other hand laugh at you when you could have avoided all these problems if you had just used non-traditional new-fangled language.<br /><br />On one hand they&#8217;ll tell you that you should use insert-traditional-RDBMS here and on the other hand say that it&#8217;s your fault for not rearchitecting your entire codebase around some NoSQL data store.<br /><br />Not everyone has the same options. I hate the phrase &#8220;hindsight is 20/20&#8221;. Why? Because it&#8217;s all relevant. Sometimes you don&#8217;t know that something is the wrong choice till it bites you in the ass. Hindsight in technology is only valuable for about a year. Maybe 6 months. Technology moves fast. It&#8217;s easy to say that someone should have used X when you don&#8217;t realize that they started working on things six months before X came along. If you have that kind of foresight, I&#8217;d love to hire you to play the stock market for me.<br /><br />Not everyone has the luxury of switching midstream. You have to make the most what technology is available. If you keep chasing the latest and greatest, you&#8217;ll never actually accomplish anything.<br /><br />Are these excuses? Absolutely but there&#8217;s nothing inherently wrong with excuses. You live and learn. So to those affected by the outage (still on-going mind you), take some comfort. Learn from your mistakes. The worst thing you could do at this point would be to <b>NOT</b> change anything. At a minimum, if you aren&#8217;t the decision maker, you should document your recommendations and move on. If you are the decision maker, you need to..you know&#8230;decide if the risk of this happening again is acceptable.<div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-2509813607251480083?l=lusislog.blogspot.com' alt='' /></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+
+
+
+      
+
+<span class="categories">
+  
+    Liquid error: undefined method `sort!' for nil:NilClass
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/archives/blogger/2011-04-22-who-owns-my-availability.html" data-via="lusis" data-counturl="http://lusis.github.com/archives/blogger/2011-04-22-who-owns-my-availability.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-redis/">Load balancing Logstash with Redis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load balancing Logstash with AMQP</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

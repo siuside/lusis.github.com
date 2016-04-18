@@ -1,7 +1,301 @@
---- 
-name: thank-you
-layout: post
-title: Thank You
-time: 2011-02-25 23:28:00 -05:00
----
-In case you hadn't heard, today Amazon went all Top Gun today and gave the world <a href="http://aws.amazon.com/cloudformation/">Cloud Formation</a>. This, of course, gave rise to tweets and one-offs from pundits all over the world stating that it was the death knell of tools like Chef and Puppet.<br /><br />Amazon had usurped yet another business model with the stroke of its mighty hand!<br /><br />Let's ignore for a moment the fact that:<br /><ul><li>Amazon had the Chef and Puppet folks in beta</li><li>Chef and Puppet are on the block to be supported as part of CloudFormation</li><li>CloudFormation is actually nothing like Chef and Puppet and serves an entirely different purpose</li></ul>I was pretty heads down at the office today (as was everyone else) so I didn't get a chance to catch up a bit until tonight. That's when I saw some of the most ignorant tweets from some supposedly smart people that I've ever seen. I ended up having to prune quite a bit from my Twitter list.<br /><br />These were obviously inspired by the CloudFormation announcement and discussions around how it relates to existing CM tools. There were gems like this:<br /><br /><blockquote>"process of orchestration, policy, governance, stacks, cross clouds, billback, etc. way too complex for some scripts"</blockquote><br /><blockquote>"Scripts also wouldn't cover complexity of trying to mng a variety of clouds, all w/differing APIs &amp; Front ends"</blockquote><br /><blockquote>"You heard it here first. All you need for cloud automation, orchestration and provisioning is some Perl and you're golden! #DevFlOps"</blockquote><br />Now maybe I'm taking these a bit out of context. Maybe I was just being a pissy bastard but these really got me riled up. Mind you not so riled up that I ran downstairs because <a href="http://xkcd.com/386/">"someone was wrong on the internet"</a>. I put my son to bed, fell asleep and when I woke up, I was still pissed off about it. I figured an hour of sleeping on it was enough justification so here I am.<br /><br /><h1>Thank You</h1>Before I get into the bitching and moaning though, I want to say "Thank you" to some people.<br /><br />To Mark Burgess, Luke Kanies, Adam Jacob, Damon Edwards and any other system administrator who got so fed up with the bullshit to write the tools that we're using today, THANK YOU.<br /><br /><i>Thank you for not accepting that we had to manage systems the way we always had. Thank you for stepping outside the comfort zone and writing amazing code. Thank you for taking 20 minutes to actually think about it when you we're only given 10 minutes to get it done. Thank you.</i><br /><br />To Patrick Debois, John Allspaw, Andrew Clay Shafer and everyone who has promoted the idea of what we call "devops" today, THANK YOU.<br /><br /><i>Thank you for pushing the idea into the mainstream with a phrase that so accurately captures what is trying to be accomplished. Thank you for being innovative and being open and sharing about it.</i><br /><br />To everyone else who's blog posts, newsgroup postings, tweets, emails, books, irc discussions that I've had the extreme pleasure of learning from over these past 17 years in this business, THANK YOU.<br /><br /><i>Thank you for sharing. Thank you for saying it even if you thought no one was reading or listening. Thank you for challenging me to learn more and inspiring me to grow as a person and as, what I'll always be at heart, a system administrator.</i><br /><br />To everyone above and those who I didn't mention, thank you. I thank you because it's ideas like "opensource" and "devops" and "configuration management" that free us up as individuals to think and achieve more as individuals personally and professionally. It frees us up to spend time with our families instead of answering a page at 2AM troubleshooting a stupid issue that should have never happened in the first place.<br /><br />These things are more valuable than gold.<br /><br /><h1>And to the haters...</h1><br /><object style="height: 390px; width: 640px;"><param name="movie" value="http://www.youtube.com/v/pc0mxOXbWIU?version=3"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="http://www.youtube.com/v/pc0mxOXbWIU?version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="390"></object> <br /><br /><br />Seriously.<br /><br />To the vendors who write stupid applications that require me to have X11 installed on a freaking server against ALL best practices forcing me to click through a goddamn powerpoint to install your "enterprise" software, FU.<br /><br /><i>&nbsp;I don't need your shit and I'm luckily at a point in my career where I don't have to put up with it anymore.</i><br /><br />To the virtualization companies who require me to have a goddamn Windows VM to manage my Linux servers because, after how many f'ing years?, you can't write a Linux port even though your product IS BASED ON LINUX? FU.<br /><br /><i>Don't worry. I can Xen and KVM like mofo. I can go to Amazon or GoGrid or Rackspace or any other provider if I don't need to host it in house. And guess what? I can do it all from the same platform I'm deploying without jumping through any hoops.</i><br /><br />To the networking vendors who give me a choice between telnet or some overpriced java gui to do configuration of your gear, FU.<br /><br /><i>"Oh sorry about the downtime. Because we have to drop and recreate rule sets just to add a new rule, we used copy/paste from Wordpad into HyperTerminal durdurdur".</i><br /><br />To the pundits who think that "devops" is just a bunch of perl scripts that can't "cover the complexity of blah blah blah"...I think you know the drill by now.<br /><br /><i>Really?</i> A bunch of scripts can't cover the complexity of the various cloud providers? Interesting. I guess <a href="https://github.com/geemus/fog">fog</a> or <a href="http://code.google.com/p/jclouds/">jclouds</a> or <a href="http://incubator.apache.org/libcloud/">libcloud</a> are just toys then.<br /><br />Oh wait, what's this? You mean I can use the same commands in my CM tool regardless of where my systems are hosted? I mean Chef's command-line tool uses Fog. Any provider Fog supports, Chef will support.<br /><br />But really I feel for you all. I do. You're in a losing battle. Here's the thing. People like me. People like those I mentioned above. The up and coming decision makers? We won't settle for your shitty mediocrity anymore. We won't be beholden to doing it your way. When we pick a vendor or a product or a provider, we're going to go with the ones that provide us the flexibility to manage our infrastructure in the way that's best for our company. Not for you.<br /><br />We've tasted what's it like to do things the "right way" and we won't take anything less.<div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-1799995219782502274?l=lusislog.blogspot.com' alt='' /></div>
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Thank You - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="In case you hadn&#8217;t heard, today Amazon went all Top Gun today and gave the world Cloud Formation. This, of course, gave rise to tweets and on...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/archives/blogger/2011-02-25-thank-you.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Thank You</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">In case you hadn&#8217;t heard, today Amazon went all Top Gun today and gave the world <a href="http://aws.amazon.com/cloudformation/">Cloud Formation</a>. This, of course, gave rise to tweets and one-offs from pundits all over the world stating that it was the death knell of tools like Chef and Puppet.<br /><br />Amazon had usurped yet another business model with the stroke of its mighty hand!<br /><br />Let&#8217;s ignore for a moment the fact that:<br /><ul><li>Amazon had the Chef and Puppet folks in beta</li><li>Chef and Puppet are on the block to be supported as part of CloudFormation</li><li>CloudFormation is actually nothing like Chef and Puppet and serves an entirely different purpose</li></ul>I was pretty heads down at the office today (as was everyone else) so I didn&#8217;t get a chance to catch up a bit until tonight. That&#8217;s when I saw some of the most ignorant tweets from some supposedly smart people that I&#8217;ve ever seen. I ended up having to prune quite a bit from my Twitter list.<br /><br />These were obviously inspired by the CloudFormation announcement and discussions around how it relates to existing CM tools. There were gems like this:<br /><br /><blockquote>&#8220;process of orchestration, policy, governance, stacks, cross clouds, billback, etc. way too complex for some scripts&#8221;</blockquote><br /><blockquote>&#8220;Scripts also wouldn&#8217;t cover complexity of trying to mng a variety of clouds, all w/differing APIs &amp; Front ends&#8221;</blockquote><br /><blockquote>&#8220;You heard it here first. All you need for cloud automation, orchestration and provisioning is some Perl and you&#8217;re golden! #DevFlOps&#8221;</blockquote><br />Now maybe I&#8217;m taking these a bit out of context. Maybe I was just being a pissy bastard but these really got me riled up. Mind you not so riled up that I ran downstairs because <a href="http://xkcd.com/386/">&#8220;someone was wrong on the internet&#8221;</a>. I put my son to bed, fell asleep and when I woke up, I was still pissed off about it. I figured an hour of sleeping on it was enough justification so here I am.<br /><br /><h1>Thank You</h1>Before I get into the bitching and moaning though, I want to say &#8220;Thank you&#8221; to some people.<br /><br />To Mark Burgess, Luke Kanies, Adam Jacob, Damon Edwards and any other system administrator who got so fed up with the bullshit to write the tools that we&#8217;re using today, THANK YOU.<br /><br /><i>Thank you for not accepting that we had to manage systems the way we always had. Thank you for stepping outside the comfort zone and writing amazing code. Thank you for taking 20 minutes to actually think about it when you we&#8217;re only given 10 minutes to get it done. Thank you.</i><br /><br />To Patrick Debois, John Allspaw, Andrew Clay Shafer and everyone who has promoted the idea of what we call &#8220;devops&#8221; today, THANK YOU.<br /><br /><i>Thank you for pushing the idea into the mainstream with a phrase that so accurately captures what is trying to be accomplished. Thank you for being innovative and being open and sharing about it.</i><br /><br />To everyone else who&#8217;s blog posts, newsgroup postings, tweets, emails, books, irc discussions that I&#8217;ve had the extreme pleasure of learning from over these past 17 years in this business, THANK YOU.<br /><br /><i>Thank you for sharing. Thank you for saying it even if you thought no one was reading or listening. Thank you for challenging me to learn more and inspiring me to grow as a person and as, what I&#8217;ll always be at heart, a system administrator.</i><br /><br />To everyone above and those who I didn&#8217;t mention, thank you. I thank you because it&#8217;s ideas like &#8220;opensource&#8221; and &#8220;devops&#8221; and &#8220;configuration management&#8221; that free us up as individuals to think and achieve more as individuals personally and professionally. It frees us up to spend time with our families instead of answering a page at 2AM troubleshooting a stupid issue that should have never happened in the first place.<br /><br />These things are more valuable than gold.<br /><br /><h1>And to the haters&#8230;</h1><br /><object style="height: 390px; width: 640px;"><param name="movie" value="http://www.youtube.com/v/pc0mxOXbWIU?version=3"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><embed src="http://www.youtube.com/v/pc0mxOXbWIU?version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="390"></object> <br /><br /><br />Seriously.<br /><br />To the vendors who write stupid applications that require me to have X11 installed on a freaking server against ALL best practices forcing me to click through a goddamn powerpoint to install your &#8220;enterprise&#8221; software, FU.<br /><br /><i>&nbsp;I don&#8217;t need your shit and I&#8217;m luckily at a point in my career where I don&#8217;t have to put up with it anymore.</i><br /><br />To the virtualization companies who require me to have a goddamn Windows VM to manage my Linux servers because, after how many f&#8217;ing years?, you can&#8217;t write a Linux port even though your product IS BASED ON LINUX? FU.<br /><br /><i>Don&#8217;t worry. I can Xen and KVM like mofo. I can go to Amazon or GoGrid or Rackspace or any other provider if I don&#8217;t need to host it in house. And guess what? I can do it all from the same platform I&#8217;m deploying without jumping through any hoops.</i><br /><br />To the networking vendors who give me a choice between telnet or some overpriced java gui to do configuration of your gear, FU.<br /><br /><i>&#8220;Oh sorry about the downtime. Because we have to drop and recreate rule sets just to add a new rule, we used copy/paste from Wordpad into HyperTerminal durdurdur&#8221;.</i><br /><br />To the pundits who think that &#8220;devops&#8221; is just a bunch of perl scripts that can&#8217;t &#8220;cover the complexity of blah blah blah&#8221;&#8230;I think you know the drill by now.<br /><br /><i>Really?</i> A bunch of scripts can&#8217;t cover the complexity of the various cloud providers? Interesting. I guess <a href="https://github.com/geemus/fog">fog</a> or <a href="http://code.google.com/p/jclouds/">jclouds</a> or <a href="http://incubator.apache.org/libcloud/">libcloud</a> are just toys then.<br /><br />Oh wait, what&#8217;s this? You mean I can use the same commands in my CM tool regardless of where my systems are hosted? I mean Chef&#8217;s command-line tool uses Fog. Any provider Fog supports, Chef will support.<br /><br />But really I feel for you all. I do. You&#8217;re in a losing battle. Here&#8217;s the thing. People like me. People like those I mentioned above. The up and coming decision makers? We won&#8217;t settle for your shitty mediocrity anymore. We won&#8217;t be beholden to doing it your way. When we pick a vendor or a product or a provider, we&#8217;re going to go with the ones that provide us the flexibility to manage our infrastructure in the way that&#8217;s best for our company. Not for you.<br /><br />We&#8217;ve tasted what&#8217;s it like to do things the &#8220;right way&#8221; and we won&#8217;t take anything less.<div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-1799995219782502274?l=lusislog.blogspot.com' alt='' /></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+
+
+
+      
+
+<span class="categories">
+  
+    Liquid error: undefined method `sort!' for nil:NilClass
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/archives/blogger/2011-02-25-thank-you.html" data-via="lusis" data-counturl="http://lusis.github.com/archives/blogger/2011-02-25-thank-you.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-redis/">Load balancing Logstash with Redis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load balancing Logstash with AMQP</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

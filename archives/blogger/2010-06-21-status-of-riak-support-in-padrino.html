@@ -1,7 +1,301 @@
---- 
-name: status-of-riak-support-in-padrino
-layout: post
-title: Status of Riak support in Padrino
-time: 2010-06-21 09:30:00 -04:00
----
-<div><span class="Apple-style-span" style="font-size: large;">Back story</span></div><div>(<i>skip to the bottom if you want the nitty gritty status</i>)</div>So I got this wild hair up my butt a week or so ago. I wanted to get into the Padrino internals and actually contribute to an open source project. I've been using open source software for years. I've made a good living from it. I owe a lot to it.<div><br /></div><div>My problem has always been the fact that I'm not a programmer by education nor by trade. I've always been a systems/architecture guy. Of course, a systems guy is a programmer at some level thanks to shell scripting, administrative scripts and the like. The DevOps philosophy makes that even more tangible by treating your systems in the same way a developer would treat his code. The most I've ever done previously in terms of contribution has been a bug fix here and there or documentation. All very valuable but in some capacity, not as rewarding.</div><div><br /></div><div>So I've started mucking about with Sinatra. I used it to build some web service gateways for our production environment. That led me to Padrino. I noticed that Padrino didn't have ORM support for a few of the other schemaless/NoSQL databases so I figured it was a good way to contribute. I picked Riak out of the blue because the first episode of the ChangeLog Show I listened to had the Riak guys on there. Little did I know ;)</div><div><br /></div><div><span class="Apple-style-span" style="font-size: large;">Riak/Ripple Status</span></div><div><span class="Apple-style-span" style="font-size: medium;">Once I got a handle on the Ruby driver that Sean Cribbs is writing for Riak, I dove right in and forked the Padrino code base. Github makes it EXCEEDINGLY easy to be a contributer and I really think they've ushered in a new wave of open source development.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">The Riak ruby driver comes in two flavors - riak-client and ripple. Riak-client is a more "basic" wrapper around riak operations - CRUD, link-walking, map/reduce. Ripple is the "next-gen" (imho) driver that borrows design from ActiveRecord, MongoMapper and DataMapper.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">After poking a bit with riak-client, I decided that the ripple driver was much more "in-line" with the other ORMs supported in Padrino. I started to go whole hog before I realized that ripple had some missing functionality I was expecting. This was not anyone's fault but my own. Essentially this prevented me from using the ripple ORM in Padrino's admin interface. Not a big deal but it would have been nice to have.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">Sean Cribbs was VERY responsive over twitter and let me know that the features I was looking for would be added. He opened an issue and last night, support for <i>update_attribute</i>/<i>update_attributes </i>was added. I grabbed the latest build and went to town on my local padrino-framework fork.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">This is where I ran into another issue. Essentially, the other NoSQL ORMs that padrino supports use some tricks for handling unique keys. I know this is trying to shoehorn RDBMS ideas on top of schema-less databases.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">So how do the other ORMs handle it?</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><ul><li><span class="Apple-style-span" style="font-size: medium;">mongomapper/mongoid - supports 'validates_uniqueness_of' on model definitions</span></li><li><span class="Apple-style-span" style="font-size: medium;">couchrest - supports unique records via a map/reduce job</span></li></ul><span class="Apple-style-span" style="font-size: medium;">Nothing similar exists in the ripple driver "yet". I say yet because I fired off an email to Sean and got a very well-thought out response.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">As a side note, Basho, you hired a good man to bear the title of "Developer Advocate".</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">Essentially Sean brought up a good point. Since you don't have "transactions or global consistency", there's no good way to guarantee that a key is unique. </span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">I've essentially got two options if I want to continue down the path of support Padrino's admin with Riak - do the map/reduce route or do a check myself before calling save. I'm still deciding the best route to take.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">Alternatively, I could simply not worry about it and forgo admin support in the ORM. It's not a deal breaker and it's not a requirement per the Padrino folks. It just would have been nice.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: large;">So what's the status?</span></div><div><span class="Apple-style-span" style="font-size: medium;">Right now, using ActiveModel/ActiveSupport 3.0.0.beta4, Ripple from ripple/master and my fork of padrino-framework, I can create models and things work as expected. </span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">The biggest headache for me is having to edit the Gemfile and append the versions for ripple and activesupport. I'm also working on adding gem version support to require_dependencies. </span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">So you wanna try it yourself? Go right ahead. You'll need to grab my fork of the framework (I keep it up to date with master) and seancribbs/ripple. There are rake tasks to build and install those locally. I would HIGHLY suggest you create an RVM gemset. Additionally you'll need to grab ActiveSupport 3.0.0.beta4.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">After that:</span></div><div><ul><li><span class="Apple-style-span" style="font-size: medium; ">padrino-gen project test -d ripple</span></li><li><span class="Apple-style-span" style="font-size: medium; ">cd test</span></li><li><span class="Apple-style-span" style="font-size: medium; ">edit Gemfile and append version 0.7.1 to the ripple line.</span></li><li><span class="Apple-style-span" style="font-size: medium; ">bundle install</span></li><li><span class="Apple-style-span" style="font-size: medium; ">padrino-gen model person name:string email:string phone:string</span></li></ul></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">You should now have a working model using riak via ripple. Here's a Gist of me doing exactly that via padrino-console:</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;"><script src="http://gist.github.com/445499.js"></script></span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">Anyway, I'm intent on getting ripple support back into upstream but I'm not going to make a pull request until ActiveSupport reaches 3.0. It feels half baked to have these extra steps to get it working and I'd really like to have admin support done before I do if possible.</span></div><div><span class="Apple-style-span" style="font-size: medium; "><br /></span></div><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-2161829254610915895?l=lusislog.blogspot.com' alt='' /></div>
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Status of Riak support in Padrino - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="Back story(skip to the bottom if you want the nitty gritty status)So I got this wild hair up my butt a week or so ago. I wanted to get into the Pad...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/archives/blogger/2010-06-21-status-of-riak-support-in-padrino.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Status of Riak Support in Padrino</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div><span class="Apple-style-span" style="font-size: large;">Back story</span></div><div>(<i>skip to the bottom if you want the nitty gritty status</i>)</div>So I got this wild hair up my butt a week or so ago. I wanted to get into the Padrino internals and actually contribute to an open source project. I&#8217;ve been using open source software for years. I&#8217;ve made a good living from it. I owe a lot to it.<div><br /></div><div>My problem has always been the fact that I&#8217;m not a programmer by education nor by trade. I&#8217;ve always been a systems/architecture guy. Of course, a systems guy is a programmer at some level thanks to shell scripting, administrative scripts and the like. The DevOps philosophy makes that even more tangible by treating your systems in the same way a developer would treat his code. The most I&#8217;ve ever done previously in terms of contribution has been a bug fix here and there or documentation. All very valuable but in some capacity, not as rewarding.</div><div><br /></div><div>So I&#8217;ve started mucking about with Sinatra. I used it to build some web service gateways for our production environment. That led me to Padrino. I noticed that Padrino didn&#8217;t have ORM support for a few of the other schemaless/NoSQL databases so I figured it was a good way to contribute. I picked Riak out of the blue because the first episode of the ChangeLog Show I listened to had the Riak guys on there. Little did I know ;)</div><div><br /></div><div><span class="Apple-style-span" style="font-size: large;">Riak/Ripple Status</span></div><div><span class="Apple-style-span" style="font-size: medium;">Once I got a handle on the Ruby driver that Sean Cribbs is writing for Riak, I dove right in and forked the Padrino code base. Github makes it EXCEEDINGLY easy to be a contributer and I really think they&#8217;ve ushered in a new wave of open source development.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">The Riak ruby driver comes in two flavors - riak-client and ripple. Riak-client is a more &#8220;basic&#8221; wrapper around riak operations - CRUD, link-walking, map/reduce. Ripple is the &#8220;next-gen&#8221; (imho) driver that borrows design from ActiveRecord, MongoMapper and DataMapper.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">After poking a bit with riak-client, I decided that the ripple driver was much more &#8220;in-line&#8221; with the other ORMs supported in Padrino. I started to go whole hog before I realized that ripple had some missing functionality I was expecting. This was not anyone&#8217;s fault but my own. Essentially this prevented me from using the ripple ORM in Padrino&#8217;s admin interface. Not a big deal but it would have been nice to have.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">Sean Cribbs was VERY responsive over twitter and let me know that the features I was looking for would be added. He opened an issue and last night, support for <i>update_attribute</i>/<i>update_attributes </i>was added. I grabbed the latest build and went to town on my local padrino-framework fork.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">This is where I ran into another issue. Essentially, the other NoSQL ORMs that padrino supports use some tricks for handling unique keys. I know this is trying to shoehorn RDBMS ideas on top of schema-less databases.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">So how do the other ORMs handle it?</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><ul><li><span class="Apple-style-span" style="font-size: medium;">mongomapper/mongoid - supports &#8216;validates_uniqueness_of&#8217; on model definitions</span></li><li><span class="Apple-style-span" style="font-size: medium;">couchrest - supports unique records via a map/reduce job</span></li></ul><span class="Apple-style-span" style="font-size: medium;">Nothing similar exists in the ripple driver &#8220;yet&#8221;. I say yet because I fired off an email to Sean and got a very well-thought out response.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">As a side note, Basho, you hired a good man to bear the title of &#8220;Developer Advocate&#8221;.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">Essentially Sean brought up a good point. Since you don&#8217;t have &#8220;transactions or global consistency&#8221;, there&#8217;s no good way to guarantee that a key is unique. </span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">I&#8217;ve essentially got two options if I want to continue down the path of support Padrino&#8217;s admin with Riak - do the map/reduce route or do a check myself before calling save. I&#8217;m still deciding the best route to take.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">Alternatively, I could simply not worry about it and forgo admin support in the ORM. It&#8217;s not a deal breaker and it&#8217;s not a requirement per the Padrino folks. It just would have been nice.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: large;">So what&#8217;s the status?</span></div><div><span class="Apple-style-span" style="font-size: medium;">Right now, using ActiveModel/ActiveSupport 3.0.0.beta4, Ripple from ripple/master and my fork of padrino-framework, I can create models and things work as expected. </span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">The biggest headache for me is having to edit the Gemfile and append the versions for ripple and activesupport. I&#8217;m also working on adding gem version support to require_dependencies. </span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">So you wanna try it yourself? Go right ahead. You&#8217;ll need to grab my fork of the framework (I keep it up to date with master) and seancribbs/ripple. There are rake tasks to build and install those locally. I would HIGHLY suggest you create an RVM gemset. Additionally you&#8217;ll need to grab ActiveSupport 3.0.0.beta4.</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">After that:</span></div><div><ul><li><span class="Apple-style-span" style="font-size: medium; ">padrino-gen project test -d ripple</span></li><li><span class="Apple-style-span" style="font-size: medium; ">cd test</span></li><li><span class="Apple-style-span" style="font-size: medium; ">edit Gemfile and append version 0.7.1 to the ripple line.</span></li><li><span class="Apple-style-span" style="font-size: medium; ">bundle install</span></li><li><span class="Apple-style-span" style="font-size: medium; ">padrino-gen model person name:string email:string phone:string</span></li></ul></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">You should now have a working model using riak via ripple. Here&#8217;s a Gist of me doing exactly that via padrino-console:</span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;"><script src="http://gist.github.com/445499.js"></script></span></div><div><span class="Apple-style-span" style="font-size: medium;"><br /></span></div><div><span class="Apple-style-span" style="font-size: medium;">Anyway, I&#8217;m intent on getting ripple support back into upstream but I&#8217;m not going to make a pull request until ActiveSupport reaches 3.0. It feels half baked to have these extra steps to get it working and I&#8217;d really like to have admin support done before I do if possible.</span></div><div><span class="Apple-style-span" style="font-size: medium; "><br /></span></div><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/934985301455705990-2161829254610915895?l=lusislog.blogspot.com' alt='' /></div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+
+
+
+      
+
+<span class="categories">
+  
+    Liquid error: undefined method `sort!' for nil:NilClass
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/archives/blogger/2010-06-21-status-of-riak-support-in-padrino.html" data-via="lusis" data-counturl="http://lusis.github.com/archives/blogger/2010-06-21-status-of-riak-support-in-padrino.html" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-redis/">Load balancing Logstash with Redis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load balancing Logstash with AMQP</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: monitoring | blog dot lusis]]></title>
   <link href="http://lusis.github.com/blog/categories/monitoring/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2016-04-07T20:10:27-04:00</updated>
+  <updated>2016-04-18T01:20:56-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -18,13 +18,13 @@
     <link href="http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit/"/>
     <updated>2015-12-09T22:06:59-05:00</updated>
     <id>http://lusis.github.com/blog/2015/12/09/aws-apigateway-for-fun-and-profit</id>
-    <content type="html"><![CDATA[<p>At we&rsquo;re currently in the process of reconfiguring our monitoring, logging and alerting setup.</p>
+    <content type="html"><![CDATA[<p>At we're currently in the process of reconfiguring our monitoring, logging and alerting setup.</p>
 
 <!-- more -->
 
 
 <p>Obviously this is something near and dear to my heart. At my previous employer we did everything in house due to various constraints.
-I&rsquo;ve got a rich set of experiences in this space so my first inclination was to build not buy. However, due to OTHER constraints, building was not a practical solution at present.</p>
+I've got a rich set of experiences in this space so my first inclination was to build not buy. However, due to OTHER constraints, building was not a practical solution at present.</p>
 
 <p>After much research and evaluation, we finally settled on the following stack:</p>
 
@@ -35,7 +35,7 @@ I&rsquo;ve got a rich set of experiences in this space so my first inclination w
 </ul>
 
 
-<p>I&rsquo;m not going into reasons for switching in this post or details about WHY these providers were chosen. This is to discuss a specific AWS service and how it can really change the nature of ChatOps and more.</p>
+<p>I'm not going into reasons for switching in this post or details about WHY these providers were chosen. This is to discuss a specific AWS service and how it can really change the nature of ChatOps and more.</p>
 
 <h1>Integration</h1>
 
@@ -43,7 +43,7 @@ I&rsquo;ve got a rich set of experiences in this space so my first inclination w
 They have a rich set already and are iterating very quickly but coupled with the migration to OpsGenie, we needed to work out a solution for wiring the two together.
 Using the power of google, I came across a great post from <a href="https://twitter.com/ripienaar">R.I. Pienaar</a> about leveraging <a href="https://www.devco.net/archives/2015/08/13/translating-webhooks-with-aws-api-gateway-and-lambda.php">Lambda and the AWS API Gateway products</a>.</p>
 
-<p>In his post, he didn&rsquo;t really go over the API Gateway configuration so I figured I would document what I &ldquo;figured out&rdquo; for others.</p>
+<p>In his post, he didn't really go over the API Gateway configuration so I figured I would document what I "figured out" for others.</p>
 
 <h2>The flow</h2>
 
@@ -59,22 +59,22 @@ Using the power of google, I came across a great post from <a href="https://twit
 
 <p>Now you might wonder why go through all this hassle? OpsGenie can create email integrations and SignalFx can send alerts to email address.</p>
 
-<h1>It&rsquo;s about context.</h1>
+<h1>It's about context.</h1>
 
-<p>When email alerts come in to OpsGenie, they&rsquo;re just &ldquo;pings&rdquo;:
-<blockquote><p>Hey this thing sent us an email and here&rsquo;s the subject. Log in to the website to see the body</p></blockquote></p>
+<p>When email alerts come in to OpsGenie, they're just "pings":
+<blockquote><p>Hey this thing sent us an email and here's the subject. Log in to the website to see the body</p></blockquote></p>
 
-<p>Frankly there&rsquo;s not much else they can do. SignalFx will also send another email when an alert auto-clears but to OpsGenie, that&rsquo;s another &ldquo;ping&rdquo;. It&rsquo;s unrelated to the previous email.</p>
+<p>Frankly there's not much else they can do. SignalFx will also send another email when an alert auto-clears but to OpsGenie, that's another "ping". It's unrelated to the previous email.</p>
 
 <p><img src="/images/posts/apigateway-lambda/hipchat-emails.png" alt="Hipchat alerts from OpsGenie" /></p>
 
-<p>As you can see above this could get painful and I already have issues with &ldquo;alert fatigue&rdquo;.</p>
+<p>As you can see above this could get painful and I already have issues with "alert fatigue".</p>
 
-<p>Additional, even if you <strong>DID</strong> log into the OpsGenie website to look at the details, there&rsquo;s really not much there:</p>
+<p>Additional, even if you <strong>DID</strong> log into the OpsGenie website to look at the details, there's really not much there:</p>
 
 <p><img src="/images/posts/apigateway-lambda/opsgenie-emails.png" alt="Emails in OpsGenie" /></p>
 
-<p>Yeah that&rsquo;s helpful&hellip;</p>
+<p>Yeah that's helpful...</p>
 
 <p>So we need to accomplish two things:</p>
 
@@ -90,27 +90,27 @@ Using the power of google, I came across a great post from <a href="https://twit
 <img src="/images/posts/apigateway-lambda/signalfx-context-1.png" alt="SignalFx Metadata in OpsGenie" />
 <img src="/images/posts/apigateway-lambda/opsgenie-alert-history.png" alt="OpsGenie Alert History" /></p>
 
-<p>and that&rsquo;s MUCH more useful.</p>
+<p>and that's MUCH more useful.</p>
 
 <h1>How we did it</h1>
 
-<p>AWS API Gateway is a PRETTY intimidating thing. There&rsquo;s lots of very specific terminology and frankly I found the docs not so useful.
+<p>AWS API Gateway is a PRETTY intimidating thing. There's lots of very specific terminology and frankly I found the docs not so useful.
 The general idea is this:</p>
 
 <ul>
 <li>Create an api</li>
-<li>Create a &ldquo;resource&rdquo; this is just a route that the api gateway responds to i.e. <code>/signalfx_to_loggly</code> via <code>POST</code></li>
-<li>Create a &ldquo;model&rdquo;: This is a json schema that describes what the incoming <code>POST</code> body looks like and its content type</li>
-<li>Create an &ldquo;integration request&rdquo;: What do you do when you get it? In this case call a Lambda task</li>
+<li>Create a "resource" this is just a route that the api gateway responds to i.e. <code>/signalfx_to_loggly</code> via <code>POST</code></li>
+<li>Create a "model": This is a json schema that describes what the incoming <code>POST</code> body looks like and its content type</li>
+<li>Create an "integration request": What do you do when you get it? In this case call a Lambda task</li>
 </ul>
 
 
-<p>There are also concepts like &ldquo;stages&rdquo; which frankly were a bit useless in my case.
-In the end, after you get all of this wired up, you&rsquo;ll be given a url that looks something like this:</p>
+<p>There are also concepts like "stages" which frankly were a bit useless in my case.
+In the end, after you get all of this wired up, you'll be given a url that looks something like this:</p>
 
 <p><code>https://&lt;random id&gt;.execute-api.&lt;region&gt;.amazonaws.com/&lt;stage name&gt;/&lt;resource name&gt;</code></p>
 
-<p>and that&rsquo;s your webhook url.</p>
+<p>and that's your webhook url.</p>
 
 <h2>Models</h2>
 
@@ -131,44 +131,51 @@ In the end, after you get all of this wired up, you&rsquo;ll be given a url that
 
 <p>which translates to the following model:</p>
 
-<pre><code class="json">{
+<p>```json
+{
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "signalfx-webhook-model",
   "type": "object",
-  "properties": {
-    "incidentId": {"type":"string"},
-    "detectorUrl":{"type":"string"},
-    "status":{"type":"string"},
-    "rule":{"type":"string"},
-    "severity":{"type":"string"},
-    "eventType":{"type":"string"},
-    "currentValue":{"type":"string"},
-    "sources":{"type":"string"},
-    "detector":{"type":"string"}
-  }
-}
+  "properties": {</p>
+
+<pre><code>"incidentId": {"type":"string"},
+"detectorUrl":{"type":"string"},
+"status":{"type":"string"},
+"rule":{"type":"string"},
+"severity":{"type":"string"},
+"eventType":{"type":"string"},
+"currentValue":{"type":"string"},
+"sources":{"type":"string"},
+"detector":{"type":"string"}
 </code></pre>
+
+<p>  }
+}
+```</p>
 
 <h1>The lambda function</h1>
 
-<p>I&rsquo;m still cleaning up the banged out code for the Lambda function to post on github however here&rsquo;s the relevant bits from the <code>opsgenie.js</code> file I added to <a href="https://github.com/ripienaar/lambda_webhook_gwy">R.I.&rsquo;s code</a>:</p>
+<p>I'm still cleaning up the banged out code for the Lambda function to post on github however here's the relevant bits from the <code>opsgenie.js</code> file I added to <a href="https://github.com/ripienaar/lambda_webhook_gwy">R.I.'s code</a>:</p>
 
-<pre><code class="javascript">  sfxNotification: function(event, config) {
-    var result = {
-        apiKey: config.api_key,
-        alias: event.incidentId,
-        note: event.detectorUrl,
-        message: "Alert: "+event.rule+" ("+event.detector+")",
-        description: "Current value: "+event.currentValue+" is "+event.status,
-        details: event,
-        tags: event.sources.split(","),
+<p>```javascript
+  sfxNotification: function(event, config) {</p>
 
-    };
+<pre><code>var result = {
+    apiKey: config.api_key,
+    alias: event.incidentId,
+    note: event.detectorUrl,
+    message: "Alert: "+event.rule+" ("+event.detector+")",
+    description: "Current value: "+event.currentValue+" is "+event.status,
+    details: event,
+    tags: event.sources.split(","),
 
-    return result;
+};
 
-  }
+return result;
 </code></pre>
+
+<p>  }
+```</p>
 
 <p>This is the meat of the translation. You can customize this as needed but note how we immediately add a <code>note</code> to the incident with the link to the graph in SignalFX.
 When you create a detector in SignalFx, any groupings you create in the signal function are put into the <code>sources</code> key as comma-separated values.
@@ -177,24 +184,28 @@ We take these and make them <code>tags</code> in OpsGenie.</p>
 <p>We also leverage the OpsGenie <code>alias</code> to create our own ID for the event. Normally you would store this id somewhere for reference later but instead we use the unique id from SignalFX.
 This make correlating a previous alert dead simple as you can see below:</p>
 
-<pre><code class="javascript">var self = module.exports = {
-  publish: function(handler, event, context, callback) {
-    var webhook = require("./webhook_request.js");
-    var config = require("./config.js");
+<p>```javascript
+var self = module.exports = {
+  publish: function(handler, event, context, callback) {</p>
 
-    if (event.status == "ok") {
-        var request = self.closeRequest(config.opsgenie);
-        var data = {
-            apiKey: config.opsgenie.api_key,
-            alias: event.incidentId
-        };
-    } else {
-        var request = self.request(config.opsgenie);
-        var data = self[handler](event, config.opsgenie, context);
-    }
-    webhook.publish(JSON.stringify(data), request, context, callback);
-  }
+<pre><code>var webhook = require("./webhook_request.js");
+var config = require("./config.js");
+
+if (event.status == "ok") {
+    var request = self.closeRequest(config.opsgenie);
+    var data = {
+        apiKey: config.opsgenie.api_key,
+        alias: event.incidentId
+    };
+} else {
+    var request = self.request(config.opsgenie);
+    var data = self[handler](event, config.opsgenie, context);
+}
+webhook.publish(JSON.stringify(data), request, context, callback);
 </code></pre>
+
+<p>  }
+```</p>
 
 <p>SignalFX has 4 status it can set for an alert:</p>
 
@@ -207,28 +218,28 @@ This make correlating a previous alert dead simple as you can see below:</p>
 
 
 <p>Here we check if the status is <code>ok</code> and if so, we call a different function to generate the request object to a different path (the <code>close</code> alert path).
-Since we created the alert using an <code>alias</code> of the SignalFx <code>incidentId</code>, we don&rsquo;t even need to do any more parsing - just <code>POST</code> to the <code>close</code> resource with the <code>alias</code> id.</p>
+Since we created the alert using an <code>alias</code> of the SignalFx <code>incidentId</code>, we don't even need to do any more parsing - just <code>POST</code> to the <code>close</code> resource with the <code>alias</code> id.</p>
 
 <p>As you saw above we get more more data and context about the alert and this is all also visible in the OpsGenie mobile app.</p>
 
 <h1>Benefits</h1>
 
 <p>Honestly the biggest benefit is not having to wait on service providers to create native integrations.
-Almost every service I&rsquo;ve used over the past several years offers an outgoing webhook capability for their system.
-API Gateway solves the part of getting those webhooks and its native Lambda support means I don&rsquo;t need to leave anything &ldquo;running&rdquo; to maintain, upgrade and support just to do something with that webhook.</p>
+Almost every service I've used over the past several years offers an outgoing webhook capability for their system.
+API Gateway solves the part of getting those webhooks and its native Lambda support means I don't need to leave anything "running" to maintain, upgrade and support just to do something with that webhook.</p>
 
 <p>However one other huge benefit that is also hinted in the other post is that using this model, you get a simple abstraction from your service provider.
 If we wanted to move to some other alerting provider, we just change the lambda function to post there instead. No need to redo all the integrations in SignalFx.
 My plan is to work towards a model where we try and utilize the API gateway as the webhook endpoint for various services and translate to our other providers from there.</p>
 
-<p>I really enjoyed working with the gateway. Testing wasn&rsquo;t too painful as it has a &ldquo;mock&rdquo; mode as well where it behaves similarly to requestb.in. It supports a couple of different authentication methods well (though sadly they couldn&rsquo;t be leveraged in this case due to provider webhook formats (note if you offer webhook support, let your users define a custom header as part of the webhook!).</p>
+<p>I really enjoyed working with the gateway. Testing wasn't too painful as it has a "mock" mode as well where it behaves similarly to requestb.in. It supports a couple of different authentication methods well (though sadly they couldn't be leveraged in this case due to provider webhook formats (note if you offer webhook support, let your users define a custom header as part of the webhook!).</p>
 
 <p>Lambda needs to support more languages but python is a happy medium from the mess of javascript and the heft of java.</p>
 
 <h1>Future steps</h1>
 
-<p>I&rsquo;m going to work on first cleaning up this specific Lambda task and making it available on github. After that my next steps are to rewrite the damn thing in Python because I &ldquo;dislike&rdquo; javascript.
-We&rsquo;re already using this similar model for another integration as well: Loggly and HipChat.</p>
+<p>I'm going to work on first cleaning up this specific Lambda task and making it available on github. After that my next steps are to rewrite the damn thing in Python because I "dislike" javascript.
+We're already using this similar model for another integration as well: Loggly and HipChat.</p>
 
 <p>Loggly has HipChat support already but it posts the messages in HipChat as a raw json dump which is useless:</p>
 
@@ -237,15 +248,15 @@ We&rsquo;re already using this similar model for another integration as well: Lo
 <p>by migrating it to use API Gateway and Lambda, we get the following instead:</p>
 
 <p><img src="/images/posts/apigateway-lambda/loggly-better.png" alt="Loggly better" />
-<em>Obviously that&rsquo;s an MVP</em></p>
+<em>Obviously that's an MVP</em></p>
 
-<p>We&rsquo;ll probably go down this route farther for other integrations and especially when HipChat Connect goes GA. Then we&rsquo;ll likely start posting richer messages using &ldquo;cards&rdquo; similar to my previous experience with Slack&rsquo;s API.</p>
+<p>We'll probably go down this route farther for other integrations and especially when HipChat Connect goes GA. Then we'll likely start posting richer messages using "cards" similar to my previous experience with Slack's API.</p>
 
 <h2>ChatOps</h2>
 
-<p>One thing that&rsquo;s really neat is that the api gateway approach can let you make some REALLY simple tools for ChatOps using outgoing webhooks from your chat system.</p>
+<p>One thing that's really neat is that the api gateway approach can let you make some REALLY simple tools for ChatOps using outgoing webhooks from your chat system.</p>
 
-<p>However it will REALLY open up when Lambda gets VPC support. Imagine a Lambda function that can fire inside your VPC and interact with all your private resources. It&rsquo;s both terrifying and thrilling assuming all the appropriate controls are in place (using api keys, rbac in your outgoing webhook).</p>
+<p>However it will REALLY open up when Lambda gets VPC support. Imagine a Lambda function that can fire inside your VPC and interact with all your private resources. It's both terrifying and thrilling assuming all the appropriate controls are in place (using api keys, rbac in your outgoing webhook).</p>
 
 <p>Thanks for reading. I hope it was valuable to you.</p>
 ]]></content>

@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Review: Site Reliability Engineering - blog dot lusis</title>
+  <meta name="author" content="John E. Vincent">
+
+  
+  <meta name="description" content="This is a first for me. I&#8217;ve never reviewed a book before. There&#8217;s an uncomfortable amount of arrogance I feel in doing so but I though...">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://lusis.github.com/blog/2016/04/17/review-site-reliability-engineering/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="blog dot lusis" type="application/atom+xml">
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-21725481-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">blog dot lusis</a></h1>
+  
+    <h2>development, operations and everything in between</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:lusis.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="https://github.com/lusis/noah">Noah</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Review: Site Reliability Engineering</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2016-04-17T00:24:00-04:00" pubdate  data-updated="true" >Apr 17<span>th</span>, 2016</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This is a first for me. I&#8217;ve never reviewed a book before. There&#8217;s an uncomfortable amount of arrogance I feel in doing so but I thought it was important.</p>
+
+<!-- more -->
+
+
+<p>Recently the <a href="http://shop.oreilly.com/product/0636920041528.do">Site Reliability Engineering</a> book came out. This is the description directly from the O&#8217;Reilly site:</p>
+
+<blockquote><p>In this collection of essays and articles, key members of Google’s Site Reliability Team explain how and why their commitment to the entire lifecycle has enabled the company to successfully build, deploy, monitor, and maintain some of the largest software systems in the world. You’ll learn the principles and practices that enable Google engineers to make systems more scalable, reliable, and efficient - lessons directly applicable to your organization.</p></blockquote>
+
+
+<p>Now I should give fair warning that I was turned off by the title of this book alone because I originally thought it was &#8220;Site Reliability Engineers&#8221;. I&#8217;ve railed multiple times about my take on renaming the functions of operations to something else. In general I don&#8217;t care about titles but what I care about is what those titles convey.</p>
+
+<p>I stand by my assertion (and experience) that having a title of &#8220;devops&#8221; or &#8220;sre&#8221; is a bad idea. The inherent implication is that you&#8217;re doing something different from operations which has yet to be shown as further from the truth.</p>
+
+<p>Still, once I realized I had the title wrong I was sort of happy. I figured here was a book of how Google engineers for reliability. Sadly it wasn&#8217;t as the title might have well been &#8220;Google SRE: Employee Orientation Guide&#8221;</p>
+
+<h2>The style of the book</h2>
+
+<p>The style of the book isn&#8217;t new. It&#8217;s very similar to the format of the <a href="http://shop.oreilly.com/product/0636920000136.do">webops</a> book published in 2010. (I&#8217;m being explicit with the date for a reason as dates are very important to this review.)</p>
+
+<p>The book is a collection individual essays about various topics in how google does &#8220;site reliability engineering&#8221;.
+The book clocks in at 33 chapters each written by and reviewed by someone inside of Google. In fact the only non-Google input in the book really appears to be the forward by Mark Burgess.</p>
+
+<p>I happen to like this style in the general but it falls apart pretty quickly when all the content is written by the same group of people from the same company. Compare this with the webops book or something like the amazing <a href="http://aosabook.org/en/index.html">AOSA</a> series where the authors may work for competing companies.</p>
+
+<p>This particular aspect is what made the book a hard read for me in light of my previously mentioned frustration with the concept of SRE as a distinct job. Almost every chapter reintroduced the concept of Google&#8217;s SRE program and how &#8220;different&#8221; it was from operations.</p>
+
+<p>This, in and of itself, I probably could have worked with except that every time the &#8220;definition&#8221; of SRE was repeated, the description was always self-aggrandizing and condescending.</p>
+
+<p>The essays frequently shift person in frustrating ways and multiple times the second person appears to be other Google employees such as describing how you (a Google SRE person) should submit a project internally to have it be accepted by SRE peers.</p>
+
+<p>All of these factors combine to have the book read more like a Google employee onboarding guide than anything else.</p>
+
+<p>I&#8217;ll get to this near the end but frankly the target audience appears to be Google itself while other parts don&#8217;t actually have an audience that would pick up this book.</p>
+
+<h2>How this review will work</h2>
+
+<p><a href="http://danluu.com/google-sre-book/">Dan Luu</a> has done a good approach here. He hits many of the key points in each chapter. I don&#8217;t see any value in duplicating what he has written. My approach is going to be a bit more general in nature. I may repeat some of the things Dan says only because we came to the same conclusions on certain things.</p>
+
+<p>I want to clarify a few things here first:</p>
+
+<ul>
+<li>Yes I came into reading this with a bias against it</li>
+<li>Nothing I write should be construed as a personal attack or criticism against the individuals who wrote that part.</li>
+<li>You should read the book for yourself and come to your own conclusions</li>
+</ul>
+
+
+<h1>The good parts</h1>
+
+<p>There are several parts of this book that were really good reads. The chapters that were mostly technical in nature provide good insight into how you might build that &#8220;thing&#8221; yourself (something I&#8217;ll get to later).</p>
+
+<p>Chapter 4 on Service Level Objectives was really good and something I&#8217;ve been crowing about for a long time.</p>
+
+<p>In particular the following chapters had lots of &#8220;meat&#8221;:</p>
+
+<ul>
+<li>20: Load Balancing in the datacenter</li>
+<li>21: Handling Overload</li>
+<li>22: Addressing cascading failures</li>
+<li>23: Distributed Consensus for Reliability</li>
+</ul>
+
+
+<p>Chapter 24 on distributed cron is short but as system-level cron is one of the most abused parts (or rather improperly used parts) of infras, it&#8217;s worth reading.</p>
+
+<p>Surprisingly, Chapter 26 on Data Integrity was an AMAZING read as it wrapped up the previous sections with an in-depth walkthrough of a Google Music recovery event. It was really well done as it took everything it wrote up to that point and gave a real-world example.</p>
+
+<p>At the end of the book, there&#8217;s a lot of good material as well that scales down very easily:</p>
+
+<ul>
+<li>Example Postmortem</li>
+<li>Example Launch Coordination Checklist</li>
+<li>Example Production Meeting Minutes</li>
+<li>Example Incident State Document</li>
+</ul>
+
+
+<p>These will need to be munged for your org but they&#8217;re great starting points if you don&#8217;t already have these things in place.</p>
+
+<p>The following section had good material but required wading through something I&#8217;ll address further on as a core &#8220;issue&#8221; I had with the book:</p>
+
+<ul>
+<li>10: Practical Alerting from Time-Series Data</li>
+</ul>
+
+
+<p>I somewhat enjoyed some of the more soft-skills sections listed here but they did suffer from the &#8220;googleness&#8221; aspect a bit too much. There&#8217;s still extractable meat in them:</p>
+
+<ul>
+<li>12: Effective Troubleshooting</li>
+<li>13: Emergency Response</li>
+<li>14: Managing Incidents</li>
+<li>15: Postmortem Culture</li>
+</ul>
+
+
+<h1>The other parts</h1>
+
+<p>As I said earlier, I had issues getting through earlier parts of the book (and to some degree - later parts) due to an overriding theme that kept jumping out.</p>
+
+<p>The first chapter of the book is what sent me into my caremad tweet fest. This was the section that attempted to layout how an &#8220;SRE&#8221; was different than an operations person in Google&#8217;s mind.</p>
+
+<p>Again, I came into this book with an established bias AGAINST the concept. Google&#8217;s &#8220;perspective&#8221; of operations was pretty much the same as <a href="http://blog.lusis.org/blog/2012/03/20/it-sucks-to-be-right/">that of Netflix</a>.</p>
+
+<p>What was different and the most frustrating was that the tone was MASSIVELY condescending. I captured a lot of it in my tweetstorm but the most often repeated statement was (paraphrased):</p>
+
+<blockquote><p>Google SREs are different and better than system administrators because they write code and use software engineering perspectives instead of operations perspectives</p></blockquote>
+
+
+<p>The problem here is that the premise is flawed on several levels. It assumes:</p>
+
+<ul>
+<li>System Administrators don&#8217;t write code</li>
+<li>System Administrators don&#8217;t have a software engineer perspective</li>
+</ul>
+
+
+<p>The other frustrating part is that the title of &#8220;site reliability engineer&#8221; implies that &#8220;site reliability&#8221; is the domain of a single team. That may not be true in practice but it doesn&#8217;t change the implication.</p>
+
+<p>My argument through all of the tweets was that:</p>
+
+<ul>
+<li>reliability is everyone&#8217;s concern</li>
+<li>operations are not subhuman</li>
+</ul>
+
+
+<p>As I stated in the netflix post, you are still doing operations and giving it a different name or applying a different &#8220;perspective&#8221; to it doesn&#8217;t make it any less of operations.</p>
+
+<p>And honestly, bringing a &#8220;software engineering&#8221; perspective to a problem isn&#8217;t always the best or right solution. This is not intended as a slight against software developers but there was an overriding theme of NIH and overengineering in how many problems were approached.</p>
+
+<h1>10</h1>
+
+<p>You&#8217;ll see this number dropped a lot in the book. The most explicit usage/reference to it is in the time-series section. This is one of the first sections of the book where it actually acknowledges something outside of Google.</p>
+
+<p>The exact phrase used was:</p>
+
+<blockquote><p>This chapter describes the architecture and programming interface of an internal monitoring tool that was foundational for the growth and reliability of Google for almost 10 years&#8230;</p></blockquote>
+
+
+<p>10 is the roughly the number of years ago much of the content in the book was &#8220;created&#8221;.</p>
+
+<p>This is important because what Google is giving us in this book is justification for something that arose from a need 10 years ago (and in some cases longer).</p>
+
+<p>The best way I can sum this up is that the book was written about ten year old decisions written over the last year mostly ignoring the last five to six years of our industry.</p>
+
+<p>The book is EXCEEDINGLY insular in nature. To some degree this is to be expected as it <em>IS</em> a book about Google. It goes overboard, however, in what seems like an attempt to attribute invention to Google. One of the more glaring parts of this was this particular line from Chapter 8 - Release Engineering:</p>
+
+<blockquote><p>We accomplish this task by rebuilding at the same revision as the original build and including specific changes that were submitted after that point in time. We call this tactic _cherry picking_</p></blockquote>
+
+
+<p>I literally re-read that sentence multiple times to make sure I didn&#8217;t misunderstand it. It may have been my existing frustration at this point with the book but cherry picking is not new. Google didn&#8217;t not invent cherry picking of commits. It&#8217;s great that you call the tactic &#8220;cherry picking&#8221; but so does almost everyone else in the world who used this amazing tactic.</p>
+
+<p>The early part of the book is exceedingly tone deaf to what has happened in our industry outside of Google. It approaches everything as if it was a Google invention never before seen in the world and is now being handed down to the rest of us.</p>
+
+<h2>Tablescraps</h2>
+
+<p>Let&#8217;s go back to that 10 number for a moment. I&#8217;ve made the comment a few times that our industry is built on Google tablescraps to some degree. My original hope for this book was that we would get some NEW insight into Google&#8217;s operations and engineering process. To some degree there was but the rest was stuff that we already knew.</p>
+
+<p>The somewhat seminal post from Tim O&#8217;Reilly <a href="http://radar.oreilly.com/2006/07/operations-the-new-secret-sauc.html">Operations: The Secret Sauce</a> is sort of applicable here. Interestingly enough this article is almost 10 years old as well. The thing is much of what comes out of Google still feels like they treat it as &#8220;secret sauce&#8221; while the rest of the industry has been telling us what was in that secret sauce down to the actualy ingredients list in the form of code.</p>
+
+<p>Google frequently releases details of its internals after they&#8217;ve moved on from it which many times spurs a flood of clones. This is what I mean by tablescraps.</p>
+
+<p>In 2015, Google released details of <a href="http://research.google.com/pubs/pub43438.html">Borg</a>. Of course by this point, the secret sauce of how companies like Heroku used containers at scale and the rise of friendly containers via Docker were already well and truly on the map.</p>
+
+<p>Interestingly one could say that Kubernetes is the counter-example to this as the stated goal (as I understand it) is that k8s will eventually replace Borg. If that all proves out then this could be a turning point (along with some of the content in this book) that Google has come around to how the industry has changed in terms of openness.</p>
+
+<h1>Applicability</h1>
+
+<p>The valley has tendancy (as an outside participant) of latching on to the every word that flows from the mouth of the &#8220;tech giants&#8221;. One of these giants publishes a repo on github and next week everyone is rearchitecting to take advantage of it - and most of the times they don&#8217;t even need it. Microservices are REALLY good examples of this.</p>
+
+<p>A frequent problem I see is that &#8220;we&#8221; adopt this tools and techniques in the same way people adopted agile early on - half-assed. Yes, Kafka is an amazing tool. You know what though, LinkedIn WROTE the tool and has the capabilities and resources and motivation to keep it working - for them. You, dear startup, do not have the resources to run Kafka the same way LinkedIn does.</p>
+
+<p>What do I mean by that? I mean Kafka is a great tool. I like it. Plenty of companies are running it to great success.</p>
+
+<p>This is the general problem I have with the SRE book. Many of the things listed here are REALLY good ideas. No they aren&#8217;t original (Coming to something by first principles does not mean you were the first to think of it).</p>
+
+<p>The problem is that you should not be doing these things per se. Your company doesn&#8217;t have a core competency on writing a FastPaxos implementation. Writing your own distributed consensus system or filestore does not get your product to market.</p>
+
+<p>So much of the information in the SRE book makes PERFECT sense if you&#8217;re Google. It even makes sense if you have a fraction of Google-scale problems.</p>
+
+<p>The thing is&#8230;the people who have those problems (say Facebook, LinkedIn, Twitter, Netflix), already solved it their own way. They reached a point where spending money and resources on solving it made sense.</p>
+
+<p>Your startup with a single-purpose application does not have the luxury of having your operations team say &#8220;I&#8217;m sorry you&#8217;re over your error budget&#8221;. Shit, you may not even have a REAL budget much less one for how many times your application is allowed to page someone.</p>
+
+<p>Doing things the way a &#8220;tech giant&#8221; does them just because a tech giant is doing them is REALLY dangerous. You need to distill those things to something that actually makes sense at non &#8220;planet scale&#8221;.</p>
+
+<p>That&#8217;s not to say you shouldn&#8217;t be concerned with those things. The thing is&#8230;.you should have already been concerned about them.</p>
+
+<p>A good example is what Google says is &#8220;acceptable&#8221; availability. They make the (somewhat valid) point that 99.99% availability for a service is acceptable because external availability (a user on a mobile device for instance) is less than that.</p>
+
+<p>This makes sense if that end user is one of millions of end users. Sure there&#8217;s no reason to invest more in availability of your service (say, additional nodes to handle failure) when the likelihood of it being experienced is so small. The return isn&#8217;t there.</p>
+
+<p>However the standard company has 1 service and can afford 2 servers and requires a much higher availability just to even be running.</p>
+
+<p>What I&#8217;m really driving at is not specific to this book but the fact that it <em>IS</em> a book that will get recommended and passed around as canon makes it have greater visibility and impact.</p>
+
+<p>This was a problem with &#8220;The Phoenix Project&#8221; too. I liked the book. It was a good book and it had a lot of visibility at very high levels of organizations. That&#8217;s great but the book did handwave a lot of things. It handwaved a lot of things to the point that it could be dangerously implemented.</p>
+
+<h1>Is the book a good book</h1>
+
+<p>Yes. It&#8217;s a good book. I don&#8217;t think it stands up to the webops book. It&#8217;s not groundbreaking if you&#8217;ve followed anything in the industry over the last 5-6 years.</p>
+
+<p>Personally, I found the early parts of the book to be VERY insulting and (I used this once before) tone-deaf. There are parts where it tries to be &#8220;human&#8221; as when it addresses the issue of being on-call and handling a pager or the later section on &#8220;management&#8221;. Unfortunately it still comes of as very mechanical and lacking humanity. This is not a new charge leveled at Google and some parts of the book bear that out. I think much of the problem here lies in the fact that it was also edited internally thus creating a feedback loop.</p>
+
+<p>Teasing out what is applicable to you and your organization is doable but you definitely shouldn&#8217;t take it as gospel.</p>
+
+<h1>A personal note</h1>
+
+<p>When I started reading this book, I succumbed to one of the worst parts of being a human. I let my rage take over and used Twitter as a platform for snide comments. As I said later on, I stand by my assesments and the intent of the statements but the statements were unneccessarily harsh.</p>
+
+<p>The people who worked on this book no doubt worked long and hard. If you&#8217;ve followed anyone like Katherine Daniels, Jennifer Davis or Lara Hogan as they&#8217;ve tweeted and talked about their books you feel joy along with them. Having some internet rando come along and shitbird their amazing work is unfair and cruel.</p>
+
+<p>If anyone involved on the Google SRE book felt that way, I apologize.</p>
+
+<p>As a deep consumer of Google technology, I am reassured after reading this book that Google is doing what is best for Google to provide and operate the services I consume. I don&#8217;t agree with how they word it but I cannot argue with the results.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">John E. Vincent</span></span>
+
+      
+
+
+
+
+
+  
+
+
+
+<time datetime="2016-04-17T00:24:00-04:00" pubdate  data-updated="true" >Apr 17<span>th</span>, 2016</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://lusis.github.com/blog/2016/04/17/review-site-reliability-engineering/" data-via="lusis" data-counturl="http://lusis.github.com/blog/2016/04/17/review-site-reliability-engineering/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+       
+        <a class="basic-alignment left" href="/blog/2016/04/07/how-is-rundeck-formed/" title="Previous Post: how is rundeck formed">&laquo; how is rundeck formed</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About my Blogger blog</h1>
+  <p>I'm currently in the process of migrating content from my blogger blog into Octopress. As such, this all seems pretty threadbare. If you're curious, you can get to it <a href="http://lusislog.blogspot.com">here</a></p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/04/07/how-is-rundeck-formed/">how is rundeck formed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/aws-apigateway-for-fun-and-profit/">aws api gateway for fun and profit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-redis/">Load balancing Logstash with Redis</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/31/load-balancing-logstash-with-amqp/">Load balancing Logstash with AMQP</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/lusis">@lusis</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'lusis',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("lusis", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/lusis" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @lusis</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - John E. Vincent -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    
+      var disqus_shortname = 'lusis';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lusis.github.com/blog/2016/04/17/review-site-reliability-engineering/';
+        var disqus_url = 'http://lusis.github.com/blog/2016/04/17/review-site-reliability-engineering/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
