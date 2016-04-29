@@ -9,7 +9,7 @@
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="The following post is a recap of what was discussed in the 07/21/11 #monitoringsucks irc meetingBefore I get any further, I just want to thank ever...">
+  <meta name="description" content="warning! This is a really long postIn the course of rewriting the Noah callback daemon, I started to get really frustrated with EventMachine. This ...">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,59 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/08/13/fun-with-celluloid/">Fun With Celluloid</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2011-08-13T00:30:00-04:00" pubdate  data-updated="true" >Aug 13<span>th</span>, 2011</time>
+        
+         | <a href="/blog/2011/08/13/fun-with-celluloid/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><em>warning! This is a really long post</em></p>
+
+<p>In the course of rewriting the <a href="https://github.com/lusis/Noah">Noah</a> callback daemon, I started to get really frustrated with EventMachine. This is nothing against EventMachine by any stretch of the imagination. I really like it.</p>
+
+<p>What I was having issues with is making the plugin framework as dirt simple as possible. By using EM, I had no choice but to require folks to understand how EM works. This primarily meant not blocking the reactor. Additionally, through no fault of EM, I was starting to get mired in callback spaghetti.</p>
+
+<h1>Actors</h1>
+
+<p>I&#8217;ve mentioned several times before that I love the actor model. It makes sense to me. The idea of mailboxes and message passing is really simple to understand. For a while, there was project that implemented actors on top of EM called Revactor but it stalled. I started following the author (Tony Arcieri) on GitHub to see if he would ever update it. He did not but I caught wind of his new project and it was pretty much exactly what I was looking for.</p>
+
+<p>Actors have a proven track record in Erlang and the Akka framework for Scala and Java uses them as well.</p>
+
+<h1>Celluloid</h1>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/08/13/fun-with-celluloid/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -400,6 +453,10 @@ side project I&#8217;ve been working on called
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/28/the-flaw-in-all-things/">The Flaw In All Things</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
       </li>
     
@@ -413,10 +470,6 @@ side project I&#8217;ve been working on called
     
       <li class="post">
         <a href="/blog/2015/10/12/current-status/">current status</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
       </li>
     
   </ul>

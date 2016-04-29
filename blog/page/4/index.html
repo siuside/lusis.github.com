@@ -9,7 +9,7 @@
   <meta name="author" content="John E. Vincent">
 
   
-  <meta name="description" content="AMQP in Logstash is one of the most complicated parts of the workflow. I&#8217;ve taken it on myself, as the person with the most AMQP experience (...">
+  <meta name="description" content="After yesterday&#8217;s post about load balancing logstash with AMQP and RabbitMQ, I got to thinking that it might be useful to show a smilar patte...">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,53 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/31/load-balancing-logstash-with-redis/">Load Balancing Logstash With Redis</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+  
+
+
+
+<time datetime="2012-01-31T23:24:00-05:00" pubdate  data-updated="true" >Jan 31<span>st</span>, 2012</time>
+        
+         | <a href="/blog/2012/01/31/load-balancing-logstash-with-redis/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After yesterday&#8217;s post about load balancing logstash with AMQP and RabbitMQ, I got to thinking that it might be useful to show a smilar pattern with other inputs and outputs.
+To me this, is the crux of what makes Logstash so awesome. Someone asked me to describe Logstash in one sentence. The best I could come up with was:</p>
+
+<blockquote><p>Logstash is a unix pipe on steroids</p></blockquote>
+
+
+<p>I hope this post helps you understand what I meant by that</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/01/31/load-balancing-logstash-with-redis/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -511,59 +558,6 @@ The one tool I enjoyed the most?</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/08/13/fun-with-celluloid/">Fun With Celluloid</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-  
-
-
-
-<time datetime="2011-08-13T00:30:00-04:00" pubdate  data-updated="true" >Aug 13<span>th</span>, 2011</time>
-        
-         | <a href="/blog/2011/08/13/fun-with-celluloid/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><em>warning! This is a really long post</em></p>
-
-<p>In the course of rewriting the <a href="https://github.com/lusis/Noah">Noah</a> callback daemon, I started to get really frustrated with EventMachine. This is nothing against EventMachine by any stretch of the imagination. I really like it.</p>
-
-<p>What I was having issues with is making the plugin framework as dirt simple as possible. By using EM, I had no choice but to require folks to understand how EM works. This primarily meant not blocking the reactor. Additionally, through no fault of EM, I was starting to get mired in callback spaghetti.</p>
-
-<h1>Actors</h1>
-
-<p>I&#8217;ve mentioned several times before that I love the actor model. It makes sense to me. The idea of mailboxes and message passing is really simple to understand. For a while, there was project that implemented actors on top of EM called Revactor but it stalled. I started following the author (Tony Arcieri) on GitHub to see if he would ever update it. He did not but I caught wind of his new project and it was pretty much exactly what I was looking for.</p>
-
-<p>Actors have a proven track record in Erlang and the Akka framework for Scala and Java uses them as well.</p>
-
-<h1>Celluloid</h1>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/08/13/fun-with-celluloid/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -585,6 +579,10 @@ The one tool I enjoyed the most?</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/28/the-flaw-in-all-things/">The Flaw In All Things</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/04/17/review-site-reliability-engineering/">Review: Site Reliability Engineering</a>
       </li>
     
@@ -598,10 +596,6 @@ The one tool I enjoyed the most?</p>
     
       <li class="post">
         <a href="/blog/2015/10/12/current-status/">current status</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/21/a-few-things/">A few things</a>
       </li>
     
   </ul>
