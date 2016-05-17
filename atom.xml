@@ -4,7 +4,7 @@
   <title><![CDATA[blog dot lusis]]></title>
   <link href="http://lusis.github.com/atom.xml" rel="self"/>
   <link href="http://lusis.github.com/"/>
-  <updated>2016-05-17T15:49:58-04:00</updated>
+  <updated>2016-05-17T15:51:28-04:00</updated>
   <id>http://lusis.github.com/</id>
   <author>
     <name><![CDATA[John E. Vincent]]></name>
@@ -471,7 +471,7 @@ SignalFX has a nice and constantly evolving API, however, that API is lacking au
 
 <h2>Packaging and distribution</h2>
 
-<p>Packaging here is important. Are you still using tarballs with execute resources to extract them everywhere? You should probably start using FPM or something to package those as system packages. Hell, use Docker images if you need to. The benefit here is not so much one of packaging but in the things you get for free.</p>
+<p>Packaging here is important. Are you still using tarballs with execute resources to extract them everywhere? You should probably start using FPM or something higher like Omnibus to package those as system packages. Hell, use Docker images if you need to. The benefit here is not so much one of packaging but in the things you get for free.</p>
 
 <p>System packages give you auditability but they also give you a distribution mechanism for free. Docker images do the same to some degree. The logic downloading, checksumming and installation is somewhat solved for you for those.</p>
 
